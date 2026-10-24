@@ -104,15 +104,18 @@ export function checkSite(siteDir, site) {
     if (dup.length) err(`duplicate ids: ${[...new Set(dup)].join(', ')}`);
   }
   // Once a recording exists, everything that goes with it must exist and fit the size budgets
-  // (brief: WebM and MP4, under 8 MB for the full demo and 2 MB for the hero loop, a poster and
-  // a WebVTT caption track in each language).
+  // (brief: WebM and MP4, under 8 MB for the full demo and 2 MB for the hero loop, a poster in
+  // site/img/ and a WebVTT caption track in each language).
   const videoDir = join(siteDir, 'video');
   if (existsSync(videoDir) && readdirSync(videoDir).some((f) => /\.(webm|mp4)$/.test(f))) {
     const budgets = { 'demo.webm': 8, 'demo.mp4': 8, 'hero.webm': 2, 'hero.mp4': 2 };
-    for (const f of ['demo.webm', 'demo.mp4', 'demo-poster.png', 'demo.en.vtt', 'demo.it.vtt', 'hero.webm', 'hero.mp4', 'hero-poster.png']) {
-      const p = join(videoDir, f);
-      if (!existsSync(p)) problems.push(`site/video/${f} is missing (a recording exists)`);
-      else if (budgets[f] && statSync(p).size > budgets[f] * 1024 * 1024) problems.push(`site/video/${f} is over ${budgets[f]} MB`);
+    // Posters are images (site/img/); the videos and caption tracks are in site/video/.
+    for (const f of ['video/demo.webm', 'video/demo.mp4', 'video/demo.en.vtt', 'video/demo.it.vtt', 'video/hero.webm', 'video/hero.mp4', 'img/demo-poster.png', 'img/hero-poster.png']) {
+      const p = join(siteDir, f);
+      const budget = budgets[f.replace('video/', '')];
+      if (!existsSync(p)) problems.push(`site/${f} is missing (a recording exists)`);
+      else if (budget && statSync(p).size > budget * 1024 * 1024) problems.push(`site/${f} is over ${budget} MB`);
+      else if (f.endsWith('.vtt') && !readFileSync(p, 'utf8').startsWith('WEBVTT')) problems.push(`site/${f} is not a WebVTT file`);
     }
   }
   // The sitemap lists only pages that exist and are not noindex.

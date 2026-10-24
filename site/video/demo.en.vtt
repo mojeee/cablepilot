@@ -1,0 +1,57 @@
+WEBVTT
+
+1
+00:00:00.850 --> 00:00:05.309
+Open the battery-charger sample: a complete drawing set, 23 pages.
+
+2
+00:00:05.559 --> 00:00:18.208
+Cover, contents, single-line, multi-line power, PLC, terminals, wire list, BOM.
+
+3
+00:00:18.458 --> 00:00:27.664
+Place a contactor coil from the library: its designation is assigned by itself.
+
+4
+00:00:27.914 --> 00:00:40.805
+Place its contact: same device, and the cross-references appear on both.
+
+5
+00:00:41.055 --> 00:00:46.132
+Give the device a part from the library: the BOM will know about it.
+
+6
+00:00:46.382 --> 00:00:58.252
+Number the wires with your own pattern: 020L+, 021L+ ...
+
+7
+00:00:58.502 --> 00:01:09.432
+Conductors in their IEC 60757 colours; a bundle gets a single label.
+
+8
+00:01:09.682 --> 00:01:14.486
+Reports come from the schematic. The terminal diagram ...
+
+9
+00:01:14.736 --> 00:01:17.884
+... the wire list with the new numbers ...
+
+10
+00:01:18.134 --> 00:01:24.186
+... and the BOM, which already counts the new contactor.
+
+11
+00:01:24.436 --> 00:01:31.145
+Print preview: the page exactly as it prints.
+
+12
+00:01:31.395 --> 00:01:34.865
+Export the PDF drawing set ...
+
+13
+00:01:35.115 --> 00:01:40.864
+... and every list as one XLSX workbook.
+
+14
+00:01:41.114 --> 00:01:45.624
+CablePilot: free, open source, your files stay yours.

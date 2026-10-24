@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo: disegna una volta, elenchi e set di disegni seguono · CablePilot</title>
+    <meta name="description" content="Una dimostrazione registrata di CablePilot con il caricabatterie DC di esempio: il set di disegni, una bobina e il suo contatto, i numeri filo, gli elenchi in tempo reale e l’esportazione in PDF e XLSX." />
+    <link rel="canonical" href="https://cablepilot.agentflowbind.com/it/demo/" />
+    <link rel="alternate" hreflang="it" href="https://cablepilot.agentflowbind.com/it/demo/" />
+    <link rel="alternate" hreflang="en" href="https://cablepilot.agentflowbind.com/demo/" />
+    <link rel="alternate" hreflang="x-default" href="https://cablepilot.agentflowbind.com/demo/" />
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0f1216" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CablePilot" />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:title" content="Demo: disegna una volta, elenchi e set di disegni seguono · CablePilot" />
+    <meta property="og:description" content="Una dimostrazione registrata di CablePilot con il caricabatterie DC di esempio: il set di disegni, una bobina e il suo contatto, i numeri filo, gli elenchi in tempo reale e l’esportazione in PDF e XLSX." />
+    <meta property="og:url" content="https://cablepilot.agentflowbind.com/it/demo/" />
+    <meta property="og:image" content="https://cablepilot.agentflowbind.com/og.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="/style.css?v=f92bc8c3fd" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Vai al contenuto</a>
+    <header class="top">
+      <div class="wrap top-in">
+        <a class="logo" href="/it/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
+        <nav class="main-nav" aria-label="Principale">
+          <a href="/it/demo/" aria-current="page">Demo</a>
+          <a href="/it/aziende/">Per le aziende</a>
+          <a href="https://github.com/mojeee/cablepilot">GitHub</a>
+          <a href="/demo/" hreflang="en" lang="en">English</a>
+        </nav>
+        <a class="btn primary sm" href="/it/#download">Scarica</a>
+      </div>
+    </header>
+    <main id="main">
+      <section class="hero hero-sub">
+        <div class="wrap">
+          <p class="eyebrow">Demo</p>
+          <h1>Demo: disegna una volta, gli elenchi e il set di disegni seguono</h1>
+          <div class="lead"><p>Una dimostrazione di CablePilot con il caricabatterie DC di esempio, circa un minuto e mezzo. È la stessa storia del video sul sito, e tutto ciò che mostra funziona nella versione attuale: nessun mock-up. Il video è registrato dall’app reale da uno script (<code>e2e/demo.e2e.ts</code>), così viene rifatto ogni volta che l’interfaccia cambia: <code>npm run record:demo</code>.</p></div>
+          <figure class="demo-video">
+            <video controls playsinline preload="metadata" poster="/img/demo-poster.png" width="1920" height="1080">
+              <source src="/video/demo.webm" type="video/webm" />
+              <source src="/video/demo.mp4" type="video/mp4" />
+              <track kind="captions" src="/video/demo.en.vtt" srclang="en" label="English" />
+              <track kind="captions" src="/video/demo.it.vtt" srclang="it" label="Italiano" default />
+              <p>Il tuo browser non riproduce questo video. <a href="/video/demo.mp4">Scarica la registrazione</a></p>
+            </video>
+            <figcaption>Registrazione dello schermo dell’app reale, con sottotitoli in italiano e inglese (si scelgono nel lettore).</figcaption>
+          </figure>
+          <h2 class="toc-h">Passi</h2>
+          <ol class="step-toc">
+            <li><a href="#step-1"><span>01</span> Apri l’esempio e sfoglia il set di disegni</a></li>
+            <li><a href="#step-2"><span>02</span> Una bobina e un contatto dalla libreria</a></li>
+            <li><a href="#step-3"><span>03</span> Numeri filo, colori e un fascio</a></li>
+            <li><a href="#step-4"><span>04</span> Elenchi che seguono lo schema</a></li>
+            <li><a href="#step-5"><span>05</span> Anteprima di stampa, PDF e XLSX</a></li>
+          </ol>
+        </div>
+      </section>
+      <section class="step" id="step-1" aria-labelledby="step-1-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-1-h"><span class="label">Passo 1</span> Apri l’esempio e sfoglia il set di disegni</h2>
+          <p>Scegli <strong>Progetti di esempio &gt; Caricabatterie 110 V DC</strong>. Il progetto si apre sulla copertina. Fai clic sulle pagine del navigatore: indice, schema unifilare, pagina multifilare di potenza, interfaccia PLC, schema delle morsettiere, elenco fili e distinta materiali. Sono le pagine del set con cui l’officina costruisce e il cliente approva, tutte nella cornice e nel cartiglio del progetto.</p>
+          <ul class="bullets"><li>I progetti di esempio sono inclusi nel programma, così ogni funzione si mostra senza file propri.</li><li>Le pagine sono disegnate nella lingua di disegno del progetto (qui l’italiano), qualunque sia la lingua dell’interfaccia.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-1.png" alt="La copertina del caricabatterie di esempio, prima pagina del set di disegni." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step alt" id="step-2" aria-labelledby="step-2-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-2-h"><span class="label">Passo 2</span> Una bobina e un contatto dalla libreria</h2>
+          <p>Nella pagina dei relè di allarme scrivi <code>coil</code> nella ricerca dei simboli e inserisci una bobina. Riceve da sola la sua designazione. Poi inserisci un contatto normalmente aperto e dagli la stessa designazione: il contatto entra nel dispositivo della bobina e i riferimenti incrociati compaiono su entrambi. Assegna un articolo generico al dispositivo nel pannello Proprietà.</p>
+          <ul class="bullets"><li>La designazione segue la IEC 81346 (=funzione +luogo -prodotto).</li><li>Nulla viene scritto due volte: il dispositivo, i suoi due simboli e il suo articolo sono una sola voce in ogni elenco.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-2.png" alt="Una bobina e un contatto inseriti nella pagina dei relè di allarme, con i riferimenti incrociati del dispositivo nel pannello Proprietà." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step" id="step-3" aria-labelledby="step-3-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-3-h"><span class="label">Passo 3</span> Numeri filo, colori e un fascio</h2>
+          <p>Apri <strong>Fili</strong>, imposta il primo numero a 20 e fai clic su <strong>Numera i fili ora</strong>: i fili sono numerati con lo schema <code>{n:3}{suffix}</code> (020L+, 021L+ e così via) in un solo passo di annullamento. I conduttori sono disegnati nel colore della loro classe (sigle IEC 60757) e un filo segnato come fascio mostra una sola etichetta con sezione e colore al posto del numero.</p>
+          <ul class="bullets"><li>La tabella delle classi di filo dell’azienda si modifica nella stessa finestra.</li><li>I fili di una stessa rete, e le reti unite tra pagine, hanno un solo numero. I numeri scritti a mano restano.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-3.png" alt="I fili della pagina di potenza numerati e disegnati nei loro colori, uno come fascio con una sola etichetta." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step alt" id="step-4" aria-labelledby="step-4-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-4-h"><span class="label">Passo 4</span> Elenchi che seguono lo schema</h2>
+          <p>Apri <strong>Report</strong>: lo schema delle morsettiere, l’elenco fili con i nuovi numeri e la distinta materiali, che conta già il contattore appena inserito. Tutti gli elenchi nascono dallo schema e si aggiornano con lui.</p>
+          <ul class="bullets"><li>Gli stessi elenchi si possono aggiungere al set di disegni come pagine.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-4.png" alt="La finestra Report con la distinta materiali e il contattore appena inserito." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step" id="step-5" aria-labelledby="step-5-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-5-h"><span class="label">Passo 5</span> Anteprima di stampa, PDF e XLSX</h2>
+          <p>Attiva <strong>Anteprima di stampa (bianca)</strong> per vedere la pagina come viene stampata. Poi <strong>Esporta PDF</strong> scrive il set di disegni completo (vettoriale, testo incorporato) e <strong>Esporta tutti gli elenchi in XLSX</strong> scrive ogni elenco in un’unica cartella di lavoro. Il video finisce sulla copertina.</p>
+          <ul class="bullets"><li>I file sono tuoi: formato di progetto aperto, PDF e XLSX in uscita, nessun account.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-5.png" alt="La stessa pagina nell’anteprima di stampa (bianca), come viene stampata." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="band dark try" aria-labelledby="try-h">
+        <div class="wrap">
+          <h2 id="try-h">Provalo tu</h2>
+          <p class="lead">Scarica CablePilot, apri il caricabatterie di esempio dalla barra degli strumenti e segui i passi qui sopra. Libero, open source, e i tuoi file restano tuoi.</p>
+          <p class="actions"><a class="btn primary" href="https://github.com/mojeee/cablepilot/releases/latest">Scarica</a> <a class="btn" href="/it/">Torna alla pagina iniziale</a></p>
+        </div>
+      </section>
+    </main>
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot-grid">
+          <div>
+            <a class="logo" href="/it/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
+            <p>Progettazione elettrica per macchine, quadri ed elettronica. Libero e open source. Funziona sul tuo computer. I tuoi file restano tuoi.</p>
+          </div>
+          <nav aria-label="Piè di pagina">
+            <ul><li><a href="/it/demo/">Demo</a></li><li><a href="/it/#download">Scarica</a></li><li><a href="/it/aziende/">Per le aziende</a></li><li><a href="https://github.com/mojeee/cablepilot">GitHub</a></li><li><a href="https://github.com/mojeee/cablepilot/discussions">Discussioni</a></li><li><a href="https://github.com/mojeee/cablepilot/releases">Versioni rilasciate</a></li></ul>
+          </nav>
+        </div>
+        <div class="foot-base">
+          <p>Copyright Mojtaba Amini. Apache-2.0. Versione 0.1.0.</p>
+          <p>Questo sito non usa cookie, non esegue script e non carica nulla da terze parti.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

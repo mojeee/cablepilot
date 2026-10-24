@@ -13,6 +13,7 @@ CablePilot's own.
 | --- | --- |
 | Landing page (`/`, `/it/`) | `scripts/site/index.template.html` |
 | For companies (`/companies/`, `/it/aziende/`) | `scripts/site/companies.template.html` |
+| Demo (`/demo/`, `/it/demo/`) | `docs/demo.md` and `scripts/site/demo.it.md` (steps), the recording in `site/video/` |
 | 404, `robots.txt`, `sitemap.xml`, `_headers`, `_redirects` | `scripts/build-site.mjs` |
 
 The landing page has, in order: hero (promise, "free and open source, runs on your computer, your
@@ -22,10 +23,8 @@ a dark/light screenshot switch made with radio inputs and CSS, no script); "A co
 (thumbnail strip); "AI inside, you decide"; "Why CablePilot"; the comparison table; the demo slot;
 formats and download per OS with a link to For companies.
 
-Still to come (milestone M8 unless a feature needs one earlier): the demo page (`/demo/`,
-`/it/demo/`, from `docs/demo.md` and its Italian file), docs pages, the changelog page, standards
-tables and symbol/device pages generated from `library/`, the guides, real screenshots, and the
-recorded demo.
+Still to come (milestone M8 unless a feature needs one earlier): docs pages, the changelog page, standards
+tables and symbol/device pages generated from `library/`, the guides and real screenshots.
 
 ## Rules the build enforces
 
@@ -41,12 +40,21 @@ recorded demo.
   are translated on every build.
 - **Screenshots from the real app** (Playwright script, M8), never retouched. Until then the pages
   show a placeholder.
-- **The recorded demo.** A muted looping `<video autoplay muted loop playsinline>` with a poster
-  plays in the hero, and the full version is on the demo page (`site/video/hero.webm`, `hero.mp4`,
-  `demo.webm`, `demo.mp4`, posters `hero-poster.png` and `demo-poster.png`, captions `demo.en.vtt`
-  and `demo.it.vtt`). Until `hero.*` / `demo.*` exist the pages show a "recording in progress" slot.
-  Once any recording file exists, `scripts/check-site.mjs` fails if one of the files is missing or
-  over its budget (8 MB demo, 2 MB hero loop).
+- **The recorded demo.** `npm run record:demo` builds the app, records the story with Playwright
+  (`e2e/demo.e2e.ts`, 1920 x 1080, DC battery-charger sample, a visible pointer, zoom-ins, print preview;
+  nothing is faked or edited), encodes it (`scripts/demo-video.mjs`, ffmpeg) and rebuilds the site. The
+  captions' texts are in `e2e/demo-captions.json` (English and Italian) and are timed from the moments the
+  script marks. Files: `site/video/demo.webm` (VP9) and `demo.mp4` (H.264, faststart), the 15 s muted loop
+  `hero.webm` and `hero.mp4`, captions `demo.en.vtt` and `demo.it.vtt`; posters `site/img/hero-poster.png`
+  and `demo-poster.png`, and one frame per step `site/img/demo-1.png` ... `demo-5.png`. The landing-page hero
+  plays the loop (`<video autoplay muted loop playsinline poster=...>`, no script) and "Watch the demo" opens
+  the demo page: the full video with both caption tracks on top, then the steps of `docs/demo.md`
+  (Italian: `scripts/site/demo.it.md`, same sections; the build fails when the number of steps differs and
+  warns when the English text changed since the translation, update its `source:` hash). Until
+  `hero.*` / `demo.*` exist the pages show a "recording in progress" slot. Once any recording file exists,
+  `scripts/check-site.mjs` fails if one of the files is missing or over its budget (8 MB demo, 2 MB hero
+  loop). `_headers` caches `/video/*` and the CSP keeps `media-src 'self'`. Re-record whenever the interface
+  changes; needs ffmpeg (`brew install ffmpeg`).
 - **Deterministic.** No dates, stable order; two runs give identical bytes. Everything in `site/`
   except `site/img/` and `site/video/` is deleted and written again on every build.
 - **Checked.** After writing, the build runs `scripts/check-site.mjs`: every internal link, image

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo: draw it once, the lists and the drawing set follow · CablePilot</title>
+    <meta name="description" content="A recorded walkthrough of CablePilot with the DC battery-charger sample: the drawing set, a coil and its contact, wire numbers, live reports, and the PDF and XLSX export." />
+    <link rel="canonical" href="https://cablepilot.agentflowbind.com/demo/" />
+    <link rel="alternate" hreflang="en" href="https://cablepilot.agentflowbind.com/demo/" />
+    <link rel="alternate" hreflang="it" href="https://cablepilot.agentflowbind.com/it/demo/" />
+    <link rel="alternate" hreflang="x-default" href="https://cablepilot.agentflowbind.com/demo/" />
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0f1216" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CablePilot" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:title" content="Demo: draw it once, the lists and the drawing set follow · CablePilot" />
+    <meta property="og:description" content="A recorded walkthrough of CablePilot with the DC battery-charger sample: the drawing set, a coil and its contact, wire numbers, live reports, and the PDF and XLSX export." />
+    <meta property="og:url" content="https://cablepilot.agentflowbind.com/demo/" />
+    <meta property="og:image" content="https://cablepilot.agentflowbind.com/og.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="/style.css?v=f92bc8c3fd" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="top">
+      <div class="wrap top-in">
+        <a class="logo" href="/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
+        <nav class="main-nav" aria-label="Main">
+          <a href="/demo/" aria-current="page">Demo</a>
+          <a href="/companies/">For companies</a>
+          <a href="https://github.com/mojeee/cablepilot">GitHub</a>
+          <a href="/it/demo/" hreflang="it" lang="it">Italiano</a>
+        </nav>
+        <a class="btn primary sm" href="/#download">Download</a>
+      </div>
+    </header>
+    <main id="main">
+      <section class="hero hero-sub">
+        <div class="wrap">
+          <p class="eyebrow">Demo</p>
+          <h1>Demo: draw it once, the lists and the drawing set follow</h1>
+          <div class="lead"><p>A walkthrough of CablePilot with the DC battery-charger sample, about a minute and a half. It is the same story as the video on the website, and everything in it works in the current version: no mock-ups. The video is recorded from the real built app by a script (<code>e2e/demo.e2e.ts</code>), so it is made again whenever the interface changes: <code>npm run record:demo</code>.</p></div>
+          <figure class="demo-video">
+            <video controls playsinline preload="metadata" poster="/img/demo-poster.png" width="1920" height="1080">
+              <source src="/video/demo.webm" type="video/webm" />
+              <source src="/video/demo.mp4" type="video/mp4" />
+              <track kind="captions" src="/video/demo.en.vtt" srclang="en" label="English" default />
+              <track kind="captions" src="/video/demo.it.vtt" srclang="it" label="Italiano" />
+              <p>Your browser does not play this video. <a href="/video/demo.mp4">Download the recording</a></p>
+            </video>
+            <figcaption>Screen recording of the real app, with captions in English and Italian (choose them in the player).</figcaption>
+          </figure>
+          <h2 class="toc-h">Steps</h2>
+          <ol class="step-toc">
+            <li><a href="#step-1"><span>01</span> Open the sample and flick through the drawing set</a></li>
+            <li><a href="#step-2"><span>02</span> A coil and a contact from the library</a></li>
+            <li><a href="#step-3"><span>03</span> Wire numbers, colours and a bundle</a></li>
+            <li><a href="#step-4"><span>04</span> Reports that follow the schematic</a></li>
+            <li><a href="#step-5"><span>05</span> Print preview, the PDF set and the XLSX lists</a></li>
+          </ol>
+        </div>
+      </section>
+      <section class="step" id="step-1" aria-labelledby="step-1-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-1-h"><span class="label">Step 1</span> Open the sample and flick through the drawing set</h2>
+          <p>Choose <strong>Sample projects &gt; Caricabatterie 110 V DC</strong>. The project opens on its cover sheet. Click through the pages in the navigator: contents, single-line diagram, multi-line power page, PLC interface, terminal diagram, wire list and bill of materials. These are the pages of the set a workshop builds from and a customer signs off, all in the project's own frame and title block.</p>
+          <ul class="bullets"><li>Sample projects ship with the app, so every feature can be shown without your own files.</li><li>The pages are drawn in the project's drawing language (Italian here), whatever language the interface uses.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-1.png" alt="The cover sheet of the battery-charger sample, the first page of the drawing set." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step alt" id="step-2" aria-labelledby="step-2-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-2-h"><span class="label">Step 2</span> A coil and a contact from the library</h2>
+          <p>On the alarm-relay page, type <code>coil</code> in the symbol search and place a coil. It gets its designation by itself. Then place a normally open contact and give it the same designation: the contact joins the coil's device, and the cross-references appear on both. Assign a generic part to the device in the Properties panel.</p>
+          <ul class="bullets"><li>The designation follows IEC 81346 (=function +location -product).</li><li>Nothing is typed twice: the device, its two symbols and its part are one entry in every list.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-2.png" alt="A coil and a contact placed on the alarm-relay page, with the cross-references of the device in the Properties panel." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step" id="step-3" aria-labelledby="step-3-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-3-h"><span class="label">Step 3</span> Wire numbers, colours and a bundle</h2>
+          <p>Open <strong>Wires</strong>, set the first number to 20 and click <strong>Number wires now</strong>: the wires are numbered with the pattern <code>{n:3}{suffix}</code> (020L+, 021L+ and so on) in one undo step. Conductors are drawn in the colour of their wire class (IEC 60757 abbreviations), and a wire marked as a bundle shows a single label with its cross-section and colour instead of a number.</p>
+          <ul class="bullets"><li>The company wire-class table is editable in the same window.</li><li>Wires on one net, and nets joined across pages, share one number. Numbers typed by hand stay.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-3.png" alt="The wires of the power page numbered and drawn in their colours, one of them as a bundle with a single label." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step alt" id="step-4" aria-labelledby="step-4-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-4-h"><span class="label">Step 4</span> Reports that follow the schematic</h2>
+          <p>Open <strong>Reports</strong>: the terminal diagram, the wire list with the new numbers, and the bill of materials, which already counts the contactor you just placed. All lists are generated from the schematic and update with it.</p>
+          <ul class="bullets"><li>The same lists can be added to the drawing set as pages.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-4.png" alt="The Reports window showing the bill of materials with the contactor that was just placed." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step" id="step-5" aria-labelledby="step-5-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-5-h"><span class="label">Step 5</span> Print preview, the PDF set and the XLSX lists</h2>
+          <p>Switch on <strong>Print preview (white)</strong> to see the page as it prints. Then <strong>Export PDF</strong> writes the complete drawing set (vector, text embedded), and <strong>Export all lists as XLSX</strong> writes every list as one workbook. The video ends on the cover sheet.</p>
+          <ul class="bullets"><li>Files belong to you: an open project format, PDF and XLSX out, no account.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-5.png" alt="The same page in print preview (white), as it prints." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="band dark try" aria-labelledby="try-h">
+        <div class="wrap">
+          <h2 id="try-h">Try it yourself</h2>
+          <p class="lead">Download CablePilot, open the battery-charger sample from the toolbar and follow the steps above. Free, open source, and your files stay yours.</p>
+          <p class="actions"><a class="btn primary" href="https://github.com/mojeee/cablepilot/releases/latest">Download</a> <a class="btn" href="/">Back to the home page</a></p>
+        </div>
+      </section>
+    </main>
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot-grid">
+          <div>
+            <a class="logo" href="/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
+            <p>Electrical design for machines, control panels and electronics. Free and open source. Runs on your computer. Your files stay yours.</p>
+          </div>
+          <nav aria-label="Footer">
+            <ul><li><a href="/demo/">Demo</a></li><li><a href="/#download">Download</a></li><li><a href="/companies/">For companies</a></li><li><a href="https://github.com/mojeee/cablepilot">GitHub</a></li><li><a href="https://github.com/mojeee/cablepilot/discussions">Discussions</a></li><li><a href="https://github.com/mojeee/cablepilot/releases">Releases</a></li></ul>
+          </nav>
+        </div>
+        <div class="foot-base">
+          <p>Copyright Mojtaba Amini. Apache-2.0. Version 0.1.0.</p>
+          <p>This site sets no cookies, runs no scripts and loads nothing from third parties.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

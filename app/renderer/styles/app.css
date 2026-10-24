@@ -137,4 +137,4 @@ table.bom tr.assembly td { font-weight: 600; background: var(--raised); }
 .report-list button.selected, .tabs button.selected { background: var(--raised); border-color: var(--accent); }
 .report-body { flex: 1; min-width: 0; overflow-x: auto; }
 .tabs { display: flex; gap: 4px; margin-bottom: 8px; }
-table.bom input[type='text'] { font-size: 12px; }
+table.bom input[type='text'], table.bom input[type='number'], table.bom select { font-size: 12px; background: var(--raised); border: 1px solid var(--line); border-radius: 4px; padding: 2px 4px; color: var(--text); }

@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Demo video
+
+- Demo video: `npm run record:demo` records the battery-charger story from the real built app (Playwright,
+  1920 x 1080, visible pointer, zoom-ins, print preview) and encodes `site/video/demo.webm` and `demo.mp4`, a
+  15 s muted hero loop, poster and step frames in `site/img/`, and captions in English and Italian
+  (`demo.en.vtt`, `demo.it.vtt`). The landing page hero plays the loop; `/demo/` and `/it/demo/` are built from
+  `docs/demo.md` and `scripts/site/demo.it.md`. `npm run check:site` fails when a file of the recording is missing.
+- Input fields in the wire-class and wire-type tables are readable in the dark theme (they were white on white).
+
 ### M3 Wires and reports
 
 - Automatic wire numbering from the nets: by potential (one counter per potential, suffix from the wire

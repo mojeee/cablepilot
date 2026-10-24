@@ -1,0 +1,57 @@
+WEBVTT
+
+1
+00:00:00.850 --> 00:00:05.309
+Apri il caricabatterie di esempio: un set di disegni completo, 23 pagine.
+
+2
+00:00:05.559 --> 00:00:18.208
+Copertina, indice, unifilare, multifilare di potenza, PLC, morsettiere, elenco fili, distinta.
+
+3
+00:00:18.458 --> 00:00:27.664
+Inserisci una bobina di contattore dalla libreria: la designazione è assegnata da sola.
+
+4
+00:00:27.914 --> 00:00:40.805
+Inserisci il suo contatto: stesso dispositivo, e i riferimenti incrociati compaiono su entrambi.
+
+5
+00:00:41.055 --> 00:00:46.132
+Assegna al dispositivo un articolo dalla libreria: la distinta lo conterà.
+
+6
+00:00:46.382 --> 00:00:58.252
+Numera i fili con il tuo schema: 020L+, 021L+ ...
+
+7
+00:00:58.502 --> 00:01:09.432
+Conduttori nei colori IEC 60757; un fascio ha una sola etichetta.
+
+8
+00:01:09.682 --> 00:01:14.486
+Gli elenchi nascono dallo schema. Lo schema delle morsettiere ...
+
+9
+00:01:14.736 --> 00:01:17.884
+... l'elenco fili con i nuovi numeri ...
+
+10
+00:01:18.134 --> 00:01:24.186
+... e la distinta, che conta già il nuovo contattore.
+
+11
+00:01:24.436 --> 00:01:31.145
+Anteprima di stampa: la pagina esattamente come viene stampata.
+
+12
+00:01:31.395 --> 00:01:34.865
+Esporta il set di disegni in PDF ...
+
+13
+00:01:35.115 --> 00:01:40.864
+... e tutti gli elenchi in un'unica cartella XLSX.
+
+14
+00:01:41.114 --> 00:01:45.624
+CablePilot: libero, open source, i tuoi file restano tuoi.

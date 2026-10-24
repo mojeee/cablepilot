@@ -10,7 +10,9 @@ const run = (cmd, args) => {
 if (!process.argv.includes('--no-build')) run('npm', ['run', 'build']);
 // --screenshots: only the website screenshots test, which is skipped otherwise (writes site/img/*.png).
 if (process.argv.includes('--screenshots')) process.env.CP_SCREENSHOTS = '1';
-const extra = process.argv.slice(2).filter((a) => a !== '--no-build' && a !== '--screenshots');
-const pw = ['playwright', 'test', '-c', 'e2e/playwright.config.ts', ...(process.argv.includes('--screenshots') ? ['-g', 'screenshots'] : []), ...extra];
+// --demo: only the demo recording test (writes out/demo-video/); npm run record:demo then encodes it.
+if (process.argv.includes('--demo')) process.env.CP_DEMO = '1';
+const extra = process.argv.slice(2).filter((a) => !['--no-build', '--screenshots', '--demo'].includes(a));
+const pw = ['playwright', 'test', '-c', 'e2e/playwright.config.ts', ...(process.argv.includes('--screenshots') ? ['-g', 'screenshots'] : []), ...(process.argv.includes('--demo') ? ['-g', 'demo recording'] : []), ...extra];
 if (process.platform === 'linux' && !process.env.DISPLAY) run('xvfb-run', ['-a', '-s', '-screen 0 1920x1200x24', 'npx', ...pw]);
 else run('npx', pw);

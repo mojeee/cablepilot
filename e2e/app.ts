@@ -16,13 +16,14 @@ export interface App {
   close(): Promise<void>;
 }
 
-export async function launch(opts: { profile?: string; env?: Record<string, string> } = {}): Promise<App> {
+export async function launch(opts: { profile?: string; env?: Record<string, string>; recordVideo?: { dir: string; size: { width: number; height: number } } } = {}): Promise<App> {
   const profile = opts.profile ?? mkdtempSync(join(tmpdir(), 'cp-e2e-'));
   const out = mkdtempSync(join(tmpdir(), 'cp-e2e-out-'));
   const app = await electron.launch({
     args: ['.', '--no-sandbox'],
     cwd: root,
     env: { ...process.env, CP_PROFILE: profile, CP_E2E_DIR: out, ...opts.env },
+    ...(opts.recordVideo ? { recordVideo: opts.recordVideo } : {}),
   });
   const page = await app.firstWindow();
   await page.waitForSelector('.topbar', { timeout: 60_000 });
