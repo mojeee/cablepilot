@@ -1,6 +1,6 @@
 {
   "format": "cablepilot-project",
-  "version": 3,
+  "version": 4,
   "id": "sample-conveyor",
   "name": "Conveyor with direct-on-line starter",
   "settings": {
@@ -26,6 +26,7 @@
     "defaultSize": "A3",
     "defaultTemplateId": "default",
     "drawingLanguage": "en",
+    "installationMethod": "B1",
     "numbering": {"pattern":"{n:3}{suffix}","scheme":"potential","start":1,"step":1},
     "style": {
       "colours": {
@@ -55,7 +56,7 @@
     "issueDate": "2026-10-24",
     "orderNo": "SAMPLE-0001",
     "product": "Belt conveyor C1, 5.5 kW",
-    "revision": "A"
+    "revision": "0"
   },
   "assembly": {
     "earthingSystem": "TN-S",
@@ -372,7 +373,18 @@
           "x": 165,
           "y": 50
         },
-        {"id":"e10","kind":"warning","sign":"electric","size":12,"x":290,"y":70}
+        {"id":"e10","kind":"warning","sign":"electric","size":12,"x":290,"y":70},
+        {
+          "id": "e94",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "L1",
+          "x": 210,
+          "y": 35
+        }
       ],
       "location": "DS",
       "size": "A3",
@@ -459,12 +471,48 @@
           "points": [{"x":215,"y":25},{"x":215,"y":50}],
           "potential": "L3"
         },
-        {"id":"e19","kind":"wire","number":"003","points":[{"x":205,"y":60},{"x":205,"y":80}]},
-        {"id":"e20","kind":"wire","number":"006","points":[{"x":210,"y":60},{"x":210,"y":80}]},
-        {"id":"e21","kind":"wire","number":"011","points":[{"x":215,"y":60},{"x":215,"y":80}]},
-        {"id":"e22","kind":"wire","number":"004","points":[{"x":205,"y":90},{"x":205,"y":110}]},
-        {"id":"e23","kind":"wire","number":"007","points":[{"x":210,"y":90},{"x":210,"y":110}]},
-        {"id":"e24","kind":"wire","number":"012","points":[{"x":215,"y":90},{"x":215,"y":110}]},
+        {
+          "id": "e19",
+          "kind": "wire",
+          "number": "003",
+          "points": [{"x":205,"y":60},{"x":205,"y":80}],
+          "wireType": "6mm2-BK"
+        },
+        {
+          "id": "e20",
+          "kind": "wire",
+          "number": "006",
+          "points": [{"x":210,"y":60},{"x":210,"y":80}],
+          "wireType": "6mm2-BK"
+        },
+        {
+          "id": "e21",
+          "kind": "wire",
+          "number": "011",
+          "points": [{"x":215,"y":60},{"x":215,"y":80}],
+          "wireType": "6mm2-BK"
+        },
+        {
+          "id": "e22",
+          "kind": "wire",
+          "number": "004",
+          "points": [{"x":205,"y":90},{"x":205,"y":110}],
+          "wireType": "6mm2-BK"
+        },
+        {
+          "id": "e23",
+          "kind": "wire",
+          "number": "007",
+          "points": [{"x":210,"y":90},{"x":210,"y":110}],
+          "wireType": "6mm2-BK"
+        },
+        {
+          "id": "e24",
+          "kind": "wire",
+          "number": "012",
+          "points": [{"x":215,"y":90},{"x":215,"y":110}],
+          "wireType": "6mm2-BK"
+        },
         {"id":"e25","kind":"wire","number":"005","points":[{"x":205,"y":120},{"x":205,"y":140}]},
         {"id":"e26","kind":"wire","number":"008","points":[{"x":210,"y":120},{"x":210,"y":140}]},
         {"id":"e27","kind":"wire","number":"013","points":[{"x":215,"y":120},{"x":215,"y":140}]},
@@ -538,10 +586,27 @@
           "number": "015",
           "points": [{"x":225,"y":190},{"x":225,"y":215},{"x":215,"y":215},{"x":215,"y":220}]
         },
-        {"id":"e37","kind":"rect","dashed":true,"h":125,"label":"Starter","w":80,"x":170,"y":40},
-        {"id":"e38","kind":"warning","sign":"electric","size":12,"x":110,"y":60},
         {
-          "id": "e39",
+          "id": "e37",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "earth-pe",
+          "x": 360,
+          "y": 60
+        },
+        {
+          "id": "e38",
+          "kind": "wire",
+          "number": "001PE",
+          "points": [{"x":360,"y":55},{"x":360,"y":35}],
+          "potential": "PE"
+        },
+        {"id":"e39","kind":"rect","dashed":true,"h":125,"label":"Starter","w":80,"x":170,"y":40},
+        {"id":"e40","kind":"warning","sign":"electric","size":12,"x":110,"y":60},
+        {
+          "id": "e41",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -549,6 +614,50 @@
           "text": "Motor starter, direct on line.\nProtection: motor circuit breaker\nand overload relay.",
           "x": 270,
           "y": 80
+        },
+        {
+          "id": "e95",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "L1",
+          "x": 205,
+          "y": 25
+        },
+        {
+          "id": "e96",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "L2",
+          "x": 210,
+          "y": 25
+        },
+        {
+          "id": "e97",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "L3",
+          "x": 215,
+          "y": 25
+        },
+        {
+          "id": "e98",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "PE",
+          "x": 360,
+          "y": 35
         }
       ],
       "location": "DS",
@@ -561,7 +670,7 @@
       "type": "control",
       "elements": [
         {
-          "id": "e40",
+          "id": "e42",
           "kind": "symbol",
           "designation": "-G1",
           "functionText": {"en":"Power supply 24 V"},
@@ -572,35 +681,35 @@
           "y": 50
         },
         {
-          "id": "e41",
+          "id": "e43",
           "kind": "wire",
           "number": "001N",
           "points": [{"x":57.5,"y":25},{"x":57.5,"y":40}],
           "potential": "N"
         },
         {
-          "id": "e42",
+          "id": "e44",
           "kind": "wire",
           "number": "002L1",
           "points": [{"x":62.5,"y":25},{"x":62.5,"y":40}],
           "potential": "L1"
         },
         {
-          "id": "e43",
+          "id": "e45",
           "kind": "wire",
           "number": "001P",
           "points": [{"x":62.5,"y":60},{"x":62.5,"y":70},{"x":320,"y":70}],
           "potential": "24VDC"
         },
         {
-          "id": "e44",
+          "id": "e46",
           "kind": "wire",
           "number": "001M",
           "points": [{"x":57.5,"y":60},{"x":57.5,"y":240},{"x":320,"y":240}],
           "potential": "0V"
         },
         {
-          "id": "e45",
+          "id": "e47",
           "kind": "symbol",
           "designation": "-S0",
           "functionText": {"en":"Emergency stop"},
@@ -611,7 +720,7 @@
           "y": 95
         },
         {
-          "id": "e46",
+          "id": "e48",
           "kind": "symbol",
           "designation": "-S2",
           "functionText": {"en":"Stop"},
@@ -622,7 +731,7 @@
           "y": 117
         },
         {
-          "id": "e47",
+          "id": "e49",
           "kind": "symbol",
           "designation": "-S1",
           "functionText": {"en":"Start"},
@@ -633,7 +742,7 @@
           "y": 139
         },
         {
-          "id": "e48",
+          "id": "e50",
           "kind": "symbol",
           "designation": "-FR1",
           "functionText": {"en":"Overload relay"},
@@ -644,7 +753,7 @@
           "y": 161
         },
         {
-          "id": "e49",
+          "id": "e51",
           "kind": "symbol",
           "designation": "-KM1",
           "functionText": {"en":"Conveyor contactor"},
@@ -654,16 +763,16 @@
           "x": 140,
           "y": 195
         },
-        {"id":"e50","kind":"wire","number":"001P","points":[{"x":140,"y":70},{"x":140,"y":90}]},
-        {"id":"e50-j1","kind":"junction","x":140,"y":70},
-        {"id":"e51","kind":"wire","number":"016","points":[{"x":140,"y":100},{"x":140,"y":112}]},
-        {"id":"e52","kind":"wire","number":"017","points":[{"x":140,"y":122},{"x":140,"y":134}]},
-        {"id":"e53","kind":"wire","number":"018","points":[{"x":140,"y":144},{"x":140,"y":156}]},
-        {"id":"e54","kind":"wire","number":"019","points":[{"x":140,"y":166},{"x":140,"y":190}]},
-        {"id":"e55","kind":"wire","number":"001M","points":[{"x":140,"y":200},{"x":140,"y":240}]},
-        {"id":"e55-j1","kind":"junction","x":140,"y":240},
+        {"id":"e52","kind":"wire","number":"001P","points":[{"x":140,"y":70},{"x":140,"y":90}]},
+        {"id":"e52-j1","kind":"junction","x":140,"y":70},
+        {"id":"e53","kind":"wire","number":"016","points":[{"x":140,"y":100},{"x":140,"y":112}]},
+        {"id":"e54","kind":"wire","number":"017","points":[{"x":140,"y":122},{"x":140,"y":134}]},
+        {"id":"e55","kind":"wire","number":"018","points":[{"x":140,"y":144},{"x":140,"y":156}]},
+        {"id":"e56","kind":"wire","number":"019","points":[{"x":140,"y":166},{"x":140,"y":190}]},
+        {"id":"e57","kind":"wire","number":"001M","points":[{"x":140,"y":200},{"x":140,"y":240}]},
+        {"id":"e57-j1","kind":"junction","x":140,"y":240},
         {
-          "id": "e56",
+          "id": "e58",
           "kind": "symbol",
           "designation": "-KM1",
           "functionText": {"en":"Self-hold"},
@@ -674,21 +783,21 @@
           "y": 139
         },
         {
-          "id": "e57",
+          "id": "e59",
           "kind": "wire",
           "number": "017",
           "points": [{"x":140,"y":128},{"x":190,"y":128},{"x":190,"y":134}]
         },
-        {"id":"e57-j1","kind":"junction","x":140,"y":128},
+        {"id":"e59-j1","kind":"junction","x":140,"y":128},
         {
-          "id": "e58",
+          "id": "e60",
           "kind": "wire",
           "number": "018",
           "points": [{"x":190,"y":144},{"x":190,"y":150},{"x":140,"y":150}]
         },
-        {"id":"e58-j1","kind":"junction","x":140,"y":150},
+        {"id":"e60-j1","kind":"junction","x":140,"y":150},
         {
-          "id": "e59",
+          "id": "e61",
           "kind": "symbol",
           "designation": "-KM1",
           "functionText": {"en":"Run"},
@@ -699,7 +808,7 @@
           "y": 160
         },
         {
-          "id": "e60",
+          "id": "e62",
           "kind": "symbol",
           "designation": "-H1",
           "functionText": {"en":"Conveyor running"},
@@ -709,13 +818,13 @@
           "x": 250,
           "y": 195
         },
-        {"id":"e61","kind":"wire","number":"001P","points":[{"x":250,"y":70},{"x":250,"y":155}]},
-        {"id":"e61-j1","kind":"junction","x":250,"y":70},
-        {"id":"e62","kind":"wire","number":"020","points":[{"x":250,"y":165},{"x":250,"y":190}]},
-        {"id":"e63","kind":"wire","number":"001M","points":[{"x":250,"y":200},{"x":250,"y":240}]},
-        {"id":"e63-j1","kind":"junction","x":250,"y":240},
+        {"id":"e63","kind":"wire","number":"001P","points":[{"x":250,"y":70},{"x":250,"y":155}]},
+        {"id":"e63-j1","kind":"junction","x":250,"y":70},
+        {"id":"e64","kind":"wire","number":"020","points":[{"x":250,"y":165},{"x":250,"y":190}]},
+        {"id":"e65","kind":"wire","number":"001M","points":[{"x":250,"y":200},{"x":250,"y":240}]},
+        {"id":"e65-j1","kind":"junction","x":250,"y":240},
         {
-          "id": "e64",
+          "id": "e66",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -725,7 +834,7 @@
           "y": 110
         },
         {
-          "id": "e65",
+          "id": "e67",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -734,6 +843,39 @@
           "value": "PLC-24V",
           "x": 320,
           "y": 70
+        },
+        {
+          "id": "e99",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "N",
+          "x": 57.5,
+          "y": 25
+        },
+        {
+          "id": "e100",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "L1",
+          "x": 62.5,
+          "y": 25
+        },
+        {
+          "id": "e101",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "potential-tag",
+          "value": "0V",
+          "x": 320,
+          "y": 240
         }
       ],
       "location": "DS",
@@ -746,7 +888,7 @@
       "type": "plc",
       "elements": [
         {
-          "id": "e66",
+          "id": "e68",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -756,19 +898,30 @@
           "x": 200,
           "y": 60
         },
-        {"id":"e67","kind":"wire","number":"021","points":[{"x":160,"y":60},{"x":200,"y":60}]},
         {
-          "id": "e68",
+          "id": "e69",
+          "kind": "symbol",
+          "designation": "-X2",
+          "mirror": false,
+          "rot": 90,
+          "symbolId": "terminal",
+          "value": "1",
+          "x": 155,
+          "y": 60
+        },
+        {"id":"e70","kind":"wire","number":"021","points":[{"x":160,"y":60},{"x":200,"y":60}]},
+        {
+          "id": "e71",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 3,
           "text": "Emergency stop healthy",
-          "x": 70,
+          "x": 65,
           "y": 61.5
         },
         {
-          "id": "e69",
+          "id": "e72",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -778,10 +931,21 @@
           "x": 200,
           "y": 76
         },
-        {"id":"e70","kind":"wire","number":"022","points":[{"x":160,"y":76},{"x":200,"y":76}]},
-        {"id":"e71","kind":"text","align":"left","rot":0,"size":3,"text":"Start","x":70,"y":77.5},
         {
-          "id": "e72",
+          "id": "e73",
+          "kind": "symbol",
+          "designation": "-X2",
+          "mirror": false,
+          "rot": 90,
+          "symbolId": "terminal",
+          "value": "2",
+          "x": 155,
+          "y": 76
+        },
+        {"id":"e74","kind":"wire","number":"022","points":[{"x":160,"y":76},{"x":200,"y":76}]},
+        {"id":"e75","kind":"text","align":"left","rot":0,"size":3,"text":"Start","x":65,"y":77.5},
+        {
+          "id": "e76",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -791,10 +955,21 @@
           "x": 200,
           "y": 92
         },
-        {"id":"e73","kind":"wire","number":"023","points":[{"x":160,"y":92},{"x":200,"y":92}]},
-        {"id":"e74","kind":"text","align":"left","rot":0,"size":3,"text":"Stop","x":70,"y":93.5},
         {
-          "id": "e75",
+          "id": "e77",
+          "kind": "symbol",
+          "designation": "-X2",
+          "mirror": false,
+          "rot": 90,
+          "symbolId": "terminal",
+          "value": "3",
+          "x": 155,
+          "y": 92
+        },
+        {"id":"e78","kind":"wire","number":"023","points":[{"x":160,"y":92},{"x":200,"y":92}]},
+        {"id":"e79","kind":"text","align":"left","rot":0,"size":3,"text":"Stop","x":65,"y":93.5},
+        {
+          "id": "e80",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -804,19 +979,30 @@
           "x": 200,
           "y": 108
         },
-        {"id":"e76","kind":"wire","number":"024","points":[{"x":160,"y":108},{"x":200,"y":108}]},
         {
-          "id": "e77",
+          "id": "e81",
+          "kind": "symbol",
+          "designation": "-X2",
+          "mirror": false,
+          "rot": 90,
+          "symbolId": "terminal",
+          "value": "4",
+          "x": 155,
+          "y": 108
+        },
+        {"id":"e82","kind":"wire","number":"024","points":[{"x":160,"y":108},{"x":200,"y":108}]},
+        {
+          "id": "e83",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 3,
           "text": "Conveyor contactor",
-          "x": 70,
+          "x": 65,
           "y": 109.5
         },
         {
-          "id": "e78",
+          "id": "e84",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -826,19 +1012,30 @@
           "x": 200,
           "y": 124
         },
-        {"id":"e79","kind":"wire","number":"025","points":[{"x":160,"y":124},{"x":200,"y":124}]},
         {
-          "id": "e80",
+          "id": "e85",
+          "kind": "symbol",
+          "designation": "-X2",
+          "mirror": false,
+          "rot": 90,
+          "symbolId": "terminal",
+          "value": "5",
+          "x": 155,
+          "y": 124
+        },
+        {"id":"e86","kind":"wire","number":"025","points":[{"x":160,"y":124},{"x":200,"y":124}]},
+        {
+          "id": "e87",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 3,
           "text": "Running lamp",
-          "x": 70,
+          "x": 65,
           "y": 125.5
         },
         {
-          "id": "e81",
+          "id": "e88",
           "kind": "rect",
           "assembly": "-A1",
           "dashed": true,
@@ -849,14 +1046,14 @@
           "y": 48
         },
         {
-          "id": "e82",
+          "id": "e89",
           "kind": "wire",
           "number": "001P",
           "points": [{"x":100,"y":35},{"x":160,"y":35}],
           "potential": "24VDC"
         },
         {
-          "id": "e83",
+          "id": "e90",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -867,7 +1064,7 @@
           "y": 35
         },
         {
-          "id": "e84",
+          "id": "e91",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -877,7 +1074,7 @@
           "y": 28
         },
         {
-          "id": "e85",
+          "id": "e92",
           "kind": "table",
           "cells": [
             ["Address","Signal","Device"],
@@ -893,6 +1090,17 @@
           "size": 3.2,
           "x": 260,
           "y": 60
+        },
+        {
+          "id": "e102",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 180,
+          "symbolId": "potential-tag",
+          "value": "24VDC",
+          "x": 100,
+          "y": 35
         }
       ],
       "location": "DS",
@@ -921,7 +1129,7 @@
       "type": "layout",
       "elements": [
         {
-          "id": "e86",
+          "id": "e93",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1040,6 +1248,15 @@
     {"designation":"+DS-S2","fields":{},"parts":[{"part":"generic-pushbutton-22mm-nc","qty":1}]},
     {
       "designation": "+DS-X1",
+      "fields": {},
+      "parts": [
+        {"part":"generic-terminal-feedthrough-4mm2","qty":1},
+        {"part":"generic-terminal-end-plate","qty":1},
+        {"part":"generic-terminal-end-stop","qty":2}
+      ]
+    },
+    {
+      "designation": "+DS-X2",
       "fields": {},
       "parts": [
         {"part":"generic-terminal-feedthrough-4mm2","qty":1},
@@ -1472,7 +1689,7 @@
     {"id":"110VDC","type":"H07V-K","colour":"BK","crossSection":"1.5","suffix":"P"},
     {"id":"signal","type":"H07V-K","colour":"BK","crossSection":"1.5","suffix":""}
   ],
-  "wireTypes": [],
+  "wireTypes": [{"id":"6mm2-BK","type":"H07V-K","colour":"BK","crossSection":"6"}],
   "cables": [
     {
       "id": "-W1",
@@ -1480,6 +1697,112 @@
       "functionText": {"en":"Motor cable"},
       "length": "12 m",
       "part": "generic-cable-power-4x2.5mm2"
+    }
+  ],
+  "issueStatus": "approval",
+  "revisions": [
+    {
+      "approved": "",
+      "checked": "",
+      "date": "2026-10-24",
+      "description": "First issue for approval",
+      "drawn": "CablePilot",
+      "inventory": {
+        "devices": {
+          "+DS-A1": "088cca10",
+          "+DS-FR1": "07abea67",
+          "+DS-G1": "188bc9ab",
+          "+DS-H1": "0d044b54",
+          "+DS-KM1": "1b862074",
+          "+DS-M1": "0d6e46ef",
+          "+DS-QF1": "0b4dce77",
+          "+DS-QS1": "02b29444",
+          "+DS-S0": "12af6cd7",
+          "+DS-S1": "11f7fd20",
+          "+DS-S2": "0ade04fe",
+          "+DS-X1": "1978dd93",
+          "+DS-X2": "08ae931e"
+        },
+        "parts": {
+          "GEN-AUX-BLOCK-1NO1NC": 1,
+          "GEN-CABLE-POWER-4X2,5MM2": 1,
+          "GEN-CONTACTOR-12A": 1,
+          "GEN-EMERGENCY-STOP-22MM": 1,
+          "GEN-ENCLOSURE-600X800X300": 1,
+          "GEN-MCB-3P-C32A": 1,
+          "GEN-MOTOR-3PH-5,5KW": 1,
+          "GEN-MOUNTING-PLATE-600X800": 1,
+          "GEN-OVERLOAD-RELAY-9A-13A": 1,
+          "GEN-PILOT-LAMP-22MM-24VDC": 1,
+          "GEN-PLC-CPU-COMPACT": 1,
+          "GEN-PLC-DI-16-24VDC": 1,
+          "GEN-PLC-DO-16-24VDC": 1,
+          "GEN-PSU-24VDC-10A": 1,
+          "GEN-PUSHBUTTON-22MM-NC": 1,
+          "GEN-PUSHBUTTON-22MM-NO": 1,
+          "GEN-SWITCH-DISCONNECTOR-3P-63A": 1,
+          "GEN-TERMINAL-END-PLATE": 2,
+          "GEN-TERMINAL-END-STOP": 4,
+          "GEN-TERMINAL-FEEDTHROUGH-4MM2": 17,
+          "GEN-TERMINAL-PE-4MM2": 3,
+          "GEN-WIRING-KIT": 1
+        },
+        "wires": {
+          "001 -FR1:2>-X1:1": "073027a2",
+          "001M -G1:->-KM1:A2": "0f55f30e",
+          "001M -KM1:A2>-H1:2": "0f55f30e",
+          "001P -G1:+>-S0:1": "0f55f30e",
+          "001P -S0:1>-KM1:1": "0f55f30e",
+          "002 -X1:1>-M1:U": "0ddba9ea",
+          "003 -QS1:2>-QF1:1": "11c22bc6",
+          "004 -QF1:2>-KM1:1": "11c22bc6",
+          "005 -KM1:2>-FR1:1": "073027a2",
+          "006 -QS1:4>-QF1:3": "11c22bc6",
+          "007 -QF1:4>-KM1:3": "11c22bc6",
+          "008 -KM1:4>-FR1:3": "073027a2",
+          "009 -FR1:4>-X1:2": "073027a2",
+          "010 -X1:2>-M1:V": "0aac0b6c",
+          "011 -QS1:6>-QF1:5": "11c22bc6",
+          "012 -QF1:6>-KM1:5": "11c22bc6",
+          "013 -KM1:6>-FR1:5": "073027a2",
+          "014 -FR1:6>-X1:3": "073027a2",
+          "015 -X1:3>-M1:W": "08fc5a5f",
+          "016 -S0:2>-S2:1": "073027a2",
+          "017 -S1:3>-KM1:1": "073027a2",
+          "017 -S2:2>-S1:3": "073027a2",
+          "018 -KM1:2>-FR1:1": "073027a2",
+          "018 -S1:4>-KM1:2": "073027a2",
+          "019 -FR1:2>-KM1:A1": "073027a2",
+          "020 -KM1:2>-H1:1": "073027a2",
+          "021 -X2:1>I0.0": "073027a2",
+          "022 -X2:2>I0.1": "073027a2",
+          "023 -X2:3>I0.2": "073027a2",
+          "024 -X2:4>Q0.0": "073027a2",
+          "025 -X2:5>Q0.1": "073027a2"
+        }
+      },
+      "number": "0",
+      "pages": [
+        {"id":"p1","hash":"17934a6b596445","title":"Cover sheet"},
+        {"id":"p2","hash":"0ad3e65d6bdf2b","title":"Contents"},
+        {"id":"p3","hash":"1a1e091f0157f6","title":"General data of the assembly"},
+        {"id":"p4","hash":"16f0656d8c0b99","title":"Single-line diagram"},
+        {"id":"p5","hash":"1528e0996c365d","title":"Motor power circuit"},
+        {"id":"p6","hash":"16678395bc851b","title":"Control circuit 24 V DC"},
+        {"id":"p7","hash":"1df3cdef220174","title":"PLC inputs and outputs"},
+        {"id":"pg-rep1","hash":"06ff2ec9041b9a.0557c314","title":"Terminal diagram"},
+        {"id":"pg-rep3","hash":"10d57a4ef38aba.0c821d03","title":"Cable list"},
+        {"id":"p8","hash":"060d05ae899ecd","title":"Cabinet layout"},
+        {"id":"pg-rep5","hash":"198990f51ffcfa.1a6eb022","title":"Wire list"},
+        {"id":"pg-rep7","hash":"1841cd26871c95.0615b75e","title":"Bill of materials"},
+        {"id":"pg-rep9","hash":"18862e7ab392df.02ac9e17","title":"Symbol legend 1/2"},
+        {"id":"pg-rep11","hash":"0bc3a8de6953bc.08e489bb","title":"Symbol legend 2/2"},
+        {"id":"pg-rep13","hash":"0971cb79b57391.06a62597","title":"Conductor colours"},
+        {"id":"pg-rep15","hash":"0af6beb17a9024.191b8d15","title":"Wire number suffixes"},
+        {"id":"pg-rep17","hash":"1e7f7e570c3ded.1e1b77a6","title":"Terminal tightening torques"},
+        {"id":"pg-rep19","hash":"0c6b113eabc420.19d2386d","title":"Nameplates"}
+      ],
+      "status": "approval"
     }
   ]
 }

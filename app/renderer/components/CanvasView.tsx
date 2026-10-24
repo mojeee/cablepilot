@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { t } from '@shared/i18n';
 import { apply, type Command } from '@shared/commands';
 import { buildPage, frameRect, symbolPrims } from '@shared/draw/page';
+import { runChecks } from '@shared/checks';
 import type { Built, Prim } from '@shared/draw/primitives';
 import { newId } from '@shared/ids';
 import { GRID, hitTest, inRect, onAnyWire, snapGrid, snapPoint, type Snap } from '@shared/geometry/pick';
@@ -184,8 +185,26 @@ export function CanvasView() {
       ctx.arc(cursor.x, cursor.y, 1.8, 0, Math.PI * 2);
       ctx.stroke();
     }
+    // Markers of the findings of the electrical rule check on this page (never printed).
+    for (const f of page ? (runChecks(project, lib).byPage.get(page.id) ?? []) : []) {
+      if (!f.at) continue;
+      const r = 3.2;
+      ctx.setLineDash([]);
+      ctx.fillStyle = f.severity === 'error' ? '#e5392d' : f.severity === 'warning' ? '#f0a63a' : '#4f8fe0';
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.arc(f.at.x, f.at.y - r - 1, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = f.severity === 'warning' ? '#1a1100' : '#ffffff';
+      ctx.font = `bold ${r * 1.6}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('!', f.at.x, f.at.y - r - 0.9);
+    }
     ctx.restore();
-  }, [built, page, view, size, theme, canvasTheme, selection, printPreview, cursor, draft, drag, tool, placing, ghost, dark, shown, fullLib, redrawTick, sheet.w, sheet.h]);
+  }, [project, lib, built, page, view, size, theme, canvasTheme, selection, printPreview, cursor, draft, drag, tool, placing, ghost, dark, shown, fullLib, redrawTick, sheet.w, sheet.h]);
 
   // ---- editing helpers ----
   const exec = useEditor.getState().exec;

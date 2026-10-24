@@ -17,7 +17,7 @@ added to the brief, in the milestone named in the last column.
 
 | Sheet | Content | Status before | Now in |
 |---|---|---|---|
-| 1 | Sheet index with per-sheet revision matrix, revision list (rev, date, description, drawn, checked, approved), issue status boxes (for proposal / for approval / for construction / as built), quantity of units to build, customer approval and signature block | Missing (only a "contents" report) | M4 (revisions), M1 (page templates) |
+| 1 | Sheet index with per-sheet revision matrix, revision list (rev, date, description, drawn, checked, approved), issue status boxes (for proposal / for approval / for construction / as built), quantity of units to build, customer approval and signature block | Missing (only a "contents" report) | M4 (revisions), M1 (page templates): done in M4 (generated cover sheet with the revision matrix of the last six revisions, revision list, status boxes, units to build, approval and signature block) |
 | 2 | General data sheets: mechanical, electrical (rated voltages, Icw, IEC 61439-2, insulation class, RDF), battery and DC-output data, with YES/NO tick boxes; conductor colour table (IEC 60445 codes, function, wire type, cross-section); wire-number suffix table | Missing | M1 (project data pages), M3 (generated colour/suffix tables): done in M3 |
 | 3–4 | Symbol legend, including company symbols (monitoring units, switch, RJ45, switching block) | Missing (no legend page, no in-app symbol editor) | M1 (symbol editor), M3 (generated legend): done in M3, used symbols only, company symbols included |
 | 5 | Legend of the company's standard boards and modules: detailed black boxes with named pins | Done in M2 (black boxes with pins, company macros) | M2 (macros) |
@@ -38,7 +38,7 @@ added to the brief, in the milestone named in the last column.
 | Drawing style: designations and wire numbers in red, line weights, CAD font | Missing | M1 (drawing styles) |
 | Drawing language different from the UI language (Italian drawings, English UI) | Missing | M1 (project drawing language) |
 | Free annotation: text (rotated, multi-line), lines, rectangles, dashed outlines, tables, images, warning signs | Missing | M1 |
-| Revisions: issue a revision, list which sheets changed, revision index per sheet, compare two revisions | Missing | M4 |
+| Revisions: issue a revision, list which sheets changed, revision index per sheet, compare two revisions | Missing | M4: done (issue with snapshot, changed pages, revision index in the title block and on the cover, comparison of pages, devices, wires and parts) |
 | Generic parts for DC and power electronics: batteries, diodes, rectifier and inverter modules, DC/DC converters, hall-effect current sensors, EMI filters, transformers with vector group, phase-monitoring relays, HMI, network switch, RJ45 | Done in M2 (was: library was focused on motor control) | M2 (library), rule 9 |
 | Editing an existing drawing like this one later | Covered for drawings made in CablePilot (open JSON format, undo). Importing an existing PDF or DXF set as an *intelligent* project is not planned | "After release 1" in the brief |
 

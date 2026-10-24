@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cablepilot.agentflowbind.com/schema/project.schema.json",
-  "title": "CablePilot project, file format version 2",
+  "title": "CablePilot project, file format version 4",
   "description": "A CablePilot project file (.cablepilot.json). Lengths are millimetres on the page; the origin is the top-left corner of the sheet, y down. Written with a stable key order so it diffs well in Git.",
   "type": "object",
-  "required": ["format", "version", "id", "name", "settings", "properties", "assembly", "templates", "potentials", "pages", "assets", "symbols", "devices", "parts", "projectParts", "wireClasses", "wireTypes", "cables"],
+  "required": ["format", "version", "id", "name", "settings", "properties", "assembly", "templates", "potentials", "pages", "assets", "symbols", "devices", "parts", "projectParts", "wireClasses", "wireTypes", "cables", "issueStatus", "revisions"],
   "properties": {
     "format": { "const": "cablepilot-project" },
     "version": { "type": "integer", "minimum": 1 },
@@ -12,13 +12,13 @@
     "name": { "type": "string" },
     "settings": {
       "type": "object",
-      "required": ["drawingLanguage", "symbolStandard", "style", "defaultSize", "defaultTemplateId", "crossRef", "bom", "numbering", "wireColours"],
+      "required": ["drawingLanguage", "symbolStandard", "style", "defaultSize", "defaultTemplateId", "crossRef", "bom", "numbering", "wireColours", "installationMethod"],
       "properties": {
         "drawingLanguage": { "enum": ["en", "it"] },
         "symbolStandard": { "enum": ["iec", "nfpa"] },
         "defaultSize": { "$ref": "#/$defs/size" },
         "defaultTemplateId": { "type": "string" },
-        "wireColours": { "type": "boolean" }, "numbering": { "type": "object", "required": ["scheme", "pattern", "start", "step"], "properties": { "scheme": { "enum": ["potential", "page-column", "sequential"] }, "pattern": { "type": "string" }, "start": { "type": "integer", "minimum": 0 }, "step": { "type": "integer", "minimum": 1 } } }, "crossRef": { "type": "object", "required": ["format", "pageDigits"], "properties": { "format": { "enum": ["page.column", "page-column-row"] }, "pageDigits": { "type": "integer", "minimum": 0 } } },
+        "wireColours": { "type": "boolean" }, "installationMethod": { "type": "string", "description": "IEC 60364-5-52 installation method letter stated for the conductors (B2, C, E...); empty: not stated" }, "numbering": { "type": "object", "required": ["scheme", "pattern", "start", "step"], "properties": { "scheme": { "enum": ["potential", "page-column", "sequential"] }, "pattern": { "type": "string" }, "start": { "type": "integer", "minimum": 0 }, "step": { "type": "integer", "minimum": 1 } } }, "crossRef": { "type": "object", "required": ["format", "pageDigits"], "properties": { "format": { "enum": ["page.column", "page-column-row"] }, "pageDigits": { "type": "integer", "minimum": 0 } } },
         "bom": { "type": "object", "required": ["columns", "units", "group", "userFields"], "properties": { "columns": { "type": "array", "items": { "type": "string" } }, "units": { "type": "number", "minimum": 1 }, "group": { "enum": ["device", "part"] }, "userFields": { "type": "array", "items": { "type": "object", "required": ["id", "label"], "properties": { "id": { "type": "string" }, "label": { "$ref": "#/$defs/ltext" } } } } } },
         "style": {
           "type": "object",
@@ -44,6 +44,8 @@
     "wireClasses": { "type": "array", "description": "Company wire-class table: function (a potential id or signal), colour code, cross-section, type text, suffix", "items": { "type": "object", "required": ["id", "colour", "crossSection", "type", "suffix"], "properties": { "id": { "type": "string" }, "colour": { "type": "string" }, "crossSection": { "type": "string" }, "type": { "type": "string" }, "suffix": { "type": "string" } } } },
     "wireTypes": { "type": "array", "items": { "type": "object", "required": ["id", "type", "crossSection", "colour"], "properties": { "id": { "type": "string" }, "type": { "type": "string" }, "crossSection": { "type": "string" }, "colour": { "type": "string" } } } },
     "cables": { "type": "array", "items": { "type": "object", "required": ["id", "kind"], "properties": { "id": { "type": "string" }, "kind": { "enum": ["multicore", "ribbon", "patch"] }, "part": { "type": "string" }, "from": { "type": "string" }, "to": { "type": "string" }, "length": { "type": "string" }, "functionText": { "$ref": "#/$defs/ltext" } } } },
+    "issueStatus": { "enum": ["proposal", "approval", "construction", "asBuilt"], "description": "Issue status of the whole set" },
+    "revisions": { "type": "array", "description": "Issued revisions, oldest first, each with a snapshot (page hashes and an inventory of devices, wires and parts) taken at issue time", "items": { "type": "object", "required": ["number", "date", "description", "drawn", "checked", "approved", "status", "pages", "inventory"], "properties": { "number": { "type": "string" }, "date": { "type": "string" }, "description": { "type": "string" }, "drawn": { "type": "string" }, "checked": { "type": "string" }, "approved": { "type": "string" }, "status": { "enum": ["proposal", "approval", "construction", "asBuilt"] }, "pages": { "type": "array", "items": { "type": "object", "required": ["id", "title", "hash"], "properties": { "id": { "type": "string" }, "title": { "type": "string" }, "hash": { "type": "string" } } } }, "inventory": { "type": "object", "required": ["devices", "wires", "parts"], "properties": { "devices": { "type": "object", "additionalProperties": { "type": "string" } }, "wires": { "type": "object", "additionalProperties": { "type": "string" } }, "parts": { "type": "object", "additionalProperties": { "type": "number" } } } } } } },
     "symbols": { "type": "array", "description": "Company symbols the project uses, embedded (same format as library/symbols)", "items": { "type": "object", "required": ["id", "kind", "pins", "graphics"], "properties": { "id": { "type": "string" }, "kind": { "const": "symbol" }, "pins": { "type": "array" }, "graphics": { "type": "array" } } } }
   },
   "$defs": {

@@ -327,6 +327,30 @@ export interface CableRec {
   functionText?: LText;
 }
 
+/** The issue status of the whole set (the four boxes on the cover sheet). */
+export const ISSUE_STATUSES = ['proposal', 'approval', 'construction', 'asBuilt'] as const;
+export type IssueStatus = (typeof ISSUE_STATUSES)[number];
+
+/**
+ * An issued revision (M4): the number, date and description, who drew, checked and approved it, and a
+ * snapshot taken at issue time: one hash per page (to work out which pages changed since) and an
+ * inventory of devices, wires and parts (to compare two revisions). Snapshots are plain data, so they
+ * diff well in Git and travel with the file.
+ */
+export interface Revision {
+  number: string;
+  /** ISO date, yyyy-mm-dd. */
+  date: string;
+  description: string;
+  drawn: string;
+  checked: string;
+  approved: string;
+  /** The issue status of the set when this revision was issued. */
+  status: IssueStatus;
+  pages: { id: string; title: string; hash: string }[];
+  inventory: { devices: Record<string, string>; wires: Record<string, string>; parts: Record<string, number> };
+}
+
 export interface ProjectSettings {
   /** Language of the texts printed on drawings: separate from the UI language. */
   drawingLanguage: Lang;
@@ -340,6 +364,8 @@ export interface ProjectSettings {
   numbering: NumberingSettings;
   /** Draw conductors in the IEC 60757 colour of their wire class. */
   wireColours: boolean;
+  /** Installation method of the conductors (IEC 60364-5-52 letter: B2, C, E...); empty: not stated, the cross-section check is skipped. */
+  installationMethod: string;
 }
 
 export const PROJECT_FORMAT = 'cablepilot-project';
@@ -370,4 +396,7 @@ export interface Project {
   wireClasses: WireClass[];
   wireTypes: WireType[];
   cables: CableRec[];
+  /** Issue status of the set and the revisions issued so far, oldest first. */
+  issueStatus: IssueStatus;
+  revisions: Revision[];
 }

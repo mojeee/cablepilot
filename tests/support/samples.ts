@@ -11,6 +11,8 @@ import { zoneRange } from '@shared/model/zones';
 import { sheetMm } from '@shared/sheets';
 import { reportPageCommands } from '@shared/draw/report';
 import type { ReportId } from '@shared/model/types';
+import { runChecks } from '@shared/checks';
+import type { Rot } from '@shared/model/types';
 import { builder } from './builder';
 
 type B = ReturnType<typeof builder>;
@@ -49,10 +51,17 @@ function viaTerminals(b: B, pg: string, from: Pt[], to: Pt[], strip: string, opt
     b.wire(pg, [t.pin('2'), P(tx, yb), P(to[i].x, yb), to[i]], { cable: opts.cable, core: opts.cores?.[i] });
   });
 }
+/** Issues a revision with the same command the app uses (the snapshot records every page, device, wire and part). */
+function issue(b: B, number: string, date: string, description: string, status: 'proposal' | 'approval' | 'construction' | 'asBuilt', names = { drawn: 'CablePilot', checked: '', approved: '' }) {
+  b.run({ type: 'revision/issue', revision: { number, date, description, status, ...names } });
+}
 /** The end of every sample: terminals and wires numbered, conductors coloured, report pages added before the layout page and at the end. */
 function finishSample(b: B, lib: Library, early: ReportId[], late: ReportId[]) {
   let k = 0;
   const mk = (prefix: string) => `${prefix}-rep${++k}`;
+  tagFreeEnds(b, lib);
+  b.run({ type: 'project/settings', settings: { installationMethod: 'B1' } });
+  sizeConductors(b, lib);
   b.run({ type: 'terminal/renumber' });
   b.run({ type: 'wire/renumber' });
   b.run({ type: 'project/settings', settings: { wireColours: true } });
@@ -60,12 +69,45 @@ function finishSample(b: B, lib: Library, early: ReportId[], late: ReportId[]) {
   b.run({ type: 'batch', label: 'report pages', commands: reportPageCommands(b.project, lib, early, at, mk) });
   b.run({ type: 'batch', label: 'report pages', commands: reportPageCommands(b.project, lib, late, undefined, mk) });
 }
-/** Wires a PLC input or output channel: the signal text on the left, the wire to the channel symbol. */
+/** Wires a PLC input or output channel: the signal text on the left, a field terminal of strip -X2, the wire to the channel symbol. */
 function channel(b: B, pg: string, kind: 'plc-input' | 'plc-output', addr: string, text: string, y: number, x = 200) {
   const ch = b.place(pg, kind, x, y, { value: addr });
-  b.wire(pg, [P(x - 40, y), ch.pin('1')]);
-  b.text(pg, x - 130, y + 1.5, text, { size: 3 });
+  const t = b.place(pg, 'terminal', x - 45, y, { designation: '-X2', rot: 90 });
+  const right = ['1', '2'].map((id) => t.pin(id)).sort((p, q) => q.x - p.x)[0];
+  b.wire(pg, [right, ch.pin('1')]);
+  b.text(pg, x - 135, y + 1.5, text, { size: 3 });
   return ch;
+}
+/** Protective earth: an earth symbol joined to the incoming PE conductor (a PE tag on the free end). */
+function peFeed(b: B, pg: string, x: number, y: number) {
+  const e = b.place(pg, 'earth-pe', x, y);
+  b.wire(pg, [e.pin('1'), P(x, y - 25)], { potential: 'PE' });
+}
+/** A potential tag on every free end of a wire that names a potential (the supply of the page): the end is then a proper connection point. */
+function tagFreeEnds(b: B, lib: Library) {
+  for (let round = 0; round < 200; round++) {
+    const f = runChecks(b.project, lib).findings.find((x) => {
+      if (x.rule !== 'unconnected-wire' || !x.page || !x.element) return false;
+      const w = b.project.pages.find((pg) => pg.id === x.page)?.elements.find((e) => e.id === x.element);
+      return w?.kind === 'wire' && !!w.potential;
+    });
+    if (!f || !f.at || !f.page || !f.element) return;
+    const w = b.project.pages.find((pg) => pg.id === f.page)!.elements.find((e) => e.id === f.element);
+    if (w?.kind !== 'wire' || !w.potential) return;
+    const first = w.points[0].x === f.at.x && w.points[0].y === f.at.y;
+    const nb = first ? w.points[1] : w.points[w.points.length - 2];
+    const dx = Math.sign(nb.x - f.at.x), dy = Math.sign(nb.y - f.at.y);
+    const rot: Rot = dx < 0 ? 0 : dx > 0 ? 180 : dy < 0 ? 90 : 270;
+    b.place(f.page, 'potential-tag', f.at.x, f.at.y, { rot, value: w.potential });
+  }
+}
+/** Applies the one-click fixes of the cross-section check, the same commands the app offers, so the sample ships correctly sized conductors. */
+function sizeConductors(b: B, lib: Library) {
+  for (let round = 0; round < 100; round++) {
+    const f = runChecks(b.project, lib).findings.find((x) => x.rule === 'cable-size' && x.fix);
+    if (!f?.fix) return;
+    b.run({ type: 'batch', label: 'fix', commands: f.fix.commands });
+  }
 }
 
 export function conveyorSample(lib: Library) {
@@ -106,6 +148,7 @@ export function conveyorSample(lib: Library) {
   link3(b, pw, km, fr, undefined, undefined, num);
   // Field wiring: the motor is connected through terminal strip -X1 with a motor cable -W1.
   viaTerminals(b, pw, [fr.pin('2'), fr.pin('4'), fr.pin('6')], ['U', 'V', 'W'].map((p) => mo.pin(p)), '-X1', { cable: '-W1', cores: ['BN', 'BK', 'GY'] });
+  peFeed(b, pw, 360, 60);
   b.rect(pw, X0 - 40, 40, 80, 125, { dashed: true, label: 'Starter' });
   b.warning(pw, X0 - 100, 60, 'electric');
   note(b, pw, X0 + 60, 80, 'Motor starter, direct on line.\nProtection: motor circuit breaker\nand overload relay.');
@@ -169,10 +212,12 @@ export function conveyorSample(lib: Library) {
   b.projectPart('generic-terminal-feedthrough-4mm2', 9);
   b.projectPart('generic-terminal-pe-4mm2', 3);
   b.parts(pw, '-X1', [['generic-terminal-feedthrough-4mm2', 1], ['generic-terminal-end-plate', 1], ['generic-terminal-end-stop', 2]]);
+  b.parts(plc, '-X2', [['generic-terminal-feedthrough-4mm2', 1], ['generic-terminal-end-plate', 1], ['generic-terminal-end-stop', 2]]);
   b.run({ type: 'part/embed', def: lib.parts.get('generic-cable-power-4x2.5mm2')! });
   b.run({ type: 'cable/set', cable: { id: '-W1', kind: 'multicore', part: 'generic-cable-power-4x2.5mm2', length: '12 m', functionText: { en: 'Motor cable' } } });
   b.fields(pw, '-QF1', { nameplate: 'Conveyor motor\nbreaker' });
   finishSample(b, lib, ['terminals', 'cables'], ['wires', 'bom', 'legend', 'colours', 'suffixes', 'torque', 'nameplates']);
+  issue(b, '0', '2026-10-24', 'First issue for approval', 'approval');
   return b.project;
 }
 
@@ -230,6 +275,7 @@ export function pumpSample(lib: Library) {
     b.wire(pw, [km3.pin('2'), km3.pin('6')]);
     b.rect(pw, X - 20, 40, 95, 185, { dashed: true, label: `Star-delta starter, pump ${i + 1}` });
   });
+  peFeed(b, pw, 390, 50);
   note(b, pw, 160, 240, 'Star-delta starting: the star contactor closes with the main contactor;\nafter the timer it opens and the delta contactor closes.');
   // Control: level switch, overload contact, timer and the three contactor coils per pump.
   const ct = b.addPage('control', { en: 'Pump control, star-delta' }, { location: 'PS' });
@@ -277,13 +323,14 @@ export function pumpSample(lib: Library) {
   for (let i = 0; i < 2; i++) {
     b.parts(pw, `-KM${i * 3 + 1}`, [['generic-contactor-18a', 1], ['generic-aux-block-1no1nc', 1]]);
     b.parts(pw, `-KM${i * 3 + 2}`, [['generic-contactor-18a', 1]]);
-    b.parts(pw, `-KM${i * 3 + 3}`, [['generic-contactor-12a', 1]]);
+    b.parts(pw, `-KM${i * 3 + 3}`, [['generic-contactor-12a', 1], ['generic-aux-block-1no1nc', 1]]);
     b.parts(pw, `-FR${i + 1}`, [['generic-overload-relay-9a-13a', 1]]);
     b.parts(pw, `-M${i + 1}`, [['generic-motor-3ph-7.5kw', 1]]);
-    b.parts(ct, `-KT${i + 1}`, [['generic-timer-relay-star-delta', 1]]);
+    b.parts(ct, `-KT${i + 1}`, [['generic-timer-relay-star-delta', 1], ['generic-aux-block-1no1nc', 1]]);
     b.parts(ct, `-BL${i + 1}`, [['generic-limit-switch-1no', 1]]);
   }
   b.parts(plc, '-A1', [['generic-plc-cpu-compact', 1], ['generic-plc-di-16-24vdc', 1], ['generic-plc-do-16-24vdc', 1]]);
+  b.parts(plc, '-X2', [['generic-terminal-feedthrough-4mm2', 1], ['generic-terminal-end-plate', 1], ['generic-terminal-end-stop', 2]]);
   b.projectPart('generic-enclosure-800x1000x300', 1, { make: 'Buy' });
   b.projectPart('generic-mounting-plate-600x800', 1, { make: 'Buy' });
   b.projectPart('generic-wiring-kit', 1, { make: 'Make' });
@@ -292,6 +339,7 @@ export function pumpSample(lib: Library) {
   b.projectPart('generic-terminal-pe-10mm2', 6);
   b.parts(ct, '-X1', [['generic-terminal-feedthrough-2.5mm2', 1], ['generic-terminal-end-plate', 1]]);
   finishSample(b, lib, ['terminals', 'cables'], ['wires', 'bom', 'legend', 'colours', 'suffixes', 'torque', 'nameplates']);
+  issue(b, '0', '2026-10-24', 'First issue as a proposal', 'proposal');
   return b.project;
 }
 
@@ -353,6 +401,7 @@ export function chargerSample(lib: Library) {
   b.place(pw, 'interruption-point', 300, yM, { value: 'L-' });
   b.rect(pw, XA - 20, 168, 40, 44, { dashed: true });
   b.rect(pw, XB - 20, 168, 40, 44, { dashed: true });
+  peFeed(b, pw, 380, 60);
   b.warning(pw, 45, 100, 'electric');
   note(b, pw, 300, 90, 'Uscita 110 V DC, 30 A.\nI due moduli lavorano in parallelo.');
   // DC output and battery (page 07): the switching block -A5 holds fuse, contactor, diode and current sensor.
@@ -386,7 +435,7 @@ export function chargerSample(lib: Library) {
   b.wire(dc, [P(290, 170), P(385, 170), P(385, 75), P(360, 75), xo2.pin('1')]);
   b.wire(dc, [xo2.pin('2'), P(360, 125)], { potential: 'L-' });
   b.warning(dc, 370, 30, 'electric');
-  note(b, dc, 40, 215, 'Batteria: 55 elementi al piombo da 2 V in serie (110 V).\nIl sensore -B1 misura la corrente di uscita (segnale IOUT).');
+  note(b, dc, 40, 215, 'Batteria: 54 elementi al piombo da 2 V in serie (108 V).\nIl sensore -B1 misura la corrente di uscita (segnale IOUT).');
   // Alarm relays and the plug to the PLC interface (page 08).
   const al = b.addPage('control', { en: 'Alarm relays', it: 'Relè di allarme' }, { location: 'DS' });
   b.wire(al, [P(40, 60), P(395, 60)], { potential: '24VDC' });
@@ -447,7 +496,7 @@ export function chargerSample(lib: Library) {
   b.parts(dc, '-KM1', [['generic-contactor-dc-2p-63a', 1]]);
   b.parts(dc, '-V1', [['generic-diode-power-50a-1600v', 1]]);
   b.parts(dc, '-B1', [['generic-hall-sensor-100a', 1]]);
-  b.parts(dc, '-G1', [['generic-battery-cell-2v-100ah', 55]]);
+  b.parts(dc, '-G1', [['generic-battery-cell-2v-100ah', 54]]);
   b.parts(dc, '-P1', [['generic-panel-meter-dc-voltmeter', 1]]);
   b.parts(dc, '-A5', [['generic-din-rail-35mm-1m', 1]]);
   b.parts(al, '-K1', [['generic-phase-monitor-relay-3ph', 1]]);
@@ -477,6 +526,12 @@ export function chargerSample(lib: Library) {
   b.fields(pw, '-QF1', { nameplate: 'Ingresso c.a.\nalimentazione ausiliari' });
   b.fields(dc, '-F1', { nameplate: 'Fusibile batteria\n63 A DC' });
   finishSample(b, lib, ['terminals', 'cables'], ['wires', 'pins', 'bom', 'legend', 'colours', 'suffixes', 'torque', 'nameplates']);
+  // A real production set: revision 0 went out for approval; revision 1 changes the battery string, which changes the DC page and the BOM.
+  issue(b, '0', '2026-09-15', 'Prima emissione per approvazione', 'approval', { drawn: 'CablePilot', checked: 'Ufficio tecnico', approved: '' });
+  const noteEl = b.project.pages.find((p) => p.id === dc)!.elements.find((e) => e.kind === 'text' && e.text.startsWith('Batteria:'))!;
+  b.run({ type: 'el/update', page: dc, id: noteEl.id, patch: { text: 'Batteria: 55 elementi al piombo da 2 V in serie (110 V).\nIl sensore -B1 misura la corrente di uscita (segnale IOUT).' } });
+  b.parts(dc, '-G1', [['generic-battery-cell-2v-100ah', 55]]);
+  issue(b, '1', '2026-10-24', 'Batteria portata a 55 elementi (110 V)', 'construction', { drawn: 'CablePilot', checked: 'Ufficio tecnico', approved: 'Direzione' });
   return b.project;
 }
 

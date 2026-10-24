@@ -106,7 +106,7 @@ test('place a symbol, draw a wire, undo, save and export a PDF', async () => {
 test('the sample projects open', async () => {
   const { page, close } = await launch();
   try {
-    for (const [id, name, pages] of [['conveyor', 'Conveyor with direct-on-line starter', 18], ['pump-station', 'Pump station, two pumps', 19], ['dc-charger', 'Caricabatterie 110 V DC', 23]] as const) {
+    for (const [id, name, pages] of [['conveyor', 'Conveyor with direct-on-line starter', 18], ['pump-station', 'Pump station, two pumps', 21], ['dc-charger', 'Caricabatterie 110 V DC', 23]] as const) {
       await page.getByTestId('samples').selectOption(id);
       await expect(page.getByTestId('project-name')).toContainText(name);
       await expect(page.getByRole('region', { name: 'Messages' })).toContainText(`Opened ${name}.`);
@@ -285,6 +285,85 @@ test('M3: number the wires, view the terminal diagram, export the PDF set and th
     expect(doc.getPageCount()).toBe(23);
     // The text is embedded (a font file in the PDF), so it shows in every viewer.
     expect(doc.context.enumerateIndirectObjects().some(([, o]) => o instanceof PDFDict && o.has(PDFName.of('FontFile2')))).toBe(true);
+  } finally {
+    await close();
+  }
+});
+
+test('M4: the warnings banner finds a loose wire, fixes it with one click, and undo brings it back', async () => {
+  const { page, close } = await launch();
+  try {
+    const box = (await page.getByTestId('page-canvas').boundingBox())!;
+    const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
+    await expect(page.getByTestId('checks-banner')).toHaveCount(0);
+    await expect(page.getByTestId('no-findings')).toBeVisible();
+    await page.keyboard.press('w');
+    await page.mouse.click(cx - 150, cy - 100);
+    await page.mouse.click(cx - 50, cy - 100);
+    await page.keyboard.press('Enter');
+    const banner = page.getByTestId('checks-banner');
+    await expect(banner).toBeVisible();
+    await expect(page.getByTestId('checks-summary')).toContainText('0 errors, 1 warnings');
+    const finding = page.getByTestId('finding');
+    await expect(finding).toHaveCount(1);
+    await expect(finding).toContainText('not connected at either end');
+    await expect(finding).toContainText('IEC 61082-1');
+    await page.getByTestId('fix-one').click();
+    await expect(banner).toHaveCount(0);
+    await expect(page.getByTestId('no-findings')).toBeVisible();
+    await page.getByTestId('undo').click();
+    await expect(banner).toBeVisible();
+    // Fix all of them in one step, in Italian.
+    await page.getByLabel('Language').selectOption('it');
+    await expect(page.getByTestId('checks-summary')).toContainText('0 errori, 1 avvisi');
+    await page.getByTestId('fix-all').click();
+    await expect(banner).toHaveCount(0);
+  } finally {
+    await close();
+  }
+});
+
+test('M4: issue a revision, see the changed page, compare, and read the cover sheet', async () => {
+  const { page, out, close } = await launch();
+  try {
+    await page.getByTestId('samples').selectOption('conveyor');
+    await expect(page.getByTestId('project-name')).toContainText('Conveyor');
+    // The sample ships with revision 0 issued and nothing changed since.
+    await expect(page.getByTestId('checks-banner')).toHaveCount(0);
+    await expect(page.getByTestId('page-changed')).toHaveCount(0);
+    // Change one page: it is marked in the navigator and listed in the Revisions window.
+    await page.getByTestId('page-5').click();
+    const box = (await page.getByTestId('page-canvas').boundingBox())!;
+    await page.getByTestId('symbol-lamp').click();
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await page.keyboard.press('Escape');
+    // The power page and the lists that print from it (BOM, nameplates...) changed.
+    await expect(page.getByTestId('page-changed').first()).toBeVisible();
+    expect(await page.getByTestId('page-changed').count()).toBeGreaterThanOrEqual(2);
+    await page.getByTestId('revisions').click();
+    await expect(page.getByTestId('changed-pages')).toContainText('changed');
+    await page.getByTestId('issue-status').selectOption('construction');
+    await page.getByTestId('rev-description').fill('Lamp added');
+    await page.getByTestId('rev-description').blur();
+    await page.getByTestId('issue-revision').click();
+    await expect(page.getByRole('region', { name: 'Messages' })).toContainText('Revision 1 issued');
+    await expect(page.getByTestId('page-changed')).toHaveCount(0);
+    // The window lists both revisions and compares them: the changed page is highlighted.
+    await page.getByTestId('revisions').click();
+    await expect(page.getByTestId('revision-table').locator('tbody tr')).toHaveCount(2);
+    await page.getByTestId('cmp-from').selectOption('0');
+    await page.getByTestId('cmp-to').selectOption('1');
+    await expect(page.getByTestId('cmp-pages').locator('li.rev-changed').first()).toBeVisible();
+    await expect(page.getByTestId('cmp-devices')).toContainText('-H');
+    await page.keyboard.press('Escape');
+    // The cover sheet (page 1) is a canvas; the saved file holds the revisions and the status.
+    await page.getByTestId('save').click();
+    const file = readdirSync(out).find((f) => f.endsWith('.cablepilot.json'))!;
+    const saved = JSON.parse(readFileSync(join(out, file), 'utf8')) as { issueStatus: string; version: number; revisions: { number: string; description: string; pages: unknown[] }[] };
+    expect(saved.version).toBe(4);
+    expect(saved.issueStatus).toBe('construction');
+    expect(saved.revisions.map((r) => r.number)).toEqual(['0', '1']);
+    expect(saved.revisions[1].description).toBe('Lamp added');
   } finally {
     await close();
   }

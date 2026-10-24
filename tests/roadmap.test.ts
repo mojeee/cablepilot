@@ -12,12 +12,13 @@ describe('docs/roadmap.md', () => {
   });
   it('has the M7-AI Assistant heading the site reads', () => expect(headings).toContain('## M7-AI Assistant'));
   it('has the release section the site reads', () => expect(headings.some((h) => /^## M8 Release/.test(h))).toBe(true));
-  it('has M0 to M3 fully ticked and M4 not started', () => {
+  it('has M0 to M4 fully ticked and M5 not started', () => {
     const section = (id: string) => roadmap.split(new RegExp(`^## ${id}\\b.*$`, 'm'))[1].split(/^## /m)[0];
     expect(section('M0')).not.toMatch(/- \[ \]/);
     expect(section('M1')).not.toMatch(/- \[ \]/);
     expect(section('M2')).not.toMatch(/- \[ \]/);
     expect(section('M3')).not.toMatch(/- \[ \]/);
-    expect(section('M4')).not.toMatch(/- \[x\]/);
+    expect(section('M4')).not.toMatch(/- \[ \]/);
+    expect(section('M5')).not.toMatch(/- \[x\]/);
   });
 });

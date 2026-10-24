@@ -10,10 +10,11 @@ import type { Library, MacroDef, PartDef } from '../library/types';
 import { withProjectSymbols } from '../library/types';
 import type { SymbolDef } from '../library/types';
 import { placeMacro } from '../macros';
-import type { BoxEl, CableRec, DeviceRec, El, JunctionEl, Page, PartUse, Potential, Project, ProjectPart, ProjectSettings, Pt, RectEl, Rot, SymbolEl, Template, WireEl, WireClass, WireType, Asset } from '../model/types';
+import type { IssueStatus, Revision, BoxEl, CableRec, DeviceRec, El, JunctionEl, Page, PartUse, Potential, Project, ProjectPart, ProjectSettings, Pt, RectEl, Rot, SymbolEl, Template, WireEl, WireClass, WireType, Asset } from '../model/types';
 import { fullDesignation, nextDesignation, parseDesignation, renumber } from '../numbering';
 import { terminalStrips } from '../reports';
 import { renumberWires } from '../wires';
+import { makeSnapshot } from '../revisions';
 
 export type Command =
   | { type: 'project/set'; name?: string; properties?: Record<string, string>; assembly?: Record<string, string> }
@@ -54,6 +55,10 @@ export type Command =
   /** Draws a dashed outline for an assembly (rect.assembly is its designation) and nests the devices in it. */
   | { type: 'assembly/create'; page: string; rect: RectEl; children: string[] }
   | { type: 'macro/place'; page: string; macro: MacroDef; x: number; y: number; prefix: string }
+  /** Sets the issue status of the set (for proposal, approval, construction, as built). */
+  | { type: 'issue/status'; status: IssueStatus }
+  /** Issues a revision: stores the number, date, description and names with a snapshot of every page, device, wire and part, and sets the status and the title-block fields. */
+  | { type: 'revision/issue'; revision: Omit<Revision, 'pages' | 'inventory'> }
   | { type: 'batch'; label: string; commands: Command[] };
 
 export interface Ctx {
@@ -390,6 +395,12 @@ export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
       return { ...project, cables: cables.sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true })) };
     }
     case 'cable/remove': return { ...project, cables: project.cables.filter((c) => c.id !== cmd.id) };
+    case 'issue/status': return project.issueStatus === cmd.status ? project : { ...project, issueStatus: cmd.status };
+    case 'revision/issue': {
+      const r = cmd.revision;
+      const props = { ...project.properties, revision: r.number, issueDate: r.date, ...(r.drawn ? { drawn: r.drawn } : {}), ...(r.checked ? { checked: r.checked } : {}), ...(r.approved ? { approved: r.approved } : {}) };
+      return { ...project, issueStatus: r.status, properties: props, revisions: [...project.revisions, { ...r, ...makeSnapshot(project, ctx.lib) }] };
+    }
     case 'batch': return cmd.commands.reduce((p, c) => apply(p, c, ctx), project);
   }
 }

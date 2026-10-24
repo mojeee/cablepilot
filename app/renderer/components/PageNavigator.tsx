@@ -4,6 +4,8 @@ import { newId } from '@shared/ids';
 import { pageNumber } from '@shared/titleblock';
 import type { Page } from '@shared/model/types';
 import type { PageType } from '@shared/sheets';
+import { changedPages } from '@shared/revisions';
+import { useMemo } from 'react';
 import { useEditor } from '../state/editor';
 import { useUi } from '../state/ui';
 
@@ -37,6 +39,8 @@ export function PageNavigator() {
   const i = project.pages.findIndex((p) => p.id === pageId);
   const cur = project.pages[i];
   const lang = project.settings.drawingLanguage;
+  const lib = useEditor((s) => s.lib);
+  const changed = useMemo(() => new Map(changedPages(project, lib).map((c) => [c.id, c.status])), [project, lib]);
   return (
     <nav className="panel navigator" aria-label={t('Page navigator')}>
       <h2>{t('Pages')}</h2>
@@ -53,7 +57,7 @@ export function PageNavigator() {
             <button type="button" data-testid={`page-${n + 1}`} className={p.id === pageId ? 'page-item selected' : 'page-item'} aria-current={p.id === pageId ? 'page' : undefined} onClick={() => setPage(p.id)}>
               <span className="num">{pageNumber(n + 1)}</span>
               <span className="page-name">
-                <span>{pick(p.title, lang) || dt(lang, `type.${p.type}`)}</span>
+                <span>{pick(p.title, lang) || dt(lang, `type.${p.type}`)}{changed.has(p.id) && <span className="changed-dot" data-testid="page-changed" title={t('Changed since the last issued revision')}>●</span>}</span>
                 <span className="sub">{pageTypeLabel(p.type)} · {p.size}</span>
               </span>
             </button>

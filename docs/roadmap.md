@@ -62,11 +62,11 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 
 ## M4 Checks and revisions
 
-- [ ] Electrical rule check (rule 5) with the warnings banner and one-click fixes
-- [ ] Issue status of the set: for proposal, for approval, for construction, as built
-- [ ] Issue a revision (number, date, description, drawn / checked / approved); the app works out which pages changed
-- [ ] Generated cover sheet: sheet index with the revision of every sheet, revision list, issue status, customer approval and signature block
-- [ ] Compare two revisions: changed pages highlighted, list of added, removed and changed devices, wires and parts
+- [x] Electrical rule check (rule 5) with the warnings banner and one-click fixes
+- [x] Issue status of the set: for proposal, for approval, for construction, as built
+- [x] Issue a revision (number, date, description, drawn / checked / approved); the app works out which pages changed
+- [x] Generated cover sheet: sheet index with the revision of every sheet, revision list, issue status, customer approval and signature block
+- [x] Compare two revisions: changed pages highlighted, list of added, removed and changed devices, wires and parts
 
 ## M5 PLC
 

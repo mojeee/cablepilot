@@ -24,6 +24,7 @@ import { FORM_PRESETS } from '@shared/forms';
 import { frameRect } from '@shared/draw/page';
 import { templateOf } from '@shared/model/queries';
 import { exportPdf } from '@shared/pdf';
+import { fixAllCommands, runChecks, type Finding } from '@shared/checks';
 import { sheetMm, type PageType, type SheetSize } from '@shared/sheets';
 import { BUILTIN_MACROS, BUILTIN_PARTS, BUILTIN_SYMBOLS } from '../library';
 import { rasterizeSvg } from '../render/svg';
@@ -31,7 +32,7 @@ import { loadPdfFonts } from '../render/fonts';
 import { useUi } from './ui';
 
 export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'line' | 'rect' | 'dashed' | 'table' | 'image' | 'warning';
-export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires';
+export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions';
 
 export interface Recovery {
   id: string;
@@ -101,6 +102,12 @@ interface EditorState {
   importDxf(): Promise<void>;
   addReportPages(ids: ReportId[]): void;
   syncReportPages(): void;
+  /** Applies every plain fix of the electrical rule check as one undo step. */
+  fixAll(): void;
+  /** Applies the fix of one finding. */
+  fix(f: Finding): void;
+  /** Shows a finding: its page, with the element selected. */
+  goTo(f: Finding): void;
   loadCompany(): Promise<void>;
   checkRecovery(): Promise<void>;
   recover(id: string): Promise<void>;
@@ -386,6 +393,21 @@ export const useEditor = create<EditorState>((set, get) => {
       if (cmds.length === 0) return flash('info', () => t('All report pages are complete.'));
       get().exec({ type: 'batch', label: 'complete report pages', commands: cmds });
       flash('info', () => t('Added {n} report pages.', { n: cmds.length }));
+    },
+
+    fixAll: () => {
+      const cmds = fixAllCommands(get().project(), get().lib);
+      if (cmds.length === 0) return;
+      const before = runChecks(get().project(), get().lib).findings.length;
+      get().exec({ type: 'batch', label: 'Fix all', commands: cmds });
+      const n = Math.max(0, before - runChecks(get().project(), get().lib).findings.length);
+      flash('info', () => t('Fixed {n} findings in one undo step.', { n }));
+    },
+    fix: (f) => {
+      if (f.fix) get().exec({ type: 'batch', label: 'Fix', commands: f.fix.commands });
+    },
+    goTo: (f) => {
+      if (f.page && pageById(get().project(), f.page)) set({ pageId: f.page, selection: f.element ? [f.element] : [] });
     },
 
     placeSymbol: (symbolId, x, y, rot, mirror) => {

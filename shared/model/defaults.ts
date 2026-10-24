@@ -7,7 +7,7 @@ import type { BomSettings, CrossRefSettings, DrawingStyle, Page, Project, Projec
 import { PROJECT_FORMAT } from './types';
 import type { SheetSize } from '../sheets';
 
-export const CURRENT_VERSION = 3;
+export const CURRENT_VERSION = 4;
 
 /** Designations and wire numbers in red, as on the reference style of production sets (brief, M1). */
 export const DEFAULT_STYLE: DrawingStyle = {
@@ -80,6 +80,7 @@ export function defaultSettings(): ProjectSettings {
     bom: structuredClone(DEFAULT_BOM),
     numbering: { ...DEFAULT_NUMBERING },
     wireColours: false,
+    installationMethod: '',
   };
 }
 
@@ -103,6 +104,8 @@ export function newProject(id: string, name: string, patch: Partial<ProjectSetti
     wireClasses: structuredClone(DEFAULT_WIRE_CLASSES),
     wireTypes: [],
     cables: [],
+    issueStatus: 'proposal',
+    revisions: [],
   };
 }
 

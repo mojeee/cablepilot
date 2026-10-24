@@ -9,6 +9,8 @@ import { computeBom } from '@shared/bom';
 import { deviceIndex } from '@shared/devices';
 import { parseProject, serializeProject } from '@shared/file';
 import { exportPdf } from '@shared/pdf';
+import { runChecks } from '@shared/checks';
+import { changedPages } from '@shared/revisions';
 import { PDFDocument } from 'pdf-lib';
 import { MACROS, SAMPLES } from './support/samples';
 import { loadLibrary } from './support/library';
@@ -53,6 +55,13 @@ describe('sample projects', () => {
         const nets = projectNets(built, lib);
         expect(nets.length).toBeGreaterThan(10);
         expect(nets.filter((n) => n.conflict).map((n) => n.id)).toEqual([]);
+      });
+      it('opens with a clean electrical rule check and every issued revision up to date', () => {
+        const r = runChecks(built, lib);
+        expect(r.findings.map((f) => `${f.rule} ${f.page}`)).toEqual([]);
+        expect(built.revisions.length).toBeGreaterThanOrEqual(1);
+        expect(changedPages(built, lib)).toEqual([]);
+        expect(built.settings.installationMethod).toBe('B1');
       });
       it('exports to a PDF with one page per sheet', async () => {
         const doc = await PDFDocument.load(await exportPdf(built, lib, { deterministic: true }));

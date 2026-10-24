@@ -88,6 +88,7 @@ export const TEXT = {
   'shot.light.alt': { en: 'CablePilot with the light theme: the motor power page of the conveyor sample', it: 'CablePilot con il tema chiaro: la pagina di potenza del motore del campione nastro trasportatore' },
   'feat.schematic.alt': { en: 'A power page of the DC battery-charger sample: breaker, transformer and two rectifier modules with wire numbers', it: 'Una pagina di potenza del campione caricabatterie: interruttore, trasformatore e due moduli raddrizzatori con numeri filo' },
   'feat.devices.alt': { en: 'The alarm relay page of the charger sample with contact images and cross-references', it: 'La pagina dei relè di allarme del campione caricabatterie con immagini dei contatti e riferimenti incrociati' },
+  'feat.checks.alt': { en: 'The warnings banner and the list of findings of the electrical rule check, with one-click fixes, over a power page with the markers of the findings', it: 'Il banner degli avvisi e l’elenco delle segnalazioni del controllo delle regole elettriche, con correzioni in un clic, su una pagina di potenza con i marcatori delle segnalazioni' },
   'feat.reports.alt': { en: 'The Reports window showing the wire list generated from the schematic', it: 'La finestra Report con l’elenco fili generato dallo schema' },
   'shot.pending': {
     en: 'Screenshots from the real app arrive with the release milestone.',

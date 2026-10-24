@@ -157,3 +157,51 @@ One entry per milestone: what works, what is left, and anything the owner must d
 - Open the three samples and look at the numbered wires, the terminal and report pages, and an exported PDF in
   your normal viewer; say what should change before the demo recording.
 - Set your company wire-class table (Wires window) before using the numbering on real work.
+
+
+## M4 Checks and revisions (done)
+
+**What works**
+
+- Electrical rule check, continuous and incremental: duplicate designations, unconnected wire ends, coils without
+  contacts and contacts without a coil, more contacts used than the parts provide, two potentials connected (on a
+  page and across pages), conductor cross-section against the protective device for the stated installation method
+  (assumptions printed, "does not replace the engineer's verification"), conductor colour against potential type
+  (protective, green-and-yellow reserved, neutral), missing PE connection, more wires on a terminal than allowed,
+  PLC address used twice. Each rule cites its standard in a comment and in the finding.
+- Findings show as a marker on the page, in the message list (page link, rule, standard, assumptions) and in the
+  warnings banner, with a one-click fix where the fix is a plain edit (rename a duplicate, remove a stray wire,
+  resize or recolour conductors) and "Fix all that can be fixed" as one undo step. Installation method is a
+  project setting.
+- Revisions: issue status of the set, "Revisions" window to issue a revision (number, date, description, drawn,
+  checked, approved) with a snapshot per page and an inventory of devices, wires and parts; pages changed since the
+  last issue are marked in the page navigator and listed; comparison of two revisions (or the working copy) lists
+  changed, added and removed pages, devices, wires and parts. The title block revision field follows (last
+  revision that changed the sheet).
+- Generated cover sheet: sheet index with revision matrix, revision list, issue status boxes, units to build,
+  customer approval and signature block; contents page shows each sheet's revision.
+- File format version 4 (migration from 3), JSON Schema updated.
+- Samples open clean (a test asserts it) and each has revision 0 issued; the charger has revisions 0 and 1 with a
+  changed battery page, like a real production set. Samples gained potential tags, PE feeds, PLC field terminals,
+  sized conductors and auxiliary blocks to be correct under the new rules.
+- Tests: every rule positive and negative, fixes and undo, fix-all, incremental page counts, revision change
+  detection (also through save and reopen), comparison, cover sheet texts, migration 3 to 4, sample revisions, a
+  500-page check and issue budget; two new end-to-end flows (banner and fix, issue and compare a revision).
+  `npm run screenshots` captured the checks block and the new cover for the website.
+
+**What is left**
+
+- The cross-section table values are from secondary sources and flagged unverified (docs/to-verify.md); only
+  conductors directly on a breaker or fuse are checked, between 1.5 and 35 mm². No voltage-drop or grouping
+  correction. A per-motor PE check, rules for cable lengths and core counts, and ignoring or silencing a finding
+  are not built. Revision snapshots store hashes, so the comparison says that a device or wire changed, not what
+  inside it changed. The compare window has no page-by-page visual diff.
+- Wire classes still decide colours and sizes for wires without their own type; the default class sizes are
+  placeholders, so projects should set the company table.
+
+**What the owner must do by hand**
+
+- Check the new rows of `docs/to-verify.md`, above all the ampacity table against IEC 60364-5-52 Table B.52-5.
+- Open the three samples: they should show no banner; change the installation method in Project settings to A1 to
+  see the cross-section findings and their fixes. Look at the new cover sheet and at an exported PDF.
+

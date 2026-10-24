@@ -51,7 +51,34 @@ test('screenshots of the sample projects, dark and light', async () => {
     await page.getByRole('dialog').screenshot({ path: join(out, 'feat-reports.png') });
     await page.keyboard.press('Escape');
 
-    // The drawing set: pages as they print (white).
+    // The electrical rule check: the conveyor sample with a duplicate designation (a second coil renamed
+    // -KM1) and the installation method changed to A1, which makes the 6 mm² conductors on the 32 A breaker too small.
+    await open('conveyor');
+    await theme('dark', 'dark');
+    await goto('Control circuit');
+    const cb = (await canvas().boundingBox())!;
+    const at = { x: cb.x + cb.width * 0.88, y: cb.y + cb.height * 0.62 };
+    await page.getByTestId('symbol-coil').click();
+    await page.mouse.move(at.x, at.y);
+    await page.waitForTimeout(200);
+    await page.mouse.click(at.x, at.y);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(700);
+    await page.mouse.click(at.x, at.y + 36);
+    await page.getByTestId('prop-designation').fill('-KM1');
+    await page.getByTestId('prop-designation').blur();
+    await page.getByTestId('settings').click();
+    await page.getByTestId('installation-method').selectOption('A1');
+    await page.keyboard.press('Escape');
+    await expect(page.getByTestId('checks-banner')).toBeVisible();
+    await goto('Motor power circuit');
+    await page.evaluate(() => document.documentElement.style.setProperty('--messages-h', '230px'));
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: join(out, 'feat-checks.png') });
+    await page.evaluate(() => document.documentElement.style.removeProperty('--messages-h'));
+
+    // The drawing set: pages as they print (white), from the charger sample.
+    await open('dc-charger');
     await theme('light', 'white');
     for (const [file, title] of [['set-cover', 'Copertina'], ['set-single', 'Schema unifilare'], ['set-multi', 'Ingresso e moduli'], ['set-terminals', 'Schema morsettiere'], ['set-bom', 'Distinta materiali']] as const) {
       await goto(title);

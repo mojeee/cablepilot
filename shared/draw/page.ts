@@ -15,6 +15,8 @@ import { boxPinsWorld, boxPrims } from './box';
 import { gfxPrims, graphicsFor, pinWorld, symbolXf, usesValue, xfPoint } from './symbol';
 import { warningPrims } from './warning';
 import { reportPrims } from './report';
+import { coverPrims } from './cover';
+import { pageRevision } from '../revisions';
 import { pageNets } from '../connectivity';
 import { bundleLabel, colourHex, STRIPE_HEX, wireSpec } from '../wires';
 
@@ -369,21 +371,7 @@ function generatedBody(project: Project, page: Page): Prim[] {
   const c = st.colours.text;
   const T = (x: number, y: number, text: string, size: number, bold = false, anchor: 'start' | 'middle' | 'end' = 'start'): Prim => ({ k: 'text', x, y, text, size, anchor, rot: 0, c, bold });
   const out: Prim[] = [];
-  if (page.type === 'cover') {
-    const cx = fx + fw / 2;
-    const logo = t.titleBlock.logoAssetId ? project.assets[t.titleBlock.logoAssetId] : undefined;
-    if (logo && t.titleBlock.logoAssetId) {
-      const k = Math.min(60 / logo.w, 30 / logo.h);
-      out.push({ k: 'image', x: cx - (logo.w * k) / 2, y: fy + 15, w: logo.w * k, h: logo.h * k, assetId: t.titleBlock.logoAssetId });
-    }
-    out.push(T(cx, fy + fh * 0.32, dt(lang, 'electricalDrawings'), 8, false, 'middle'), T(cx, fy + fh * 0.32 + 18, project.name, 14, true, 'middle'));
-    let y = fy + fh * 0.32 + 38;
-    for (const k of ['client', 'product', 'orderNo', 'drawingNo', 'issueDate', 'revision'] as const) {
-      const v = project.properties[k];
-      if (v) { out.push(T(cx - 5, y, `${dt(lang, k)}:`, 4.5, false, 'end'), T(cx, y, v, 4.5, true)); y += 8; }
-    }
-    return out;
-  }
+  if (page.type === 'cover') return coverPrims(project, page);
   if (page.type === 'contents') {
     out.push(T(fx + 8, fy + 14, dt(lang, 'sheetIndex'), 7, true));
     const rowH = 6.2, top = fy + 26;
@@ -393,7 +381,9 @@ function generatedBody(project: Project, page: Page): Prim[] {
       const col = Math.floor(i / perCol);
       if (col > 1) return;
       const x = fx + 8 + col * (colW + 4), y = top + (i % perCol) * rowH;
+      const rev = pageRevision(project, p.id);
       out.push(T(x, y, pageNumber(i + 1), 3.6, true), T(x + 12, y, pick(p.title, lang) || dt(lang, `type.${p.type}` as 'type.cover'), 3.6), T(x + colW, y, dt(lang, `type.${p.type}` as 'type.cover'), 2.8, false, 'end'));
+      if (rev !== undefined) out.push(T(x + colW - 34, y, `${dt(lang, 'revision')} ${rev}`, 3, true, 'end'));
     });
     if (project.pages.length > perCol * 2) out.push(T(fx + 8, fy + fh - t.titleBlock.h - 4, '...', 4));
   }

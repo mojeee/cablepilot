@@ -199,6 +199,74 @@ IEC 60617 symbols by default with NFPA 79 / ANSI as an option from M1; three sam
   wire-marker quantity is two per connection; the ERC checks for cables (cross-section against the cable, core
   count) are M4.
 
+## M4
+
+- **The check is a pure function of the project** (`shared/checks.ts`, `runChecks`), cached per project object
+  and, for the rules that look at one page (loose wire ends, nets, colours, cross-sections, terminals), per page
+  object together with what that page depends on (library, potentials, symbols, wire classes and types, cables,
+  parts, devices, the stated method). An edit therefore rechecks only the page that changed (a test counts the
+  page computations); the project-wide rules (duplicates, coils and contacts, PLC addresses, PE, potentials
+  joined across pages) are cheap aggregations over the cached facts. A finding has a stable id, a page, an
+  element and a position (the marker), the rule, plain arguments for the text, and optionally a `fix`: plain
+  commands, so a fix is one undo step. "Fix all" applies the fixes one after another and re-runs the check
+  between them, so two fixes never take the same choice (two duplicates get different numbers).
+- **Rules and what they mean.** Duplicates: as decided in M2 (the later one is flagged, the fix renames it with
+  `device/relink` to the next free number). Unconnected end: an end that touches no pin, junction or other wire;
+  a wire loose at both ends has a "remove wire" fix. Coil without contacts: only for class K (relays and
+  contactors, IEC 81346-2), so a valve coil is not asked for contacts; a power part counts as contacts. Contact
+  without coil: a contact whose device has neither a coil nor a power part (an overload relay's contact is fine).
+  Contacts used against available: summed over the device's parts' "Auxiliary contacts" and "Contacts" data; a
+  changeover contact serves as one NO or one NC; nothing is said when no part states its contacts. Two potentials:
+  per page net, and across pages through interruption points and mated connectors. PLC address: the `value` of
+  PLC channel symbols, compared case-insensitively (racks and cards join in M5). Missing PE: live circuits drawn,
+  but no PE potential and no connected earth symbol anywhere. Terminal wires: wire ends on a terminal pin against
+  the part's "Conductors per connection" data, one when absent.
+- **Cross-section check.** The protective device is a symbol with function breaker or fuse whose device has a
+  part with "Rated current"; every conductor directly connected to it (both sides) must have a table capacity
+  at least that rating, for the stated installation method (`settings.installationMethod`, empty: not stated, the
+  check is skipped and one note says so). Assumptions are fixed and printed with the finding: PVC copper, 30 °C,
+  three loaded conductors, no grouping, the device protects every conductor connected to it, no check outside
+  1.5 to 35 mm². The table (`shared/ampacity.ts`) holds numbers recorded from secondary sources: every one is
+  listed in `docs/to-verify.md`, the finding says the values are not yet verified, and it never claims to replace
+  the engineer's verification. The fix gives the wires a wire type of the smallest tabulated size (new type
+  `6mm2-BK`, same colour and type text).
+- **Colour rules.** Protective potential not GNYE: error; GNYE on any other potential: error; neutral not blue:
+  warning (a company may choose otherwise: only a warning). Core colours of cables are checked too; those have no
+  one-click fix, wires do (a wire type with the right colour).
+- **Findings in the UI.** A banner under the top bar (counts, "Fix all that can be fixed", show/hide), the
+  findings in the message list (page link that selects the element, rule, standard, assumptions, one-click fix),
+  and a round marker on the page at the finding's position, drawn on the canvas only (never in print preview or
+  PDF). The list is capped at 200 rows.
+- **Revisions are data in the project** (`project.revisions`, `project.issueStatus`, file format 4 with a
+  migration from 3). Issuing is the command `revision/issue`: it stores the number, date, description, names and
+  status, copies date, names and revision into the title-block properties, and takes a **snapshot**: a hash per
+  page (canonical JSON, sorted keys, so it survives saving and reopening; pages that show a live report also hash
+  the rows they show, so a BOM page counts as changed when the BOM changes; cover and contents pages hash without
+  their generated body) and an inventory of devices (position, text, parts, fields), wires (number, ends,
+  cross-section, colour, type, core) and parts (code and quantity), each as a short hash or a number. Page hashes
+  are cached per page object, so finding the changed pages after an edit hashes only that page. Changed pages are
+  worked out against the last revision (added, changed, removed); comparison works between two revisions or a
+  revision and the working copy and lists pages, devices, wires and parts.
+- **Revision index of a sheet** is the last issued revision in which the page changed (revision 0 marks every
+  page); the title block's revision field shows it, falling back to the project's revision field before the first
+  issue. Unissued edits do not change it until the next issue. The cover shows a column per revision (the last
+  six) with a cross where a sheet changed.
+- **Cover sheet.** The cover page type is now the generated cover: title and project data, sheet index with the
+  revision of every sheet, revision list (last eight), the four issue-status boxes, units to build, customer
+  approval and signature block; the contents page also prints each sheet's revision. Texts follow the drawing
+  language.
+- **Samples are clean.** The three samples open with no findings (a test asserts it): supply ends carry
+  potential tags (placed by the sample builder on every free end that names a potential), a PE feed with an
+  earth symbol sits on each power page, PLC signal wires start on field terminals (strip -X2), power conductors
+  are sized with the same one-click fixes the app offers, installation method B1 is stated, the star-delta
+  timers and contactors got their auxiliary blocks. Each sample has revision 0 issued; the charger has revisions
+  0 and 1, the second changing the battery string (54 to 55 cells), which changes the DC page, the BOM and
+  nameplate pages, a device and a part quantity.
+- **Website screenshots** for the checks block come from the real app: the conveyor sample with a second coil
+  renamed to a duplicate designation and the installation method changed to A1 (the 6 mm² conductors on the 32 A
+  breaker are then too small), captured by `npm run screenshots`.
+- **No new dependencies.**
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite

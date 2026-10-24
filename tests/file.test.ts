@@ -96,13 +96,27 @@ describe('project file', () => {
       expect(r.value.cables).toEqual([]);
     }
   });
-  it('migrates a version 2 file (M2) and writes it back as version 3', () => {
+  it('migrates a version 3 file (M3) to issue status, revisions and the installation method', () => {
+    const v4 = JSON.parse(serializeProject(sample())) as Record<string, unknown>;
+    const { issueStatus, revisions, ...v3 } = v4;
+    void issueStatus; void revisions;
+    const { installationMethod, ...settings } = v3.settings as Record<string, unknown>;
+    void installationMethod;
+    const r = parseProject(JSON.stringify({ ...v3, version: 3, settings }));
+    expect(r.ok && r.value.version).toBe(4);
+    if (r.ok) {
+      expect(r.value.issueStatus).toBe('proposal');
+      expect(r.value.revisions).toEqual([]);
+      expect(r.value.settings.installationMethod).toBe('');
+    }
+  });
+  it('migrates a version 2 file (M2) and writes it back as the current version', () => {
     const v3 = JSON.parse(serializeProject(sample())) as Record<string, unknown>;
     const { wireClasses, wireTypes, cables, ...v2 } = v3;
     void wireClasses; void wireTypes; void cables;
     const { numbering, wireColours, ...settings } = v2.settings as Record<string, unknown>;
     void numbering; void wireColours;
     const r = parseProject(JSON.stringify({ ...v2, version: 2, settings }));
-    expect(r.ok && r.value.version).toBe(3);
+    expect(r.ok && r.value.version).toBe(CURRENT_VERSION);
   });
 });

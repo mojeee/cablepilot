@@ -1,6 +1,6 @@
 {
   "format": "cablepilot-project",
-  "version": 3,
+  "version": 4,
   "id": "sample-dc-charger",
   "name": "Caricabatterie 110 V DC",
   "settings": {
@@ -26,6 +26,7 @@
     "defaultSize": "A3",
     "defaultTemplateId": "default",
     "drawingLanguage": "it",
+    "installationMethod": "B1",
     "numbering": {"pattern":"{n:3}{suffix}","scheme":"potential","start":1,"step":1},
     "style": {
       "colours": {
@@ -46,6 +47,8 @@
     "wireColours": true
   },
   "properties": {
+    "approved": "Direzione",
+    "checked": "Ufficio tecnico",
     "client": "Cliente di esempio S.r.l.",
     "copyright": "Progetto di esempio di CablePilot (Apache-2.0). Solo dati di esempio.",
     "drawingNo": "SMP-CHG-001",
@@ -53,7 +56,7 @@
     "issueDate": "2026-10-24",
     "orderNo": "ESEMPIO-0003",
     "product": "Quadro caricabatterie 110 V DC",
-    "revision": "A"
+    "revision": "1"
   },
   "assembly": {
     "batteryCapacity": "100",
@@ -462,6 +465,17 @@
           "text": "Alimentazione 400 V 3~ 50 Hz\nUscita 110 V DC",
           "x": 200,
           "y": 70
+        },
+        {
+          "id": "e117",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "L1",
+          "x": 130,
+          "y": 30
         }
       ],
       "location": "DS",
@@ -500,25 +514,46 @@
           "kind": "wire",
           "number": "001L1",
           "points": [{"x":95,"y":25},{"x":95,"y":50}],
-          "potential": "L1"
+          "potential": "L1",
+          "wireType": "6mm2-BK"
         },
         {
           "id": "e21",
           "kind": "wire",
           "number": "001L2",
           "points": [{"x":100,"y":25},{"x":100,"y":50}],
-          "potential": "L2"
+          "potential": "L2",
+          "wireType": "6mm2-BK"
         },
         {
           "id": "e22",
           "kind": "wire",
           "number": "001L3",
           "points": [{"x":105,"y":25},{"x":105,"y":50}],
-          "potential": "L3"
+          "potential": "L3",
+          "wireType": "6mm2-BK"
         },
-        {"id":"e23","kind":"wire","number":"001","points":[{"x":95,"y":60},{"x":95,"y":104.5}]},
-        {"id":"e24","kind":"wire","number":"003","points":[{"x":100,"y":60},{"x":100,"y":104.5}]},
-        {"id":"e25","kind":"wire","number":"005","points":[{"x":105,"y":60},{"x":105,"y":104.5}]},
+        {
+          "id": "e23",
+          "kind": "wire",
+          "number": "001",
+          "points": [{"x":95,"y":60},{"x":95,"y":104.5}],
+          "wireType": "6mm2-BK"
+        },
+        {
+          "id": "e24",
+          "kind": "wire",
+          "number": "003",
+          "points": [{"x":100,"y":60},{"x":100,"y":104.5}],
+          "wireType": "6mm2-BK"
+        },
+        {
+          "id": "e25",
+          "kind": "wire",
+          "number": "005",
+          "points": [{"x":105,"y":60},{"x":105,"y":104.5}],
+          "wireType": "6mm2-BK"
+        },
         {
           "id": "e26",
           "kind": "symbol",
@@ -617,9 +652,26 @@
         },
         {"id":"e40","kind":"rect","dashed":true,"h":44,"w":40,"x":80,"y":168},
         {"id":"e41","kind":"rect","dashed":true,"h":44,"w":40,"x":220,"y":168},
-        {"id":"e42","kind":"warning","sign":"electric","size":12,"x":45,"y":100},
+        {
+          "id": "e42",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "earth-pe",
+          "x": 380,
+          "y": 60
+        },
         {
           "id": "e43",
+          "kind": "wire",
+          "number": "001PE",
+          "points": [{"x":380,"y":55},{"x":380,"y":35}],
+          "potential": "PE"
+        },
+        {"id":"e44","kind":"warning","sign":"electric","size":12,"x":45,"y":100},
+        {
+          "id": "e45",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -627,6 +679,50 @@
           "text": "Uscita 110 V DC, 30 A.\nI due moduli lavorano in parallelo.",
           "x": 300,
           "y": 90
+        },
+        {
+          "id": "e118",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "L1",
+          "x": 95,
+          "y": 25
+        },
+        {
+          "id": "e119",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "L2",
+          "x": 100,
+          "y": 25
+        },
+        {
+          "id": "e120",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "L3",
+          "x": 105,
+          "y": 25
+        },
+        {
+          "id": "e121",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "PE",
+          "x": 380,
+          "y": 35
         }
       ],
       "location": "DS",
@@ -639,7 +735,7 @@
       "type": "power",
       "elements": [
         {
-          "id": "e44",
+          "id": "e46",
           "kind": "symbol",
           "designation": "",
           "mirror": true,
@@ -650,7 +746,7 @@
           "y": 80
         },
         {
-          "id": "e45",
+          "id": "e47",
           "kind": "symbol",
           "designation": "",
           "mirror": true,
@@ -661,7 +757,7 @@
           "y": 170
         },
         {
-          "id": "e46",
+          "id": "e48",
           "kind": "symbol",
           "designation": "-F1",
           "functionText": {"en":"Battery fuse","it":"Fusibile batteria"},
@@ -672,7 +768,7 @@
           "y": 80
         },
         {
-          "id": "e47",
+          "id": "e49",
           "kind": "symbol",
           "designation": "-KM1",
           "functionText": {"en":"DC contactor","it":"Contattore DC"},
@@ -683,7 +779,7 @@
           "y": 80
         },
         {
-          "id": "e48",
+          "id": "e50",
           "kind": "symbol",
           "designation": "-V1",
           "functionText": {"en":"Blocking diode","it":"Diodo di blocco"},
@@ -694,7 +790,7 @@
           "y": 80
         },
         {
-          "id": "e49",
+          "id": "e51",
           "kind": "symbol",
           "designation": "-B1",
           "functionText": {"en":"Current sensor","it":"Sensore di corrente"},
@@ -705,7 +801,7 @@
           "y": 80
         },
         {
-          "id": "e50",
+          "id": "e52",
           "kind": "symbol",
           "designation": "-G1",
           "functionText": {"en":"Battery 110 V","it":"Batteria 110 V"},
@@ -716,7 +812,7 @@
           "y": 125
         },
         {
-          "id": "e51",
+          "id": "e53",
           "kind": "symbol",
           "designation": "-P1",
           "functionText": {"en":"Battery voltage","it":"Tensione batteria"},
@@ -727,49 +823,56 @@
           "y": 125
         },
         {
-          "id": "e52",
+          "id": "e54",
           "kind": "wire",
           "number": "001L+",
           "points": [{"x":40,"y":80},{"x":75,"y":80}],
-          "potential": "L+"
+          "potential": "L+",
+          "wireType": "16mm2-BK"
         },
-        {"id":"e53","kind":"wire","number":"007","points":[{"x":85,"y":80},{"x":107,"y":80}]},
-        {"id":"e54","kind":"wire","number":"008","points":[{"x":117,"y":80},{"x":139,"y":80}]},
         {
           "id": "e55",
+          "kind": "wire",
+          "number": "007",
+          "points": [{"x":85,"y":80},{"x":107,"y":80}],
+          "wireType": "16mm2-BK"
+        },
+        {"id":"e56","kind":"wire","number":"008","points":[{"x":117,"y":80},{"x":139,"y":80}]},
+        {
+          "id": "e57",
           "kind": "wire",
           "number": "009",
           "points": [{"x":149,"y":80},{"x":290,"y":80},{"x":290,"y":117.5}]
         },
         {
-          "id": "e56",
+          "id": "e58",
           "kind": "wire",
           "number": "001L-",
           "points": [{"x":40,"y":170},{"x":290,"y":170}],
           "potential": "L-"
         },
-        {"id":"e57","kind":"wire","number":"001L-","points":[{"x":290,"y":132.5},{"x":290,"y":170}]},
-        {"id":"e58","kind":"wire","number":"009","points":[{"x":250,"y":80},{"x":250,"y":120}]},
-        {"id":"e58-j1","kind":"junction","x":250,"y":80},
-        {"id":"e59","kind":"wire","number":"001L-","points":[{"x":250,"y":130},{"x":250,"y":170}]},
-        {"id":"e59-j1","kind":"junction","x":250,"y":170},
+        {"id":"e59","kind":"wire","number":"001L-","points":[{"x":290,"y":132.5},{"x":290,"y":170}]},
+        {"id":"e60","kind":"wire","number":"009","points":[{"x":250,"y":80},{"x":250,"y":120}]},
+        {"id":"e60-j1","kind":"junction","x":250,"y":80},
+        {"id":"e61","kind":"wire","number":"001L-","points":[{"x":250,"y":130},{"x":250,"y":170}]},
+        {"id":"e61-j1","kind":"junction","x":250,"y":170},
         {
-          "id": "e60",
+          "id": "e62",
           "kind": "wire",
           "number": "001P",
           "points": [{"x":173.5,"y":72.5},{"x":173.5,"y":60}],
           "potential": "24VDC"
         },
         {
-          "id": "e61",
+          "id": "e63",
           "kind": "wire",
           "number": "001M",
           "points": [{"x":178.5,"y":72.5},{"x":178.5,"y":67.5},{"x":186,"y":67.5}],
           "potential": "0V"
         },
-        {"id":"e62","kind":"wire","number":"010","points":[{"x":176,"y":87.5},{"x":176,"y":100}]},
+        {"id":"e64","kind":"wire","number":"010","points":[{"x":176,"y":87.5},{"x":176,"y":100}]},
         {
-          "id": "e63",
+          "id": "e65",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -780,7 +883,7 @@
           "y": 100
         },
         {
-          "id": "e64",
+          "id": "e66",
           "kind": "rect",
           "assembly": "-A5",
           "dashed": true,
@@ -791,7 +894,7 @@
           "y": 53
         },
         {
-          "id": "e65",
+          "id": "e67",
           "kind": "symbol",
           "designation": "-X1",
           "functionText": {"en":"Load output L+","it":"Uscita carico L+"},
@@ -803,7 +906,7 @@
           "y": 95
         },
         {
-          "id": "e66",
+          "id": "e68",
           "kind": "symbol",
           "designation": "-X1",
           "functionText": {"en":"Load output L-","it":"Uscita carico L-"},
@@ -815,36 +918,36 @@
           "y": 95
         },
         {
-          "id": "e67",
+          "id": "e69",
           "kind": "wire",
           "number": "009",
           "points": [{"x":290,"y":80},{"x":330,"y":80},{"x":330,"y":90}]
         },
-        {"id":"e67-j1","kind":"junction","x":290,"y":80},
+        {"id":"e69-j1","kind":"junction","x":290,"y":80},
         {
-          "id": "e68",
+          "id": "e70",
           "kind": "wire",
           "number": "002L+",
           "points": [{"x":330,"y":100},{"x":330,"y":125}],
           "potential": "L+"
         },
         {
-          "id": "e69",
+          "id": "e71",
           "kind": "wire",
           "number": "001L-",
           "points": [{"x":290,"y":170},{"x":385,"y":170},{"x":385,"y":75},{"x":360,"y":75},{"x":360,"y":90}]
         },
-        {"id":"e69-j1","kind":"junction","x":290,"y":170},
+        {"id":"e71-j1","kind":"junction","x":290,"y":170},
         {
-          "id": "e70",
+          "id": "e72",
           "kind": "wire",
           "number": "002L-",
           "points": [{"x":360,"y":100},{"x":360,"y":125}],
           "potential": "L-"
         },
-        {"id":"e71","kind":"warning","sign":"electric","size":12,"x":370,"y":30},
+        {"id":"e73","kind":"warning","sign":"electric","size":12,"x":370,"y":30},
         {
-          "id": "e72",
+          "id": "e74",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -852,6 +955,50 @@
           "text": "Batteria: 55 elementi al piombo da 2 V in serie (110 V).\nIl sensore -B1 misura la corrente di uscita (segnale IOUT).",
           "x": 40,
           "y": 215
+        },
+        {
+          "id": "e122",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 270,
+          "symbolId": "potential-tag",
+          "value": "24VDC",
+          "x": 173.5,
+          "y": 60
+        },
+        {
+          "id": "e123",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "potential-tag",
+          "value": "0V",
+          "x": 186,
+          "y": 67.5
+        },
+        {
+          "id": "e124",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 90,
+          "symbolId": "potential-tag",
+          "value": "L+",
+          "x": 330,
+          "y": 125
+        },
+        {
+          "id": "e125",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 90,
+          "symbolId": "potential-tag",
+          "value": "L-",
+          "x": 360,
+          "y": 125
         }
       ],
       "location": "DS",
@@ -864,21 +1011,21 @@
       "type": "control",
       "elements": [
         {
-          "id": "e73",
+          "id": "e75",
           "kind": "wire",
           "number": "002P",
           "points": [{"x":40,"y":60},{"x":395,"y":60}],
           "potential": "24VDC"
         },
         {
-          "id": "e74",
+          "id": "e76",
           "kind": "wire",
           "number": "002M",
           "points": [{"x":40,"y":200},{"x":395,"y":200}],
           "potential": "0V"
         },
         {
-          "id": "e75",
+          "id": "e77",
           "kind": "symbol",
           "designation": "-K1",
           "functionText": {"en":"Phase monitoring relay","it":"Relè controllo fasi"},
@@ -892,12 +1039,12 @@
           "x": 70,
           "y": 100
         },
-        {"id":"e76","kind":"wire","number":"002P","points":[{"x":70,"y":60},{"x":70,"y":95}]},
-        {"id":"e76-j1","kind":"junction","x":70,"y":60},
-        {"id":"e77","kind":"wire","number":"002M","points":[{"x":70,"y":105},{"x":70,"y":200}]},
-        {"id":"e77-j1","kind":"junction","x":70,"y":200},
+        {"id":"e78","kind":"wire","number":"002P","points":[{"x":70,"y":60},{"x":70,"y":95}]},
+        {"id":"e78-j1","kind":"junction","x":70,"y":60},
+        {"id":"e79","kind":"wire","number":"002M","points":[{"x":70,"y":105},{"x":70,"y":200}]},
+        {"id":"e79-j1","kind":"junction","x":70,"y":200},
         {
-          "id": "e78",
+          "id": "e80",
           "kind": "symbol",
           "designation": "-K1",
           "functionText": {"en":"Mains failure","it":"Mancanza rete"},
@@ -908,7 +1055,7 @@
           "y": 140
         },
         {
-          "id": "e79",
+          "id": "e81",
           "kind": "symbol",
           "designation": "-H1",
           "functionText": {"en":"Mains failure indication","it":"Segnalazione mancanza rete"},
@@ -918,11 +1065,11 @@
           "x": 130,
           "y": 175
         },
-        {"id":"e80","kind":"wire","number":"002P","points":[{"x":130,"y":60},{"x":130,"y":135}]},
-        {"id":"e80-j1","kind":"junction","x":130,"y":60},
-        {"id":"e81","kind":"wire","number":"011","points":[{"x":130,"y":145},{"x":130,"y":170}]},
-        {"id":"e82","kind":"wire","number":"002M","points":[{"x":130,"y":180},{"x":130,"y":200}]},
-        {"id":"e82-j1","kind":"junction","x":130,"y":200},
+        {"id":"e82","kind":"wire","number":"002P","points":[{"x":130,"y":60},{"x":130,"y":135}]},
+        {"id":"e82-j1","kind":"junction","x":130,"y":60},
+        {"id":"e83","kind":"wire","number":"011","points":[{"x":130,"y":145},{"x":130,"y":170}]},
+        {"id":"e84","kind":"wire","number":"002M","points":[{"x":130,"y":180},{"x":130,"y":200}]},
+        {"id":"e84-j1","kind":"junction","x":130,"y":200},
         {
           "id": "mc1-1",
           "kind": "symbol",
@@ -966,7 +1113,7 @@
         {"id":"mc1-6-j1","kind":"junction","x":220,"y":60},
         {"id":"mc1-8-j1","kind":"junction","x":220,"y":200},
         {
-          "id": "e83",
+          "id": "e85",
           "kind": "symbol",
           "designation": "-KM1",
           "functionText": {"en":"Battery DC contactor","it":"Contattore DC batteria"},
@@ -976,12 +1123,12 @@
           "x": 360,
           "y": 100
         },
-        {"id":"e84","kind":"wire","number":"002P","points":[{"x":360,"y":60},{"x":360,"y":95}]},
-        {"id":"e84-j1","kind":"junction","x":360,"y":60},
-        {"id":"e85","kind":"wire","number":"002M","points":[{"x":360,"y":105},{"x":360,"y":200}]},
-        {"id":"e85-j1","kind":"junction","x":360,"y":200},
+        {"id":"e86","kind":"wire","number":"002P","points":[{"x":360,"y":60},{"x":360,"y":95}]},
+        {"id":"e86-j1","kind":"junction","x":360,"y":60},
+        {"id":"e87","kind":"wire","number":"002M","points":[{"x":360,"y":105},{"x":360,"y":200}]},
+        {"id":"e87-j1","kind":"junction","x":360,"y":200},
         {
-          "id": "e86",
+          "id": "e88",
           "kind": "box",
           "designation": "-X11",
           "functionText": {"en":"Plug","it":"Spina"},
@@ -1000,35 +1147,79 @@
           "y": 125
         },
         {
-          "id": "e87",
+          "id": "e89",
           "kind": "wire",
           "number": "011",
           "points": [{"x":130,"y":152.5},{"x":270,"y":152.5},{"x":270,"y":130},{"x":300,"y":130}]
         },
-        {"id":"e87-j1","kind":"junction","x":130,"y":152.5},
+        {"id":"e89-j1","kind":"junction","x":130,"y":152.5},
         {
-          "id": "e88",
+          "id": "e90",
           "kind": "wire",
           "number": "012",
           "points": [{"x":220,"y":157.5},{"x":280,"y":157.5},{"x":280,"y":135},{"x":300,"y":135}]
         },
-        {"id":"e88-j1","kind":"junction","x":220,"y":157.5},
+        {"id":"e90-j1","kind":"junction","x":220,"y":157.5},
         {
-          "id": "e89",
+          "id": "e91",
           "kind": "wire",
           "number": "002P",
           "points": [{"x":320,"y":130},{"x":330,"y":130},{"x":330,"y":60}],
           "potential": "24VDC"
         },
-        {"id":"e89-j1","kind":"junction","x":330,"y":60},
+        {"id":"e91-j1","kind":"junction","x":330,"y":60},
         {
-          "id": "e90",
+          "id": "e92",
           "kind": "wire",
           "number": "002M",
           "points": [{"x":320,"y":135},{"x":335,"y":135},{"x":335,"y":200}],
           "potential": "0V"
         },
-        {"id":"e90-j1","kind":"junction","x":335,"y":200}
+        {"id":"e92-j1","kind":"junction","x":335,"y":200},
+        {
+          "id": "e126",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 180,
+          "symbolId": "potential-tag",
+          "value": "24VDC",
+          "x": 40,
+          "y": 60
+        },
+        {
+          "id": "e127",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "potential-tag",
+          "value": "24VDC",
+          "x": 395,
+          "y": 60
+        },
+        {
+          "id": "e128",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 180,
+          "symbolId": "potential-tag",
+          "value": "0V",
+          "x": 40,
+          "y": 200
+        },
+        {
+          "id": "e129",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "potential-tag",
+          "value": "0V",
+          "x": 395,
+          "y": 200
+        }
       ],
       "location": "DS",
       "size": "A3",
@@ -1040,7 +1231,7 @@
       "type": "plc",
       "elements": [
         {
-          "id": "e91",
+          "id": "e93",
           "kind": "box",
           "designation": "-X10",
           "functionText": {"en":"Socket","it":"Presa"},
@@ -1059,7 +1250,7 @@
           "y": 62
         },
         {
-          "id": "e92",
+          "id": "e94",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1070,7 +1261,7 @@
           "y": 72
         },
         {
-          "id": "e93",
+          "id": "e95",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1081,7 +1272,7 @@
           "y": 102
         },
         {
-          "id": "e94",
+          "id": "e96",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1092,33 +1283,33 @@
           "y": 142
         },
         {
-          "id": "e95",
+          "id": "e97",
           "kind": "wire",
           "number": "011",
           "points": [{"x":70,"y":67},{"x":150,"y":67},{"x":150,"y":72},{"x":250,"y":72}]
         },
         {
-          "id": "e96",
+          "id": "e98",
           "kind": "wire",
           "number": "012",
           "points": [{"x":70,"y":72},{"x":170,"y":72},{"x":170,"y":102},{"x":250,"y":102}]
         },
         {
-          "id": "e97",
+          "id": "e99",
           "kind": "wire",
           "number": "002P",
           "points": [{"x":55,"y":67},{"x":20,"y":67}],
           "potential": "24VDC"
         },
         {
-          "id": "e98",
+          "id": "e100",
           "kind": "wire",
           "number": "002M",
           "points": [{"x":55,"y":72},{"x":10,"y":72},{"x":10,"y":97}],
           "potential": "0V"
         },
         {
-          "id": "e99",
+          "id": "e101",
           "kind": "symbol",
           "designation": "",
           "mirror": true,
@@ -1128,9 +1319,9 @@
           "x": 170,
           "y": 142
         },
-        {"id":"e100","kind":"wire","number":"010","points":[{"x":170,"y":142},{"x":250,"y":142}]},
+        {"id":"e102","kind":"wire","number":"010","points":[{"x":170,"y":142},{"x":250,"y":142}]},
         {
-          "id": "e101",
+          "id": "e103",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1140,7 +1331,7 @@
           "y": 132
         },
         {
-          "id": "e102",
+          "id": "e104",
           "kind": "rect",
           "assembly": "-A1",
           "dashed": true,
@@ -1151,7 +1342,7 @@
           "y": 55
         },
         {
-          "id": "e103",
+          "id": "e105",
           "kind": "table",
           "cells": [
             ["Indirizzo","Segnale","Dispositivo"],
@@ -1167,7 +1358,7 @@
           "y": 62
         },
         {
-          "id": "e104",
+          "id": "e106",
           "kind": "box",
           "designation": "-A3",
           "functionText": {"en":"HMI operator panel","it":"Pannello operatore HMI"},
@@ -1183,7 +1374,7 @@
           "y": 200
         },
         {
-          "id": "e105",
+          "id": "e107",
           "kind": "box",
           "designation": "-A4",
           "functionText": {"en":"Network switch","it":"Switch di rete"},
@@ -1198,9 +1389,9 @@
           "x": 185,
           "y": 200
         },
-        {"id":"e106","kind":"wire","number":"013","points":[{"x":105,"y":205},{"x":185,"y":205}]},
+        {"id":"e108","kind":"wire","number":"013","points":[{"x":105,"y":205},{"x":185,"y":205}]},
         {
-          "id": "e107",
+          "id": "e109",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1210,28 +1401,28 @@
           "y": 198
         },
         {
-          "id": "e108",
+          "id": "e110",
           "kind": "wire",
           "number": "003P",
           "points": [{"x":55,"y":205},{"x":20,"y":205}],
           "potential": "24VDC"
         },
         {
-          "id": "e109",
+          "id": "e111",
           "kind": "wire",
           "number": "003M",
           "points": [{"x":55,"y":210},{"x":10,"y":210}],
           "potential": "0V"
         },
         {
-          "id": "e110",
+          "id": "e112",
           "kind": "wire",
           "number": "004P",
           "points": [{"x":235,"y":210},{"x":270,"y":210}],
           "potential": "24VDC"
         },
         {
-          "id": "e111",
+          "id": "e113",
           "kind": "box",
           "designation": "-X20",
           "functionText": {"en":"Interface board header","it":"Intestazione scheda interfaccia"},
@@ -1248,7 +1439,7 @@
           "y": 195
         },
         {
-          "id": "e112",
+          "id": "e114",
           "kind": "box",
           "designation": "-X21",
           "functionText": {"en":"PLC input header","it":"Intestazione ingressi PLC"},
@@ -1265,7 +1456,7 @@
           "y": 195
         },
         {
-          "id": "e113",
+          "id": "e115",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1273,6 +1464,61 @@
           "text": "Cavo piatto",
           "x": 322,
           "y": 192
+        },
+        {
+          "id": "e130",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 180,
+          "symbolId": "potential-tag",
+          "value": "24VDC",
+          "x": 20,
+          "y": 67
+        },
+        {
+          "id": "e131",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 90,
+          "symbolId": "potential-tag",
+          "value": "0V",
+          "x": 10,
+          "y": 97
+        },
+        {
+          "id": "e132",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 180,
+          "symbolId": "potential-tag",
+          "value": "24VDC",
+          "x": 20,
+          "y": 205
+        },
+        {
+          "id": "e133",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 180,
+          "symbolId": "potential-tag",
+          "value": "0V",
+          "x": 10,
+          "y": 210
+        },
+        {
+          "id": "e134",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "potential-tag",
+          "value": "24VDC",
+          "x": 270,
+          "y": 210
         }
       ],
       "location": "DS",
@@ -1301,7 +1547,7 @@
       "type": "layout",
       "elements": [
         {
-          "id": "e114",
+          "id": "e116",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -2145,7 +2391,10 @@
     {"id":"110VDC","type":"H07V-K","colour":"BK","crossSection":"1.5","suffix":"P"},
     {"id":"signal","type":"H07V-K","colour":"BK","crossSection":"1.5","suffix":""}
   ],
-  "wireTypes": [],
+  "wireTypes": [
+    {"id":"6mm2-BK","type":"H07V-K","colour":"BK","crossSection":"6"},
+    {"id":"16mm2-BK","type":"H07V-K","colour":"BK","crossSection":"16"}
+  ],
   "cables": [
     {
       "id": "-W1",
@@ -2164,6 +2413,297 @@
       "length": "2 m",
       "part": "generic-cable-patch-rj45-cat5e",
       "to": "-A4:P1"
+    }
+  ],
+  "issueStatus": "construction",
+  "revisions": [
+    {
+      "approved": "",
+      "checked": "Ufficio tecnico",
+      "date": "2026-09-15",
+      "description": "Prima emissione per approvazione",
+      "drawn": "CablePilot",
+      "inventory": {
+        "devices": {
+          "+DS-A1": "19e477a7",
+          "+DS-A3": "04315227",
+          "+DS-A4": "15313eff",
+          "+DS-A5": "19449b46",
+          "+DS-B1": "1a987a4e",
+          "+DS-F1": "036f843b",
+          "+DS-G1": "081f4710",
+          "+DS-H1": "01784c98",
+          "+DS-H2": "072aa9c8",
+          "+DS-K1": "18710f2f",
+          "+DS-K2": "1f569dee",
+          "+DS-KM1": "1caf6802",
+          "+DS-P1": "00fb1411",
+          "+DS-QF1": "0bcd63af",
+          "+DS-T1": "000c8b3d",
+          "+DS-U1": "19c01042",
+          "+DS-U2": "0f8fbf38",
+          "+DS-V1": "06e9f6fb",
+          "+DS-X1": "15a9bef5",
+          "+DS-X10": "1db59ff7",
+          "+DS-X11": "166f66ba",
+          "+DS-X20": "18834114",
+          "+DS-X21": "1ab71022"
+        },
+        "parts": {
+          "GEN-BATTERY-CELL-2V-100AH": 54,
+          "GEN-CABLE-DUCT-60X60-2M": 4,
+          "GEN-CABLE-PATCH-RJ45-CAT5E": 1,
+          "GEN-CABLE-RIBBON-FLAT-10POLE": 1,
+          "GEN-CAPACITOR-ELECTROLYTIC-4700UF-100V": 4,
+          "GEN-CONNECTOR-HEADER-10PIN": 3,
+          "GEN-CONNECTOR-PLUG-SOCKET-8POLE": 1,
+          "GEN-CONTACTOR-DC-2P-63A": 1,
+          "GEN-DIN-RAIL-35MM-1M": 4,
+          "GEN-DIODE-POWER-50A-1600V": 1,
+          "GEN-ENCLOSURE-800X1000X300": 1,
+          "GEN-FUSE-HOLDER-DC-63A": 1,
+          "GEN-FUSE-LINK-DC-63A": 1,
+          "GEN-HALL-SENSOR-100A": 1,
+          "GEN-HMI-7IN-TOUCH-24VDC": 1,
+          "GEN-MCB-3P-C32A": 1,
+          "GEN-MOUNTING-PLATE-600X800": 1,
+          "GEN-PANEL-METER-DC-VOLTMETER": 1,
+          "GEN-PHASE-MONITOR-RELAY-3PH": 1,
+          "GEN-PILOT-LAMP-22MM-24VDC": 2,
+          "GEN-PLC-AI-8": 1,
+          "GEN-PLC-CPU-COMPACT": 1,
+          "GEN-PLC-DI-16-24VDC": 1,
+          "GEN-RECTIFIER-MODULE-3PH-110VDC-15A": 2,
+          "GEN-RELAY-INTERFACE-2CO-24VDC": 1,
+          "GEN-SWITCH-ETHERNET-5PORT-24VDC": 1,
+          "GEN-TERMINAL-END-PLATE": 1,
+          "GEN-TERMINAL-END-STOP": 2,
+          "GEN-TERMINAL-FEEDTHROUGH-4MM2": 20,
+          "GEN-TERMINAL-FEEDTHROUGH-6MM2": 2,
+          "GEN-TERMINAL-PE-4MM2": 6,
+          "GEN-TRANSFORMER-3PH-DYN11-5KVA": 1,
+          "GEN-WIRING-KIT": 1
+        },
+        "wires": {
+          "001 -QF1:2>-T1:1U": "11c22bc6",
+          "001L+ -U1:DC+>-U2:DC+": "1edae787",
+          "001L+ -U2:DC+>-F1:2": "1edae787",
+          "001L- -P1:2>-G1:-": "1edae787",
+          "001L- -U1:DC->-U2:DC-": "1edae787",
+          "001L- -U2:DC->-X1:2": "1edae787",
+          "001L- -X1:2>-P1:2": "1edae787",
+          "002 -T1:2U>-U1:L1": "073027a2",
+          "002 -U1:L1>-U2:L1": "073027a2",
+          "002M -H1:2>-X10:4": "0f55f30e",
+          "002M -H2:2>-H1:2": "0f55f30e",
+          "002M -K1:A2>-K2:A2": "0f55f30e",
+          "002M -K2:A2>-KM1:A2": "0f55f30e",
+          "002M -KM1:A2>-X11:4": "0f55f30e",
+          "002M -X11:4>-H2:2": "0f55f30e",
+          "002P -K1:1>-K2:1": "0f55f30e",
+          "002P -K1:A1>-K2:A1": "0f55f30e",
+          "002P -K2:1>-X10:3": "0f55f30e",
+          "002P -K2:A1>-KM1:A1": "0f55f30e",
+          "002P -KM1:A1>-X11:3": "0f55f30e",
+          "002P -X11:3>-K1:1": "0f55f30e",
+          "003 -QF1:4>-T1:1V": "11c22bc6",
+          "004 -T1:2V>-U1:L2": "073027a2",
+          "004 -U1:L2>-U2:L2": "073027a2",
+          "005 -QF1:6>-T1:1W": "11c22bc6",
+          "006 -T1:2W>-U1:L3": "073027a2",
+          "006 -U1:L3>-U2:L3": "073027a2",
+          "007 -F1:1>-KM1:2": "19230347",
+          "008 -KM1:1>-V1:A": "073027a2",
+          "009 -P1:1>-G1:+": "073027a2",
+          "009 -V1:K>-X1:1": "073027a2",
+          "009 -X1:1>-P1:1": "073027a2",
+          "010 -B1:OUT>AI0": "073027a2",
+          "011 -H1:1>-X10:1": "073027a2",
+          "011 -K1:2>-H1:1": "073027a2",
+          "011 -X10:1>I0.0": "073027a2",
+          "011 -X11:1>-K1:2": "073027a2",
+          "012 -H2:1>-X10:2": "073027a2",
+          "012 -K2:2>-H2:1": "073027a2",
+          "012 -X10:2>I0.1": "073027a2",
+          "012 -X11:2>-K2:2": "073027a2",
+          "013 -A3:ETH>-A4:P1": "073027a2"
+        }
+      },
+      "number": "0",
+      "pages": [
+        {"id":"p1","hash":"1590c3f2e47d0d","title":"Copertina"},
+        {"id":"p2","hash":"1da184b025ebc9","title":"Indice"},
+        {"id":"p3","hash":"1a1e091f0157f6","title":"Dati generali dell'assieme"},
+        {"id":"p4","hash":"013e24250aba0d","title":"Dati batteria e uscita DC"},
+        {"id":"p5","hash":"0eda4cd02d211a","title":"Schema unifilare"},
+        {"id":"p6","hash":"0e9a714ea30098","title":"Ingresso e moduli raddrizzatori"},
+        {"id":"p7","hash":"1599326d31ec20","title":"Uscita DC e batteria"},
+        {"id":"p8","hash":"179ad3642a68a3","title":"Relè di allarme"},
+        {"id":"p9","hash":"17feca6b3ab990","title":"Interfaccia PLC"},
+        {"id":"pg-rep1","hash":"0cda0e935a3e8c.1c474116","title":"Schema morsettiere"},
+        {"id":"pg-rep3","hash":"1c90b582f359e4.003ff6a4","title":"Elenco cavi"},
+        {"id":"p10","hash":"0e40dc003d0c61","title":"Layout quadro"},
+        {"id":"pg-rep5","hash":"07ff9cae913bec.0e931628","title":"Elenco fili 1/2"},
+        {"id":"pg-rep7","hash":"01e59d5821eddd.0d24e259","title":"Elenco fili 2/2"},
+        {"id":"pg-rep9","hash":"16424cd7395cac.0a48947a","title":"Elenchi pin dei connettori"},
+        {"id":"pg-rep11","hash":"0a94598f5b21f6.01cb6786","title":"Distinta materiali 1/2"},
+        {"id":"pg-rep13","hash":"0b2c18325a41b2.003d0fcd","title":"Distinta materiali 2/2"},
+        {"id":"pg-rep15","hash":"0eb6983a3a7aa6.0224ac56","title":"Legenda dei simboli 1/2"},
+        {"id":"pg-rep17","hash":"0cda38d55516a5.0f41d0b2","title":"Legenda dei simboli 2/2"},
+        {"id":"pg-rep19","hash":"051ba61f905e80.16923503","title":"Colori dei conduttori"},
+        {"id":"pg-rep21","hash":"00a4a0b04d25ca.0ee8be20","title":"Suffissi dei numeri filo"},
+        {
+          "id": "pg-rep23",
+          "hash": "1b26d9931e5017.00745559",
+          "title": "Coppie di serraggio dei morsetti"
+        },
+        {"id":"pg-rep25","hash":"167c79db2766f2.049d8a40","title":"Targhette"}
+      ],
+      "status": "approval"
+    },
+    {
+      "approved": "Direzione",
+      "checked": "Ufficio tecnico",
+      "date": "2026-10-24",
+      "description": "Batteria portata a 55 elementi (110 V)",
+      "drawn": "CablePilot",
+      "inventory": {
+        "devices": {
+          "+DS-A1": "19e477a7",
+          "+DS-A3": "04315227",
+          "+DS-A4": "15313eff",
+          "+DS-A5": "19449b46",
+          "+DS-B1": "1a987a4e",
+          "+DS-F1": "036f843b",
+          "+DS-G1": "020ec200",
+          "+DS-H1": "01784c98",
+          "+DS-H2": "072aa9c8",
+          "+DS-K1": "18710f2f",
+          "+DS-K2": "1f569dee",
+          "+DS-KM1": "1caf6802",
+          "+DS-P1": "00fb1411",
+          "+DS-QF1": "0bcd63af",
+          "+DS-T1": "000c8b3d",
+          "+DS-U1": "19c01042",
+          "+DS-U2": "0f8fbf38",
+          "+DS-V1": "06e9f6fb",
+          "+DS-X1": "15a9bef5",
+          "+DS-X10": "1db59ff7",
+          "+DS-X11": "166f66ba",
+          "+DS-X20": "18834114",
+          "+DS-X21": "1ab71022"
+        },
+        "parts": {
+          "GEN-BATTERY-CELL-2V-100AH": 55,
+          "GEN-CABLE-DUCT-60X60-2M": 4,
+          "GEN-CABLE-PATCH-RJ45-CAT5E": 1,
+          "GEN-CABLE-RIBBON-FLAT-10POLE": 1,
+          "GEN-CAPACITOR-ELECTROLYTIC-4700UF-100V": 4,
+          "GEN-CONNECTOR-HEADER-10PIN": 3,
+          "GEN-CONNECTOR-PLUG-SOCKET-8POLE": 1,
+          "GEN-CONTACTOR-DC-2P-63A": 1,
+          "GEN-DIN-RAIL-35MM-1M": 4,
+          "GEN-DIODE-POWER-50A-1600V": 1,
+          "GEN-ENCLOSURE-800X1000X300": 1,
+          "GEN-FUSE-HOLDER-DC-63A": 1,
+          "GEN-FUSE-LINK-DC-63A": 1,
+          "GEN-HALL-SENSOR-100A": 1,
+          "GEN-HMI-7IN-TOUCH-24VDC": 1,
+          "GEN-MCB-3P-C32A": 1,
+          "GEN-MOUNTING-PLATE-600X800": 1,
+          "GEN-PANEL-METER-DC-VOLTMETER": 1,
+          "GEN-PHASE-MONITOR-RELAY-3PH": 1,
+          "GEN-PILOT-LAMP-22MM-24VDC": 2,
+          "GEN-PLC-AI-8": 1,
+          "GEN-PLC-CPU-COMPACT": 1,
+          "GEN-PLC-DI-16-24VDC": 1,
+          "GEN-RECTIFIER-MODULE-3PH-110VDC-15A": 2,
+          "GEN-RELAY-INTERFACE-2CO-24VDC": 1,
+          "GEN-SWITCH-ETHERNET-5PORT-24VDC": 1,
+          "GEN-TERMINAL-END-PLATE": 1,
+          "GEN-TERMINAL-END-STOP": 2,
+          "GEN-TERMINAL-FEEDTHROUGH-4MM2": 20,
+          "GEN-TERMINAL-FEEDTHROUGH-6MM2": 2,
+          "GEN-TERMINAL-PE-4MM2": 6,
+          "GEN-TRANSFORMER-3PH-DYN11-5KVA": 1,
+          "GEN-WIRING-KIT": 1
+        },
+        "wires": {
+          "001 -QF1:2>-T1:1U": "11c22bc6",
+          "001L+ -U1:DC+>-U2:DC+": "1edae787",
+          "001L+ -U2:DC+>-F1:2": "1edae787",
+          "001L- -P1:2>-G1:-": "1edae787",
+          "001L- -U1:DC->-U2:DC-": "1edae787",
+          "001L- -U2:DC->-X1:2": "1edae787",
+          "001L- -X1:2>-P1:2": "1edae787",
+          "002 -T1:2U>-U1:L1": "073027a2",
+          "002 -U1:L1>-U2:L1": "073027a2",
+          "002M -H1:2>-X10:4": "0f55f30e",
+          "002M -H2:2>-H1:2": "0f55f30e",
+          "002M -K1:A2>-K2:A2": "0f55f30e",
+          "002M -K2:A2>-KM1:A2": "0f55f30e",
+          "002M -KM1:A2>-X11:4": "0f55f30e",
+          "002M -X11:4>-H2:2": "0f55f30e",
+          "002P -K1:1>-K2:1": "0f55f30e",
+          "002P -K1:A1>-K2:A1": "0f55f30e",
+          "002P -K2:1>-X10:3": "0f55f30e",
+          "002P -K2:A1>-KM1:A1": "0f55f30e",
+          "002P -KM1:A1>-X11:3": "0f55f30e",
+          "002P -X11:3>-K1:1": "0f55f30e",
+          "003 -QF1:4>-T1:1V": "11c22bc6",
+          "004 -T1:2V>-U1:L2": "073027a2",
+          "004 -U1:L2>-U2:L2": "073027a2",
+          "005 -QF1:6>-T1:1W": "11c22bc6",
+          "006 -T1:2W>-U1:L3": "073027a2",
+          "006 -U1:L3>-U2:L3": "073027a2",
+          "007 -F1:1>-KM1:2": "19230347",
+          "008 -KM1:1>-V1:A": "073027a2",
+          "009 -P1:1>-G1:+": "073027a2",
+          "009 -V1:K>-X1:1": "073027a2",
+          "009 -X1:1>-P1:1": "073027a2",
+          "010 -B1:OUT>AI0": "073027a2",
+          "011 -H1:1>-X10:1": "073027a2",
+          "011 -K1:2>-H1:1": "073027a2",
+          "011 -X10:1>I0.0": "073027a2",
+          "011 -X11:1>-K1:2": "073027a2",
+          "012 -H2:1>-X10:2": "073027a2",
+          "012 -K2:2>-H2:1": "073027a2",
+          "012 -X10:2>I0.1": "073027a2",
+          "012 -X11:2>-K2:2": "073027a2",
+          "013 -A3:ETH>-A4:P1": "073027a2"
+        }
+      },
+      "number": "1",
+      "pages": [
+        {"id":"p1","hash":"1590c3f2e47d0d","title":"Copertina"},
+        {"id":"p2","hash":"1da184b025ebc9","title":"Indice"},
+        {"id":"p3","hash":"1a1e091f0157f6","title":"Dati generali dell'assieme"},
+        {"id":"p4","hash":"013e24250aba0d","title":"Dati batteria e uscita DC"},
+        {"id":"p5","hash":"0eda4cd02d211a","title":"Schema unifilare"},
+        {"id":"p6","hash":"0e9a714ea30098","title":"Ingresso e moduli raddrizzatori"},
+        {"id":"p7","hash":"0d771bd85a43ea","title":"Uscita DC e batteria"},
+        {"id":"p8","hash":"179ad3642a68a3","title":"Relè di allarme"},
+        {"id":"p9","hash":"17feca6b3ab990","title":"Interfaccia PLC"},
+        {"id":"pg-rep1","hash":"0cda0e935a3e8c.1c474116","title":"Schema morsettiere"},
+        {"id":"pg-rep3","hash":"1c90b582f359e4.003ff6a4","title":"Elenco cavi"},
+        {"id":"p10","hash":"0e40dc003d0c61","title":"Layout quadro"},
+        {"id":"pg-rep5","hash":"07ff9cae913bec.0e931628","title":"Elenco fili 1/2"},
+        {"id":"pg-rep7","hash":"01e59d5821eddd.0d24e259","title":"Elenco fili 2/2"},
+        {"id":"pg-rep9","hash":"16424cd7395cac.0a48947a","title":"Elenchi pin dei connettori"},
+        {"id":"pg-rep11","hash":"0a94598f5b21f6.0ce6fd0c","title":"Distinta materiali 1/2"},
+        {"id":"pg-rep13","hash":"0b2c18325a41b2.003d0fcd","title":"Distinta materiali 2/2"},
+        {"id":"pg-rep15","hash":"0eb6983a3a7aa6.0224ac56","title":"Legenda dei simboli 1/2"},
+        {"id":"pg-rep17","hash":"0cda38d55516a5.0f41d0b2","title":"Legenda dei simboli 2/2"},
+        {"id":"pg-rep19","hash":"051ba61f905e80.16923503","title":"Colori dei conduttori"},
+        {"id":"pg-rep21","hash":"00a4a0b04d25ca.0ee8be20","title":"Suffissi dei numeri filo"},
+        {
+          "id": "pg-rep23",
+          "hash": "1b26d9931e5017.00745559",
+          "title": "Coppie di serraggio dei morsetti"
+        },
+        {"id":"pg-rep25","hash":"167c79db2766f2.049d8a40","title":"Targhette"}
+      ],
+      "status": "construction"
     }
   ]
 }

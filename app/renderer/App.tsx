@@ -12,6 +12,8 @@ import { SymbolEditorDialog } from './components/SymbolEditor';
 import { BomDialog } from './components/BomDialog';
 import { ReportsDialog } from './components/ReportsDialog';
 import { WiresDialog } from './components/WiresDialog';
+import { ChecksBanner } from './components/ChecksBanner';
+import { RevisionsDialog } from './components/RevisionsDialog';
 import { useEditor } from './state/editor';
 import { useUi } from './state/ui';
 
@@ -59,6 +61,7 @@ export function App() {
       <div>
         <TopBar />
         <RecoveryBanner />
+        <ChecksBanner />
       </div>
       <div className="workspace">
         <PageNavigator />
@@ -74,6 +77,7 @@ export function App() {
       {dialog === 'bom' && <BomDialog />}
       {dialog === 'reports' && <ReportsDialog />}
       {dialog === 'wires' && <WiresDialog />}
+      {dialog === 'revisions' && <RevisionsDialog />}
     </div>
   );
 }

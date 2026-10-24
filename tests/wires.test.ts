@@ -5,7 +5,9 @@ import { apply } from '@shared/commands';
 import { createHistory, exec, undo } from '@shared/commands/history';
 import { buildPage } from '@shared/draw/page';
 import type { Pt, WireEl } from '@shared/model/types';
-import { DEFAULT_WIRE_CLASSES, NUMBERING_PRESETS, WIRE_COLOURS, bundleLabel, formatWireNumber, renumberWires, wireSpec } from '@shared/wires';
+import { DEFAULT_WIRE_CLASSES, NUMBERING_PRESETS, WIRE_COLOURS, bundleLabel, formatWireNumber, isNumbered, renumberWires, wireSpec } from '@shared/wires';
+import { wireRows } from '@shared/reports';
+import { SAMPLES } from './support/samples';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { builder } from './support/builder';
@@ -145,5 +147,20 @@ describe('wire classes, colours and labels', () => {
     b.wire(pg, [P(40, 20), P(80, 20)], { number: '002' });
     const texts = buildPage(b.project, b.project.pages[0], lib, 0).prims.filter((p) => p.k === 'text' && ['001', '002'].includes(p.text));
     expect(texts.map((p) => (p.k === 'text' ? p.rot : 0))).toEqual([-90, 0]);
+  });
+});
+
+describe('every wire of the wire list gets a number (M4 regression)', () => {
+  it('the charger sample: after numbering, no row of the wire list has an empty number, whichever scheme', () => {
+    const p = SAMPLES[2].build(lib);
+    for (const scheme of ['potential', 'page-column', 'sequential'] as const) {
+      const q = apply({ ...p, settings: { ...p.settings, numbering: { ...p.settings.numbering, scheme, pattern: NUMBERING_PRESETS[scheme] } } }, { type: 'wire/renumber' }, { lib });
+      const rows = wireRows(q, lib);
+      expect(rows.length, scheme).toBeGreaterThan(30);
+      expect(rows.filter((r) => !r[0]).map((r) => `${r[1]}>${r[2]}`), scheme).toEqual([]);
+      // Every wire on a numbered page, except bundles, carries a number.
+      const loose = q.pages.filter(isNumbered).flatMap((pg) => pg.elements.filter((e) => e.kind === 'wire' && !e.bundle && !e.number).map((e) => `${pg.id}/${e.id}`));
+      expect(loose, scheme).toEqual([]);
+    }
   });
 });

@@ -13,7 +13,7 @@ import { findPart, isTerminalPart, withProjectSymbols } from './library/types';
 import type { CableRec, Page, Project, ReportId, SymbolEl } from './model/types';
 import { netlist, destinations, type NetlistGroup } from './netlist';
 import { rt, type ReportTextKey } from './reportText';
-import { colourName, formatWireNumber, wireSpec } from './wires';
+import { colourName, formatWireNumber, isNumbered, wireSpec } from './wires';
 
 export interface ReportRow {
   cells: string[];
@@ -128,8 +128,12 @@ interface Connection {
 }
 function connections(project: Project, lib: Library): Connection[] {
   const out: Connection[] = [];
+  // Wires of single-line, data and report pages are not numbered and are not conductors to pull: the
+  // multi-line pages carry the connections (M4 fix: they showed in the wire list with an empty number).
+  const numbered = new Set(project.pages.filter(isNumbered).map((p) => p.id));
   for (const g of netlist(project, lib).groups) {
-    const pins = g.pins.filter((p) => p.label);
+    if (g.wires.length && !g.wires.some((w) => numbered.has(w.page))) continue;
+    const pins = g.pins.filter((p) => p.label && numbered.has(p.page));
     const wire = g.wires.find((w) => w.number) ?? g.wires[0];
     for (let i = 0; i + 1 < pins.length; i++) out.push({ number: wire?.number ?? '', from: pins[i].label, to: pins[i + 1].label, group: g, wire });
   }
@@ -137,7 +141,7 @@ function connections(project: Project, lib: Library): Connection[] {
 }
 
 /** The core of a cable a wire is, with the cable's part data. */
-function coreSpec(project: Project, lib: Library, w: { cable?: string; core?: string }): { colour?: string; crossSection?: string } {
+export function coreSpec(project: Project, lib: Library, w: { cable?: string; core?: string }): { colour?: string; crossSection?: string } {
   if (!w.cable) return {};
   const cab = project.cables.find((c) => c.id === w.cable);
   const part = cab?.part ? findPart(lib, project.parts, cab.part) : undefined;
@@ -145,13 +149,18 @@ function coreSpec(project: Project, lib: Library, w: { cable?: string; core?: st
   return { colour: w.core && /^[A-Z]{2,4}$/.test(w.core) ? w.core : undefined, crossSection: xs ? String(num(xs)) : undefined };
 }
 
-function wireTable(project: Project, lib: Library, lang: Lang): ReportTable {
-  const rows = connections(project, lib).map((c) => {
+/** The connections of the wire list as cells: number, from, to, cross-section, colour, type, cable:core. */
+export function wireRows(project: Project, lib: Library): string[][] {
+  return connections(project, lib).map((c) => {
     const w = c.wire?.wire;
     const spec = wireSpec(project, { wireType: w?.wireType, potential: w?.potential }, c.group.potential);
     const core = w ? coreSpec(project, lib, w) : {};
-    return R(c.number, c.from, c.to, core.crossSection ?? spec.crossSection, core.colour ?? spec.colour, spec.type, w?.cable ? `${w.cable}${w.core ? `:${w.core}` : ''}` : '');
+    return [c.number, c.from, c.to, core.crossSection ?? spec.crossSection, core.colour ?? spec.colour, spec.type, w?.cable ? `${w.cable}${w.core ? `:${w.core}` : ''}` : ''];
   });
+}
+
+function wireTable(project: Project, lib: Library, lang: Lang): ReportTable {
+  const rows = wireRows(project, lib).map((c) => R(...c));
   return { id: 'wires', title: rt(lang, 'report.wires'), headers: [rt(lang, 'col.number'), rt(lang, 'col.from'), rt(lang, 'col.to'), rt(lang, 'col.crossSection'), rt(lang, 'col.colour'), rt(lang, 'col.type'), rt(lang, 'col.cable')], widths: [24, 52, 52, 24, 20, 30, 30], rows };
 }
 

@@ -5,12 +5,12 @@ import { PAGE_TYPES } from './sheets';
 import { SHEET_SIZES } from './sheets';
 import { CURRENT_VERSION, DEFAULT_BOM, DEFAULT_CROSSREF } from './model/defaults';
 import { DEFAULT_NUMBERING, DEFAULT_WIRE_CLASSES } from './model/wireDefaults';
-import { PROJECT_FORMAT, type Project } from './model/types';
+import { ISSUE_STATUSES, PROJECT_FORMAT, type Project } from './model/types';
 import { fail, ok, type Result } from './result';
 
 /** Key order of the written file: identity first, then the rest alphabetically; top level is fixed. */
 const FIRST = ['id', 'kind', 'type', 'name'];
-const TOP = ['format', 'version', 'id', 'name', 'settings', 'properties', 'assembly', 'templates', 'potentials', 'pages', 'assets', 'symbols', 'devices', 'parts', 'projectParts', 'wireClasses', 'wireTypes', 'cables'];
+const TOP = ['format', 'version', 'id', 'name', 'settings', 'properties', 'assembly', 'templates', 'potentials', 'pages', 'assets', 'symbols', 'devices', 'parts', 'projectParts', 'wireClasses', 'wireTypes', 'cables', 'issueStatus', 'revisions'];
 
 function orderedKeys(o: Record<string, unknown>, top: boolean): string[] {
   const keys = Object.keys(o).filter((k) => o[k] !== undefined);
@@ -53,6 +53,11 @@ export const MIGRATIONS: Record<number, Migration> = {
   2: (d) => {
     const settings = (d.settings ?? {}) as Record<string, unknown>;
     return { ...d, settings: { ...settings, numbering: { ...DEFAULT_NUMBERING }, wireColours: false }, wireClasses: structuredClone(DEFAULT_WIRE_CLASSES), wireTypes: [], cables: [] };
+  },
+  // 3 -> 4 (M4): the issue status, the list of issued revisions and the stated installation method.
+  3: (d) => {
+    const settings = (d.settings ?? {}) as Record<string, unknown>;
+    return { ...d, settings: { ...settings, installationMethod: '' }, issueStatus: 'proposal', revisions: [] };
   },
 };
 
@@ -128,6 +133,8 @@ export function validateProject(d: unknown): string[] {
   if (!Array.isArray(d.projectParts) || !d.projectParts.every((r) => isObj(r) && isStr(r.id) && isStr(r.part) && isNum(r.qty))) errs.push('projectParts must be an array of parts');
   if (isObj(s) && (!isObj(s.crossRef) || !isObj(s.bom) || !isObj(s.numbering))) errs.push('settings.crossRef, settings.bom and settings.numbering are required');
   if (!Array.isArray(d.wireClasses) || !Array.isArray(d.wireTypes) || !Array.isArray(d.cables)) errs.push('wireClasses, wireTypes and cables must be arrays');
+  if (!ISSUE_STATUSES.includes(d.issueStatus as never)) errs.push('issueStatus must be proposal, approval, construction or asBuilt');
+  if (!Array.isArray(d.revisions) || !d.revisions.every((r) => isObj(r) && isStr(r.number) && isStr(r.date) && Array.isArray(r.pages) && isObj(r.inventory))) errs.push('revisions must be an array of issued revisions');
   if (!Array.isArray(d.pages)) errs.push('pages must be an array');
   else {
     const ids = new Set<string>();

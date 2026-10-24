@@ -9,6 +9,8 @@ import { buildIndex } from '@shared/geometry/spatial';
 import { renumberWires } from '@shared/wires';
 import { reportTable } from '@shared/reports';
 import { apply } from '@shared/commands';
+import { checkStats, runChecks } from '@shared/checks';
+import { changedPages, makeSnapshot } from '@shared/revisions';
 import { builder } from './support/builder';
 import { loadLibrary } from './support/library';
 
@@ -78,5 +80,30 @@ describe('performance budget', () => {
     const edited = apply(numbered, { type: 'el/add', page: numbered.pages[7].id, elements: [{ id: 'x1', kind: 'wire', points: [{ x: 5, y: 5 }, { x: 5, y: 30 }] }] }, { lib });
     reportTable(edited, lib, 'wires');
     expect(performance.now() - t1).toBeLessThan(2000);
+  });
+  it('checks 500 pages within 20 s, then rechecks one page edit incrementally within 2 s', () => {
+    // Unique designations per page so the project is clean apart from loose wire ends.
+    const pages = project.pages.map((pg, i) => ({ ...pg, elements: pg.elements.map((e) => (e.kind === 'symbol' ? { ...e, designation: `-K${i * 100 + Number(e.id.slice(1)) + 1}` } : e)) }));
+    const clean = { ...project, pages };
+    const t0 = performance.now();
+    const first = runChecks(clean, lib);
+    expect(first.findings.length).toBeGreaterThan(0);
+    expect(performance.now() - t0).toBeLessThan(20000);
+    const t1 = performance.now();
+    const before = checkStats.pages;
+    const edited = apply(clean, { type: 'el/add', page: clean.pages[7].id, elements: [{ id: 'x2', kind: 'wire', points: [{ x: 5, y: 5 }, { x: 5, y: 30 }] }] }, { lib });
+    const second = runChecks(edited, lib);
+    expect(checkStats.pages - before).toBe(1);
+    expect(second.findings.length).toBe(first.findings.length + 1);
+    expect(performance.now() - t1).toBeLessThan(2000);
+  });
+  it('issues a revision on 500 pages and finds the one changed page within 20 s', () => {
+    const t0 = performance.now();
+    const issued = apply(project, { type: 'revision/issue', revision: { number: '0', date: '2026-01-01', description: 'x', drawn: '', checked: '', approved: '', status: 'approval' } }, { lib });
+    expect(issued.revisions[0].pages).toHaveLength(500);
+    const edited = apply(issued, { type: 'el/add', page: issued.pages[9].id, elements: [{ id: 'x3', kind: 'text', x: 5, y: 5, rot: 0, text: 'x', size: 3, align: 'left' }] }, { lib });
+    expect(changedPages(edited, lib).map((c) => c.id)).toEqual([issued.pages[9].id]);
+    expect(performance.now() - t0).toBeLessThan(20000);
+    void makeSnapshot;
   });
 });

@@ -11,6 +11,29 @@
   `docs/demo.md` and `scripts/site/demo.it.md`. `npm run check:site` fails when a file of the recording is missing.
 - Input fields in the wire-class and wire-type tables are readable in the dark theme (they were white on white).
 
+### M4 Checks and revisions
+
+- Electrical rule check, continuous and incremental (only the page that changed is rechecked): duplicate
+  designations, unconnected wire ends, coils without contacts and contacts without a coil, more contacts used than
+  the parts provide, two potentials connected together (also across pages), conductor cross-section against the
+  protective device and the stated installation method (IEC 60364-5-52; assumptions shown, table values flagged
+  unverified in `docs/to-verify.md`, never a replacement for the engineer's verification), conductor colour against
+  potential type (IEC 60204-1, IEC 60445), missing PE connection, more wires on a terminal than allowed, PLC
+  address used twice. Every rule cites its standard and clause.
+- Findings appear as a marker on the page, in the message list and in a warnings banner, with a one-click fix
+  (undoable) for plain edits and "Fix all that can be fixed" as one undo step. New project setting: installation
+  method of the conductors.
+- Revisions: issue status of the set (for proposal, approval, construction, as built); issue a revision (number,
+  date, description, drawn, checked, approved) with a snapshot of every page, device, wire and part; changed pages
+  since the last issue are marked and listed; compare two revisions (or the working copy). The title-block
+  revision field follows each sheet's last revision.
+- Generated cover sheet: sheet index with the revision of every sheet, revision list, issue status boxes, units to
+  build and customer approval and signature block; the contents page shows each sheet's revision.
+- Project file format version 4 (migration from 3), JSON Schema updated.
+- Samples open with a clean check and revision 0 issued; the charger has revisions 0 and 1 with a changed page.
+  They gained potential tags, PE feeds, PLC field terminals, sized conductors and auxiliary blocks.
+- Website: the "Checks and revisions" block and the cover sheet show screenshots of the real app.
+
 ### M3 Wires and reports
 
 - Automatic wire numbering from the nets: by potential (one counter per potential, suffix from the wire

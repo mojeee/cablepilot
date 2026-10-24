@@ -138,3 +138,26 @@ table.bom tr.assembly td { font-weight: 600; background: var(--raised); }
 .report-body { flex: 1; min-width: 0; overflow-x: auto; }
 .tabs { display: flex; gap: 4px; margin-bottom: 8px; }
 table.bom input[type='text'], table.bom input[type='number'], table.bom select { font-size: 12px; background: var(--raised); border: 1px solid var(--line); border-radius: 4px; padding: 2px 4px; color: var(--text); }
+
+/* Electrical rule check: banner, findings, page markers */
+.checks-banner { display: flex; align-items: center; gap: 12px; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid var(--line); }
+.checks-banner.error { background: var(--err); color: #1a0000; }
+.checks-banner.warning { background: var(--warn); color: #1a1100; }
+[data-theme='light'] .checks-banner.error, [data-theme='light'] .checks-banner.warning { color: #fff; }
+.checks-banner.info { background: var(--panel); color: var(--text); }
+.checks-banner .grow { flex: 1; }
+.checks-banner button { background: #fff8; color: inherit; }
+.msg.finding { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.msg.finding .link { background: none; border: none; padding: 0; color: inherit; text-decoration: underline; cursor: pointer; font: inherit; }
+.msg.finding .finding-text { flex: 1 1 420px; }
+.msg.finding .finding-src { color: var(--muted); }
+.msg.finding .finding-detail { display: block; color: var(--muted); font-size: 11px; }
+.page-item .changed-dot { color: var(--warn); font-weight: bold; margin-left: 4px; }
+.rev-changed { background: color-mix(in srgb, var(--warn) 25%, transparent); }
+.rev-added { background: color-mix(in srgb, var(--ok) 20%, transparent); }
+.rev-removed { background: color-mix(in srgb, var(--err) 20%, transparent); }
+.rev-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
+.rev-compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.rev-list ul { list-style: none; margin: 0; padding: 0; max-height: 220px; overflow: auto; font-size: 12px; }
+.rev-list li, [data-testid='changed-pages'] li { padding: 1px 4px; }
+[data-testid='changed-pages'] { list-style: none; padding: 0; margin: 4px 0; font-size: 12px; }

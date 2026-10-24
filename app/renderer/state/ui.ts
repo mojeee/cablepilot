@@ -15,6 +15,9 @@ export interface Message {
 
 interface UiState extends Settings {
   messages: Message[];
+  /** Whether the findings of the electrical rule check show in the message list. */
+  checksOpen: boolean;
+  setChecksOpen(open: boolean): void;
   setTheme(theme: Theme): void;
   setCanvas(canvas: CanvasTheme): void;
   setLang(language: Lang): void;
@@ -39,6 +42,8 @@ function persist(patch: Partial<Settings>): void {
 export const useUi = create<UiState>((set) => ({
   ...DEFAULT_SETTINGS,
   messages: [],
+  checksOpen: true,
+  setChecksOpen: (checksOpen) => set({ checksOpen }),
   setTheme: (theme) => {
     persist({ theme });
     set({ theme });
