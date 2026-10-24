@@ -1,6 +1,6 @@
 {
   "format": "cablepilot-project",
-  "version": 5,
+  "version": 6,
   "id": "sample-pump-station",
   "name": "Pump station, two pumps",
   "settings": {
@@ -44,6 +44,7 @@
       "textSizes": {"designation":3.5,"text":3.5,"wireNumber":2.5},
       "weights": {"annotation":0.35,"frame":0.7,"symbol":0.35,"wire":0.35}
     },
+    "supply": {"ambient":30,"grouping":1,"ik":10,"maxDropPct":5,"voltage":400},
     "symbolStandard": "iec",
     "wireColours": true
   },
@@ -1498,8 +1499,16 @@
     },
     {"designation":"+PS-BL1","fields":{},"parts":[{"part":"generic-limit-switch-1no","qty":1}]},
     {"designation":"+PS-BL2","fields":{},"parts":[{"part":"generic-limit-switch-1no","qty":1}]},
-    {"designation":"+PS-FR1","fields":{},"parts":[{"part":"generic-overload-relay-9a-13a","qty":1}]},
-    {"designation":"+PS-FR2","fields":{},"parts":[{"part":"generic-overload-relay-9a-13a","qty":1}]},
+    {
+      "designation": "+PS-FR1",
+      "fields": {},
+      "parts": [{"part":"generic-overload-relay-12a-18a","qty":1}]
+    },
+    {
+      "designation": "+PS-FR2",
+      "fields": {},
+      "parts": [{"part":"generic-overload-relay-12a-18a","qty":1}]
+    },
     {
       "designation": "+PS-KM1",
       "fields": {},
@@ -1538,8 +1547,34 @@
         {"part":"generic-aux-block-1no1nc","qty":1}
       ]
     },
-    {"designation":"+PS-M1","fields":{},"parts":[{"part":"generic-motor-3ph-7.5kw","qty":1}]},
-    {"designation":"+PS-M2","fields":{},"parts":[{"part":"generic-motor-3ph-7.5kw","qty":1}]},
+    {
+      "designation": "+PS-M1",
+      "fields": {},
+      "load": {
+        "kind": "motor",
+        "cosPhi": 0.85,
+        "curve": "C",
+        "efficiency": 90,
+        "length": 25,
+        "powerKw": 7.5,
+        "starter": "star-delta"
+      },
+      "parts": [{"part":"generic-motor-3ph-7.5kw","qty":1}]
+    },
+    {
+      "designation": "+PS-M2",
+      "fields": {},
+      "load": {
+        "kind": "motor",
+        "cosPhi": 0.85,
+        "curve": "C",
+        "efficiency": 90,
+        "length": 25,
+        "powerKw": 7.5,
+        "starter": "star-delta"
+      },
+      "parts": [{"part":"generic-motor-3ph-7.5kw","qty":1}]
+    },
     {"designation":"+PS-QF0","fields":{},"parts":[{"part":"generic-mcb-3p-c63a","qty":1}]},
     {"designation":"+PS-QF1","fields":{},"parts":[{"part":"generic-mpcb-10a-16a","qty":1}]},
     {"designation":"+PS-QF2","fields":{},"parts":[{"part":"generic-mpcb-10a-16a","qty":1}]},
@@ -1567,7 +1602,13 @@
       "kind": "part",
       "category": "breakers",
       "code": "GEN-MCB-3P-C63A",
-      "data": {"Poles":"3","Rated current":"63 A","Tripping characteristic":"C"},
+      "data": {
+        "Breaking capacity": "6 kA",
+        "Poles": "3",
+        "Rated current": "63 A",
+        "Tripping characteristic": "C",
+        "Type": "MCB"
+      },
       "description": {
         "en": "Miniature circuit breaker 3 poles, curve C, 63 A",
         "it": "Interruttore magnetotermico 3 poli, curva C, 63 A"
@@ -1587,7 +1628,7 @@
       "kind": "part",
       "category": "motor-protection",
       "code": "GEN-MPCB-10A-16A",
-      "data": {"Poles":"3","Setting range":"10 - 16 A"},
+      "data": {"Breaking capacity":"10 kA","Poles":"3","Setting range":"10 - 16 A","Type":"MPCB"},
       "description": {
         "en": "Motor protective circuit breaker, 3 poles, setting range 10 to 16 A",
         "it": "Salvamotore, 3 poli, campo di regolazione da 10 a 16 A"
@@ -1610,7 +1651,8 @@
         "Auxiliary contacts": "1 NO",
         "Coil voltage": "24 V DC",
         "Poles": "3",
-        "Rated operational current AC-3": "18 A"
+        "Rated operational current AC-3": "18 A",
+        "Type": "Contactor"
       },
       "description": {
         "en": "Contactor 3 poles, 18 A AC-3, coil 24 V DC",
@@ -1647,7 +1689,8 @@
         "Auxiliary contacts": "1 NO",
         "Coil voltage": "24 V DC",
         "Poles": "3",
-        "Rated operational current AC-3": "12 A"
+        "Rated operational current AC-3": "12 A",
+        "Type": "Contactor"
       },
       "description": {
         "en": "Contactor 3 poles, 12 A AC-3, coil 24 V DC",
@@ -1663,20 +1706,20 @@
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
     },
     {
-      "id": "generic-overload-relay-9a-13a",
+      "id": "generic-overload-relay-12a-18a",
       "kind": "part",
       "category": "motor-protection",
-      "code": "GEN-OVERLOAD-RELAY-9A-13A",
-      "data": {"Setting range":"9 - 13 A"},
+      "code": "GEN-OVERLOAD-RELAY-12A-18A",
+      "data": {"Setting range":"12 - 18 A","Type":"Overload relay"},
       "description": {
-        "en": "Thermal overload relay, setting range 9 to 13 A",
-        "it": "Relè termico, campo di regolazione da 9 a 13 A"
+        "en": "Thermal overload relay, setting range 12 to 18 A",
+        "it": "Relè termico, campo di regolazione da 12 a 18 A"
       },
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
-        "en": "Thermal overload relay, setting range 9 to 13 A",
-        "it": "Relè termico, campo di regolazione da 9 a 13 A"
+        "en": "Thermal overload relay, setting range 12 to 18 A",
+        "it": "Relè termico, campo di regolazione da 12 a 18 A"
       },
       "verification": "secondary",
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
@@ -1992,8 +2035,8 @@
           "+PS-A1": "088cca10",
           "+PS-BL1": "112417bc",
           "+PS-BL2": "121417b6",
-          "+PS-FR1": "04d32408",
-          "+PS-FR2": "0ff59913",
+          "+PS-FR1": "0ead533b",
+          "+PS-FR2": "19e7a096",
           "+PS-KM1": "06fa413d",
           "+PS-KM2": "037ff1b2",
           "+PS-KM3": "0426fb69",
@@ -2021,7 +2064,7 @@
           "GEN-MOTOR-3PH-7,5KW": 2,
           "GEN-MOUNTING-PLATE-600X800": 1,
           "GEN-MPCB-10A-16A": 2,
-          "GEN-OVERLOAD-RELAY-9A-13A": 2,
+          "GEN-OVERLOAD-RELAY-12A-18A": 2,
           "GEN-PLC-CPU-COMPACT": 1,
           "GEN-PLC-DI-16-24VDC": 1,
           "GEN-PLC-DO-16-24VDC": 1,
@@ -2122,7 +2165,7 @@
         {"id":"pg-rep5","hash":"0680b88c766b7d.11006fed","title":"Wire list 1/3"},
         {"id":"pg-rep7","hash":"167412b1ed7826.03215df3","title":"Wire list 2/3"},
         {"id":"pg-rep9","hash":"1cd96b578dc7ca.02996004","title":"Wire list 3/3"},
-        {"id":"pg-rep11","hash":"093b824278c681.020b4984","title":"Bill of materials 1/2"},
+        {"id":"pg-rep11","hash":"093b824278c681.0fd4bc27","title":"Bill of materials 1/2"},
         {"id":"pg-rep13","hash":"176e8291952c15.1ac36df2","title":"Bill of materials 2/2"},
         {"id":"pg-rep15","hash":"1df1ded10050a7.125e8dbc","title":"Symbol legend 1/2"},
         {"id":"pg-rep17","hash":"1282e2b376fe84.13007c0c","title":"Symbol legend 2/2"},

@@ -6,6 +6,7 @@ import type { AppInfo, CompanyKind } from '@shared/api';
 import type { Settings } from '@shared/settings';
 import type { FileService } from './files';
 import type { SettingsStore } from './settings';
+import type { WarehouseService } from './warehouse';
 
 function guard<T>(fn: () => T): Result<T> {
   try {
@@ -26,7 +27,7 @@ async function guardAsync<T>(fn: () => Promise<Result<T>>): Promise<Result<T>> {
 
 const isKind = (k: unknown): k is CompanyKind => k === 'symbols' || k === 'templates' || k === 'macros' || k === 'parts';
 
-export function registerIpc(deps: { settings: SettingsStore; files: FileService }): void {
+export function registerIpc(deps: { settings: SettingsStore; files: FileService; warehouse: WarehouseService }): void {
   const { files } = deps;
   ipcMain.handle('app:info', (): Result<AppInfo> => guard(() => ({ name: app.getName(), version: app.getVersion(), platform: process.platform })));
   ipcMain.handle('settings:get', (): Result<Settings> => guard(() => deps.settings.get()));
@@ -51,6 +52,14 @@ export function registerIpc(deps: { settings: SettingsStore; files: FileService 
   ipcMain.handle('autosave:list', () => safe(() => files.listAutosaves()));
   ipcMain.handle('autosave:read', (_e, id: string) => safe(() => files.readAutosave(String(id))));
   ipcMain.handle('autosave:clear', (_e, id: string) => safe(() => files.clearAutosave(String(id))));
+  const wh = deps.warehouse;
+  ipcMain.handle('warehouse:load', () => safe(() => wh.load()));
+  ipcMain.handle('warehouse:save', (_e, data: unknown) => safe(() => wh.save(data)));
+  ipcMain.handle('warehouse:pickFile', () => guardAsync(() => wh.pickFile()));
+  ipcMain.handle('warehouse:pickFolder', () => guardAsync(() => wh.pickFolder()));
+  ipcMain.handle('warehouse:refresh', () => safe(() => wh.refresh()));
+  ipcMain.handle('warehouse:sample', () => safe(() => wh.sample()));
+  ipcMain.handle('warehouse:watch', (_e, on: unknown) => safe(() => wh.watch(on === true)));
   ipcMain.handle('company:list', (_e, kind: unknown) => safe(() => (isKind(kind) ? files.listCompany(kind) : fail('company.kind', 'Unknown library kind.', 'Report this on GitHub.'))));
   ipcMain.handle('company:save', (_e, kind: unknown, id: string, text: string) => safe(() => (isKind(kind) ? files.saveCompany(kind, String(id), String(text)) : fail('company.kind', 'Unknown library kind.', 'Report this on GitHub.'))));
   ipcMain.handle('company:folder', () => ok(files.companyFolder()));

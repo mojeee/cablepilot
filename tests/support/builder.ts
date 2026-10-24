@@ -7,7 +7,7 @@ import { pinWorld } from '@shared/draw/symbol';
 import { idGen } from '@shared/ids';
 import type { Library } from '@shared/library/types';
 import { newPage, newProject } from '@shared/model/defaults';
-import type { BoxEl, BoxPin, LText, Page, Project, ProjectSettings, Pt, Rot, SymbolEl, WarningSign } from '@shared/model/types';
+import type { BoxEl, BoxPin, LoadData, LText, Page, Project, ProjectSettings, Pt, Rot, SymbolEl, WarningSign } from '@shared/model/types';
 import type { PageType, SheetSize } from '@shared/sheets';
 
 export interface PlaceOpts {
@@ -103,6 +103,12 @@ export function builder(lib: Library, projectId: string, name: string, settings:
       const key = keyOf(project.pages.find((p) => p.id === page) as Page, designation);
       if (!deviceIndex(project, lib).byKey.has(key)) throw new Error(`no device ${key}`);
       run({ type: 'device/update', key, patch: { fields } });
+    },
+    /** Load data (motor nameplate or load current) of a device, for sizing. */
+    load(page: string, designation: string, load: LoadData) {
+      const key = keyOf(project.pages.find((p) => p.id === page) as Page, designation);
+      if (!deviceIndex(project, lib).byKey.has(key)) throw new Error(`no device ${key}`);
+      run({ type: 'device/update', key, patch: { load } });
     },
     projectPart(partId: string, qty: number, fields: Record<string, string> = {}) {
       const def = lib.parts.get(partId);

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Demo: draw it once, the lists and the drawing set follow · CablePilot</title>
-    <meta name="description" content="A recorded walkthrough of CablePilot with the DC battery-charger sample: the drawing set, a coil and its contact, wire numbers, live reports, and the PDF and XLSX export." />
+    <meta name="description" content="A recorded walkthrough of CablePilot with the DC battery-charger sample: the drawing set, a coil and its contact, wire numbers, live reports, and the PDF and XLSX export, and sizing a motor feeder with parts from the stock list." />
     <link rel="canonical" href="https://cablepilot.agentflowbind.com/demo/" />
     <link rel="alternate" hreflang="en" href="https://cablepilot.agentflowbind.com/demo/" />
     <link rel="alternate" hreflang="it" href="https://cablepilot.agentflowbind.com/it/demo/" />
@@ -15,7 +15,7 @@
     <meta property="og:site_name" content="CablePilot" />
     <meta property="og:locale" content="en_GB" />
     <meta property="og:title" content="Demo: draw it once, the lists and the drawing set follow · CablePilot" />
-    <meta property="og:description" content="A recorded walkthrough of CablePilot with the DC battery-charger sample: the drawing set, a coil and its contact, wire numbers, live reports, and the PDF and XLSX export." />
+    <meta property="og:description" content="A recorded walkthrough of CablePilot with the DC battery-charger sample: the drawing set, a coil and its contact, wire numbers, live reports, and the PDF and XLSX export, and sizing a motor feeder with parts from the stock list." />
     <meta property="og:url" content="https://cablepilot.agentflowbind.com/demo/" />
     <meta property="og:image" content="https://cablepilot.agentflowbind.com/og.svg" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -40,7 +40,7 @@
         <div class="wrap">
           <p class="eyebrow">Demo</p>
           <h1>Demo: draw it once, the lists and the drawing set follow</h1>
-          <div class="lead"><p>A walkthrough of CablePilot with the DC battery-charger sample, about a minute and a half. It is the same story as the video on the website, and everything in it works in the current version: no mock-ups. The video is recorded from the real built app by a script (<code>e2e/demo.e2e.ts</code>), so it is made again whenever the interface changes: <code>npm run record:demo</code>.</p></div>
+          <div class="lead"><p>A walkthrough of CablePilot with the DC battery-charger sample and the conveyor sample, under two minutes. It is the same story as the video on the website, and everything in it works in the current version: no mock-ups. The video is recorded from the real built app by a script (<code>e2e/demo.e2e.ts</code>), so it is made again whenever the interface changes: <code>npm run record:demo</code>.</p></div>
           <figure class="demo-video">
             <video controls playsinline preload="metadata" poster="/img/demo-poster.png" width="1920" height="1080">
               <source src="/video/demo.webm" type="video/webm" />
@@ -59,6 +59,7 @@
             <li><a href="#step-4"><span>04</span> The check banner finds a problem; one click fixes it</a></li>
             <li><a href="#step-5"><span>05</span> PLC I/O overview and a tag list</a></li>
             <li><a href="#step-6"><span>06</span> PDF and XLSX</a></li>
+            <li><a href="#step-7"><span>07</span> Sizing from the schematic, parts from the warehouse</a></li>
           </ol>
         </div>
       </section>
@@ -116,10 +117,21 @@
         <div class="wrap step-grid">
           <div class="step-text">
           <h2 id="step-6-h"><span class="label">Step 6</span> PDF and XLSX</h2>
-          <p><strong>Export PDF</strong> writes the complete drawing set (vector, text embedded), and <strong>Export all lists as XLSX</strong> writes every list, the PLC I/O list included, as one workbook. The video ends on the cover sheet.</p>
+          <p><strong>Export PDF</strong> writes the complete drawing set (vector, text embedded), and <strong>Export all lists as XLSX</strong> writes every list, the PLC I/O list included, as one workbook.</p>
           <ul class="bullets"><li>Files belong to you: an open project format, PDF and XLSX out, no account.</li></ul>
           </div>
           <figure class="step-shot"><img src="/img/demo-6.png" alt="The messages after exporting the PDF drawing set, over the PLC interface page." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step" id="step-7" aria-labelledby="step-7-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-7-h"><span class="label">Step 7</span> Sizing from the schematic, parts from the warehouse</h2>
+          <p>Open the conveyor sample, open <strong>Warehouse</strong> and load the sample stock list (your own file comes from a CSV or XLSX export of your warehouse system, through a column mapping saved for your company). Select the motor on the power page and raise its rated power to 7.5 kW in the Properties panel: the design current is recomputed. <strong>Size this feeder</strong> lists the breaker, contactor, overload relay, cable and wires found in the schematic, each with its requirement. The contactor no longer meets it: open its suggestions to see the requirement, its assumptions and the parts that meet it, ranked by what the warehouse has for this project, with warehouse, location and the quantity available (on hand, minus reserved, minus what the project already uses). Select the part in stock and confirm: the BOM shows the new part with its on-hand and available quantities.</p>
+          <p>- Sizing is computed from the project data and says what it assumes; table values that have not been checked   against the standard yet are flagged, and no result replaces the engineer's verification. - Confirming a line is one undo step, and <strong>Accept all proposals</strong> is one undo step for the whole project.</p>
+          <p>The video ends on the cover sheet of the conveyor sample.</p>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-7.png" alt="The sizing window of the conveyor sample with the contactor line open: the requirement, its assumptions and the parts that meet it, ranked by what the warehouse has for the project." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="band dark try" aria-labelledby="try-h">

@@ -76,13 +76,13 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 
 ## M6-Sizing and warehouse (part 1 of M6, brief rule 12)
 
-- [ ] Load and feeder data on devices; project supply data (voltage, prospective short-circuit current, ambient temperature, installation method, grouping); cable lengths
-- [ ] Sizing engine in `/shared`: cable current-carrying capacity and correction factors (IEC 60364-5-52), protection coordination Ib ≤ In ≤ Iz and I2 ≤ 1.45 Iz (IEC 60364-4-43), voltage drop, breakers (IEC 60947-2), contactors and overload relays (IEC 60947-4-1), with sources and stated assumptions
-- [ ] Warehouse stock import from CSV/XLSX with a saved column mapping and refresh; stock items linked to library parts; "data missing" for items without technical data; generic sample stock file
-- [ ] Suggestions per device and per conductor: only parts that meet the requirement, ranked by availability, showing warehouse, location and the quantity available for this project; select and confirm as one undoable command
-- [ ] "Size the whole project" review table, accept line by line or all
-- [ ] Quantities: available = on hand − reserved − this project's use (× units to build, cable in metres); BOM columns on hand / available / short / location; shortages and stale stock flagged in the message list; picking-list export
-- [ ] Tests (sizing worked examples, availability arithmetic, import mapping) and e2e (import stock, size a motor feeder, confirm, BOM quantities)
+- [x] Load and feeder data on devices; project supply data (voltage, prospective short-circuit current, ambient temperature, installation method, grouping); cable lengths
+- [x] Sizing engine in `/shared`: cable current-carrying capacity and correction factors (IEC 60364-5-52), protection coordination Ib ≤ In ≤ Iz and I2 ≤ 1.45 Iz (IEC 60364-4-43), voltage drop, breakers (IEC 60947-2), contactors and overload relays (IEC 60947-4-1), with sources and stated assumptions
+- [x] Warehouse stock import from CSV/XLSX with a saved column mapping and refresh; stock items linked to library parts; "data missing" for items without technical data; generic sample stock file
+- [x] Suggestions per device and per conductor: only parts that meet the requirement, ranked by availability, showing warehouse, location and the quantity available for this project; select and confirm as one undoable command
+- [x] "Size the whole project" review table, accept line by line or all
+- [x] Quantities: available = on hand − reserved − this project's use (× units to build, cable in metres); BOM columns on hand / available / short / location; shortages and stale stock flagged in the message list; picking-list export
+- [x] Tests (sizing worked examples, availability arithmetic, import mapping) and e2e (import stock, size a motor feeder, confirm, BOM quantities)
 
 ## M6-CAD workspace with the AI inside (part 2 of M6)
 

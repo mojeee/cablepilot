@@ -15,7 +15,10 @@ import { ReportsDialog } from './components/ReportsDialog';
 import { WiresDialog } from './components/WiresDialog';
 import { ChecksBanner } from './components/ChecksBanner';
 import { RevisionsDialog } from './components/RevisionsDialog';
+import { SizingDialog } from './components/SizingDialog';
+import { WarehouseDialog } from './components/WarehouseDialog';
 import { useEditor } from './state/editor';
+import { listenForStockChanges, useStock } from './state/stock';
 import { useUi } from './state/ui';
 
 const AUTOSAVE_MS = 4000;
@@ -37,9 +40,11 @@ export function App() {
         useUi.getState().addMessage('info', () => t('CablePilot {version} started on {platform}.', { version, platform }));
       }
       await useEditor.getState().loadCompany();
+      await useStock.getState().load();
       await useEditor.getState().checkRecovery();
     })();
   }, []);
+  useEffect(() => listenForStockChanges(), []);
   // Autosave: while the project has unsaved changes, write a recovery copy a few seconds after the
   // last change, and again when the window goes away. Saving clears it (state/editor.ts).
   useEffect(() => {
@@ -80,6 +85,8 @@ export function App() {
       {dialog === 'wires' && <WiresDialog />}
       {dialog === 'revisions' && <RevisionsDialog />}
       {dialog === 'plc' && <PlcDialog />}
+      {dialog === 'sizing' && <SizingDialog />}
+      {dialog === 'warehouse' && <WarehouseDialog />}
     </div>
   );
 }

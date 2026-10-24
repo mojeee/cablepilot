@@ -54,6 +54,8 @@ export interface WireEl {
   /** Cable (designation, e.g. "-W1") this wire is a core of, and the core's colour code or number. */
   cable?: string;
   core?: string;
+  /** Length of the conductor in metres, entered by hand until the cabinet layout estimates it (M6 part 1). */
+  length?: string;
 }
 export interface JunctionEl {
   id: string;
@@ -260,6 +262,40 @@ export interface Potential {
   kind: 'ac' | 'neutral' | 'pe' | 'dc-plus' | 'dc-minus' | 'dc' | 'other';
 }
 
+/**
+ * Load data of a device that draws current (a motor or another load), the input of the sizing engine
+ * (shared/sizing.ts). Three-phase AC loads only. Everything is optional: the engine reports what is missing.
+ */
+export interface LoadData {
+  kind: 'motor' | 'load';
+  /** Motor: rated shaft power from the nameplate, kW. */
+  powerKw?: number;
+  /** Rated current in amperes: the nameplate current of a motor, or the load current. Overrides the computed one. */
+  current?: number;
+  cosPhi?: number;
+  /** Motor efficiency in percent (nameplate). */
+  efficiency?: number;
+  /** Motor starter: direct on line, or star-delta (line and delta contactors carry the winding current). */
+  starter?: 'dol' | 'star-delta';
+  /** Tripping curve required of the breaker (IEC 60898-1 letters); the user chooses it from the starting current. */
+  curve?: 'B' | 'C' | 'D';
+  /** Feeder length in metres when neither a cable nor a wire of the feeder states one. */
+  length?: number;
+}
+/** Supply and installation data of the project, the shared assumptions of every sizing result. */
+export interface SupplyData {
+  /** Line-to-line voltage in volts. */
+  voltage: number;
+  /** Prospective short-circuit current at the board in kA; 0: not stated (the breaking-capacity requirement is skipped). */
+  ik: number;
+  /** Ambient air temperature in degrees C (the capacity tables are for 30). */
+  ambient: number;
+  /** Number of loaded circuits bunched together (grouping). */
+  grouping: number;
+  /** Largest voltage drop of a feeder in percent of the supply voltage. */
+  maxDropPct: number;
+}
+
 /** A part of a device: a library part (or an embedded one) and how many per device. */
 export interface PartUse {
   part: string;
@@ -273,6 +309,8 @@ export interface PartUse {
  */
 export interface DeviceRec {
   designation: string;
+  /** Load and feeder data for sizing (motor nameplate or load current); see LoadData. */
+  load?: LoadData;
   parts: PartUse[];
   fields: Record<string, string>;
   /** Full designation of the assembly this device is mounted on or in (nested assemblies). */
@@ -386,6 +424,8 @@ export interface ProjectSettings {
   wireColours: boolean;
   /** Installation method of the conductors (IEC 60364-5-52 letter: B2, C, E...); empty: not stated, the cross-section check is skipped. */
   installationMethod: string;
+  /** Supply data for sizing (M6 part 1). */
+  supply: SupplyData;
   /** PLC addressing scheme (M5). */
   plc: PlcSettings;
 }

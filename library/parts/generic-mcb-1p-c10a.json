@@ -13,9 +13,11 @@
     "it": "Interruttore magnetotermico 1 polo, curva C, 10 A"
   },
   "data": {
+    "Type": "MCB",
     "Poles": "1",
     "Tripping characteristic": "C",
-    "Rated current": "10 A"
+    "Rated current": "10 A",
+    "Breaking capacity": "6 kA"
   },
   "dimensions": {
     "w": 17.5,

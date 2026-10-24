@@ -15,6 +15,15 @@ const api: CablePilotApi = {
   files: { open: call('files:open'), save: call('files:save'), exportPdf: call('files:exportPdf'), exportText: call('files:exportText'), exportBinary: call('files:exportBinary'), importDxf: call('files:importDxf'), importTags: call('files:importTags') },
   samples: { list: call('samples:list'), read: call('samples:read') },
   autosave: { write: call('autosave:write'), list: call('autosave:list'), read: call('autosave:read'), clear: call('autosave:clear') },
+  warehouse: {
+    load: call('warehouse:load'), save: call('warehouse:save'), pickFile: call('warehouse:pickFile'), pickFolder: call('warehouse:pickFolder'),
+    refresh: call('warehouse:refresh'), sample: call('warehouse:sample'), watch: call('warehouse:watch'),
+    onChanged: (cb) => {
+      const fn = () => cb();
+      ipcRenderer.on('warehouse:changed', fn);
+      return () => void ipcRenderer.removeListener('warehouse:changed', fn);
+    },
+  },
   company: { list: call('company:list'), save: call('company:save'), folder: call('company:folder') },
 };
 

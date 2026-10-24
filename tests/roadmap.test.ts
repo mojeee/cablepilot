@@ -12,7 +12,7 @@ describe('docs/roadmap.md', () => {
   });
   it('has the M7-AI Assistant heading the site reads', () => expect(headings).toContain('## M7-AI Assistant'));
   it('has the release section the site reads', () => expect(headings.some((h) => /^## M8 Release/.test(h))).toBe(true));
-  it('has M0 to M5 fully ticked and M6 (sizing, CAD workspace, cabinet layout) not started', () => {
+  it('has M0 to M5 and M6 sizing and warehouse fully ticked, the other two M6 sections not started', () => {
     const section = (id: string) => roadmap.split(new RegExp(`^## ${id}\\b.*$`, 'm'))[1].split(/^## /m)[0];
     expect(section('M0')).not.toMatch(/- \[ \]/);
     expect(section('M1')).not.toMatch(/- \[ \]/);
@@ -20,7 +20,8 @@ describe('docs/roadmap.md', () => {
     expect(section('M3')).not.toMatch(/- \[ \]/);
     expect(section('M4')).not.toMatch(/- \[ \]/);
     expect(section('M5')).not.toMatch(/- \[ \]/);
-    for (const id of ['M6-Sizing and warehouse', 'M6-CAD workspace with the AI inside', 'M6 Cabinet layout']) {
+    expect(roadmap.split(/^## M6-Sizing and warehouse.*$/m)[1].split(/^## /m)[0]).not.toMatch(/- \[ \]/);
+    for (const id of ['M6-CAD workspace with the AI inside', 'M6 Cabinet layout']) {
       const part = roadmap.split(new RegExp(`^## ${id}.*$`, 'm'))[1].split(/^## /m)[0];
       expect(part).not.toMatch(/- \[x\]/);
       expect(part).toMatch(/- \[ \]/);

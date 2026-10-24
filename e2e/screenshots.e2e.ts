@@ -52,7 +52,8 @@ test('screenshots of the sample projects, dark and light', async () => {
     await page.keyboard.press('Escape');
 
     // The electrical rule check: the conveyor sample with a duplicate designation (a second coil renamed
-    // -KM1) and the installation method changed to A1, which makes the 6 mm² conductors on the 32 A breaker too small.
+    // -KM1), the installation method changed to A1 and the ambient temperature to 45 °C, which makes the
+    // 2.5 mm² conductors on the 16 A breaker too small (18 A x 0.79 = 14.2 A).
     await open('conveyor');
     await theme('dark', 'dark');
     await goto('Control circuit');
@@ -69,6 +70,7 @@ test('screenshots of the sample projects, dark and light', async () => {
     await page.getByTestId('prop-designation').blur();
     await page.getByTestId('settings').click();
     await page.getByTestId('installation-method').selectOption('A1');
+    await page.getByTestId('supply-ambient').selectOption('45');
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('checks-banner')).toBeVisible();
     await goto('Motor power circuit');
@@ -85,6 +87,29 @@ test('screenshots of the sample projects, dark and light', async () => {
     // The top of the window, in the 12:7 shape of the other feature images.
     const bb = (await page.getByRole('dialog').boundingBox())!;
     await page.screenshot({ path: join(out, 'feat-plc.png'), clip: { x: bb.x, y: bb.y, width: bb.width, height: Math.min(bb.height, Math.round((bb.width * 7) / 12)) } });
+    await page.keyboard.press('Escape');
+
+    // Sizing: the conveyor sample's motor raised to 7.5 kW on its nameplate, the sample stock list loaded; the review
+    // table proposes a contactor and an overload relay from stock, and the suggestion panel of the contactor is open.
+    await open('conveyor');
+    await theme('dark', 'dark');
+    await page.getByTestId('warehouse').click();
+    await page.getByTestId('wh-sample').click();
+    await expect(page.getByTestId('wh-table')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await goto('Motor power circuit');
+    await page.keyboard.press('f');
+    const cv = (await canvas().boundingBox())!;
+    const zoom = Number(/Zoom\s+(\d+)\s*%/.exec(await page.locator('body').innerText())![1]) / 100;
+    await page.mouse.click(cv.x + cv.width / 2, cv.y + cv.height / 2 + (234 - 148.5) * zoom);
+    await page.getByTestId('load-power').fill('7.5');
+    await page.getByTestId('load-power').blur();
+    await page.getByTestId('device-sizing').click();
+    await page.locator('[data-testid="sizing-line"][data-role="contactor"]').getByTestId('sizing-choose').click();
+    await expect(page.getByTestId('sizing-panel')).toBeVisible();
+    await page.locator('.modal-body').evaluate((el) => { el.scrollTop = 112; });
+    const sb = (await page.getByRole('dialog').boundingBox())!;
+    await page.screenshot({ path: join(out, 'feat-sizing.png'), clip: { x: sb.x, y: sb.y, width: sb.width, height: Math.min(sb.height, Math.round((sb.width * 7) / 12)) } });
     await page.keyboard.press('Escape');
 
     // The drawing set: pages as they print (white), from the charger sample.

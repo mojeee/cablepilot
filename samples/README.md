@@ -11,8 +11,11 @@ projects" and opens them as unsaved copies.
 - `dc-charger.cablepilot.json`: 110 V DC battery-charger panel with Italian drawing texts: two data pages,
   single-line with dashed module outlines and a warning sign, input and rectifier modules, alarm relays and
   a PLC interface with input cards and a PLC I/O list page. Terminal, cable and layout pages are placeholders until M3 and M6.
+- `stock-sample.csv`: a generic stock list (fictional quantities, generic part codes, two warehouses, a part with no
+  technical data) for the Warehouse window's "Use the sample stock list"; the conveyor and pump samples carry load data
+  so sizing works against it.
 
-The files are generated from `tests/support/samples.ts` with the same commands the editor uses. To change a
+The project files are generated from `tests/support/samples.ts` with the same commands the editor uses. To change a
 sample, edit that file and run `UPDATE_SAMPLES=1 npx vitest run tests/samples.test.ts`; the test fails when
 the committed files are out of date. Generic parts and invented example data only; nothing is taken from a
 third-party drawing.

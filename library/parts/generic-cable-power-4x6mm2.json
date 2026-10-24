@@ -13,6 +13,7 @@
     "it": "Cavo di potenza 4 x 6 mm²"
   },
   "data": {
+    "Type": "Power cable",
     "Cores": "4",
     "Conductor cross-section": "6 mm²",
     "Core colours": "BN, BK, GY, GNYE"

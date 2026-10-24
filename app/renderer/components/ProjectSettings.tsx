@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { t, getLanguage } from '@shared/i18n';
 import { ASSEMBLY_FIELDS, PROJECT_FIELDS, type DataField } from '@shared/forms';
 import { newId } from '@shared/ids';
-import type { DrawingStyle, Potential, StyleColourKey, Template } from '@shared/model/types';
+import type { DrawingStyle, Potential, StyleColourKey, SupplyData, Template } from '@shared/model/types';
+import { AMBIENT_STEPS, GROUPING_STEPS } from '@shared/sizing';
 import { parseZoneLabels, zoneRange } from '@shared/model/zones';
 import { SHEET_SIZES, type SheetSize } from '@shared/sheets';
 import { readImageFile } from '../render/svg';
@@ -55,6 +56,7 @@ function General() {
   const p = useEditor((s) => s.history.present);
   const exec = useEditor.getState().exec;
   const s = p.settings;
+  const setSupply = (patch: Partial<SupplyData>) => exec({ type: 'project/settings', settings: { supply: { ...s.supply, ...patch } } });
   const [pot, setPot] = useState({ id: '', label: '' });
   return (
     <>
@@ -64,7 +66,14 @@ function General() {
       <Select<SheetSize> label={t('Default sheet size')} value={s.defaultSize} options={SHEET_SIZES.map((x) => ({ value: x, label: x }))} onChange={(v) => exec({ type: 'project/settings', settings: { defaultSize: v } })} />
       <h3>{t('Electrical rule check')}</h3>
       <Select label={t('Installation method of the conductors (IEC 60364-5-52)')} testid="installation-method" value={s.installationMethod} options={[{ value: '', label: t('Not stated') }, ...INSTALLATION_METHODS.map((m) => ({ value: m, label: `${m}: ${METHOD_TEXT[m][getLanguage()]}` }))]} onChange={(v) => exec({ type: 'project/settings', settings: { installationMethod: v } })} />
-      <p className="hint">{t('Used by the cross-section check, with these assumptions: PVC-insulated copper, 30 °C, three loaded conductors. It does not replace the engineer\'s verification.')}</p>
+      <p className="hint">{t('Used by the cross-section check and by sizing, with these assumptions: PVC-insulated copper, three loaded conductors, the ambient temperature and grouping of the supply data. It does not replace the engineer\'s verification.')}</p>
+      <h3>{t('Supply and installation (sizing)')}</h3>
+      <NumField label={t('Supply voltage between phases (V)')} testid="supply-voltage" value={s.supply.voltage} min={1} step={1} onCommit={(v) => setSupply({ voltage: v })} />
+      <NumField label={t('Prospective short-circuit current at the board (kA, 0: not stated)')} testid="supply-ik" value={s.supply.ik} min={0} step={0.5} onCommit={(v) => setSupply({ ik: v })} />
+      <Select<string> label={t('Ambient temperature (°C)')} testid="supply-ambient" value={String(s.supply.ambient)} options={AMBIENT_STEPS.map((x) => ({ value: String(x), label: String(x) }))} onChange={(v) => setSupply({ ambient: Number(v) })} />
+      <Select<string> label={t('Grouped circuits')} testid="supply-grouping" value={String(s.supply.grouping)} options={GROUPING_STEPS.map((x) => ({ value: String(x), label: String(x) }))} onChange={(v) => setSupply({ grouping: Number(v) })} />
+      <NumField label={t('Largest voltage drop of a feeder (%)')} testid="supply-drop" value={s.supply.maxDropPct} min={0.1} step={0.5} onCommit={(v) => setSupply({ maxDropPct: v })} />
+      <p className="hint">{t('Shared assumptions of every sizing result. Ambient temperature and grouping use the steps of the correction tables; the installation method is set above.')}</p>
       <h3>{t('Cross-references')}</h3>
       <Select<'page.column' | 'page-column-row'> label={t('Cross-reference format')} testid="crossref-format" value={s.crossRef.format} options={[{ value: 'page.column', label: t('Page.column (8.3)') }, { value: 'page-column-row', label: t('Page-column-row (08-E3)') }]} onChange={(v) => exec({ type: 'project/settings', settings: { crossRef: { ...s.crossRef, format: v } } })} />
       <NumField label={t('Page number digits')} value={s.crossRef.pageDigits} min={0} max={4} step={1} onCommit={(v) => exec({ type: 'project/settings', settings: { crossRef: { ...s.crossRef, pageDigits: Math.round(v) } } })} />

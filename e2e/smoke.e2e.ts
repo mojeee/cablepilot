@@ -360,7 +360,7 @@ test('M4: issue a revision, see the changed page, compare, and read the cover sh
     await page.getByTestId('save').click();
     const file = readdirSync(out).find((f) => f.endsWith('.cablepilot.json'))!;
     const saved = JSON.parse(readFileSync(join(out, file), 'utf8')) as { issueStatus: string; version: number; revisions: { number: string; description: string; pages: unknown[] }[] };
-    expect(saved.version).toBe(5);
+    expect(saved.version).toBe(6);
     expect(saved.issueStatus).toBe('construction');
     expect(saved.revisions.map((r) => r.number)).toEqual(['0', '1']);
     expect(saved.revisions[1].description).toBe('Lamp added');
@@ -408,6 +408,117 @@ test('M5: assign an address in the PLC overview, export a tag list, import tags 
     await page.getByTestId('plc').click();
     await expect(page.getByTestId('plc-tag-1')).toHaveValue('S1_Start');
     await expect(page.getByTestId('plc-address-0')).toHaveValue('I1.0');
+  } finally {
+    await close();
+  }
+});
+
+test('M6: import stock, size a motor feeder, confirm, and see the BOM quantities', async () => {
+  const { page, out, close } = await launch();
+  try {
+    await page.getByTestId('samples').selectOption('conveyor');
+    await expect(page.getByTestId('checks-banner')).toHaveCount(0);
+    const messages = page.getByRole('region', { name: 'Messages' });
+
+    // The company's stock file: Italian ERP headers and semicolons; the wizard guesses the mapping, which is saved.
+    writeFileSync(join(out, 'stock-import.csv'), [
+      'Codice articolo;Descrizione;Giacenza;Impegnato;Ubicazione;Magazzino;UM',
+      'GEN-CONTACTOR-12A;Contattore 12 A;25;5;A-03-02;Centrale;pz',
+      'GEN-CONTACTOR-18A;Contattore 18 A;18;4;A-03-03;Centrale;pz',
+      'GEN-OVERLOAD-RELAY-9A-13A;Relè 9-13 A;14;2;A-04-02;Centrale;pz',
+      'GEN-OVERLOAD-RELAY-12A-18A;Relè 12-18 A;6;2;A-04-03;Centrale;pz',
+      'GEN-MCB-3P-C16A;MCB C16;60;10;A-01-02;Centrale;pz',
+      'LABEL-ROLL-WHITE;Rotolo etichette;12;0;E-01-01;Centrale;pz',
+    ].join('\n'));
+    await page.getByTestId('warehouse').click();
+    await page.getByTestId('wh-pick-file').click();
+    await expect(page.getByTestId('wh-wizard')).toBeVisible();
+    await expect(page.getByTestId('wh-map-code')).toHaveValue('Codice articolo');
+    await expect(page.getByTestId('wh-map-onHand')).toHaveValue('Giacenza');
+    await page.getByTestId('wh-import').click();
+    await expect(page.getByTestId('wh-table').locator('tbody tr')).toHaveCount(6);
+    await expect(messages).toContainText('6 items imported');
+    await expect(page.getByTestId('wh-data-missing')).toHaveCount(1); // the label roll has no technical data
+    await page.keyboard.press('Escape');
+
+    // The motor of the conveyor: raise it to 7.5 kW on its nameplate, then size its feeder.
+    await page.getByTestId('page-5').click();
+    await page.keyboard.press('f');
+    const canvas = page.getByTestId('page-canvas');
+    const b = (await canvas.boundingBox())!;
+    const zoom = Number(/Zoom\s+(\d+)\s*%/.exec(await page.locator('body').innerText())![1]) / 100;
+    await page.mouse.click(b.x + b.width / 2 + (210 - 210) * zoom, b.y + b.height / 2 + (234 - 148.5) * zoom);
+    await expect(page.getByTestId('device-section')).toContainText('+DS-M1');
+    await expect(page.getByTestId('load-ib')).toContainText('10.74');
+    await page.getByTestId('load-power').fill('7.5');
+    await page.getByTestId('load-power').blur();
+    await expect(page.getByTestId('load-ib')).toContainText('14.64');
+    await page.getByTestId('device-sizing').click();
+    const lines = page.getByTestId('sizing-line');
+    await expect(lines).toHaveCount(5);
+    const km = page.locator('[data-testid="sizing-line"][data-role="contactor"]');
+    await expect(km).toHaveAttribute('data-status', 'change');
+    await expect(km).toContainText('GEN-CONTACTOR-18A');
+    await expect(km).toContainText('Centrale A-03-03');
+    await expect(page.locator('[data-testid="sizing-line"][data-role="breaker"]')).toHaveAttribute('data-status', 'ok');
+
+    // Suggestion panel: the requirement, its assumptions, the unverified values and the ranked parts with their stock.
+    await km.getByTestId('sizing-choose').click();
+    const panel = page.getByTestId('sizing-panel');
+    await expect(panel).toContainText('AC-3 ≥ 14.6 A');
+    await expect(panel).toContainText('does not replace the engineer');
+    await expect(panel.getByTestId('sizing-options').locator('tbody tr').first()).toContainText('GEN-CONTACTOR-18A');
+    await expect(panel.getByTestId('stock-available').first()).toContainText('available for this project 14 pz');
+    await panel.getByTestId('sizing-confirm').click();
+    await expect(km).toHaveAttribute('data-status', 'ok');
+
+    // The BOM follows, with the stock columns: 18 on hand, 4 reserved, the project uses 1.
+    await page.keyboard.press('Escape');
+    await page.getByTestId('bom').click();
+    const bom = page.getByTestId('bom-table');
+    const row = bom.locator('tbody tr', { hasText: 'GEN-CONTACTOR-18A' });
+    await expect(row).toContainText('A-03-03');
+    await expect(bom.locator('thead')).toContainText('Available');
+    await expect(row.locator('td').nth(-3)).toHaveText('13'); // available: 18 - 4 - 1
+    await expect(bom).not.toContainText('GEN-CONTACTOR-12A');
+    // Units to build multiply the use: 20 units need 20 of the 14 free contactors.
+    await page.getByTestId('bom-units').fill('20');
+    await page.getByTestId('bom-units').blur();
+    await expect(page.getByTestId('bom-short')).toBeVisible();
+    await expect(row.locator('td').nth(-2)).toHaveText('6'); // short: 20 - 14
+    await page.getByTestId('bom-pick-csv').click();
+    const pick = readdirSync(out).find((f) => f.endsWith('-picking-list.csv'))!;
+    const csv = readFileSync(join(out, pick), 'utf8');
+    expect(csv).toContain('GEN-CONTACTOR-18A');
+    expect(csv).toContain('Short');
+    await page.keyboard.press('Escape');
+    await expect(messages).toContainText('Short in the warehouse: GEN-CONTACTOR-18A, 6 pz missing');
+
+    // Undo takes the contactor back in one step; "size the whole project" accepts everything in one step.
+    await page.getByTestId('bom-units').count();
+    await page.getByTestId('sizing').click();
+    await expect(page.getByTestId('sizing-feeder')).toHaveCount(1);
+    await expect(km).toHaveAttribute('data-status', 'ok');
+    await page.keyboard.press('Escape');
+    await page.getByTestId('undo').click(); // units back to 1
+    await page.getByTestId('undo').click(); // the contactor assignment
+    await page.getByTestId('sizing').click();
+    await expect(km).toHaveAttribute('data-status', 'change');
+    await expect(page.getByTestId('sizing-accept-all')).toContainText('(2)');
+    await page.getByTestId('sizing-accept-all').click();
+    await expect(page.locator('[data-testid="sizing-line"][data-status="change"]')).toHaveCount(0);
+    await page.keyboard.press('Escape');
+    await page.getByTestId('undo').click();
+    await page.getByTestId('sizing').click();
+    await expect(page.locator('[data-testid="sizing-line"][data-status="change"]')).toHaveCount(2);
+    await page.keyboard.press('Escape');
+
+    // An old stock list is flagged in the message list.
+    await page.getByTestId('warehouse').click();
+    await page.getByTestId('wh-date').fill('2026-01-01');
+    await expect(page.getByTestId('wh-stale')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.getByTestId('stock-stale')).toBeVisible();
   } finally {
     await close();
   }

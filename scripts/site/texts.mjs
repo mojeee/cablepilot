@@ -76,6 +76,11 @@ export const TEXT = {
     en: 'PLC racks and I/O cards as devices with addresses from your addressing scheme, an I/O overview that edits both ways, and tag lists for CODESYS and TIA Portal (the TIA format is marked unverified).',
     it: 'Rack PLC e schede I/O come dispositivi con indirizzi dal tuo schema di indirizzamento, panoramica I/O modificabile nei due sensi ed elenchi di tag per CODESYS e TIA Portal (il formato TIA è segnato come non verificato).',
   },
+  'feat.sizing.title': { en: 'Sizing and warehouse', it: 'Dimensionamento e magazzino' },
+  'feat.sizing.text': {
+    en: 'Cables, breakers, contactors and overload relays sized from the schematic with their requirement, assumptions and sources (table values still unverified are flagged), then proposed from your own stock list: ranked by what the warehouse has for this project, with warehouse and location. Confirm one line, or the whole project, in one undo step.',
+    it: 'Cavi, interruttori, contattori e relè termici dimensionati dallo schema con requisito, ipotesi e fonti (i valori di tabella non ancora verificati sono segnalati), poi proposti dalla tua lista di magazzino: in ordine di disponibilità per questo progetto, con magazzino e ubicazione. Conferma una riga, o tutto il progetto, in un solo passo annullabile.',
+  },
   'feat.layout.title': { en: 'Cabinet layout', it: 'Layout del quadro' },
   'feat.layout.text': {
     en: 'Mounting plate to scale in 2D with dimensions and side view, a 3D view, duct fill rate and a drilling DXF.',
@@ -90,6 +95,7 @@ export const TEXT = {
   'feat.devices.alt': { en: 'The alarm relay page of the charger sample with contact images and cross-references', it: 'La pagina dei relè di allarme del campione caricabatterie con immagini dei contatti e riferimenti incrociati' },
   'feat.checks.alt': { en: 'The warnings banner and the list of findings of the electrical rule check, with one-click fixes, over a power page with the markers of the findings', it: 'Il banner degli avvisi e l’elenco delle segnalazioni del controllo delle regole elettriche, con correzioni in un clic, su una pagina di potenza con i marcatori delle segnalazioni' },
   'feat.plc.alt': { en: 'The PLC I/O window listing every channel of the conveyor sample with address, tag, comment and what it is wired to, and the tag list export and import', it: 'La finestra I/O PLC con ogni canale del campione nastro trasportatore: indirizzo, simbolo, commento e collegamento, ed esportazione e importazione degli elenchi di simboli' },
+  'feat.sizing.alt': { en: 'The sizing window of the conveyor sample after the motor was raised to 7.5 kW: the contactor and overload relay lines propose parts from the stock list, with warehouse, location and the quantity available for this project', it: 'La finestra di dimensionamento del campione nastro trasportatore dopo l’aumento del motore a 7,5 kW: le righe di contattore e relè termico propongono articoli dalla lista di magazzino, con magazzino, ubicazione e quantità disponibile per questo progetto' },
   'feat.reports.alt': { en: 'The Reports window showing the wire list generated from the schematic', it: 'La finestra Report con l’elenco fili generato dallo schema' },
   'shot.pending': {
     en: 'Screenshots from the real app arrive with the release milestone.',
@@ -177,8 +183,8 @@ export const TEXT = {
 
   'demo.page.title': { en: 'Demo: draw it once, the lists and the drawing set follow · CablePilot', it: 'Demo: disegna una volta, elenchi e set di disegni seguono · CablePilot' },
   'demo.page.description': {
-    en: 'A recorded walkthrough of CablePilot with the DC battery-charger sample: the drawing set, a coil and its contact, wire numbers, live reports, and the PDF and XLSX export.',
-    it: 'Una dimostrazione registrata di CablePilot con il caricabatterie DC di esempio: il set di disegni, una bobina e il suo contatto, i numeri filo, gli elenchi in tempo reale e l’esportazione in PDF e XLSX.',
+    en: 'A recorded walkthrough of CablePilot with the DC battery-charger sample: the drawing set, a coil and its contact, wire numbers, live reports, and the PDF and XLSX export, and sizing a motor feeder with parts from the stock list.',
+    it: 'Una dimostrazione registrata di CablePilot con il caricabatterie DC di esempio: il set di disegni, una bobina e il suo contatto, i numeri filo, gli elenchi in tempo reale e l’esportazione in PDF e XLSX e il dimensionamento di una linea motore con articoli dalla lista di magazzino.',
   },
   'demo.watch': { en: 'Watch the demo', it: 'Guarda la demo' },
   'demo.poster.alt': { en: 'The demo of CablePilot: wires numbered and coloured on the multi-line power page of the battery-charger sample. Opens the demo page.', it: 'La demo di CablePilot: fili numerati e colorati nella pagina multifilare di potenza del caricabatterie di esempio. Apre la pagina della demo.' },
@@ -193,6 +199,7 @@ export const TEXT = {
   'demo.step4.alt': { en: 'The warnings banner and the finding for a wire that connects to nothing, with its one-click fix.', it: 'Il banner degli avvisi e la segnalazione di un filo che non collega nulla, con la correzione in un clic.' },
   'demo.step5.alt': { en: 'The PLC I/O window listing every channel of the charger sample with address, tag and what it is wired to.', it: 'La finestra I/O PLC con ogni canale del caricabatterie di esempio: indirizzo, simbolo e collegamento.' },
   'demo.step6.alt': { en: 'The messages after exporting the PDF drawing set, over the PLC interface page.', it: 'I messaggi dopo l’esportazione del set di disegni in PDF, sopra la pagina dell’interfaccia PLC.' },
+  'demo.step7.alt': { en: 'The sizing window of the conveyor sample with the contactor line open: the requirement, its assumptions and the parts that meet it, ranked by what the warehouse has for the project.', it: 'La finestra di dimensionamento del campione nastro trasportatore con la riga del contattore aperta: il requisito, le sue ipotesi e gli articoli che lo soddisfano, in ordine di disponibilità a magazzino per il progetto.' },
   'demo.try.title': { en: 'Try it yourself', it: 'Provalo tu' },
   'demo.try.text': { en: 'Download CablePilot, open the battery-charger sample from the toolbar and follow the steps above. Free, open source, and your files stay yours.', it: 'Scarica CablePilot, apri il caricabatterie di esempio dalla barra degli strumenti e segui i passi qui sopra. Libero, open source, e i tuoi file restano tuoi.' },
   'demo.home': { en: 'Back to the home page', it: 'Torna alla pagina iniziale' },

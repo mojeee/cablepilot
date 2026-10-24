@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { FileService } from './files';
 import { registerIpc } from './ipc';
 import { SettingsStore } from './settings';
+import { WarehouseService } from './warehouse';
 
 // CP_PROFILE=<dir>: use this folder as the app's data. End-to-end tests start from a clean profile,
 // so nothing remembered by an earlier run changes what they see.
@@ -14,6 +15,7 @@ const settings = new SettingsStore(join(app.getPath('userData'), 'settings.json'
 let mainWindow: BrowserWindow | null = null;
 // Sample projects ship in /samples next to the app (packaging copies them in M8).
 const files = new FileService(app.getPath('userData'), join(app.getAppPath(), 'samples'), () => mainWindow);
+const warehouse = new WarehouseService(app.getPath('userData'), join(app.getAppPath(), 'samples'), () => mainWindow);
 
 function createWindow(): void {
   const dark = settings.get().theme !== 'light';
@@ -50,7 +52,7 @@ function createWindow(): void {
 }
 
 void app.whenReady().then(() => {
-  registerIpc({ settings, files });
+  registerIpc({ settings, files, warehouse });
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

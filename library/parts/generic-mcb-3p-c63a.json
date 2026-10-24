@@ -13,9 +13,11 @@
     "it": "Interruttore magnetotermico 3 poli, curva C, 63 A"
   },
   "data": {
+    "Type": "MCB",
     "Poles": "3",
     "Tripping characteristic": "C",
-    "Rated current": "63 A"
+    "Rated current": "63 A",
+    "Breaking capacity": "6 kA"
   },
   "dimensions": {
     "w": 52.5,

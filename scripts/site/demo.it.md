@@ -1,11 +1,11 @@
 <!--
 Italian text of the demo page (/it/demo/), translated from docs/demo.md: same "## N." sections.
 "source" is the hash the build prints when docs/demo.md changes; update it together with the translation.
-source: 852def186e
+source: 89856db23c
 -->
 # Demo: disegna una volta, gli elenchi e il set di disegni seguono
 
-Una dimostrazione di CablePilot con il caricabatterie DC di esempio, circa un minuto e mezzo. È la stessa
+Una dimostrazione di CablePilot con il caricabatterie DC e il nastro trasportatore di esempio, meno di due minuti. È la stessa
 storia del video sul sito, e tutto ciò che mostra funziona nella versione attuale: nessun mock-up. Il video
 è registrato dall’app reale da uno script (`e2e/demo.e2e.ts`), così viene rifatto ogni volta che
 l’interfaccia cambia: `npm run record:demo`.
@@ -64,7 +64,24 @@ documentazione Siemens).
 ## 6. PDF e XLSX
 
 **Esporta PDF** scrive il set di disegni completo (vettoriale, testo incorporato) e **Esporta tutti gli
-elenchi in XLSX** scrive ogni elenco, compreso l’elenco I/O del PLC, in un’unica cartella di lavoro. Il video
-finisce sulla copertina.
+elenchi in XLSX** scrive ogni elenco, compreso l’elenco I/O del PLC, in un’unica cartella di lavoro.
 
 - I file sono tuoi: formato di progetto aperto, PDF e XLSX in uscita, nessun account.
+
+## 7. Dimensionamento dallo schema, articoli dal magazzino
+
+Apri il campione del nastro trasportatore, apri **Magazzino** e carica la lista di magazzino di esempio (la tua
+arriva da un’esportazione CSV o XLSX del sistema di magazzino, tramite un’associazione delle colonne salvata per
+la tua azienda). Seleziona il motore nella pagina di potenza e porta la potenza nominale a 7,5 kW nel pannello
+Proprietà: la corrente di impiego viene ricalcolata. **Dimensiona questa linea** elenca interruttore, contattore,
+relè termico, cavo e fili trovati nello schema, ciascuno con il suo requisito. Il contattore non lo soddisfa più:
+apri i suoi suggerimenti per vedere il requisito, le ipotesi e gli articoli che lo soddisfano, in ordine di
+disponibilità a magazzino per questo progetto, con magazzino, ubicazione e quantità disponibile (giacenza, meno
+il riservato, meno ciò che il progetto già usa). Seleziona l’articolo disponibile e conferma: la distinta mostra
+il nuovo articolo con giacenza e quantità disponibile.
+
+- Il dimensionamento è calcolato dai dati del progetto e dichiara le sue ipotesi; i valori di tabella non ancora
+  verificati sulla norma sono segnalati e nessun risultato sostituisce la verifica del progettista.
+- Confermare una riga è un solo passo di annullamento, e **Accetta tutte le proposte** lo è per l’intero progetto.
+
+Il video finisce sulla copertina del campione del nastro trasportatore.

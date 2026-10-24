@@ -3,7 +3,7 @@
 
 import { PAGE_TYPES } from './sheets';
 import { SHEET_SIZES } from './sheets';
-import { CURRENT_VERSION, DEFAULT_BOM, DEFAULT_CROSSREF, DEFAULT_PLC } from './model/defaults';
+import { CURRENT_VERSION, DEFAULT_BOM, DEFAULT_CROSSREF, DEFAULT_PLC, DEFAULT_SUPPLY } from './model/defaults';
 import { DEFAULT_NUMBERING, DEFAULT_WIRE_CLASSES } from './model/wireDefaults';
 import { ISSUE_STATUSES, PROJECT_FORMAT, type Project } from './model/types';
 import { fail, ok, type Result } from './result';
@@ -63,6 +63,11 @@ export const MIGRATIONS: Record<number, Migration> = {
   4: (d) => {
     const settings = (d.settings ?? {}) as Record<string, unknown>;
     return { ...d, settings: { ...settings, plc: structuredClone(DEFAULT_PLC) } };
+  },
+  // 5 -> 6 (M6 part 1): the supply data for sizing. Load data on devices and wire lengths are optional fields.
+  5: (d) => {
+    const settings = (d.settings ?? {}) as Record<string, unknown>;
+    return { ...d, settings: { ...settings, supply: { ...DEFAULT_SUPPLY } } };
   },
 };
 
@@ -136,7 +141,7 @@ export function validateProject(d: unknown): string[] {
   if (!Array.isArray(d.devices) || !d.devices.every((r) => isObj(r) && isStr(r.designation) && Array.isArray(r.parts) && isObj(r.fields))) errs.push('devices must be an array of device records');
   if (!Array.isArray(d.parts)) errs.push('parts must be an array');
   if (!Array.isArray(d.projectParts) || !d.projectParts.every((r) => isObj(r) && isStr(r.id) && isStr(r.part) && isNum(r.qty))) errs.push('projectParts must be an array of parts');
-  if (isObj(s) && (!isObj(s.crossRef) || !isObj(s.bom) || !isObj(s.numbering) || !isObj(s.plc))) errs.push('settings.crossRef, settings.bom, settings.numbering and settings.plc are required');
+  if (isObj(s) && (!isObj(s.crossRef) || !isObj(s.bom) || !isObj(s.numbering) || !isObj(s.plc) || !isObj(s.supply))) errs.push('settings.crossRef, settings.bom, settings.numbering, settings.plc and settings.supply are required');
   if (!Array.isArray(d.wireClasses) || !Array.isArray(d.wireTypes) || !Array.isArray(d.cables)) errs.push('wireClasses, wireTypes and cables must be arrays');
   if (!ISSUE_STATUSES.includes(d.issueStatus as never)) errs.push('issueStatus must be proposal, approval, construction or asBuilt');
   if (!Array.isArray(d.revisions) || !d.revisions.every((r) => isObj(r) && isStr(r.number) && isStr(r.date) && Array.isArray(r.pages) && isObj(r.inventory))) errs.push('revisions must be an array of issued revisions');

@@ -13,8 +13,10 @@
     "it": "Salvamotore, 3 poli, campo di regolazione da 6,3 a 10 A"
   },
   "data": {
+    "Type": "MPCB",
     "Poles": "3",
-    "Setting range": "6.3 - 10 A"
+    "Setting range": "6.3 - 10 A",
+    "Breaking capacity": "10 kA"
   },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",

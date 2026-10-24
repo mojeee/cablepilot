@@ -13,6 +13,7 @@
     "it": "Contattore 3 poli, 9 A AC-3, bobina 24 V DC"
   },
   "data": {
+    "Type": "Contactor",
     "Poles": "3",
     "Rated operational current AC-3": "9 A",
     "Coil voltage": "24 V DC",

@@ -1,6 +1,6 @@
 # Demo: draw it once, the lists and the drawing set follow
 
-A walkthrough of CablePilot with the DC battery-charger sample, about a minute and a half. It is the
+A walkthrough of CablePilot with the DC battery-charger sample and the conveyor sample, under two minutes. It is the
 same story as the video on the website, and everything in it works in the current version: no mock-ups.
 The video is recorded from the real built app by a script (`e2e/demo.e2e.ts`), so it is made again
 whenever the interface changes: `npm run record:demo`.
@@ -56,6 +56,23 @@ marked unverified until it has been checked against Siemens' documentation).
 ## 6. PDF and XLSX
 
 **Export PDF** writes the complete drawing set (vector, text embedded), and **Export all lists as XLSX** writes
-every list, the PLC I/O list included, as one workbook. The video ends on the cover sheet.
+every list, the PLC I/O list included, as one workbook.
 
 - Files belong to you: an open project format, PDF and XLSX out, no account.
+
+## 7. Sizing from the schematic, parts from the warehouse
+
+Open the conveyor sample, open **Warehouse** and load the sample stock list (your own file comes from a CSV or
+XLSX export of your warehouse system, through a column mapping saved for your company). Select the motor on the
+power page and raise its rated power to 7.5 kW in the Properties panel: the design current is recomputed. **Size
+this feeder** lists the breaker, contactor, overload relay, cable and wires found in the schematic, each with its
+requirement. The contactor no longer meets it: open its suggestions to see the requirement, its assumptions and the
+parts that meet it, ranked by what the warehouse has for this project, with warehouse, location and the quantity
+available (on hand, minus reserved, minus what the project already uses). Select the part in stock and confirm:
+the BOM shows the new part with its on-hand and available quantities.
+
+- Sizing is computed from the project data and says what it assumes; table values that have not been checked
+  against the standard yet are flagged, and no result replaces the engineer's verification.
+- Confirming a line is one undo step, and **Accept all proposals** is one undo step for the whole project.
+
+The video ends on the cover sheet of the conveyor sample.

@@ -238,3 +238,41 @@ One entry per milestone: what works, what is left, and anything the owner must d
 
 - Try an exported tag list in TIA Portal and in CODESYS and tell us what they reject (the TIA file is the risky one).
 - Check the default addressing start bytes against the controllers you use (docs/to-verify.md).
+
+## M6 part 1: Sizing and warehouse (done)
+
+**What works**
+
+- Load data on devices (Properties panel: motor nameplate or load current, starter, breaker curve, feeder length),
+  supply data in Project settings (voltage, Ik, ambient, grouping, voltage-drop limit), wire lengths.
+- Sizing engine (`shared/sizing.ts`, `shared/feeders.ts`): feeders are read from the schematic; breaker, contactors,
+  overload relay, cable and wires are checked against their requirement (text, assumptions, unverified table values,
+  "does not replace the engineer's verification"). Worked examples in `tests/sizing.test.ts`.
+- Warehouse window: choose a CSV or XLSX file or a watched folder, map the columns (saved per company), refresh, edit
+  the stock date, link items to library parts, "data missing" badges; sample stock list for the demo.
+- Sizing window: review table for the whole project, suggestion panel per line (ranked, warehouse, location, quantity
+  available for this project), accept a line or all as one undo step.
+- BOM stock columns, shortage, old-stock and lost-part messages, picking-list export (CSV, XLSX).
+- Samples: conveyor and pump station carry load data and ship sized; all three still open with no findings. The charger
+  sample is unchanged except for the file format.
+- Tests: sizing worked examples, availability arithmetic, import mapping, XLSX reading (a deflated workbook with shared
+  strings), feeders and confirm commands, migration 5 to 6; an end-to-end flow (import stock, size a motor feeder,
+  confirm, BOM quantities). The 500-page budget still passes.
+
+**What is left**
+
+- Every ambient and grouping factor, the voltage-drop constants and the generic breaking capacities are unverified
+  (`docs/to-verify.md`); the results flag it. Method E has no grouping factors.
+- Three-phase AC feeders only: no single-phase, DC, fuse-based or soft-starter/drive feeders; no motor starting current,
+  discrimination or short-circuit withstand of the cable; star-delta contactors are all sized alike.
+- A feeder fed from a shared bus without a breaker would walk into its neighbours' devices.
+- Suggestions use library parts only (generic data); manufacturer data arrives through the company library. Cable
+  lengths are typed by hand until the cabinet layout estimates them.
+- Live ERP connections are not built (files and a watched folder only); stock rows of different warehouses are merged
+  per part, with the largest free stock used first.
+
+**What the owner must do by hand**
+
+- Check the new rows of `docs/to-verify.md` against IEC 60364-5-52 (Tables B.52-14 and B.52-17, Annex G) and the
+  generic breaking capacities; then set `CORRECTION_VERIFIED` and `VOLTAGE_DROP_VERIFIED` to true.
+- Try your own ERP export in the warehouse window and tell us which column layouts or encodings fail.

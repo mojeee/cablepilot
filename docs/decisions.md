@@ -294,6 +294,49 @@ IEC 60617 symbols by default with NFPA 79 / ANSI as an option from M1; three sam
   open unchanged. The conveyor and charger samples use cards; the pump station keeps channel symbols to show that
   they still work.
 
+## M6 part 1: Sizing and warehouse
+
+- **Feeders come from the schematic.** A feeder is a device with load data (or a motor symbol) and the series chain the
+  nets show from it toward the supply: terminals, overload relays and contactors are walked through, the first breaker
+  or fuse ends the chain. Wires on pages that are not numbered (single-line pages) and protective conductors are left
+  out. A feeder fed from a shared bus with no breaker between would walk into its neighbours; the samples and the
+  usual breaker-first layout do not, and this is listed as left in `docs/progress.md`.
+- **Sizing order.** Breaker first (In >= Ib, three poles, curve, Icu >= Ik), then the cable and wires for the breaker's
+  current (Ib <= In <= Iz, I2 <= 1.45 Iz, voltage drop). A breaker that meets its own requirement is "ok" even when it
+  is larger than needed: the cable line then asks for the larger cable, the same direction the existing cross-section
+  check fixes in. New choices are ranked smallest rating first. A motor protective breaker counts as set to Ib.
+- **Star-delta:** every contactor is sized for Ib / sqrt(3), which is conservative for the star contactor; no starting
+  current or electrical life is checked. DC loads and single-phase loads are not sized yet (three-phase AC only).
+- **Part data for sizing** is a `Type` key (`MCB`, `MPCB`, `Contactor`, `Overload relay`, `Power cable`) plus the
+  technical fields of that type; `check:library` enforces it. Parts without them are "data missing" and never
+  suggested. New generic breaking capacities and an overload relay 12 to 18 A were added; all are generic classes in
+  `docs/to-verify.md`.
+- **Table values and the unverified flag.** The ambient and grouping factors and the voltage-drop constants are
+  recorded from secondary sources, shipped as unverified (`CORRECTION_VERIFIED`, `VOLTAGE_DROP_VERIFIED`), listed in
+  `docs/to-verify.md`, and every result that uses them says so. The existing cross-section check now applies the same
+  factors (one table, no duplicate), so its finding text shows the ambient temperature and grouping.
+- **Supply data** (voltage, Ik, ambient, grouping, voltage-drop limit) is a project setting (file format 6, migration
+  5 to 6). Ik 0 means not stated: the breaking-capacity requirement is skipped and says so. Ambient temperature and
+  grouping are offered only in the steps of the correction tables. Load data is on the device record (`load`);
+  wire lengths are a manual `length` on a wire; a feeder's length is its cable's length, else its longest wire, else
+  the load's own.
+- **The warehouse belongs to the company, not the project.** The stock list, the saved column mapping, manual links and
+  the stock date live in `warehouse.json` in the app's data folder, written by the main process; the renderer gets
+  rows and never a path. Refresh and a watched folder (`fs.watch`, debounced) are in the main process too. Mapping
+  is saved by header text, so a reordered file still maps. XLSX is read by our own small reader (`node:zlib` for
+  deflate, shared strings, inline strings): no dependency. CSV falls back to Windows-1252 when it is not UTF-8.
+- **Availability** = on hand - reserved - this project's use, where use is the BOM quantity (quantity per device times
+  units to build) or, for cable stocked in metres, length times units. With several stock rows the use is taken from
+  the largest free stock first. Items are linked by part code or by a manual link that survives refreshes.
+- **Stock columns in the BOM are a view,** not a project setting: the BOM report on the drawing set stays free of stock
+  data. The picking list uses the drawing language for its headers.
+- **Samples changed** so that they ship sized: the conveyor's breaker is a 16 A MCB (the 32 A breaker was larger than its
+  2.5 mm² cable can carry), its power wires are 2.5 mm² (a 1.5 mm² wire sat downstream of the 16 A breaker, which the
+  old check did not look at), the pumps' relays are 12 to 18 A. "Size the whole project" is applied when the samples are
+  generated, with no stock list, so they open with no findings and nothing to change.
+- **Demo:** the sizing step opens the conveyor sample last, after the PDF and XLSX export of the charger sample, so the
+  first six steps are unchanged.
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite

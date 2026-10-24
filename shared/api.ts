@@ -3,6 +3,7 @@
 
 import type { Result } from './result';
 import type { Settings } from './settings';
+import type { WarehouseData } from './stock';
 
 export interface AppInfo {
   name: string;
@@ -31,6 +32,13 @@ export interface AutosaveInfo {
   path: string | null;
   savedAt: string;
 }
+/** A stock file read by the main process: its rows as text, the file's name and its date (yyyy-mm-dd). */
+export interface WarehouseFile {
+  name: string;
+  rows: string[][];
+  modified: string;
+}
+export type WarehouseState = WarehouseData & { source: { kind: 'file' | 'folder'; name: string } | null; watching: boolean };
 export type CompanyKind = 'symbols' | 'templates' | 'macros' | 'parts';
 
 export interface CablePilotApi {
@@ -66,6 +74,23 @@ export interface CablePilotApi {
     list(): Promise<Result<AutosaveInfo[]>>;
     read(id: string): Promise<Result<string>>;
     clear(id: string): Promise<Result<null>>;
+  };
+  /** The company's warehouse (M6 part 1): the stock file is read here, never in the renderer. */
+  warehouse: {
+    load(): Promise<Result<WarehouseState>>;
+    /** Saves the column mapping and the stock list. */
+    save(data: WarehouseData): Promise<Result<null>>;
+    /** Asks for a CSV or XLSX stock file, remembers it as the source and returns its rows; null when the user cancels. */
+    pickFile(): Promise<Result<WarehouseFile | null>>;
+    /** Asks for a folder; its newest CSV or XLSX file is the stock list. */
+    pickFolder(): Promise<Result<WarehouseFile | null>>;
+    /** Reads the remembered source again; null when there is none. */
+    refresh(): Promise<Result<WarehouseFile | null>>;
+    /** The generic sample stock list that ships with the app. */
+    sample(): Promise<Result<WarehouseFile>>;
+    /** Watches the source: `onChanged` fires when the file changes. Returns whether it is watching. */
+    watch(on: boolean): Promise<Result<boolean>>;
+    onChanged(cb: () => void): () => void;
   };
   /** The company library: plain data files in the app's data folder, same format as /library. */
   company: {

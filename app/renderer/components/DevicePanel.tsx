@@ -9,7 +9,8 @@ import { withPin } from '@shared/draw/box';
 import { newId } from '@shared/ids';
 import type { PartDef } from '@shared/library/types';
 import { findPart } from '@shared/library/types';
-import type { BoxEl, BoxPin, Page, PartUse, PlcType, Project, SymbolEl } from '@shared/model/types';
+import type { BoxEl, BoxPin, LoadData, Page, PartUse, PlcType, Project, SymbolEl } from '@shared/model/types';
+import { loadCurrent } from '@shared/sizing';
 import { PLC_TYPES } from '@shared/plc';
 import { aspectsOf, parseDesignation } from '@shared/numbering';
 import { useEditor } from '../state/editor';
@@ -108,6 +109,36 @@ function DeviceParts({ device, project }: { device: Device; project: Project }) 
   );
 }
 
+/**
+ * Load and feeder data for sizing (rule 12): motor nameplate (power, cos φ, efficiency or current), starter and tripping
+ * curve, or a load current. The sizing dialog computes everything else from these and the supply data.
+ */
+function LoadSection({ device, project }: { device: Device; project: Project }) {
+  const load = device.rec?.load;
+  const set = (patch: Partial<LoadData> | null) => exec({ type: 'device/update', key: device.key, patch: { load: patch === null ? null : { kind: 'motor', ...load, ...patch } } });
+  const clean = (v: number, p: keyof LoadData) => (v > 0 ? set({ [p]: v }) : set({ [p]: undefined }));
+  const lc = loadCurrent(load, project.settings.supply);
+  return (
+    <section className="load-data" data-testid="load-section">
+      <h4>{t('Load and feeder data (sizing)')}</h4>
+      <Select<'' | LoadData['kind']> label={t('Kind of load')} testid="load-kind" value={load?.kind ?? ''} options={[{ value: '', label: t('None') }, { value: 'motor', label: t('Motor (nameplate)') }, { value: 'load', label: t('Other load (current or power)') }]} onChange={(v) => (v ? set({ kind: v }) : set(null))} />
+      {load && (
+        <>
+          <NumField label={load.kind === 'motor' ? t('Rated power (kW)') : t('Power (kW)')} testid="load-power" value={load.powerKw ?? 0} min={0} step={0.1} onCommit={(v) => clean(v, 'powerKw')} />
+          <NumField label={t('Rated current (A), overrides the computed one')} testid="load-current" value={load.current ?? 0} min={0} step={0.1} onCommit={(v) => clean(v, 'current')} />
+          <NumField label={t('cos φ')} testid="load-cosphi" value={load.cosPhi ?? 0} min={0} max={1} step={0.01} onCommit={(v) => clean(v, 'cosPhi')} />
+          {load.kind === 'motor' && <NumField label={t('Efficiency (%)')} testid="load-efficiency" value={load.efficiency ?? 0} min={0} max={100} step={0.1} onCommit={(v) => clean(v, 'efficiency')} />}
+          {load.kind === 'motor' && <Select<NonNullable<LoadData['starter']>> label={t('Starter')} value={load.starter ?? 'dol'} options={[{ value: 'dol', label: t('Direct on line') }, { value: 'star-delta', label: t('Star-delta') }]} onChange={(v) => set({ starter: v })} />}
+          <Select<NonNullable<LoadData['curve']>> label={t('Breaker curve')} value={load.curve ?? 'C'} options={[{ value: 'B', label: 'B' }, { value: 'C', label: 'C' }, { value: 'D', label: 'D' }]} onChange={(v) => set({ curve: v })} />
+          <NumField label={t('Feeder length (m), when no cable or wire states one')} value={load.length ?? 0} min={0} step={1} onCommit={(v) => clean(v, 'length')} />
+          <p className="hint" data-testid="load-ib">{lc.ib !== undefined ? t('Design current Ib {ib} A ({source})', { ib: lc.ib, source: lc.source === 'nameplate' ? t('nameplate') : t('computed') }) : t('Design current: data missing')}</p>
+        </>
+      )}
+      <button type="button" data-testid="device-sizing" onClick={() => { const s = useEditor.getState(); s.patch({ sizingFocus: device.key }); s.setDialog('sizing'); }}>{t('Size this feeder...')}</button>
+    </section>
+  );
+}
+
 /** Device section for a selected symbol or box: representations, functions, links, parent, parts, fields. */
 export function DeviceSection({ el, page, project }: { el: SymbolEl | BoxEl; page: Page; project: Project }) {
   const lib = useEditor((s) => s.lib);
@@ -153,6 +184,7 @@ export function DeviceSection({ el, page, project }: { el: SymbolEl | BoxEl; pag
         onChange={(v) => exec({ type: 'device/update', key: d.key, patch: { parent: v || null } })}
       />
       <DeviceParts device={d} project={project} />
+      <LoadSection device={d} project={project} />
       {project.settings.bom.userFields.map((f) => (
         <TextField key={f.id} label={f.label[lang] || f.id} value={d.rec?.fields[f.id] ?? ''} onCommit={(v) => exec({ type: 'device/update', key: d.key, patch: { fields: { [f.id]: v } } })} />
       ))}

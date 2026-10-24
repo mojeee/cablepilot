@@ -12,7 +12,11 @@ import { MIGRATIONS, parseProject, projectFileName, serializeProject } from '@sh
 import { newId } from '@shared/ids';
 import { makeLibrary, type Library, type MacroDef, type PartDef, type SymbolDef } from '@shared/library/types';
 import { withPin } from '@shared/draw/box';
-import { computeBom, bomToCsv } from '@shared/bom';
+import { BOM_STOCK_COLUMNS, computeBom, bomToCsv } from '@shared/bom';
+import { pickingList, withStock } from '@shared/stock';
+import { toCsv } from '@shared/export/csv';
+import { xlsxBytes } from '@shared/export/xlsx';
+import { useStock } from './stock';
 import { macroFromSelection } from '@shared/macros';
 import { newPage, newProject } from '@shared/model/defaults';
 import { pageById } from '@shared/model/queries';
@@ -34,7 +38,7 @@ import { loadPdfFonts } from '../render/fonts';
 import { useUi } from './ui';
 
 export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'line' | 'rect' | 'dashed' | 'table' | 'image' | 'warning';
-export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc';
+export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc' | 'sizing' | 'warehouse';
 
 export interface Recovery {
   id: string;
@@ -65,6 +69,8 @@ interface EditorState {
   lib: Library;
   dialog: Dialog;
   recovery: Recovery[];
+  /** The device the sizing dialog opens on (set from the properties panel); null: the whole project. */
+  sizingFocus: string | null;
   /** Asks the properties panel to focus its text field (after placing a text). */
   focusText: boolean;
   /** A hint for the status bar: what the active tool expects next. */
@@ -96,7 +102,9 @@ interface EditorState {
   placeBox(variant: 'blackbox' | 'connector', x: number, y: number): void;
   placeMacro(id: string, x: number, y: number): void;
   saveMacro(name: string): Promise<void>;
-  exportBom(): Promise<void>;
+  exportBom(withStock?: boolean): Promise<void>;
+  /** The warehouse picking list: what to take from which warehouse and location (CSV or XLSX). */
+  exportPicking(kind: 'csv' | 'xlsx'): Promise<void>;
   renumberWires(): void;
   exportReportCsv(id: ReportId): Promise<void>;
   exportXlsx(): Promise<void>;
@@ -190,6 +198,7 @@ export const useEditor = create<EditorState>((set, get) => {
     lib: makeLibrary(BUILTIN_SYMBOLS, BUILTIN_PARTS),
     dialog: null,
     recovery: [],
+    sizingFocus: null,
     focusText: false,
     hint: '',
 
@@ -331,15 +340,31 @@ export const useEditor = create<EditorState>((set, get) => {
       await get().loadCompany();
       flash('info', () => t('Saved macro {name} to the company library.', { name: clean }));
     },
-    exportBom: async () => {
+    exportBom: async (withStockColumns = false) => {
       const p = get().project();
-      const csv = bomToCsv(p, computeBom(p, get().lib));
+      const stock = useStock.getState().stock;
+      const bom = computeBom(p, get().lib);
+      const csv = withStockColumns && stock
+        ? bomToCsv(p, withStock(bom, stock, [...get().lib.parts.values(), ...p.parts.filter((x) => !get().lib.parts.has(x.id))]), p.settings.drawingLanguage, [...p.settings.bom.columns, ...BOM_STOCK_COLUMNS])
+        : bomToCsv(p, bom);
       const r = await window.cablepilot.files.exportText(csv, projectFileName(p).replace(/\.cablepilot\.json$/, '-bom.csv'));
       if (!r.ok) return errMsg(r.error);
       if (r.value) {
         const { name } = r.value;
         flash('info', () => t('BOM exported to {name}.', { name }));
       }
+    },
+
+    exportPicking: async (kind) => {
+      const p = get().project();
+      const lang = p.settings.drawingLanguage;
+      const rows = pickingList(computeBom(p, get().lib), useStock.getState().stock, [...get().lib.parts.values(), ...p.parts.filter((x) => !get().lib.parts.has(x.id))], lang);
+      const base = projectFileName(p).replace(/\.cablepilot\.json$/, '-picking-list');
+      const r = kind === 'csv'
+        ? await window.cablepilot.files.exportText(toCsv(rows, lang), `${base}.csv`)
+        : await window.cablepilot.files.exportBinary(xlsxBytes([{ name: 'Picking list', rows }]), `${base}.xlsx`);
+      if (!r.ok) return errMsg(r.error);
+      if (r.value) { const name = r.value.name; flash('info', () => t('Picking list exported to {name}.', { name })); }
     },
 
     renumberWires: () => {

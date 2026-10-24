@@ -2,6 +2,29 @@
 
 ## Unreleased
 
+### M6 part 1: Sizing and warehouse
+
+- Load and feeder data on devices (motor power, current, cos phi, efficiency, starter, breaker curve, load current,
+  feeder length), project supply data (voltage, prospective short-circuit current, ambient temperature, grouping,
+  voltage-drop limit) next to the installation method, and a manual length on wires. File format 6 (migration 5 to 6).
+- Sizing engine in `shared/sizing.ts` (pure functions, API documented for the AI of M7): design current, cable
+  current-carrying capacity with ambient and grouping factors (IEC 60364-5-52), Ib <= In <= Iz and I2 <= 1.45 Iz
+  (IEC 60364-4-43), voltage drop, breaker (rating, curve, poles, Icu, IEC 60947-2), contactor (AC-3) and overload relay
+  (IEC 60947-4-1). Every result carries its requirement, assumptions and the table values that are still unverified
+  (`docs/to-verify.md`), and says it does not replace the engineer's verification. The cross-section check uses the same
+  factors.
+- Warehouse: import a stock list from CSV or XLSX through a column-mapping wizard saved per company, refresh from the
+  file or a watched folder (main process), stock date and an "old" flag, links to library parts by part code or by
+  hand, "data missing" for items without technical data; a generic sample stock list.
+- Sizing window ("Size the whole project" review table and a suggestion panel per line): only parts that meet the
+  requirement, ranked in stock and enough, in stock but short, not in stock, each with warehouse, location and the
+  quantity available for this project; confirm a line or accept all in one undo step.
+- BOM stock columns (on hand, available, short, location), shortages, an old stock list and parts lost in a refresh in the
+  message list, picking-list export (CSV and XLSX). Generic parts got the technical fields sizing needs and a 12 to
+  18 A overload relay; the conveyor and pump samples carry load data and ship sized.
+- Website: feature block "Sizing and warehouse" with a screenshot and a seventh demo step; `/demo/` and the video
+  show sizing a motor feeder, picking the part in stock and confirming.
+
 ### Demo video
 
 - Demo video: `npm run record:demo` records the battery-charger story from the real built app (Playwright,

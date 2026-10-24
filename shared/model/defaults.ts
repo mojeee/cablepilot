@@ -3,11 +3,11 @@
 import { DEFAULT_POTENTIALS } from '../potentials';
 import { zoneRange } from './zones';
 import { DEFAULT_NUMBERING, DEFAULT_WIRE_CLASSES } from './wireDefaults';
-import type { BomSettings, CrossRefSettings, DrawingStyle, Page, PlcSettings, Project, ProjectSettings, Template, TitleCell } from './types';
+import type { BomSettings, CrossRefSettings, DrawingStyle, Page, PlcSettings, Project, ProjectSettings, SupplyData, Template, TitleCell } from './types';
 import { PROJECT_FORMAT } from './types';
 import type { SheetSize } from '../sheets';
 
-export const CURRENT_VERSION = 5;
+export const CURRENT_VERSION = 6;
 
 /** Designations and wire numbers in red, as on the reference style of production sets (brief, M1). */
 export const DEFAULT_STYLE: DrawingStyle = {
@@ -72,6 +72,12 @@ export const DEFAULT_BOM: BomSettings = {
 /** Editable company defaults, not requirements: digital areas start at byte 0, analog at byte 64. */
 export const DEFAULT_PLC: PlcSettings = { style: 'siemens', start: { di: 0, do: 0, ai: 64, ao: 64 } };
 
+/**
+ * Editable defaults, not requirements: 400 V, short-circuit current not stated, 30 °C (the reference
+ * temperature of the capacity tables), one circuit, a 5 % voltage drop (IEC 60204-1 clause 13.5; to verify).
+ */
+export const DEFAULT_SUPPLY: SupplyData = { voltage: 400, ik: 0, ambient: 30, grouping: 1, maxDropPct: 5 };
+
 export function defaultSettings(): ProjectSettings {
   return {
     drawingLanguage: 'en',
@@ -84,6 +90,7 @@ export function defaultSettings(): ProjectSettings {
     numbering: { ...DEFAULT_NUMBERING },
     wireColours: false,
     installationMethod: '',
+    supply: { ...DEFAULT_SUPPLY },
     plc: structuredClone(DEFAULT_PLC),
   };
 }

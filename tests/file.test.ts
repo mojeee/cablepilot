@@ -47,6 +47,12 @@ describe('project file', () => {
     const validate = new Ajv2020({ strict: false }).compile(schema);
     expect(validate(JSON.parse(serializeProject(sample()))), JSON.stringify(validate.errors)).toBe(true);
     expect(validate({ format: 'cablepilot-project' })).toBe(false);
+    // The samples carry load data, supply data and a wire length: the schema describes them too.
+    for (const f of ['conveyor', 'pump-station']) expect(validate(JSON.parse(readFileSync(join(__dirname, '..', 'samples', `${f}.cablepilot.json`), 'utf8'))), JSON.stringify(validate.errors)).toBe(true);
+    const wired = sample();
+    const pg = wired.pages[0];
+    const w = pg.elements.find((e) => e.kind === 'wire');
+    if (w) expect(validate(JSON.parse(serializeProject({ ...wired, pages: [{ ...pg, elements: pg.elements.map((e) => (e === w ? { ...w, length: '3,5' } : e)) }, ...wired.pages.slice(1)] }))), JSON.stringify(validate.errors)).toBe(true);
   });
   it('reports damaged files in plain language', () => {
     expect(parseProject('{nope')).toMatchObject({ ok: false, error: { code: 'file.json' } });
@@ -103,12 +109,27 @@ describe('project file', () => {
     const { installationMethod, ...settings } = v3.settings as Record<string, unknown>;
     void installationMethod;
     const r = parseProject(JSON.stringify({ ...v3, version: 3, settings }));
-    expect(r.ok && r.value.version).toBe(5);
+    expect(r.ok && r.value.version).toBe(CURRENT_VERSION);
     if (r.ok) {
       expect(r.value.issueStatus).toBe('proposal');
       expect(r.value.revisions).toEqual([]);
       expect(r.value.settings.installationMethod).toBe('');
     }
+  });
+  it('migrates a version 5 file (M5) to the supply data for sizing, and keeps load data and wire lengths', () => {
+    const v6 = JSON.parse(serializeProject(sample())) as Record<string, unknown>;
+    const { supply, ...settings } = v6.settings as Record<string, unknown>;
+    void supply;
+    const r = parseProject(JSON.stringify({ ...v6, version: 5, settings }));
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.value.version).toBe(CURRENT_VERSION);
+      expect(r.value.settings.supply).toEqual({ voltage: 400, ik: 0, ambient: 30, grouping: 1, maxDropPct: 5 });
+    }
+    const p = sample();
+    const withLoad = { ...p, devices: [{ designation: '-M1', load: { kind: 'motor' as const, powerKw: 5.5, cosPhi: 0.85, efficiency: 87 }, parts: [], fields: {} }] };
+    const back = parseProject(serializeProject(withLoad));
+    expect(back.ok && back.value.devices[0].load).toEqual({ kind: 'motor', powerKw: 5.5, cosPhi: 0.85, efficiency: 87 });
   });
   it('migrates a version 2 file (M2) and writes it back as the current version', () => {
     const v3 = JSON.parse(serializeProject(sample())) as Record<string, unknown>;

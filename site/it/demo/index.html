@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Demo: disegna una volta, elenchi e set di disegni seguono · CablePilot</title>
-    <meta name="description" content="Una dimostrazione registrata di CablePilot con il caricabatterie DC di esempio: il set di disegni, una bobina e il suo contatto, i numeri filo, gli elenchi in tempo reale e l’esportazione in PDF e XLSX." />
+    <meta name="description" content="Una dimostrazione registrata di CablePilot con il caricabatterie DC di esempio: il set di disegni, una bobina e il suo contatto, i numeri filo, gli elenchi in tempo reale e l’esportazione in PDF e XLSX e il dimensionamento di una linea motore con articoli dalla lista di magazzino." />
     <link rel="canonical" href="https://cablepilot.agentflowbind.com/it/demo/" />
     <link rel="alternate" hreflang="it" href="https://cablepilot.agentflowbind.com/it/demo/" />
     <link rel="alternate" hreflang="en" href="https://cablepilot.agentflowbind.com/demo/" />
@@ -15,7 +15,7 @@
     <meta property="og:site_name" content="CablePilot" />
     <meta property="og:locale" content="it_IT" />
     <meta property="og:title" content="Demo: disegna una volta, elenchi e set di disegni seguono · CablePilot" />
-    <meta property="og:description" content="Una dimostrazione registrata di CablePilot con il caricabatterie DC di esempio: il set di disegni, una bobina e il suo contatto, i numeri filo, gli elenchi in tempo reale e l’esportazione in PDF e XLSX." />
+    <meta property="og:description" content="Una dimostrazione registrata di CablePilot con il caricabatterie DC di esempio: il set di disegni, una bobina e il suo contatto, i numeri filo, gli elenchi in tempo reale e l’esportazione in PDF e XLSX e il dimensionamento di una linea motore con articoli dalla lista di magazzino." />
     <meta property="og:url" content="https://cablepilot.agentflowbind.com/it/demo/" />
     <meta property="og:image" content="https://cablepilot.agentflowbind.com/og.svg" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -40,7 +40,7 @@
         <div class="wrap">
           <p class="eyebrow">Demo</p>
           <h1>Demo: disegna una volta, gli elenchi e il set di disegni seguono</h1>
-          <div class="lead"><p>Una dimostrazione di CablePilot con il caricabatterie DC di esempio, circa un minuto e mezzo. È la stessa storia del video sul sito, e tutto ciò che mostra funziona nella versione attuale: nessun mock-up. Il video è registrato dall’app reale da uno script (<code>e2e/demo.e2e.ts</code>), così viene rifatto ogni volta che l’interfaccia cambia: <code>npm run record:demo</code>.</p></div>
+          <div class="lead"><p>Una dimostrazione di CablePilot con il caricabatterie DC e il nastro trasportatore di esempio, meno di due minuti. È la stessa storia del video sul sito, e tutto ciò che mostra funziona nella versione attuale: nessun mock-up. Il video è registrato dall’app reale da uno script (<code>e2e/demo.e2e.ts</code>), così viene rifatto ogni volta che l’interfaccia cambia: <code>npm run record:demo</code>.</p></div>
           <figure class="demo-video">
             <video controls playsinline preload="metadata" poster="/img/demo-poster.png" width="1920" height="1080">
               <source src="/video/demo.webm" type="video/webm" />
@@ -59,6 +59,7 @@
             <li><a href="#step-4"><span>04</span> Il banner dei controlli trova un problema; un clic lo corregge</a></li>
             <li><a href="#step-5"><span>05</span> Panoramica I/O del PLC ed elenco dei simboli</a></li>
             <li><a href="#step-6"><span>06</span> PDF e XLSX</a></li>
+            <li><a href="#step-7"><span>07</span> Dimensionamento dallo schema, articoli dal magazzino</a></li>
           </ol>
         </div>
       </section>
@@ -116,10 +117,21 @@
         <div class="wrap step-grid">
           <div class="step-text">
           <h2 id="step-6-h"><span class="label">Passo 6</span> PDF e XLSX</h2>
-          <p><strong>Esporta PDF</strong> scrive il set di disegni completo (vettoriale, testo incorporato) e <strong>Esporta tutti gli elenchi in XLSX</strong> scrive ogni elenco, compreso l’elenco I/O del PLC, in un’unica cartella di lavoro. Il video finisce sulla copertina.</p>
+          <p><strong>Esporta PDF</strong> scrive il set di disegni completo (vettoriale, testo incorporato) e <strong>Esporta tutti gli elenchi in XLSX</strong> scrive ogni elenco, compreso l’elenco I/O del PLC, in un’unica cartella di lavoro.</p>
           <ul class="bullets"><li>I file sono tuoi: formato di progetto aperto, PDF e XLSX in uscita, nessun account.</li></ul>
           </div>
           <figure class="step-shot"><img src="/img/demo-6.png" alt="I messaggi dopo l’esportazione del set di disegni in PDF, sopra la pagina dell’interfaccia PLC." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step" id="step-7" aria-labelledby="step-7-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-7-h"><span class="label">Passo 7</span> Dimensionamento dallo schema, articoli dal magazzino</h2>
+          <p>Apri il campione del nastro trasportatore, apri <strong>Magazzino</strong> e carica la lista di magazzino di esempio (la tua arriva da un’esportazione CSV o XLSX del sistema di magazzino, tramite un’associazione delle colonne salvata per la tua azienda). Seleziona il motore nella pagina di potenza e porta la potenza nominale a 7,5 kW nel pannello Proprietà: la corrente di impiego viene ricalcolata. <strong>Dimensiona questa linea</strong> elenca interruttore, contattore, relè termico, cavo e fili trovati nello schema, ciascuno con il suo requisito. Il contattore non lo soddisfa più: apri i suoi suggerimenti per vedere il requisito, le ipotesi e gli articoli che lo soddisfano, in ordine di disponibilità a magazzino per questo progetto, con magazzino, ubicazione e quantità disponibile (giacenza, meno il riservato, meno ciò che il progetto già usa). Seleziona l’articolo disponibile e conferma: la distinta mostra il nuovo articolo con giacenza e quantità disponibile.</p>
+          <p>- Il dimensionamento è calcolato dai dati del progetto e dichiara le sue ipotesi; i valori di tabella non ancora   verificati sulla norma sono segnalati e nessun risultato sostituisce la verifica del progettista. - Confermare una riga è un solo passo di annullamento, e <strong>Accetta tutte le proposte</strong> lo è per l’intero progetto.</p>
+          <p>Il video finisce sulla copertina del campione del nastro trasportatore.</p>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-7.png" alt="La finestra di dimensionamento del campione nastro trasportatore con la riga del contattore aperta: il requisito, le sue ipotesi e gli articoli che lo soddisfano, in ordine di disponibilità a magazzino per il progetto." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="band dark try" aria-labelledby="try-h">

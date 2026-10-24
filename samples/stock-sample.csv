@@ -1,0 +1,21 @@
+Part code,Manufacturer,Description,On hand,Reserved,Location,Warehouse,Unit
+GEN-MCB-3P-C10A,Generic,"Miniature circuit breaker 3 poles, curve C, 10 A",40,4,A-01-01,Main,pcs
+GEN-MCB-3P-C16A,Generic,"Miniature circuit breaker 3 poles, curve C, 16 A",60,10,A-01-02,Main,pcs
+GEN-MCB-3P-C16A,Generic,"Miniature circuit breaker 3 poles, curve C, 16 A",12,0,B-03-01,Branch,pcs
+GEN-MCB-3P-B16A,Generic,"Miniature circuit breaker 3 poles, curve B, 16 A",18,2,A-01-03,Main,pcs
+GEN-MCB-3P-C32A,Generic,"Miniature circuit breaker 3 poles, curve C, 32 A",0,0,A-01-04,Main,pcs
+GEN-MCB-3P-C63A,Generic,"Miniature circuit breaker 3 poles, curve C, 63 A",6,1,A-01-05,Main,pcs
+GEN-MPCB-6A3-10A,Generic,"Motor protective circuit breaker, 3 poles, setting range 6.3 to 10 A",9,1,A-02-01,Main,pcs
+GEN-MPCB-10A-16A,Generic,"Motor protective circuit breaker, 3 poles, setting range 10 to 16 A",14,2,A-02-02,Main,pcs
+GEN-CONTACTOR-9A,Generic,"Contactor 3 poles, 9 A AC-3, coil 24 V DC",40,6,A-03-01,Main,pcs
+GEN-CONTACTOR-12A,Generic,"Contactor 3 poles, 12 A AC-3, coil 24 V DC",25,5,A-03-02,Main,pcs
+GEN-CONTACTOR-18A,Generic,"Contactor 3 poles, 18 A AC-3, coil 24 V DC",18,4,A-03-03,Main,pcs
+GEN-CONTACTOR-25A,Generic,"Contactor 3 poles, 25 A AC-3, coil 24 V DC",3,3,A-03-04,Main,pcs
+GEN-OVERLOAD-RELAY-5A5-8A,Generic,"Thermal overload relay, setting range 5.5 to 8 A",3,3,A-04-01,Main,pcs
+GEN-OVERLOAD-RELAY-9A-13A,Generic,"Thermal overload relay, setting range 9 to 13 A",14,2,A-04-02,Main,pcs
+GEN-OVERLOAD-RELAY-12A-18A,Generic,"Thermal overload relay, setting range 12 to 18 A",6,2,A-04-03,Main,pcs
+"GEN-CABLE-POWER-4X2,5MM2",Generic,Power cable 4 x 2.5 mm²,250,50,C-01-01,Main,m
+GEN-CABLE-POWER-4X6MM2,Generic,Power cable 4 x 6 mm²,120,0,C-01-02,Main,m
+GEN-CABLE-POWER-4X16MM2,Generic,Power cable 4 x 16 mm²,0,0,C-01-03,Main,m
+GEN-TERMINAL-FEEDTHROUGH-4MM2,Generic,"Feed-through terminal 4 mm²",500,40,D-02-01,Main,pcs
+LABEL-ROLL-WHITE,Generic,Label roll (no technical data),12,0,E-01-01,Main,pcs

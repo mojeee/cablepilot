@@ -61,6 +61,7 @@ frame('bom', 2.6, 'demo-3.png');
 frame('loose', 2.6, 'demo-4.png');
 frame('plc', 2.2, 'demo-5.png');
 frame('pdf', 1.2, 'demo-6.png');
+frame('pick', 1.9, 'demo-7.png');
 frame('open', 3.0, 'demo-poster.png');
 run(['-ss', String(Math.max(0, at('wirelist') - heroFrom + 1.2).toFixed(2)), '-i', join(videoDir, 'hero.mp4'), '-frames:v', '1', join(imgDir, 'hero-poster.png')]);
 

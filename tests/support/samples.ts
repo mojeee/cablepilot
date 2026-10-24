@@ -12,6 +12,8 @@ import { sheetMm } from '@shared/sheets';
 import { reportPageCommands } from '@shared/draw/report';
 import type { ReportId } from '@shared/model/types';
 import { runChecks } from '@shared/checks';
+import { computeBom } from '@shared/bom';
+import { acceptAllCommand, sizeProject } from '@shared/feeders';
 import type { Rot } from '@shared/model/types';
 import { builder } from './builder';
 
@@ -62,6 +64,7 @@ function finishSample(b: B, lib: Library, early: ReportId[], late: ReportId[]) {
   tagFreeEnds(b, lib);
   b.run({ type: 'project/settings', settings: { installationMethod: 'B1' } });
   sizeConductors(b, lib);
+  sizeFeeders(b, lib);
   b.run({ type: 'terminal/renumber' });
   b.run({ type: 'wire/renumber' });
   b.run({ type: 'project/settings', settings: { wireColours: true } });
@@ -125,6 +128,13 @@ function sizeConductors(b: B, lib: Library) {
     if (!f?.fix) return;
     b.run({ type: 'batch', label: 'fix', commands: f.fix.commands });
   }
+}
+
+/** Applies "size the whole project" (the same command the app offers, without a stock list), so the sample ships with feeders that meet their requirements. */
+function sizeFeeders(b: B, lib: Library) {
+  const ctx = { project: b.project, lib, stock: null, bom: computeBom(b.project, lib) };
+  const cmd = acceptAllCommand(ctx, sizeProject(ctx));
+  if (cmd) b.run(cmd);
 }
 
 export function conveyorSample(lib: Library) {
@@ -216,7 +226,7 @@ export function conveyorSample(lib: Library) {
   layoutPage(b, 'en');
   // Parts (generic): the BOM is generated from these assignments and the schematic.
   b.parts(pw, '-QS1', [['generic-switch-disconnector-3p-63a', 1]]);
-  b.parts(pw, '-QF1', [['generic-mcb-3p-c32a', 1]]);
+  b.parts(pw, '-QF1', [['generic-mcb-3p-c16a', 1]]);
   b.parts(pw, '-KM1', [['generic-contactor-12a', 1], ['generic-aux-block-1no1nc', 1]]);
   b.parts(pw, '-FR1', [['generic-overload-relay-9a-13a', 1]]);
   b.parts(pw, '-M1', [['generic-motor-3ph-5.5kw', 1]]);
@@ -230,6 +240,9 @@ export function conveyorSample(lib: Library) {
   b.parts(plc, '-A3', [['generic-plc-do-8-24vdc', 1]]);
   b.fields(pw, '-QS1', { make: 'Buy' });
   b.fields(pw, '-M1', { make: 'Buy', notes: 'Supplied by the customer' });
+  // Sizing data (M6 part 1): the motor nameplate (5.5 kW, cos phi 0.85, 87 %) and the supply of the board.
+  b.load(pw, '-M1', { kind: 'motor', powerKw: 5.5, cosPhi: 0.85, efficiency: 87, starter: 'dol', curve: 'C' });
+  b.run({ type: 'project/settings', settings: { supply: { voltage: 400, ik: 6, ambient: 30, grouping: 1, maxDropPct: 5 } } });
   b.projectPart('generic-enclosure-600x800x300', 1, { make: 'Buy' });
   b.projectPart('generic-mounting-plate-600x800', 1, { make: 'Buy' });
   b.projectPart('generic-wiring-kit', 1, { make: 'Make' });
@@ -348,13 +361,15 @@ export function pumpSample(lib: Library) {
     b.parts(pw, `-KM${i * 3 + 1}`, [['generic-contactor-18a', 1], ['generic-aux-block-1no1nc', 1]]);
     b.parts(pw, `-KM${i * 3 + 2}`, [['generic-contactor-18a', 1]]);
     b.parts(pw, `-KM${i * 3 + 3}`, [['generic-contactor-12a', 1], ['generic-aux-block-1no1nc', 1]]);
-    b.parts(pw, `-FR${i + 1}`, [['generic-overload-relay-9a-13a', 1]]);
+    b.parts(pw, `-FR${i + 1}`, [['generic-overload-relay-12a-18a', 1]]);
+    b.load(pw, `-M${i + 1}`, { kind: 'motor', powerKw: 7.5, cosPhi: 0.85, efficiency: 90, starter: 'star-delta', curve: 'C', length: 25 });
     b.parts(pw, `-M${i + 1}`, [['generic-motor-3ph-7.5kw', 1]]);
     b.parts(ct, `-KT${i + 1}`, [['generic-timer-relay-star-delta', 1], ['generic-aux-block-1no1nc', 1]]);
     b.parts(ct, `-BL${i + 1}`, [['generic-limit-switch-1no', 1]]);
   }
   b.parts(plc, '-A1', [['generic-plc-cpu-compact', 1], ['generic-plc-di-16-24vdc', 1], ['generic-plc-do-16-24vdc', 1]]);
   b.parts(plc, '-X2', [['generic-terminal-feedthrough-4mm2', 1], ['generic-terminal-end-plate', 1], ['generic-terminal-end-stop', 2]]);
+  b.run({ type: 'project/settings', settings: { supply: { voltage: 400, ik: 10, ambient: 30, grouping: 1, maxDropPct: 5 } } });
   b.projectPart('generic-enclosure-800x1000x300', 1, { make: 'Buy' });
   b.projectPart('generic-mounting-plate-600x800', 1, { make: 'Buy' });
   b.projectPart('generic-wiring-kit', 1, { make: 'Make' });

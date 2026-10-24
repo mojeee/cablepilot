@@ -13,6 +13,7 @@
     "it": "Contattore 3 poli, 32 A AC-3, bobina 230 V AC"
   },
   "data": {
+    "Type": "Contactor",
     "Poles": "3",
     "Rated operational current AC-3": "32 A",
     "Coil voltage": "230 V AC",

@@ -19,7 +19,7 @@ import type { Library } from './library/types';
 import { findPart, isTerminalPart, symbolRole, withProjectSymbols } from './library/types';
 import type { DeviceRec, Page, Project, Pt, SymbolEl, WireEl } from './model/types';
 import { nextDesignation, parseDesignation } from './numbering';
-import { capacityOf, minCrossSection } from './ampacity';
+import { correctedCapacity, minCorrectedCrossSection } from './ampacity';
 import { canonicalAddress } from './plc';
 import { coreSpec } from './reports';
 import { isNumbered, wireSpec } from './wires';
@@ -73,7 +73,7 @@ interface PageFacts {
   links: boolean;
   firstWire?: { el: string; at: Pt };
 }
-interface Deps { lib: Library; potentials: unknown; symbols: unknown; wireClasses: unknown; wireTypes: unknown; cables: unknown; parts: unknown; devices: unknown; method: string }
+interface Deps { lib: Library; potentials: unknown; symbols: unknown; wireClasses: unknown; wireTypes: unknown; cables: unknown; parts: unknown; devices: unknown; method: string; supply: unknown }
 const cache = new WeakMap<Page, { deps: Deps; facts: PageFacts }>();
 /** Counts page computations: tests use it to check that edits recheck only the pages that changed. */
 export const checkStats = { pages: 0 };
@@ -251,16 +251,17 @@ function computeFacts(project: Project, page: Page, libIn: Library): PageFacts {
           if (!w || w.bundle) continue;
           const spec = wireSpec(project, w, net.potential);
           const xs = numOf(coreSpec(project, lib, w).crossSection ?? spec.crossSection);
-          const cap = capacityOf(project.settings.installationMethod, xs);
+          const sup = project.settings.supply;
+          const cap = correctedCapacity(project.settings.installationMethod, xs, sup.ambient, sup.grouping)?.iz;
           if (cap !== undefined && cap < rating) bad.push({ w, xs, cap, colour: spec.colour, type: spec.type });
         }
         if (!bad.length) continue;
-        const min = minCrossSection(project.settings.installationMethod, rating);
+        const min = minCorrectedCrossSection(project.settings.installationMethod, rating, project.settings.supply.ambient, project.settings.supply.grouping);
         const worst = bad.reduce((a, b) => (b.cap < a.cap ? b : a));
         const viaCable = bad.some((b) => b.w.cable);
         f.local.push(mk('cable-size', `${page.id}:${el.id}:${net.id}`, {
           page: page.id, element: worst.w.id, at: worst.w.points[0],
-          args: { wire: worst.w.number ?? '', xs: worst.xs, cap: worst.cap, device: el.designation, rating, method: project.settings.installationMethod, min: min ?? '' },
+          args: { wire: worst.w.number ?? '', xs: worst.xs, cap: worst.cap, device: el.designation, rating, method: project.settings.installationMethod, ambient: project.settings.supply.ambient, grouping: project.settings.supply.grouping, min: min ?? '' },
           ...(min !== undefined && !viaCable ? { fix: typedFix(project, page, bad.map((b) => b.w), worst.colour, String(min), worst.type) } : {}),
         }));
       }
@@ -280,7 +281,7 @@ function typedFix(project: Project, page: Page, wires: WireEl[], colour: string 
 }
 
 function factsOf(project: Project, page: Page, lib: Library): PageFacts {
-  const deps: Deps = { lib, potentials: project.potentials, symbols: project.symbols, wireClasses: project.wireClasses, wireTypes: project.wireTypes, cables: project.cables, parts: project.parts, devices: project.devices, method: project.settings.installationMethod };
+  const deps: Deps = { lib, potentials: project.potentials, symbols: project.symbols, wireClasses: project.wireClasses, wireTypes: project.wireTypes, cables: project.cables, parts: project.parts, devices: project.devices, method: project.settings.installationMethod, supply: project.settings.supply };
   const hit = cache.get(page);
   if (hit && (Object.keys(deps) as (keyof Deps)[]).every((k) => hit.deps[k] === deps[k])) return hit.facts;
   const facts = computeFacts(project, page, lib);

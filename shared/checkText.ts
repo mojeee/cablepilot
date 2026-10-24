@@ -74,7 +74,7 @@ export function findingText(f: Finding, ctx: TextCtx): string {
 /** The second line of a finding: the assumptions of a check that depends on installation conditions. */
 export function findingDetail(f: Finding): string {
   if (f.rule !== 'cable-size') return '';
-  return t('Assumptions: PVC-insulated copper conductors, 30 °C ambient, three loaded conductors, no grouping, method {method}; the device is taken as the protection of every conductor connected to it. Table values are not yet verified against IEC 60364-5-52. This check does not replace the engineer\'s verification.', { method: s(f.args.method) });
+  return t('Assumptions: PVC-insulated copper conductors, {ambient} °C ambient, three loaded conductors, grouping {grouping}, method {method}; the device is taken as the protection of every conductor connected to it. Table values are not yet verified against IEC 60364-5-52. This check does not replace the engineer\'s verification.', { method: s(f.args.method), ambient: s(f.args.ambient), grouping: s(f.args.grouping) });
 }
 
 export function fixText(fix: Fix): string {

@@ -85,6 +85,7 @@ function ElementProps({ el, page, project }: { el: El; page: Page; project: Proj
           <TextField label={t('Wire number')} testid="prop-wire-number" value={el.number ?? ''} onCommit={(v) => up({ number: v || undefined, numberLocked: v ? true : undefined })} mono />
           <Check label={t('Keep this number when numbering automatically')} checked={!!el.numberLocked} onChange={(v) => up({ numberLocked: v || undefined })} />
           <Select label={t('Wire type')} value={el.wireType ?? ''} options={[{ value: '', label: t('From the potential (wire class)') }, ...project.wireTypes.map((w) => ({ value: w.id, label: `${w.id} · ${w.crossSection} mm² ${w.colour}` }))]} onChange={(v) => up({ wireType: v || undefined })} />
+          <TextField label={t('Length (m), for sizing')} testid="prop-wire-length" value={el.length ?? ''} onCommit={(v) => up({ length: v || undefined })} />
           <Check label={t('Bundle of wires (one label)')} checked={!!el.bundle} onChange={(v) => up({ bundle: v || undefined })} />
           <Select label={t('Cable')} value={el.cable ?? ''} options={[{ value: '', label: t('None') }, ...project.cables.map((c) => ({ value: c.id, label: c.id }))]} onChange={(v) => up({ cable: v || undefined })} />
           {el.cable && <TextField label={t('Core (colour code or number)')} value={el.core ?? ''} onCommit={(v) => up({ core: v || undefined })} mono />}

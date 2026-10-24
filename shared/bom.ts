@@ -9,8 +9,20 @@ import type { Lang } from './i18n';
 import type { Library } from './library/types';
 import { findPart, isTerminalPart, withProjectSymbols } from './library/types';
 import type { Page, Project } from './model/types';
+import { numOf } from './sizing';
 
 export const BOM_BASE_COLUMNS = ['designation', 'position', 'qty', 'code', 'description', 'manufacturer'] as const;
+/** Stock columns, shown when a stock list is loaded (shared/stock.ts fills them). */
+export const BOM_STOCK_COLUMNS = ['onHand', 'available', 'short', 'location'] as const;
+/** Stock of a BOM row's part, at part level: what the warehouse holds and what is left for this project. */
+export interface RowStock {
+  onHand: number;
+  /** Free stock (on hand minus reserved) minus everything this project uses of the part; negative when short. */
+  available: number;
+  short: number;
+  location: string;
+  unit: string;
+}
 export type BomBaseColumn = (typeof BOM_BASE_COLUMNS)[number];
 
 export interface BomRow {
@@ -30,12 +42,17 @@ export interface BomRow {
   missing?: boolean;
   /** A heading row of an assembly that has no part of its own. */
   assembly?: boolean;
+  /** Cable rows: the cable length in metres times the units to build, when the cable states a length. */
+  metres?: number;
+  stock?: RowStock;
 }
 export interface Bom {
   rows: BomRow[];
   units: number;
   /** Devices with no part assigned. */
   missing: number;
+  /** What the project uses of each part (quantity, and cable metres), before any grouping. */
+  use: Map<string, { qty: number; metres: number }>;
 }
 
 /** The representation that gives the device its position: a coil or power part on a multi-line page first. */
@@ -104,14 +121,22 @@ export function computeBom(project: Project, lib: Library): Bom {
   for (const c of project.cables) {
     if (!c.part) continue;
     const part = findPart(lib, project.parts, c.part);
-    rows.push({ level: 0, designation: c.id, position: '', qty: units, qtyPerUnit: 1, part: c.part, fields: {}, code: part?.code ?? c.part, description: part ? pick(part.description, lang) : '', manufacturer: part?.manufacturer ?? '' });
+    const len = numOf(c.length);
+    rows.push({ level: 0, designation: c.id, position: '', qty: units, qtyPerUnit: 1, part: c.part, fields: {}, ...(Number.isFinite(len) && len > 0 ? { metres: len * units } : {}), code: part?.code ?? c.part, description: part ? pick(part.description, lang) : '', manufacturer: part?.manufacturer ?? '' });
   }
   for (const pp of project.projectParts) {
     const part = findPart(lib, project.parts, pp.part);
     rows.push({ level: 0, designation: '', position: '', qty: pp.qty * units, qtyPerUnit: pp.qty, part: pp.part, fields: pp.fields, code: part?.code ?? pp.part, description: part ? pick(part.description, lang) : '', manufacturer: part?.manufacturer ?? '' });
   }
-  if (project.settings.bom.group === 'part') return { rows: groupByPart(rows), units, missing };
-  return { rows, units, missing };
+  const use = new Map<string, { qty: number; metres: number }>();
+  for (const r of rows) {
+    if (!r.part) continue;
+    const u = use.get(r.part) ?? use.set(r.part, { qty: 0, metres: 0 }).get(r.part)!;
+    u.qty += r.qty;
+    u.metres += r.metres ?? 0;
+  }
+  if (project.settings.bom.group === 'part') return { rows: groupByPart(rows), units, missing, use };
+  return { rows, units, missing, use };
 }
 
 /** Rows merged by part: the designations and positions are listed, the quantities added. Headings go. */
@@ -130,6 +155,7 @@ function groupByPart(rows: BomRow[]): BomRow[] {
     }
     g.qty += r.qty;
     g.qtyPerUnit += r.qtyPerUnit;
+    if (r.metres) g.metres = (g.metres ?? 0) + r.metres;
     if (r.designation) g.designation = g.designation ? `${g.designation}, ${r.designation}` : r.designation;
     if (r.position && !g.position.split(', ').includes(r.position)) g.position = g.position ? `${g.position}, ${r.position}` : r.position;
     for (const [k, v] of Object.entries(r.fields)) if (!g.fields[k]) g.fields[k] = v;
@@ -146,21 +172,24 @@ export function bomCell(r: BomRow, col: string): string {
     case 'code': return r.code;
     case 'description': return r.description;
     case 'manufacturer': return r.manufacturer;
+    case 'onHand': return r.stock ? `${r.stock.onHand}` : '';
+    case 'available': return r.stock ? `${r.stock.available}` : '';
+    case 'short': return r.stock && r.stock.short > 0 ? `${r.stock.short}` : '';
+    case 'location': return r.stock?.location ?? '';
     default: return col.startsWith('field:') ? (r.fields[col.slice(6)] ?? '') : '';
   }
 }
 
 /** The header of a column in the drawing language (it ends up on paper and in files). */
 export function bomHeader(project: Project, col: string, lang: Lang): string {
-  if ((BOM_BASE_COLUMNS as readonly string[]).includes(col)) return dt(lang, `bom.${col}` as 'bom.code');
+  if ((BOM_BASE_COLUMNS as readonly string[]).includes(col) || (BOM_STOCK_COLUMNS as readonly string[]).includes(col)) return dt(lang, `bom.${col}` as 'bom.code');
   const f = project.settings.bom.userFields.find((u) => `field:${u.id}` === col);
   return f ? pick(f.label, lang) : col;
 }
 
 /** CSV of the BOM with the configured columns: UTF-8 with a byte order mark; ";" in Italian, "," otherwise. */
-export function bomToCsv(project: Project, bom: Bom, lang: Lang = project.settings.drawingLanguage): string {
+export function bomToCsv(project: Project, bom: Bom, lang: Lang = project.settings.drawingLanguage, cols: string[] = project.settings.bom.columns): string {
   const sep = lang === 'it' ? ';' : ',';
-  const cols = project.settings.bom.columns;
   const q = (s: string) => (/["\n;,]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
   const lines = [cols.map((c) => q(bomHeader(project, c, lang))).join(sep), ...bom.rows.map((r) => cols.map((c) => q(bomCell(r, c))).join(sep))];
   return `﻿${lines.join('\r\n')}\r\n`;

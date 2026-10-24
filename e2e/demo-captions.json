@@ -14,5 +14,8 @@
   {"id": "tags", "en": "Edit a tag here, export the tag list for the PLC tool.", "it": "Modifica un simbolo qui ed esporta l'elenco per lo strumento del PLC."},
   {"id": "pdf", "en": "Export the PDF drawing set ...", "it": "Esporta il set di disegni in PDF ..."},
   {"id": "xlsx", "en": "... and every list as one XLSX workbook.", "it": "... e tutti gli elenchi in un'unica cartella XLSX."},
+  {"id": "size", "en": "Sizing: the motor is raised to 7.5 kW and the feeder is sized from the schematic.", "it": "Dimensionamento: il motore passa a 7,5 kW e la linea è dimensionata dallo schema."},
+  {"id": "pick", "en": "The contactor that meets the requirement and is in stock, with warehouse and location: select and confirm.", "it": "Il contattore che soddisfa il requisito ed è a magazzino, con magazzino e ubicazione: seleziona e conferma."},
+  {"id": "stock", "en": "The BOM shows the new part with on hand, available and location.", "it": "La distinta mostra il nuovo articolo con giacenza, disponibile e ubicazione."},
   {"id": "end", "en": "CablePilot: free, open source, your files stay yours.", "it": "CablePilot: libero, open source, i tuoi file restano tuoi."}
 ]

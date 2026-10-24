@@ -10,7 +10,7 @@ import type { Library, MacroDef, PartDef } from '../library/types';
 import { withProjectSymbols } from '../library/types';
 import type { SymbolDef } from '../library/types';
 import { placeMacro } from '../macros';
-import type { IssueStatus, Revision, BoxEl, CableRec, DeviceRec, El, JunctionEl, Page, PartUse, Potential, Project, ProjectPart, ProjectSettings, Pt, RectEl, Rot, SymbolEl, Template, WireEl, WireClass, WireType, Asset } from '../model/types';
+import type { IssueStatus, LoadData, Revision, BoxEl, CableRec, DeviceRec, El, JunctionEl, Page, PartUse, Potential, Project, ProjectPart, ProjectSettings, Pt, RectEl, Rot, SymbolEl, Template, WireEl, WireClass, WireType, Asset } from '../model/types';
 import { fullDesignation, nextDesignation, parseDesignation, renumber } from '../numbering';
 import { terminalStrips } from '../reports';
 import { renumberWires } from '../wires';
@@ -49,7 +49,7 @@ export type Command =
   /** Sets one element's designation without renaming the rest of its device: links it to another device. */
   | { type: 'device/relink'; page: string; id: string; designation: string }
   /** Device data: parts, user fields (empty text removes a field), the parent assembly (null clears it). */
-  | { type: 'device/update'; key: string; patch: { parts?: PartUse[]; fields?: Record<string, string>; parent?: string | null } }
+  | { type: 'device/update'; key: string; patch: { parts?: PartUse[]; fields?: Record<string, string>; parent?: string | null; load?: LoadData | null } }
   | { type: 'part/embed'; def: PartDef }
   | { type: 'projectPart/set'; part: ProjectPart }
   | { type: 'projectPart/remove'; id: string }
@@ -228,14 +228,15 @@ function renameDevice(project: Project, oldKey: string, oldDes: string, newDes: 
   return { ...project, pages, devices: devices.sort((x, y) => x.designation.localeCompare(y.designation, 'en', { numeric: true })) };
 }
 
-function updateDevice(project: Project, key: string, patch: { parts?: PartUse[]; fields?: Record<string, string>; parent?: string | null }): Project {
+function updateDevice(project: Project, key: string, patch: { parts?: PartUse[]; fields?: Record<string, string>; parent?: string | null; load?: LoadData | null }): Project {
   const rec: DeviceRec = project.devices.find((r) => r.designation === key) ?? { designation: key, parts: [], fields: {} };
   const fields = { ...rec.fields, ...(patch.fields ?? {}) };
   for (const k of Object.keys(fields)) if (fields[k] === '') delete fields[k];
   const parent = patch.parent === undefined ? rec.parent : patch.parent === null || patch.parent === key ? undefined : patch.parent;
-  const next: DeviceRec = { designation: key, parts: patch.parts ?? rec.parts, fields, ...(parent ? { parent } : {}) };
+  const load = patch.load === undefined ? rec.load : patch.load === null ? undefined : patch.load;
+  const next: DeviceRec = { designation: key, ...(load ? { load } : {}), parts: patch.parts ?? rec.parts, fields, ...(parent ? { parent } : {}) };
   const others = project.devices.filter((r) => r.designation !== key);
-  const empty = next.parts.length === 0 && Object.keys(next.fields).length === 0 && !next.parent;
+  const empty = next.parts.length === 0 && Object.keys(next.fields).length === 0 && !next.parent && !next.load;
   const devices = empty ? others : [...others, next].sort((x, y) => x.designation.localeCompare(y.designation, 'en', { numeric: true }));
   return { ...project, devices };
 }

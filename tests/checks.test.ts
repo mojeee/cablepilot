@@ -179,6 +179,12 @@ describe('conductor cross-section against the protective device (IEC 60364-5-52)
     expect(of(circuit('B1', '4mm2').b.project, 'cable-size')).toHaveLength(1);
     expect(of(circuit('C', '4mm2').b.project, 'cable-size')).toEqual([]);
   });
+  it('applies the ambient temperature and grouping of the supply data to the capacity', () => {
+    const { b } = circuit('C', '4mm2'); // method C, 4 mm²: 32 A at 30 °C, enough for the 32 A breaker
+    expect(of(b.project, 'cable-size')).toEqual([]);
+    b.run({ type: 'project/settings', settings: { supply: { ...b.project.settings.supply, ambient: 40 } } }); // 32 * 0.87 = 27.84 A
+    expect(of(b.project, 'cable-size')).toHaveLength(1);
+  });
   it('checks the cores of a cable by the cable part', () => {
     const { b, pg, w } = circuit('B1', '6mm2');
     b.run({ type: 'part/embed', def: lib.parts.get('generic-cable-power-4x2.5mm2')! });

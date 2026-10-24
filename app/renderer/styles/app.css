@@ -167,3 +167,20 @@ table.bom input[type='text'], table.bom input[type='number'], table.bom select {
 .bom button.link { background: none; border: none; padding: 0; color: inherit; text-decoration: underline; cursor: pointer; font: inherit; }
 .tag-formats { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
 .badge.warn { background: var(--warn, #b26a00); color: #fff; border-radius: 3px; padding: 0 6px; font-size: 11px; }
+.badge { white-space: nowrap; }
+.badge.ok { background: var(--ok); color: #04170d; border-radius: 3px; padding: 0 6px; font-size: 11px; }
+[data-theme='light'] .badge { white-space: nowrap; }
+.badge.ok { color: #fff; }
+
+/* Sizing and warehouse (M6 part 1) */
+.feeder h3 { margin: 14px 0 4px; }
+table.sizing td { font-size: 12px; }
+table.sizing .actions-cell { white-space: nowrap; }
+.sizing-panel { background: var(--raised); border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; }
+.sizing-panel .assumptions { margin: 4px 0 8px; padding-left: 18px; font-size: 12px; color: var(--dim); }
+.sizing-panel tr.chosen td { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.stock-rows { list-style: none; margin: 0; padding: 0; font-size: 12px; }
+.wizard { border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; margin: 8px 0; }
+.wizard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 6px 12px; }
+table.wizard-preview td { color: var(--dim); }
+.load-data { margin-top: 10px; }

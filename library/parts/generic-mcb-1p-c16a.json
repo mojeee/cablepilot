@@ -13,9 +13,11 @@
     "it": "Interruttore magnetotermico 1 polo, curva C, 16 A"
   },
   "data": {
+    "Type": "MCB",
     "Poles": "1",
     "Tripping characteristic": "C",
-    "Rated current": "16 A"
+    "Rated current": "16 A",
+    "Breaking capacity": "6 kA"
   },
   "dimensions": {
     "w": 17.5,

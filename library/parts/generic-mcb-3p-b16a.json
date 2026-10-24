@@ -13,9 +13,11 @@
     "it": "Interruttore magnetotermico 3 poli, curva B, 16 A"
   },
   "data": {
+    "Type": "MCB",
     "Poles": "3",
     "Tripping characteristic": "B",
-    "Rated current": "16 A"
+    "Rated current": "16 A",
+    "Breaking capacity": "6 kA"
   },
   "dimensions": {
     "w": 52.5,

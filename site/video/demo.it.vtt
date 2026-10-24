@@ -1,65 +1,77 @@
 WEBVTT
 
 1
-00:00:00.850 --> 00:00:04.216
+00:00:00.850 --> 00:00:03.462
 Apri il caricabatterie di esempio: un set di disegni completo, 25 pagine.
 
 2
-00:00:04.466 --> 00:00:09.742
+00:00:03.712 --> 00:00:08.038
 La copertina: ogni foglio con la sua revisione, lo stato di emissione e l'approvazione del cliente.
 
 3
-00:00:09.992 --> 00:00:16.696
+00:00:08.288 --> 00:00:14.296
 Indice, unifilare e la pagina PLC con la sua scheda I/O.
 
 4
-00:00:16.946 --> 00:00:24.621
+00:00:14.546 --> 00:00:21.323
 Inserisci una bobina di contattore dalla libreria: la designazione è assegnata da sola.
 
 5
-00:00:24.871 --> 00:00:36.950
+00:00:21.573 --> 00:00:32.895
 Inserisci il suo contatto: stesso dispositivo, e i riferimenti incrociati compaiono su entrambi.
 
 6
-00:00:37.200 --> 00:00:40.879
+00:00:33.145 --> 00:00:36.307
 Assegna al dispositivo un articolo dalla libreria: la distinta lo conterà.
 
 7
-00:00:41.129 --> 00:00:46.379
+00:00:36.557 --> 00:00:41.275
 Numera i fili con il tuo schema: 020L+, 021L+ ...
 
 8
-00:00:46.629 --> 00:00:50.197
+00:00:41.525 --> 00:00:44.416
 L'elenco fili segue lo schema ...
 
 9
-00:00:50.447 --> 00:00:54.622
+00:00:44.666 --> 00:00:48.121
 ... e la distinta conta già il nuovo contattore.
 
 10
-00:00:54.872 --> 00:01:01.666
+00:00:48.371 --> 00:00:54.270
 Disegna un filo che non collega nulla: il banner dei controlli lo trova subito.
 
 11
-00:01:01.916 --> 00:01:05.275
+00:00:54.520 --> 00:00:57.115
 Un clic sulla correzione e il problema sparisce.
 
 12
-00:01:05.525 --> 00:01:09.323
+00:00:57.365 --> 00:01:00.230
 I/O PLC: ogni canale con indirizzo, simbolo e a cosa è collegato.
 
 13
-00:01:09.573 --> 00:01:19.831
+00:01:00.480 --> 00:01:09.180
 Modifica un simbolo qui ed esporta l'elenco per lo strumento del PLC.
 
 14
-00:01:20.081 --> 00:01:22.974
+00:01:09.430 --> 00:01:11.820
 Esporta il set di disegni in PDF ...
 
 15
-00:01:23.224 --> 00:01:27.978
+00:01:12.070 --> 00:01:14.784
 ... e tutti gli elenchi in un'unica cartella XLSX.
 
 16
-00:01:28.228 --> 00:01:31.959
+00:01:15.034 --> 00:01:25.943
+Dimensionamento: il motore passa a 7,5 kW e la linea è dimensionata dallo schema.
+
+17
+00:01:26.193 --> 00:01:30.006
+Il contattore che soddisfa il requisito ed è a magazzino, con magazzino e ubicazione: seleziona e conferma.
+
+18
+00:01:30.256 --> 00:01:35.254
+La distinta mostra il nuovo articolo con giacenza, disponibile e ubicazione.
+
+19
+00:01:35.504 --> 00:01:38.795
 CablePilot: libero, open source, i tuoi file restano tuoi.

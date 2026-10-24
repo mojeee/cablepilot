@@ -1,6 +1,6 @@
 {
   "format": "cablepilot-project",
-  "version": 5,
+  "version": 6,
   "id": "sample-dc-charger",
   "name": "Caricabatterie 110 V DC",
   "settings": {
@@ -44,6 +44,7 @@
       "textSizes": {"designation":3.5,"text":3.5,"wireNumber":2.5},
       "weights": {"annotation":0.35,"frame":0.7,"symbol":0.35,"wire":0.35}
     },
+    "supply": {"ambient":30,"grouping":1,"ik":0,"maxDropPct":5,"voltage":400},
     "symbolStandard": "iec",
     "wireColours": true
   },
@@ -1809,7 +1810,13 @@
       "kind": "part",
       "category": "breakers",
       "code": "GEN-MCB-3P-C32A",
-      "data": {"Poles":"3","Rated current":"32 A","Tripping characteristic":"C"},
+      "data": {
+        "Breaking capacity": "6 kA",
+        "Poles": "3",
+        "Rated current": "32 A",
+        "Tripping characteristic": "C",
+        "Type": "MCB"
+      },
       "description": {
         "en": "Miniature circuit breaker 3 poles, curve C, 32 A",
         "it": "Interruttore magnetotermico 3 poli, curva C, 32 A"

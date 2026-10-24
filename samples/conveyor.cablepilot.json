@@ -1,6 +1,6 @@
 {
   "format": "cablepilot-project",
-  "version": 5,
+  "version": 6,
   "id": "sample-conveyor",
   "name": "Conveyor with direct-on-line starter",
   "settings": {
@@ -44,6 +44,7 @@
       "textSizes": {"designation":3.5,"text":3.5,"wireNumber":2.5},
       "weights": {"annotation":0.35,"frame":0.7,"symbol":0.35,"wire":0.35}
     },
+    "supply": {"ambient":30,"grouping":1,"ik":6,"maxDropPct":5,"voltage":400},
     "symbolStandard": "iec",
     "wireColours": true
   },
@@ -477,46 +478,64 @@
           "kind": "wire",
           "number": "003",
           "points": [{"x":205,"y":60},{"x":205,"y":80}],
-          "wireType": "6mm2-BK"
+          "wireType": "2.5mm2-BK"
         },
         {
           "id": "e20",
           "kind": "wire",
           "number": "006",
           "points": [{"x":210,"y":60},{"x":210,"y":80}],
-          "wireType": "6mm2-BK"
+          "wireType": "2.5mm2-BK"
         },
         {
           "id": "e21",
           "kind": "wire",
           "number": "011",
           "points": [{"x":215,"y":60},{"x":215,"y":80}],
-          "wireType": "6mm2-BK"
+          "wireType": "2.5mm2-BK"
         },
         {
           "id": "e22",
           "kind": "wire",
           "number": "004",
           "points": [{"x":205,"y":90},{"x":205,"y":110}],
-          "wireType": "6mm2-BK"
+          "wireType": "2.5mm2-BK"
         },
         {
           "id": "e23",
           "kind": "wire",
           "number": "007",
           "points": [{"x":210,"y":90},{"x":210,"y":110}],
-          "wireType": "6mm2-BK"
+          "wireType": "2.5mm2-BK"
         },
         {
           "id": "e24",
           "kind": "wire",
           "number": "012",
           "points": [{"x":215,"y":90},{"x":215,"y":110}],
-          "wireType": "6mm2-BK"
+          "wireType": "2.5mm2-BK"
         },
-        {"id":"e25","kind":"wire","number":"005","points":[{"x":205,"y":120},{"x":205,"y":140}]},
-        {"id":"e26","kind":"wire","number":"008","points":[{"x":210,"y":120},{"x":210,"y":140}]},
-        {"id":"e27","kind":"wire","number":"013","points":[{"x":215,"y":120},{"x":215,"y":140}]},
+        {
+          "id": "e25",
+          "kind": "wire",
+          "number": "005",
+          "points": [{"x":205,"y":120},{"x":205,"y":140}],
+          "wireType": "2.5mm2-BK"
+        },
+        {
+          "id": "e26",
+          "kind": "wire",
+          "number": "008",
+          "points": [{"x":210,"y":120},{"x":210,"y":140}],
+          "wireType": "2.5mm2-BK"
+        },
+        {
+          "id": "e27",
+          "kind": "wire",
+          "number": "013",
+          "points": [{"x":215,"y":120},{"x":215,"y":140}],
+          "wireType": "2.5mm2-BK"
+        },
         {
           "id": "e28",
           "kind": "symbol",
@@ -532,7 +551,8 @@
           "id": "e29",
           "kind": "wire",
           "number": "001",
-          "points": [{"x":205,"y":150},{"x":205,"y":155},{"x":195,"y":155},{"x":195,"y":180}]
+          "points": [{"x":205,"y":150},{"x":205,"y":155},{"x":195,"y":155},{"x":195,"y":180}],
+          "wireType": "2.5mm2-BK"
         },
         {
           "id": "e30",
@@ -553,7 +573,13 @@
           "x": 210,
           "y": 185
         },
-        {"id":"e32","kind":"wire","number":"009","points":[{"x":210,"y":150},{"x":210,"y":180}]},
+        {
+          "id": "e32",
+          "kind": "wire",
+          "number": "009",
+          "points": [{"x":210,"y":150},{"x":210,"y":180}],
+          "wireType": "2.5mm2-BK"
+        },
         {
           "id": "e33",
           "kind": "wire",
@@ -577,7 +603,8 @@
           "id": "e35",
           "kind": "wire",
           "number": "014",
-          "points": [{"x":215,"y":150},{"x":215,"y":161},{"x":225,"y":161},{"x":225,"y":180}]
+          "points": [{"x":215,"y":150},{"x":215,"y":161},{"x":225,"y":161},{"x":225,"y":180}],
+          "wireType": "2.5mm2-BK"
         },
         {
           "id": "e36",
@@ -1246,12 +1273,13 @@
     {
       "designation": "+DS-M1",
       "fields": {"make":"Buy","notes":"Supplied by the customer"},
+      "load": {"kind":"motor","cosPhi":0.85,"curve":"C","efficiency":87,"powerKw":5.5,"starter":"dol"},
       "parts": [{"part":"generic-motor-3ph-5.5kw","qty":1}]
     },
     {
       "designation": "+DS-QF1",
       "fields": {"nameplate":"Conveyor motor\nbreaker"},
-      "parts": [{"part":"generic-mcb-3p-c32a","qty":1}]
+      "parts": [{"part":"generic-mcb-3p-c16a","qty":1}]
     },
     {
       "designation": "+DS-QS1",
@@ -1295,21 +1323,27 @@
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
     },
     {
-      "id": "generic-mcb-3p-c32a",
+      "id": "generic-mcb-3p-c16a",
       "kind": "part",
       "category": "breakers",
-      "code": "GEN-MCB-3P-C32A",
-      "data": {"Poles":"3","Rated current":"32 A","Tripping characteristic":"C"},
+      "code": "GEN-MCB-3P-C16A",
+      "data": {
+        "Breaking capacity": "6 kA",
+        "Poles": "3",
+        "Rated current": "16 A",
+        "Tripping characteristic": "C",
+        "Type": "MCB"
+      },
       "description": {
-        "en": "Miniature circuit breaker 3 poles, curve C, 32 A",
-        "it": "Interruttore magnetotermico 3 poli, curva C, 32 A"
+        "en": "Miniature circuit breaker 3 poles, curve C, 16 A",
+        "it": "Interruttore magnetotermico 3 poli, curva C, 16 A"
       },
       "dimensions": {"d":70,"h":90,"w":52.5},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
-        "en": "Miniature circuit breaker 3 poles, curve C, 32 A",
-        "it": "Interruttore magnetotermico 3 poli, curva C, 32 A"
+        "en": "Miniature circuit breaker 3 poles, curve C, 16 A",
+        "it": "Interruttore magnetotermico 3 poli, curva C, 16 A"
       },
       "verification": "secondary",
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
@@ -1323,7 +1357,8 @@
         "Auxiliary contacts": "1 NO",
         "Coil voltage": "24 V DC",
         "Poles": "3",
-        "Rated operational current AC-3": "12 A"
+        "Rated operational current AC-3": "12 A",
+        "Type": "Contactor"
       },
       "description": {
         "en": "Contactor 3 poles, 12 A AC-3, coil 24 V DC",
@@ -1356,7 +1391,7 @@
       "kind": "part",
       "category": "motor-protection",
       "code": "GEN-OVERLOAD-RELAY-9A-13A",
-      "data": {"Setting range":"9 - 13 A"},
+      "data": {"Setting range":"9 - 13 A","Type":"Overload relay"},
       "description": {
         "en": "Thermal overload relay, setting range 9 to 13 A",
         "it": "Relè termico, campo di regolazione da 9 a 13 A"
@@ -1673,7 +1708,12 @@
       "kind": "part",
       "category": "cables",
       "code": "GEN-CABLE-POWER-4X2,5MM2",
-      "data": {"Conductor cross-section":"2.5 mm²","Core colours":"BN, BK, GY, GNYE","Cores":"4"},
+      "data": {
+        "Conductor cross-section": "2.5 mm²",
+        "Core colours": "BN, BK, GY, GNYE",
+        "Cores": "4",
+        "Type": "Power cable"
+      },
       "description": {"en":"Power cable 4 x 2.5 mm²","it":"Cavo di potenza 4 x 2,5 mm²"},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
@@ -1717,7 +1757,7 @@
     {"id":"110VDC","type":"H07V-K","colour":"BK","crossSection":"1.5","suffix":"P"},
     {"id":"signal","type":"H07V-K","colour":"BK","crossSection":"1.5","suffix":""}
   ],
-  "wireTypes": [{"id":"6mm2-BK","type":"H07V-K","colour":"BK","crossSection":"6"}],
+  "wireTypes": [{"id":"2.5mm2-BK","type":"H07V-K","colour":"BK","crossSection":"2.5"}],
   "cables": [
     {
       "id": "-W1",
@@ -1745,7 +1785,7 @@
           "+DS-H1": "0d044b54",
           "+DS-KM1": "1b862074",
           "+DS-M1": "0d6e46ef",
-          "+DS-QF1": "0b4dce77",
+          "+DS-QF1": "1a201cc7",
           "+DS-QS1": "02b29444",
           "+DS-S0": "12af6cd7",
           "+DS-S1": "11f7fd20",
@@ -1759,7 +1799,7 @@
           "GEN-CONTACTOR-12A": 1,
           "GEN-EMERGENCY-STOP-22MM": 1,
           "GEN-ENCLOSURE-600X800X300": 1,
-          "GEN-MCB-3P-C32A": 1,
+          "GEN-MCB-3P-C16A": 1,
           "GEN-MOTOR-3PH-5,5KW": 1,
           "GEN-MOUNTING-PLATE-600X800": 1,
           "GEN-OVERLOAD-RELAY-9A-13A": 1,
@@ -1779,24 +1819,24 @@
           "GEN-WIRING-KIT": 1
         },
         "wires": {
-          "001 -FR1:2>-X1:1": "073027a2",
+          "001 -FR1:2>-X1:1": "1edae787",
           "001M -G1:->-KM1:A2": "0f55f30e",
           "001M -KM1:A2>-H1:2": "0f55f30e",
           "001P -G1:+>-S0:1": "0f55f30e",
           "001P -S0:1>-KM1:1": "0f55f30e",
           "002 -X1:1>-M1:U": "0ddba9ea",
-          "003 -QS1:2>-QF1:1": "11c22bc6",
-          "004 -QF1:2>-KM1:1": "11c22bc6",
-          "005 -KM1:2>-FR1:1": "073027a2",
-          "006 -QS1:4>-QF1:3": "11c22bc6",
-          "007 -QF1:4>-KM1:3": "11c22bc6",
-          "008 -KM1:4>-FR1:3": "073027a2",
-          "009 -FR1:4>-X1:2": "073027a2",
+          "003 -QS1:2>-QF1:1": "1edae787",
+          "004 -QF1:2>-KM1:1": "1edae787",
+          "005 -KM1:2>-FR1:1": "1edae787",
+          "006 -QS1:4>-QF1:3": "1edae787",
+          "007 -QF1:4>-KM1:3": "1edae787",
+          "008 -KM1:4>-FR1:3": "1edae787",
+          "009 -FR1:4>-X1:2": "1edae787",
           "010 -X1:2>-M1:V": "0aac0b6c",
-          "011 -QS1:6>-QF1:5": "11c22bc6",
-          "012 -QF1:6>-KM1:5": "11c22bc6",
-          "013 -KM1:6>-FR1:5": "073027a2",
-          "014 -FR1:6>-X1:3": "073027a2",
+          "011 -QS1:6>-QF1:5": "1edae787",
+          "012 -QF1:6>-KM1:5": "1edae787",
+          "013 -KM1:6>-FR1:5": "1edae787",
+          "014 -FR1:6>-X1:3": "1edae787",
           "015 -X1:3>-M1:W": "08fc5a5f",
           "016 -S0:2>-S2:1": "073027a2",
           "017 -S1:3>-KM1:1": "073027a2",
@@ -1818,17 +1858,17 @@
         {"id":"p2","hash":"0ad3e65d6bdf2b","title":"Contents"},
         {"id":"p3","hash":"1a1e091f0157f6","title":"General data of the assembly"},
         {"id":"p4","hash":"14fba6a4da8283","title":"Single-line diagram"},
-        {"id":"p5","hash":"0ceaed1af6e78f","title":"Motor power circuit"},
+        {"id":"p5","hash":"1b78972105d297","title":"Motor power circuit"},
         {"id":"p6","hash":"139ab5c46d4956","title":"Control circuit 24 V DC"},
         {"id":"p7","hash":"0ff991bec9709f","title":"PLC inputs and outputs"},
         {"id":"pg-rep1","hash":"06ff2ec9041b9a.0136b26e","title":"Terminal diagram"},
         {"id":"pg-rep3","hash":"10d57a4ef38aba.0c821d03","title":"Cable list"},
         {"id":"p8","hash":"1663abaf700e76","title":"Cabinet layout"},
-        {"id":"pg-rep5","hash":"198990f51ffcfa.0ab83cc6","title":"Wire list"},
-        {"id":"pg-rep7","hash":"1841cd26871c95.04af1646","title":"Bill of materials"},
+        {"id":"pg-rep5","hash":"198990f51ffcfa.1bd8592c","title":"Wire list"},
+        {"id":"pg-rep7","hash":"1841cd26871c95.0531bdee","title":"Bill of materials"},
         {"id":"pg-rep9","hash":"18862e7ab392df.056145a5","title":"Symbol legend 1/2"},
         {"id":"pg-rep11","hash":"0bc3a8de6953bc.12044c0d","title":"Symbol legend 2/2"},
-        {"id":"pg-rep13","hash":"0971cb79b57391.06a62597","title":"Conductor colours"},
+        {"id":"pg-rep13","hash":"0971cb79b57391.01f5e98b","title":"Conductor colours"},
         {"id":"pg-rep15","hash":"0af6beb17a9024.191b8d15","title":"Wire number suffixes"},
         {"id":"pg-rep17","hash":"1e7f7e570c3ded.1e1b77a6","title":"Terminal tightening torques"},
         {"id":"pg-rep19","hash":"0c6b113eabc420.121d9697","title":"Nameplates"},

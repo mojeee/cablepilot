@@ -73,6 +73,12 @@ const done = (id) => {
   if (!m) throw new Error(`docs/roadmap.md has no milestone ${id}`);
   return m.boxes > 0 && m.ticked === m.boxes;
 };
+// A feature can follow one section of a split milestone: "Sizing and warehouse" is the first part of M6.
+const sectionDone = (re) => {
+  const s = sections.find((x) => re.test(x.title));
+  if (!s) throw new Error(`docs/roadmap.md has no section matching ${re}`);
+  return s.boxes > 0 && s.ticked === s.boxes;
+};
 const milestoneIds = Object.keys(milestones).sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)));
 const doneCount = milestoneIds.filter(done).length;
 const releaseSection = sections.find((s) => /^release\b/i.test(s.title));
@@ -266,16 +272,18 @@ const FEATURES = [
   { key: 'reports', m: 'M3', std: ['IEC 60204-1', 'IEC 60445', 'IEC 60757'] },
   { key: 'checks', m: 'M4', std: ['IEC 60364-5-52', 'IEC 60204-1'] },
   { key: 'plc', m: 'M5', std: [] },
+  { key: 'sizing', m: 'M6', section: /^Sizing and warehouse/i, std: ['IEC 60364-5-52', 'IEC 60364-4-43', 'IEC 60947-2', 'IEC 60947-4-1'] },
   { key: 'layout', m: 'M6', std: ['IEC 61439'] },
 ];
-const statusTag = (lang, m) =>
-  done(m) ? `<span class="tag available">${esc(tx(lang, 'tag.available'))}</span>` : `<span class="tag planned">${esc(tx(lang, 'tag.planned'))} (${m})</span>`;
+const featureDone = (f) => (f.section ? sectionDone(f.section) : done(f.m));
+const statusTag = (lang, m, isDone = done(m)) =>
+  isDone ? `<span class="tag available">${esc(tx(lang, 'tag.available'))}</span>` : `<span class="tag planned">${esc(tx(lang, 'tag.planned'))} (${m})</span>`;
 
 function landingVars(lang) {
   // Screenshots come from the real app (npm run screenshots, e2e/screenshots.e2e.ts) and show only for features that are done.
-  const featImg = (f) => (done(f.m) && imgExists(`feat-${f.key}.png`) ? `<img class="card-img" src="/img/feat-${f.key}.png" alt="${esc(tx(lang, `feat.${f.key}.alt`))}" width="1200" height="700" loading="lazy" />` : '');
+  const featImg = (f) => (featureDone(f) && imgExists(`feat-${f.key}.png`) ? `<img class="card-img" src="/img/feat-${f.key}.png" alt="${esc(tx(lang, `feat.${f.key}.alt`))}" width="1200" height="700" loading="lazy" />` : '');
   const features = FEATURES.map(
-    (f) => `<article class="card">${featImg(f)}<h3>${esc(tx(lang, `feat.${f.key}.title`))}</h3>${statusTag(lang, f.m)}<p>${esc(tx(lang, `feat.${f.key}.text`))}</p>${f.std.map((s) => `<span class="std">${esc(s)}</span>`).join('')}</article>`,
+    (f) => `<article class="card">${featImg(f)}<h3>${esc(tx(lang, `feat.${f.key}.title`))}</h3>${statusTag(lang, f.m, featureDone(f))}<p>${esc(tx(lang, `feat.${f.key}.text`))}</p>${f.std.map((s) => `<span class="std">${esc(s)}</span>`).join('')}</article>`,
   ).join('\n      ');
   const strip = ['cover', 'single', 'multi', 'terminals', 'layout', 'bom']
     .map((k) => (imgExists(`set-${k}.png`) ? `<li class="thumb has-img"><img src="/img/set-${k}.png" alt="${esc(tx(lang, `set.${k}`))}" width="600" height="420" loading="lazy" /><span>${esc(tx(lang, `set.${k}`))}</span></li>` : `<li class="thumb">${esc(tx(lang, `set.${k}`))}</li>`))

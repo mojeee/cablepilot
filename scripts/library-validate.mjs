@@ -25,6 +25,15 @@ function checkGraphics(list, where, err) {
   });
 }
 
+// Parts the sizing engine can use (shared/sizing.ts) carry a `Type` and the technical fields sizing needs.
+const SIZING_FIELDS = {
+  MCB: ['Poles', 'Tripping characteristic', 'Rated current', 'Breaking capacity'],
+  MPCB: ['Poles', 'Setting range', 'Breaking capacity'],
+  Contactor: ['Poles', 'Rated operational current AC-3'],
+  'Overload relay': ['Setting range'],
+  'Power cable': ['Cores', 'Conductor cross-section'],
+};
+
 /** Required fields per kind: each checker receives the data and an error callback. */
 export const KINDS = {
   'colour-codes': (d, err) => {
@@ -64,6 +73,11 @@ export const KINDS = {
     if (!isStr(d.code)) err('code (the part code shown in the BOM) is required');
     if (!isStr(d.manufacturer)) err('manufacturer is required ("Generic" for built-in parts)');
     if (!isObj(d.data) || !Object.values(d.data).every(isStr)) err('data must be an object of text values (unit included, e.g. "16 A")');
+    if (isObj(d.data) && d.data.Type !== undefined) {
+      const need = SIZING_FIELDS[d.data.Type];
+      if (!need) err(`data.Type "${d.data.Type}" is not a sizing type (${Object.keys(SIZING_FIELDS).join(', ')})`);
+      else for (const k of need) if (!isStr(d.data[k]) || !/\d/.test(d.data[k]) && k !== 'Tripping characteristic') err(`a ${d.data.Type} needs data "${k}" for sizing`);
+    }
     if (d.dimensions !== undefined && !(isObj(d.dimensions) && ['w', 'h', 'd'].every((k) => isNum(d.dimensions[k]) && d.dimensions[k] > 0))) err('dimensions needs positive w, h and d in millimetres');
   },
   macro: (d, err) => {
