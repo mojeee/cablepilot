@@ -21,6 +21,8 @@ export type WarningSign = 'general' | 'electric' | 'hot' | 'autostart';
 export interface SymbolEl {
   id: string;
   kind: 'symbol';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   symbolId: string;
   x: number;
   y: number;
@@ -39,6 +41,8 @@ export interface SymbolEl {
 export interface WireEl {
   id: string;
   kind: 'wire';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   /** Orthogonal polyline in page millimetres. */
   points: Pt[];
   potential?: string;
@@ -60,12 +64,16 @@ export interface WireEl {
 export interface JunctionEl {
   id: string;
   kind: 'junction';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   x: number;
   y: number;
 }
 export interface TextEl {
   id: string;
   kind: 'text';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   x: number;
   y: number;
   rot: number;
@@ -77,12 +85,16 @@ export interface TextEl {
 export interface LineEl {
   id: string;
   kind: 'line';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   points: Pt[];
   dashed?: boolean;
 }
 export interface RectEl {
   id: string;
   kind: 'rect';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   x: number;
   y: number;
   w: number;
@@ -93,9 +105,21 @@ export interface RectEl {
   /** Designation of the assembly device this dashed outline draws (nested assemblies). */
   assembly?: string;
 }
+export interface CircleEl {
+  id: string;
+  kind: 'circle';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
+  x: number;
+  y: number;
+  r: number;
+  dashed?: boolean;
+}
 export interface TableEl {
   id: string;
   kind: 'table';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   x: number;
   y: number;
   colWidths: number[];
@@ -107,6 +131,8 @@ export interface TableEl {
 export interface ImageEl {
   id: string;
   kind: 'image';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   x: number;
   y: number;
   w: number;
@@ -116,6 +142,8 @@ export interface ImageEl {
 export interface WarningEl {
   id: string;
   kind: 'warning';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   x: number;
   y: number;
   size: number;
@@ -152,6 +180,8 @@ export interface PlcSettings {
 export interface BoxEl {
   id: string;
   kind: 'box';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   variant: 'blackbox' | 'connector';
   x: number;
   y: number;
@@ -177,6 +207,8 @@ export type FormItem =
 export interface FormEl {
   id: string;
   kind: 'form';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   x: number;
   y: number;
   w: number;
@@ -190,6 +222,8 @@ export type ReportId = (typeof REPORT_IDS)[number];
 export interface ReportEl {
   id: string;
   kind: 'report';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
   x: number;
   y: number;
   report: ReportId;
@@ -198,7 +232,7 @@ export interface ReportEl {
   rows: number;
 }
 
-export type El = SymbolEl | BoxEl | WireEl | JunctionEl | TextEl | LineEl | RectEl | TableEl | ImageEl | WarningEl | FormEl | ReportEl;
+export type El = SymbolEl | BoxEl | WireEl | JunctionEl | TextEl | LineEl | RectEl | CircleEl | TableEl | ImageEl | WarningEl | FormEl | ReportEl;
 export type ElKind = El['kind'];
 
 export interface Page {
@@ -222,6 +256,17 @@ export interface DrawingStyle {
   font: 'sans' | 'serif' | 'mono';
   /** Text heights in millimetres. */
   textSizes: { designation: number; wireNumber: number; text: number };
+}
+
+/** A drawing layer: on/off, lock, a colour that replaces the drawing style's, and a line type. */
+export interface Layer {
+  id: string;
+  name: string;
+  on: boolean;
+  locked: boolean;
+  /** Hex colour; absent: the colours of the drawing style apply. */
+  colour?: string;
+  lineType: 'continuous' | 'dashed';
 }
 
 export interface Asset {
@@ -461,4 +506,6 @@ export interface Project {
   /** Issue status of the set and the revisions issued so far, oldest first. */
   issueStatus: IssueStatus;
   revisions: Revision[];
+  /** Layer overrides and the user's own layers (M6 part 2); absent: the built-in layers with their defaults. */
+  layers?: Layer[];
 }

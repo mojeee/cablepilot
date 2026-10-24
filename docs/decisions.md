@@ -337,6 +337,31 @@ IEC 60617 symbols by default with NFPA 79 / ANSI as an option from M1; three sam
 - **Demo:** the sizing step opens the conveyor sample last, after the PDF and XLSX export of the charger sample, so the
   first six steps are unchanged.
 
+## M6 part 2: CAD workspace with the AI inside
+
+- **One engine for every entry point.** The ribbon, the command line, the context menu and the shortcuts run the same
+  commands (`app/renderer/cad/run.ts`); interactive commands are chains of steps ("sessions", `cad/sessions.ts`). Pure
+  parts (typed input, aliases and routing, snapping, selection, TRIM/EXTEND/OFFSET, grips) are in `shared/cad` and tested.
+- **What counts as a command.** A typed text is a command only when its first word is a command or alias and nothing
+  else follows (or the command takes arguments: INSERT, ZOOM, GRID...). "number the wires on this page" is therefore a
+  request to the assistant, not NUMBER; one unknown word is reported as unknown, not sent to the assistant.
+- **Keys.** On the canvas, printable keys start typing in the command line (CAD habit). Only V, W and F stay immediate
+  single-key shortcuts (and R and M while placing a symbol), because M is MOVE and L is LINE now. The old drag-to-draw
+  line and rectangle tools became the LINE and REC commands (point by point).
+- **Coordinates** are page millimetres as the status bar shows them (origin top left, y down); angles are counter-
+  clockwise on screen, so `@50<90` goes up the page. This keeps typed values equal to what the readout shows.
+- **Layers** are an optional `layers` list in the project (overrides of the five built-in layers, which map the drawing
+  style groups, and user layers) plus an optional `layer` on elements. Absent data means the defaults, so the file
+  format version stays 6. Off layers are not drawn or printed; locked layers cannot be picked from the canvas.
+- **Circle.** A `circle` element (centre, radius) was added so that the usual C command has something to draw.
+- **Docking** is a dock selector per panel with resizable splitters (also by keyboard), not drag-and-drop between docks:
+  simple, testable and enough. The layout is part of the settings file (`layout`), validated on read.
+- **AI.** The provider interface and the built-in provider are in `app/main/ai`; the request carries the project, the page
+  and the selection, the answer text, claims with a source (project, standard, library, suggestion) and an optional
+  proposal (commands). The renderer previews the proposal as a project that is not in the history, highlights what it
+  adds or changes, and applies it as one batch on Accept. A proposal made for an older state of the project is dropped.
+  The built-in provider is deterministic and offline and states that free-form requests need an API key (M7).
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite

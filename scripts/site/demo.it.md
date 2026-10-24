@@ -1,7 +1,7 @@
 <!--
 Italian text of the demo page (/it/demo/), translated from docs/demo.md: same "## N." sections.
 "source" is the hash the build prints when docs/demo.md changes; update it together with the translation.
-source: 89856db23c
+source: 5871b1efad
 -->
 # Demo: disegna una volta, gli elenchi e il set di disegni seguono
 
@@ -83,5 +83,19 @@ il nuovo articolo con giacenza e quantità disponibile.
 - Il dimensionamento è calcolato dai dati del progetto e dichiara le sue ipotesi; i valori di tabella non ancora
   verificati sulla norma sono segnalati e nessun risultato sostituisce la verifica del progettista.
 - Confermare una riga è un solo passo di annullamento, e **Accetta tutte le proposte** lo è per l’intero progetto.
+
+## 8. L’area di lavoro CAD e l’assistente
+
+In una pagina del nastro trasportatore di esempio, fai clic sulla riga di comando e scrivi `L`, premi Invio, poi scrivi `30,40` e `@60,0`
+(Invio dopo ciascuno) e ancora Invio: la linea viene disegnata da coordinate scritte. Scrivi di nuovo `L` e avvicina il
+cursore all’estremità di quella linea: si aggancia e la barra di stato nomina lo snap (snap a oggetto, F3). Poi inserisci una
+bobina dall’elenco dei simboli: l’app propone «Aggiungere i contatti di -K1?». Chiedi: l’assistente integrato risponde nel
+pannello chat con un’anteprima evidenziata sul disegno e una fonte per ogni affermazione (questo progetto, oppure «suggerimento»
+dove propone un numero). **Accetta** inserisce i contatti in un solo passo di annullamento.
+
+- La barra multifunzione, la riga di comando (alias come `L`, `PL`, `REC`, `M`, `CO`, `TR`, `Z`), gli ausili nella barra di stato
+  (griglia F7, orto F8, snap F9, snap a oggetto F3, polare F10), i livelli e i pannelli ancorabili sono tutti nell’app.
+- Fino a M7 la chat usa un provider integrato che capisce poche richieste e dice che le richieste libere richiedono una chiave
+  API; l’app è pienamente utilizzabile anche senza.
 
 Il video finisce sulla copertina del campione del nastro trasportatore.

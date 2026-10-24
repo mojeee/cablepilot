@@ -35,16 +35,6 @@ export function TopBar() {
           <option value="all">{t('All pages')}</option>
           <option value="page">{t('This page')}</option>
         </select>
-        <button type="button" data-testid="bom" title={t('Bill of materials')} onClick={() => st().setDialog('bom')}>{t('BOM')}</button>
-        <button type="button" data-testid="reports" title={t('Reports')} onClick={() => st().setDialog('reports')}>{t('Reports')}</button>
-        <button type="button" data-testid="wires" title={t('Wires and cables')} onClick={() => st().setDialog('wires')}>{t('Wires')}</button>
-        <button type="button" data-testid="number-wires" title={t('Number the wires automatically')} onClick={() => st().renumberWires()}>{t('Number wires')}</button>
-        <button type="button" data-testid="plc" title={t('PLC I/O overview and tag lists')} onClick={() => st().setDialog('plc')}>{t('PLC I/O')}</button>
-        <button type="button" data-testid="sizing" title={t('Size cables and components from the schematic and the warehouse')} onClick={() => { st().patch({ sizingFocus: null }); st().setDialog('sizing'); }}>{t('Sizing')}</button>
-        <button type="button" data-testid="warehouse" title={t('Stock list, links to library parts')} onClick={() => st().setDialog('warehouse')}>{t('Warehouse')}</button>
-        <button type="button" data-testid="revisions" title={t('Revisions and issue status')} onClick={() => st().setDialog('revisions')}>{t('Revisions')}</button>
-        <button type="button" data-testid="settings" onClick={() => st().setDialog('settings')}>{t('Project settings...')}</button>
-        <button type="button" title={t('Renumber designations automatically')} onClick={() => st().exec({ type: 'designation/renumber' })}>{t('Renumber')}</button>
       </div>
       <div className="spacer" />
       <label className="field">

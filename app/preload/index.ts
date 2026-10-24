@@ -24,6 +24,7 @@ const api: CablePilotApi = {
       return () => void ipcRenderer.removeListener('warehouse:changed', fn);
     },
   },
+  ai: { status: call('ai:status'), ask: call('ai:ask') },
   company: { list: call('company:list'), save: call('company:save'), folder: call('company:folder') },
 };
 

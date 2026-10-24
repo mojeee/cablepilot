@@ -4,6 +4,7 @@
 import type { Result } from './result';
 import type { Settings } from './settings';
 import type { WarehouseData } from './stock';
+import type { AiAnswer, AiRequest, AiStatus } from './ai/types';
 
 export interface AppInfo {
   name: string;
@@ -91,6 +92,11 @@ export interface CablePilotApi {
     /** Watches the source: `onChanged` fires when the file changes. Returns whether it is watching. */
     watch(on: boolean): Promise<Result<boolean>>;
     onChanged(cb: () => void): () => void;
+  };
+  /** The assistant (M6 part 2): providers run here in the main process, API keys never reach the renderer. */
+  ai: {
+    status(): Promise<Result<AiStatus>>;
+    ask(req: AiRequest): Promise<Result<AiAnswer>>;
   };
   /** The company library: plain data files in the app's data folder, same format as /library. */
   company: {

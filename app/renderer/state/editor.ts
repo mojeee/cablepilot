@@ -17,6 +17,7 @@ import { pickingList, withStock } from '@shared/stock';
 import { toCsv } from '@shared/export/csv';
 import { xlsxBytes } from '@shared/export/xlsx';
 import { useStock } from './stock';
+import { useChat } from './chat';
 import { macroFromSelection } from '@shared/macros';
 import { newPage, newProject } from '@shared/model/defaults';
 import { pageById } from '@shared/model/queries';
@@ -37,7 +38,7 @@ import { rasterizeSvg } from '../render/svg';
 import { loadPdfFonts } from '../render/fonts';
 import { useUi } from './ui';
 
-export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'line' | 'rect' | 'dashed' | 'table' | 'image' | 'warning';
+export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'table' | 'image' | 'warning';
 export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc' | 'sizing' | 'warehouse';
 
 export interface Recovery {
@@ -99,6 +100,9 @@ interface EditorState {
   deleteSelection(): void;
   copy(): void;
   paste(): void;
+  /** Copies the elements with these ids to a position offset by dx, dy (designations are numbered again), one undo step; selects the copies. */
+  copyElements(ids: string[], dx: number, dy: number): void;
+  insertElements(els: El[], dx: number, dy: number): void;
   placeBox(variant: 'blackbox' | 'connector', x: number, y: number): void;
   placeMacro(id: string, x: number, y: number): void;
   saveMacro(name: string): Promise<void>;
@@ -175,6 +179,7 @@ export const useEditor = create<EditorState>((set, get) => {
 
   const withLoaded = (p: Project, path: string | null) => {
     void window.cablepilot.autosave.clear(get().project().id);
+    useChat.getState().setHint(null);
     set({ history: freshHistory(p), saved: p, filePath: path, pageId: p.pages[0]?.id ?? '', selection: [], tool: 'select', placing: null });
   };
 
@@ -493,6 +498,8 @@ export const useEditor = create<EditorState>((set, get) => {
       const title = def.title[getLanguage()];
       flash('info', () => (des ? t('Placed {designation} ({symbol}).', { designation: des, symbol: title }) : t('Placed {symbol}.', { symbol: title })));
       set({ selection: [id] });
+      // Context hint (M6 part 2): a coil placed with a designation offers its contacts.
+      if (def.function === 'coil' && des) useChat.getState().setHint({ text: t('Add the contacts of {des}?', { des }), prompt: `add contacts for ${des}` });
     },
 
     deleteSelection: () => {
@@ -508,9 +515,17 @@ export const useEditor = create<EditorState>((set, get) => {
       set({ clipboard: pg.elements.filter((e) => sel.has(e.id)) });
     },
     paste: () => {
-      const { clipboard, pageId } = get();
+      get().insertElements(get().clipboard, 5, 5);
+    },
+    copyElements: (ids, dx, dy) => {
+      const pg = get().page();
+      if (!pg) return;
+      const sel = new Set(ids);
+      get().insertElements(pg.elements.filter((e) => sel.has(e.id)), dx, dy);
+    },
+    insertElements: (clipboard, dx, dy) => {
+      const { pageId } = get();
       if (!clipboard.length) return;
-      const dx = 5, dy = 5;
       const els = clipboard.map((e): El => {
         const id = newId('e');
         if (e.kind === 'wire' || e.kind === 'line') return { ...e, id, points: e.points.map((q) => ({ x: q.x + dx, y: q.y + dy })) };

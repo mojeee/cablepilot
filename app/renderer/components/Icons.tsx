@@ -1,0 +1,74 @@
+// The ribbon's icons: simple 24x24 line drawings made for this app (no third-party artwork). They use
+// the current text colour, so they follow the theme.
+import type { ReactNode } from 'react';
+
+const P = (d: string, k?: string) => <path key={k ?? d} d={d} />;
+const C = (cx: number, cy: number, r: number) => <circle key={`${cx}${cy}${r}`} cx={cx} cy={cy} r={r} />;
+
+const ICONS: Record<string, ReactNode[]> = {
+  line: [P('M4 20 L20 4'), C(4, 20, 1.6), C(20, 4, 1.6)],
+  pline: [P('M3 18 L9 8 L14 15 L21 5')],
+  rect: [P('M4 6 H20 V18 H4 Z')],
+  circle: [C(12, 12, 8)],
+  dashed: [P('M4 6 H8 M11 6 H15 M18 6 H20 V9 M20 12 V15 M20 18 H17 M14 18 H10 M7 18 H4 V15 M4 12 V9')],
+  text: [P('M5 6 H19 M12 6 V19 M9 19 H15')],
+  table: [P('M4 5 H20 V19 H4 Z M4 10 H20 M4 15 H20 M10 5 V19')],
+  image: [P('M4 5 H20 V19 H4 Z'), C(9, 10, 1.6), P('M5 18 L10 13 L14 17 L16 15 L19 18')],
+  warning: [P('M12 4 L21 19 H3 Z M12 10 V14 M12 16.5 V17')],
+  wire: [P('M3 8 H10 V16 H21'), C(3, 8, 1.4), C(21, 16, 1.4)],
+  symbol: [P('M12 3 V8 M12 16 V21 M7 8 H17 V16 H7 Z')],
+  box: [P('M6 5 H18 V19 H6 Z M3 9 H6 M3 15 H6 M18 9 H21 M18 15 H21')],
+  connector: [P('M8 4 H16 V20 H8 Z M4 8 H8 M4 12 H8 M4 16 H8')],
+  move: [P('M12 3 V21 M3 12 H21 M12 3 L9 6 M12 3 L15 6 M12 21 L9 18 M12 21 L15 18 M3 12 L6 9 M3 12 L6 15 M21 12 L18 9 M21 12 L18 15')],
+  copy: [P('M8 8 H19 V19 H8 Z M5 15 V5 H15')],
+  rotate: [P('M19 12 A7 7 0 1 1 15 5.7 M15 2 V6 H19')],
+  mirror: [P('M12 3 V21'), P('M9 7 L3 17 H9 Z'), P('M15 7 L21 17 H15 Z')],
+  erase: [P('M5 16 L13 5 L20 10 L12 20 H8 Z M9 12 L16 17')],
+  trim: [P('M3 12 H21'), P('M12 3 V21'), P('M3 12 H12 V21')],
+  extend: [P('M3 12 H14 M14 12 H17', 'a'), P('M21 4 V20'), P('M16 9 L21 12 L16 15')],
+  offset: [P('M4 17 L14 7'), P('M10 20 L20 10')],
+  undo: [P('M9 8 L4 13 L9 18 M4 13 H15 A5 5 0 0 1 15 23')],
+  redo: [P('M15 8 L20 13 L15 18 M20 13 H9 A5 5 0 0 0 9 23')],
+  zoom: [C(10, 10, 6), P('M15 15 L21 21 M7.5 10 H12.5 M10 7.5 V12.5')],
+  extents: [P('M4 9 V4 H9 M15 4 H20 V9 M20 15 V20 H15 M9 20 H4 V15'), P('M9 9 H15 V15 H9 Z')],
+  pan: [P('M8 12 V6 A1.5 1.5 0 0 1 11 6 V11 V4.5 A1.5 1.5 0 0 1 14 4.5 V11 V6 A1.5 1.5 0 0 1 17 6 V14 C17 18 15 21 11 21 C8 21 7 19 5 15 L4 13 A1.5 1.5 0 0 1 7 12 Z')],
+  layers: [P('M12 4 L21 9 L12 14 L3 9 Z M3 13 L12 18 L21 13 M3 17 L12 22 L21 17')],
+  dist: [P('M3 17 L17 3 L21 7 L7 21 Z M7 13 L9 15 M10 10 L12 12 M13 7 L15 9')],
+  number: [P('M4 8 H20 M4 16 H20'), P('M8 4 V12 M14 12 V20')],
+  renumber: [P('M5 6 H11 M5 12 H11 M5 18 H11 M15 6 H19 M15 12 H19 M15 18 H19')],
+  wires: [P('M3 6 H21 M3 12 H21 M3 18 H21'), C(8, 6, 1.5), C(16, 12, 1.5), C(10, 18, 1.5)],
+  report: [P('M6 3 H14 L19 8 V21 H6 Z M14 3 V8 H19 M9 12 H16 M9 16 H16')],
+  bom: [P('M4 5 H20 M4 10 H20 M4 15 H20 M4 20 H14 M8 5 V20')],
+  check: [P('M4 12 L9 17 L20 6')],
+  size: [P('M4 18 L12 6 L20 18 Z M9 14 H15')],
+  plc: [P('M4 5 H20 V19 H4 Z M8 5 V19 M4 9 H8 M4 14 H8 M12 9 H17 M12 13 H17')],
+  warehouse: [P('M3 10 L12 4 L21 10 V20 H3 Z M8 20 V13 H16 V20')],
+  revisions: [P('M12 7 V12 L15 14'), C(12, 12, 8)],
+  settings: [C(12, 12, 3), P('M12 3 V6 M12 18 V21 M3 12 H6 M18 12 H21 M5.6 5.6 L7.7 7.7 M16.3 16.3 L18.4 18.4 M5.6 18.4 L7.7 16.3 M16.3 7.7 L18.4 5.6')],
+  grid: [P('M4 4 H20 V20 H4 Z M4 9.3 H20 M4 14.7 H20 M9.3 4 V20 M14.7 4 V20')],
+  ortho: [P('M4 18 H14 V6 M10 14 H14 V18')],
+  snap: [P('M4 4 V8 M4 4 H8 M20 4 H16 M20 4 V8 M4 20 V16 M4 20 H8 M20 20 H16 M20 20 V16'), C(12, 12, 2)],
+  osnap: [P('M5 5 H11 V11 H5 Z'), P('M13 17 L16 12 L19 17 Z')],
+  polar: [P('M4 20 H20 M4 20 L16 8'), P('M10 20 A6 6 0 0 0 8.6 16.1')],
+  fullscreen: [P('M4 9 V4 H9 M15 4 H20 V9 M20 15 V20 H15 M9 20 H4 V15')],
+  chat: [P('M4 5 H20 V16 H11 L6 20 V16 H4 Z M8 9 H16 M8 12 H13')],
+  save: [P('M5 4 H17 L20 7 V20 H5 Z M8 4 V9 H15 V4 M8 20 V14 H17 V20')],
+  open: [P('M3 7 H10 L12 9 H21 V19 H3 Z')],
+  new: [P('M6 3 H14 L19 8 V21 H6 Z M14 3 V8 H19 M12 12 V18 M9 15 H15')],
+  pdf: [P('M6 3 H14 L19 8 V21 H6 Z M14 3 V8 H19 M9 17 V12 H11 A1.5 1.5 0 0 1 11 15 H9')],
+  dxf: [P('M5 4 H19 V20 H5 Z M5 4 L19 20 M19 4 L5 20')],
+  page: [P('M6 3 H14 L19 8 V21 H6 Z M14 3 V8 H19 M12 12 V18 M9 15 H15')],
+  panel: [P('M3 5 H21 V19 H3 Z M9 5 V19')],
+  reset: [P('M5 12 A7 7 0 1 0 8 6.5 M4 4 V8 H8')],
+  help: [C(12, 12, 8), P('M9.5 9.5 A2.5 2.5 0 1 1 12 12 V14 M12 16.5 V17')],
+  select: [P('M6 4 L18 12 L12 13 L9 19 Z')],
+  preview: [P('M2 12 C5 6 19 6 22 12 C19 18 5 18 2 12 Z'), C(12, 12, 3)],
+};
+
+export function Icon({ name, size = 22 }: { name: string; size?: number }) {
+  return (
+    <svg className="icon" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {ICONS[name] ?? ICONS.select}
+    </svg>
+  );
+}

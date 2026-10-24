@@ -5,6 +5,7 @@ import { create } from 'zustand';
 import { setLanguage, type Lang } from '@shared/i18n';
 import type { CanvasTheme, Settings, Theme } from '@shared/settings';
 import { DEFAULT_SETTINGS } from '@shared/settings';
+import { DEFAULT_LAYOUT, type Layout } from '@shared/layout';
 
 export interface Message {
   id: number;
@@ -21,6 +22,12 @@ interface UiState extends Settings {
   setTheme(theme: Theme): void;
   setCanvas(canvas: CanvasTheme): void;
   setLang(language: Lang): void;
+  /** Changes the panel layout and saves it per user (settings in the main process). */
+  setLayout(layout: Layout, save?: boolean): void;
+  resetLayout(): void;
+  /** Full-screen canvas: docks and ribbon hidden for this session. */
+  fullscreen: boolean;
+  setFullscreen(on: boolean): void;
   addMessage(severity: Message['severity'], text: () => string): void;
   hydrate(settings: Settings): void;
 }
@@ -42,6 +49,16 @@ function persist(patch: Partial<Settings>): void {
 export const useUi = create<UiState>((set) => ({
   ...DEFAULT_SETTINGS,
   messages: [],
+  fullscreen: false,
+  setFullscreen: (fullscreen) => set({ fullscreen }),
+  setLayout: (layout, save = true) => {
+    if (save) persist({ layout });
+    set({ layout });
+  },
+  resetLayout: () => {
+    persist({ layout: DEFAULT_LAYOUT });
+    set({ layout: DEFAULT_LAYOUT });
+  },
   checksOpen: true,
   setChecksOpen: (checksOpen) => set({ checksOpen }),
   setTheme: (theme) => {

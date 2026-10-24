@@ -81,6 +81,13 @@ export const TEXT = {
     en: 'Cables, breakers, contactors and overload relays sized from the schematic with their requirement, assumptions and sources (table values still unverified are flagged), then proposed from your own stock list: ranked by what the warehouse has for this project, with warehouse and location. Confirm one line, or the whole project, in one undo step.',
     it: 'Cavi, interruttori, contattori e relè termici dimensionati dallo schema con requisito, ipotesi e fonti (i valori di tabella non ancora verificati sono segnalati), poi proposti dalla tua lista di magazzino: in ordine di disponibilità per questo progetto, con magazzino e ubicazione. Conferma una riga, o tutto il progetto, in un solo passo annullabile.',
   },
+  'feat.workspace.title': { en: 'A familiar CAD workspace, with the chat inside', it: 'Un’area di lavoro CAD familiare, con la chat dentro' },
+  'feat.workspace.text': {
+    en: 'Ribbon, command line with the aliases CAD users type (L, PL, REC, M, CO, TR, Z...), grid, ortho, object snap and polar tracking, window and crossing selection, layers and dockable panels. A chat panel proposes changes as a preview you accept or reject; until the AI providers arrive (M7) it answers a few requests with a built-in stand-in.',
+    it: 'Barra multifunzione, riga di comando con gli alias che gli utenti CAD digitano (L, PL, REC, M, CO, TR, Z...), griglia, orto, snap a oggetto e tracciamento polare, selezione a finestra e a intersezione, livelli e pannelli ancorabili. Un pannello chat propone modifiche come anteprima da accettare o rifiutare; finché non arrivano i provider IA (M7) risponde a poche richieste con un sostituto integrato.',
+  },
+  'feat.workspace.alt': { en: 'The CablePilot window: the ribbon on top, a drawing page in the middle with the crosshair, the command line and status bar below, and the AI chat docked on the right with a proposal and its sources', it: 'La finestra di CablePilot: la barra multifunzione in alto, una pagina di disegno al centro con il mirino, riga di comando e barra di stato sotto e la chat IA ancorata a destra con una proposta e le sue fonti' },
+  'demo.step8.alt': { en: 'The conveyor sample after Accept: the contacts of the new coil placed, the command line below and the chat panel showing the accepted proposal with its sources.', it: 'Il nastro trasportatore di esempio dopo Accetta: i contatti della nuova bobina inseriti, la riga di comando sotto e il pannello chat con la proposta accettata e le sue fonti.' },
   'feat.layout.title': { en: 'Cabinet layout', it: 'Layout del quadro' },
   'feat.layout.text': {
     en: 'Mounting plate to scale in 2D with dimensions and side view, a 3D view, duct fill rate and a drilling DXF.',
@@ -120,8 +127,8 @@ export const TEXT = {
     it: 'Un assistente facoltativo con la tua chiave API. Propone, tu accetti o rifiuti. Nulla viene inviato altrove.',
   },
   'ai.lead.coming': {
-    en: 'An optional assistant with your own API key is planned. It will propose, and you accept or reject. The app is fully usable without it.',
-    it: 'È pianificato un assistente facoltativo con la tua chiave API. Proporrà, e tu accetti o rifiuti. L’app è pienamente utilizzabile anche senza.',
+    en: 'An optional assistant with your own API key is planned (M7). The chat panel is already in the app: it proposes as a preview you accept or reject, but until the providers arrive it only answers a few requests with a built-in stand-in. The app is fully usable without it.',
+    it: 'È pianificato un assistente facoltativo con la tua chiave API (M7). Il pannello chat è già nell’app: propone come anteprima da accettare o rifiutare, ma finché non arrivano i provider risponde solo a poche richieste con un sostituto integrato. L’app è pienamente utilizzabile anche senza.',
   },
   'ai.prompts': { en: 'Example prompts', it: 'Esempi di richieste' },
   'ai.p1': { en: 'Add a star-delta starter for a 7.5 kW motor on page 5', it: 'Aggiungi un avviatore stella-triangolo per un motore da 7,5 kW a pagina 5' },

@@ -10,7 +10,7 @@ import { fail, ok, type Result } from './result';
 
 /** Key order of the written file: identity first, then the rest alphabetically; top level is fixed. */
 const FIRST = ['id', 'kind', 'type', 'name'];
-const TOP = ['format', 'version', 'id', 'name', 'settings', 'properties', 'assembly', 'templates', 'potentials', 'pages', 'assets', 'symbols', 'devices', 'parts', 'projectParts', 'wireClasses', 'wireTypes', 'cables', 'issueStatus', 'revisions'];
+const TOP = ['format', 'version', 'id', 'name', 'settings', 'properties', 'assembly', 'templates', 'potentials', 'pages', 'assets', 'symbols', 'devices', 'parts', 'projectParts', 'wireClasses', 'wireTypes', 'cables', 'issueStatus', 'revisions', 'layers'];
 
 function orderedKeys(o: Record<string, unknown>, top: boolean): string[] {
   const keys = Object.keys(o).filter((k) => o[k] !== undefined);

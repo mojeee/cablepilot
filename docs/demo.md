@@ -75,4 +75,18 @@ the BOM shows the new part with its on-hand and available quantities.
   against the standard yet are flagged, and no result replaces the engineer's verification.
 - Confirming a line is one undo step, and **Accept all proposals** is one undo step for the whole project.
 
+## 8. The CAD workspace and the assistant
+
+On a page of the conveyor sample, click the command line and type `L`, press Enter, then type `30,40` and `@60,0`
+(Enter after each) and Enter again: the line is drawn from typed coordinates. Type `L` again and bring the
+cursor near the end of that line: it locks on and the status bar names the snap (object snap, F3). Then place a
+coil from the symbol list: the app offers "Add the contacts of -K1?". Ask: the built-in assistant answers in the
+chat panel with a highlighted preview on the canvas and a source on every claim (this project, or "suggestion"
+where it proposes a count). **Accept** places the contacts as one undo step.
+
+- The ribbon, the command line (aliases such as `L`, `PL`, `REC`, `M`, `CO`, `TR`, `Z`), the status-bar aids
+  (grid F7, ortho F8, snap F9, object snap F3, polar F10), layers and the dockable panels are all in the app.
+- Until M7 the chat uses a built-in stand-in provider that understands a few requests and says that free-form
+  requests need an API key; the app is fully usable without it.
+
 The video ends on the cover sheet of the conveyor sample.

@@ -10,7 +10,7 @@ import type { Library, MacroDef, PartDef } from '../library/types';
 import { withProjectSymbols } from '../library/types';
 import type { SymbolDef } from '../library/types';
 import { placeMacro } from '../macros';
-import type { IssueStatus, LoadData, Revision, BoxEl, CableRec, DeviceRec, El, JunctionEl, Page, PartUse, Potential, Project, ProjectPart, ProjectSettings, Pt, RectEl, Rot, SymbolEl, Template, WireEl, WireClass, WireType, Asset } from '../model/types';
+import type { Layer, IssueStatus, LoadData, Revision, BoxEl, CableRec, DeviceRec, El, JunctionEl, Page, PartUse, Potential, Project, ProjectPart, ProjectSettings, Pt, RectEl, Rot, SymbolEl, Template, WireEl, WireClass, WireType, Asset } from '../model/types';
 import { fullDesignation, nextDesignation, parseDesignation, renumber } from '../numbering';
 import { terminalStrips } from '../reports';
 import { renumberWires } from '../wires';
@@ -64,6 +64,10 @@ export type Command =
   | { type: 'plc/channels'; edits: ChannelEdit[] }
   /** Gives channels their addresses by the project's scheme: only empty ones, or all. */
   | { type: 'plc/assign'; all?: boolean }
+  /** Adds or replaces a layer: state, colour and line type of a built-in layer, or a user layer. */
+  | { type: 'layer/set'; layer: Layer }
+  /** Removes a user layer; its elements go back to the default layer of their kind. */
+  | { type: 'layer/remove'; id: string }
   | { type: 'batch'; label: string; commands: Command[] };
 
 export interface Ctx {
@@ -98,7 +102,7 @@ function addJunctions(pg: Page, wire: WireEl): Page {
 }
 
 /** Moves one end of a wire, inserting a corner when the adjacent segment would turn diagonal. */
-function moveWireEnd(points: Pt[], end: 'start' | 'end', to: Pt): Pt[] {
+export function moveWireEnd(points: Pt[], end: 'start' | 'end', to: Pt): Pt[] {
   const pts = end === 'start' ? points.slice() : points.slice().reverse();
   const p = pts[0], q = pts[1];
   const out = [to, ...pts.slice(1)];
@@ -158,6 +162,7 @@ function transform(pg: Page, ids: string[], f: PointMap, mode: 'move' | 'rotate'
         const a = f({ x: e.x, y: e.y }), b = f({ x: e.x + e.w, y: e.y + e.h });
         return { ...e, x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), w: Math.abs(b.x - a.x), h: Math.abs(b.y - a.y) };
       }
+      case 'circle':
       case 'table':
       case 'report':
       case 'form':
@@ -409,6 +414,17 @@ export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
     }
     case 'plc/channels': return applyChannelEdits(project, cmd.edits);
     case 'plc/assign': return applyChannelEdits(project, assignEdits(project, !!cmd.all));
+    case 'layer/set': {
+      const rest = (project.layers ?? []).filter((l) => l.id !== cmd.layer.id);
+      const at = (project.layers ?? []).findIndex((l) => l.id === cmd.layer.id);
+      const next = at < 0 ? [...rest, cmd.layer] : [...rest.slice(0, at), cmd.layer, ...rest.slice(at)];
+      return { ...project, layers: next };
+    }
+    case 'layer/remove': {
+      const layers = (project.layers ?? []).filter((l) => l.id !== cmd.id);
+      const pages = project.pages.map((pg) => (pg.elements.some((e) => e.layer === cmd.id) ? { ...pg, elements: pg.elements.map((e) => (e.layer === cmd.id ? ({ ...e, layer: undefined } as El) : e)) } : pg));
+      return { ...project, layers, pages };
+    }
     case 'batch': return cmd.commands.reduce((p, c) => apply(p, c, ctx), project);
   }
 }

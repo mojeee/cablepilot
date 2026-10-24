@@ -1,21 +1,13 @@
+// The options bar above the canvas: what the active tool needs (potential and conductors for wires, the
+// sign for warning signs), print preview, and the hidden image picker. The tools themselves are on the
+// ribbon (Ribbon.tsx) and in the command line.
 import { useRef } from 'react';
 import { t } from '@shared/i18n';
 import { newId } from '@shared/ids';
 import type { WarningSign } from '@shared/model/types';
-import { useEditor, type Tool } from '../state/editor';
+import { useEditor } from '../state/editor';
 import { useUi } from '../state/ui';
 import { readImageFile } from '../render/svg';
-
-const TOOLS: { tool: Tool; key: string; label: () => string }[] = [
-  { tool: 'select', key: 'V', label: () => t('Select') },
-  { tool: 'wire', key: 'W', label: () => t('Wire') },
-  { tool: 'text', key: 'T', label: () => t('Text') },
-  { tool: 'line', key: 'L', label: () => t('Line') },
-  { tool: 'rect', key: 'B', label: () => t('Rectangle') },
-  { tool: 'dashed', key: 'D', label: () => t('Dashed outline') },
-  { tool: 'table', key: 'G', label: () => t('Table') },
-  { tool: 'warning', key: 'N', label: () => t('Warning sign') },
-];
 
 const SIGNS: { id: WarningSign; label: () => string }[] = [
   { id: 'general', label: () => t('General warning') },
@@ -49,17 +41,8 @@ export function Toolbar() {
   };
 
   return (
-    <div className="tools" role="toolbar" aria-label={t('Tools')}>
-      {TOOLS.map((x) => (
-        <button key={x.tool} type="button" data-testid={`tool-${x.tool}`} className={tool === x.tool ? 'on' : ''} aria-pressed={tool === x.tool} title={`${x.label()} (${x.key})`} onClick={() => st().setTool(x.tool)}>
-          {x.label()}
-        </button>
-      ))}
-      <button type="button" data-testid="tool-image" className={tool === 'image' ? 'on' : ''} title={`${t('Image')} (I)`} onClick={() => file.current?.click()}>
-        {t('Image')}
-      </button>
-      <input ref={file} type="file" accept="image/png,image/jpeg,image/svg+xml,.svg" hidden onChange={(e) => { void onFile(e.target.files?.[0]); e.target.value = ''; }} />
-      <span className="sep" />
+    <div className="tools" role="toolbar" aria-label={t('Tool options')}>
+      <input ref={file} type="file" data-testid="image-input" accept="image/png,image/jpeg,image/svg+xml,.svg" hidden onChange={(e) => { void onFile(e.target.files?.[0]); e.target.value = ''; }} />
       {tool === 'wire' && (
         <>
           <label className="field">

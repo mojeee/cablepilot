@@ -7,6 +7,7 @@ import { FileService } from './files';
 import { registerIpc } from './ipc';
 import { SettingsStore } from './settings';
 import { WarehouseService } from './warehouse';
+import { FakeProvider } from './ai/fake';
 
 // CP_PROFILE=<dir>: use this folder as the app's data. End-to-end tests start from a clean profile,
 // so nothing remembered by an earlier run changes what they see.
@@ -52,7 +53,7 @@ function createWindow(): void {
 }
 
 void app.whenReady().then(() => {
-  registerIpc({ settings, files, warehouse });
+  registerIpc({ settings, files, warehouse, ai: new FakeProvider() });
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

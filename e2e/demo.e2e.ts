@@ -8,7 +8,7 @@
 import { test, type Locator } from '@playwright/test';
 import { copyFileSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { expect, launch } from './app';
+import { expect, launch, tab } from './app';
 
 test.skip(!!process.env.CI || !process.env.CP_DEMO, 'run with npm run record:demo (not in CI)');
 
@@ -113,25 +113,20 @@ test('demo recording: the battery-charger story', async () => {
     };
 
     // ============ 1. Open the sample, the cover sheet with its revision matrix, the drawing set ============
-    await wait(1000);
+    await wait(600);
     await cue('open');
     await glide(700, 22, 800);
     await wait(400);
     await page.getByTestId('samples').selectOption('dc-charger');
     await expect(messages).toContainText('Opened');
-    await wait(1500);
+    await wait(900);
 
     await cue('cover');
     const matrix = await mm(205, 118);
     await zoomAt(matrix.x, matrix.y, 7);
-    await wait(2400);
+    await wait(1440);
     await fit();
     await wait(300);
-
-    await cue('flick');
-    await gotoPage(2, 700);
-    await gotoPage(5, 800);
-    await gotoPage(9, 1000);
 
     // ============ 2. A coil and a contact from the library, on the control page ============
     await gotoPage(8, 1000);
@@ -147,7 +142,7 @@ test('demo recording: the battery-charger story', async () => {
     await page.keyboard.press('Escape');
     await wait(700);
     await zoomAt(coilAt.x, coilAt.y, 8);
-    await wait(1000);
+    await wait(600);
     await fit();
     await wait(300);
 
@@ -166,10 +161,12 @@ test('demo recording: the battery-charger story', async () => {
     await clickOn(page.getByTestId('device-reps').locator('li').first(), 500);
     await wait(500);
     await zoomAt(coilAt.x, (coilAt.y + contactAt.y) / 2, 5);
-    await wait(1200);
+    await wait(720);
     await fit();
     // select the contact again to keep the Properties panel on the device
-    await clickAt(contactAt.x, contactAt.y, 600);
+    await wait(300);
+    const again = await mm(250, 178); // the canvas may have changed size since: measure again
+    await clickAt(again.x, again.y, 600);
 
     await cue('part');
     await clickOn(page.getByTestId('part-select'), 600);
@@ -177,26 +174,28 @@ test('demo recording: the battery-charger story', async () => {
     await wait(300);
     await clickOn(page.getByTestId('part-add'), 450);
     await expect(page.getByTestId('device-parts')).toContainText('GEN-CONTACTOR-9A');
-    await wait(900);
+    await wait(540);
     await page.keyboard.press('Escape');
 
     // ============ 3. Wire numbers, then the lists that follow ============
     await cue('number');
+    await tab(page, 'wires');
     await clickOn(page.getByTestId('wires'), 700);
     await wait(600);
     await typeInto(page.getByLabel('Start at'), '20', true);
     await wait(400);
     await clickOn(page.getByTestId('wires-number-now'), 600);
     await expect(messages).toContainText('Wires numbered.');
-    await wait(900);
+    await wait(540);
     await page.keyboard.press('Escape');
     await wait(300);
 
     await cue('wirelist');
+    await tab(page, 'reports');
     await clickOn(page.getByTestId('reports'), 700);
     await clickOn(page.getByTestId('report-wires'), 500);
     await expect(page.getByTestId('report-table')).toContainText('020');
-    await wait(1400);
+    await wait(840);
     await cue('bom');
     await clickOn(page.getByTestId('report-bom'), 500);
     await wait(700);
@@ -204,13 +203,14 @@ test('demo recording: the battery-charger story', async () => {
     await expect(row).toContainText('GEN-CONTACTOR-9A');
     const rp = await centre(row);
     await glide(rp.x, rp.y, 600);
-    await wait(1500);
+    await wait(900);
     await page.keyboard.press('Escape');
     await wait(300);
 
     // ============ 4. The check banner finds a loose wire; one click fixes it ============
     await cue('loose');
     await gotoPage(8, 500);
+    await tab(page, 'wires');
     await clickOn(page.getByTestId('tool-wire'), 600);
     const w1 = await mm(40, 238), w2 = await mm(105, 238);
     await clickAt(w1.x, w1.y, 700);
@@ -218,23 +218,24 @@ test('demo recording: the battery-charger story', async () => {
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('checks-banner')).toBeVisible();
     await expect(page.getByTestId('checks-summary')).toContainText('0 errors, 1 warnings');
-    await wait(2200);
+    await wait(1320);
     await cue('fix');
     await clickOn(page.getByTestId('fix-one'), 800);
     await expect(page.getByTestId('checks-banner')).toHaveCount(0);
-    await wait(1500);
+    await wait(900);
 
     // ============ 5. The PLC I/O overview: tags, and a tag list for the PLC tool ============
     await cue('plc');
+    await tab(page, 'plc');
     await clickOn(page.getByTestId('plc'), 800);
     await expect(page.getByTestId('plc-table')).toBeVisible();
-    await wait(2200);
+    await wait(1320);
     await cue('tags');
     await typeInto(page.getByTestId('plc-tag-1'), 'K2_Batteria_bassa', true);
-    await wait(900);
+    await wait(540);
     await clickOn(page.getByTestId('tags-export-codesys'), 700);
     await expect(messages).toContainText('Tag list exported');
-    await wait(1600);
+    await wait(960);
     await page.keyboard.press('Escape');
     await wait(300);
     await gotoPage(9, 1600);
@@ -243,12 +244,13 @@ test('demo recording: the battery-charger story', async () => {
     await cue('pdf');
     await clickOn(page.getByTestId('export-pdf'), 700);
     await expect(messages).toContainText('PDF exported');
-    await wait(1100);
+    await wait(660);
     await cue('xlsx');
+    await tab(page, 'reports');
     await clickOn(page.getByTestId('reports'), 600);
     await clickOn(page.getByTestId('export-xlsx'), 600);
     await expect(messages).toContainText('Lists exported');
-    await wait(1100);
+    await wait(660);
     await page.keyboard.press('Escape');
     await wait(300);
 
@@ -257,11 +259,12 @@ test('demo recording: the battery-charger story', async () => {
     await clickOn(page.getByTestId('samples'), 600);
     await page.getByTestId('samples').selectOption('conveyor');
     await expect(messages).toContainText('Opened Conveyor with direct-on-line starter');
-    await wait(800);
+    await wait(480);
+    await tab(page, 'reports');
     await clickOn(page.getByTestId('warehouse'), 700);
     await clickOn(page.getByTestId('wh-sample'), 600);
     await expect(page.getByTestId('wh-table')).toBeVisible();
-    await wait(1100);
+    await wait(660);
     await page.keyboard.press('Escape');
     await gotoPage(5, 500);
     await fit();
@@ -274,28 +277,68 @@ test('demo recording: the battery-charger story', async () => {
     await clickOn(page.getByTestId('device-sizing'), 600);
     const km = page.locator('[data-testid="sizing-line"][data-role="contactor"]');
     await expect(km).toHaveAttribute('data-status', 'change');
-    await wait(1200);
+    await wait(720);
     await cue('pick');
     await clickOn(km.getByTestId('sizing-choose'), 600);
     await expect(page.getByTestId('sizing-panel')).toBeVisible();
-    await wait(1500);
+    await wait(900);
     await clickOn(page.getByTestId('sizing-confirm'), 600);
     await expect(km).toHaveAttribute('data-status', 'ok');
-    await wait(800);
+    await wait(480);
     await page.keyboard.press('Escape');
     await cue('stock');
+    await tab(page, 'reports');
     await clickOn(page.getByTestId('bom'), 700);
     const stockRow = page.getByTestId('bom-table').locator('tbody tr', { hasText: 'GEN-CONTACTOR-18A' });
     await expect(stockRow).toContainText('A-03-03');
     const sp = await centre(stockRow);
     await glide(sp.x, sp.y, 600);
-    await wait(1800);
+    await wait(1080);
     await page.keyboard.press('Escape');
     await wait(300);
     await gotoPage(1, 400);
+
+    // ============ 8. The CAD workspace: a typed command, a snap, and the assistant proposing ============
+    await cue('cmd');
+    await gotoPage(6, 600);
+    await fit();
+    const cmdLine = page.getByTestId('cmd-input');
+    await clickOn(cmdLine, 600);
+    await cmdLine.pressSequentially('L', { delay: 120 });
+    await cmdLine.press('Enter');
+    await wait(500);
+    for (const t of ['30,40', '@60,0']) {
+      await cmdLine.pressSequentially(t, { delay: 70 });
+      await cmdLine.press('Enter');
+      await wait(350);
+    }
+    await cmdLine.press('Enter');
+    await wait(500);
+    await cue('snap');
+    await cmdLine.pressSequentially('L', { delay: 120 });
+    await cmdLine.press('Enter');
+    const endAt = await mm(90, 40);
+    await glide(endAt.x + 3, endAt.y + 2, 800);
+    await wait(1500);
+    await cmdLine.press('Escape');
+    await cue('chat');
+    const coilPos = await mm(300, 60);
+    await clickOn(page.getByTestId('symbol-coil'), 600);
+    await clickAt(coilPos.x, coilPos.y, 700);
+    await page.keyboard.press('Escape');
+    await expect(page.getByTestId('ai-hint')).toBeVisible();
+    await wait(800);
+    await clickOn(page.getByTestId('ai-hint-ask'), 700);
+    await expect(page.getByTestId('chat-proposal')).toBeVisible();
+    await wait(2600);
+    await cue('accept');
+    await clickOn(page.getByTestId('chat-accept'), 700);
+    await expect(page.getByTestId('chat-outcome')).toContainText('Accepted');
+    await wait(1800);
+    await gotoPage(1, 300);
     await cue('end');
     await glide(1500, 1000, 700);
-    await wait(2200);
+    await wait(1320);
     expect(readdirSync(out).some((f) => f.endsWith('.pdf'))).toBe(true);
     marks.__end = Date.now();
   } finally {

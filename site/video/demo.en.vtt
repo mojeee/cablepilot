@@ -1,77 +1,89 @@
 WEBVTT
 
 1
-00:00:00.850 --> 00:00:03.462
+00:00:00.850 --> 00:00:02.629
 Open the battery-charger sample: a complete drawing set, 25 pages.
 
 2
-00:00:03.712 --> 00:00:08.038
+00:00:02.879 --> 00:00:07.814
 The cover sheet: every sheet with its revision, issue status and the customer's approval.
 
 3
-00:00:08.288 --> 00:00:14.296
-Contents, single-line, and the PLC page with its I/O card.
-
-4
-00:00:14.546 --> 00:00:21.323
+00:00:08.064 --> 00:00:14.561
 Place a contactor coil from the library: its designation is assigned by itself.
 
-5
-00:00:21.573 --> 00:00:32.895
+4
+00:00:14.811 --> 00:00:25.434
 Place its contact: same device, and the cross-references appear on both.
 
-6
-00:00:33.145 --> 00:00:36.307
+5
+00:00:25.684 --> 00:00:28.336
 Give the device a part from the library: the BOM will know about it.
 
-7
-00:00:36.557 --> 00:00:41.275
+6
+00:00:28.586 --> 00:00:33.440
 Number the wires with your own pattern: 020L+, 021L+ ...
 
-8
-00:00:41.525 --> 00:00:44.416
+7
+00:00:33.690 --> 00:00:36.299
 The wire list follows the schematic ...
 
-9
-00:00:44.666 --> 00:00:48.121
+8
+00:00:36.549 --> 00:00:39.654
 ... and the BOM already counts the new contactor.
 
-10
-00:00:48.371 --> 00:00:54.270
+9
+00:00:39.904 --> 00:00:44.886
 Draw a wire that connects to nothing: the check banner finds it at once.
 
-11
-00:00:54.520 --> 00:00:57.115
+10
+00:00:45.136 --> 00:00:46.680
 One click on the fix, and the problem is gone.
 
-12
-00:00:57.365 --> 00:01:00.230
+11
+00:00:46.930 --> 00:00:49.194
 PLC I/O: every channel with address, tag and what it is wired to.
 
-13
-00:01:00.480 --> 00:01:09.180
+12
+00:00:49.444 --> 00:00:57.114
 Edit a tag here, export the tag list for the PLC tool.
 
-14
-00:01:09.430 --> 00:01:11.820
+13
+00:00:57.364 --> 00:00:59.310
 Export the PDF drawing set ...
 
-15
-00:01:12.070 --> 00:01:14.784
+14
+00:00:59.560 --> 00:01:02.079
 ... and every list as one XLSX workbook.
 
-16
-00:01:15.034 --> 00:01:25.943
+15
+00:01:02.329 --> 00:01:12.211
 Sizing: the motor is raised to 7.5 kW and the feeder is sized from the schematic.
 
-17
-00:01:26.193 --> 00:01:30.006
+16
+00:01:12.461 --> 00:01:15.135
 The contactor that meets the requirement and is in stock, with warehouse and location: select and confirm.
 
-18
-00:01:30.256 --> 00:01:35.254
+17
+00:01:15.385 --> 00:01:19.956
 The BOM shows the new part with on hand, available and location.
 
+18
+00:01:20.206 --> 00:01:24.999
+The CAD workspace: type L, then coordinates, and the line is drawn.
+
 19
-00:01:35.504 --> 00:01:38.795
+00:01:25.249 --> 00:01:27.696
+Object snap: the cursor locks on the end of the line and says so.
+
+20
+00:01:27.946 --> 00:01:33.636
+Place a coil: the assistant offers its contacts, as a preview with its sources.
+
+21
+00:01:33.886 --> 00:01:37.457
+Accept, and it is one undo step. (Built-in assistant; providers with your API key arrive in M7.)
+
+22
+00:01:37.707 --> 00:01:39.999
 CablePilot: free, open source, your files stay yours.

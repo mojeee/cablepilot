@@ -7,6 +7,8 @@ import type { Settings } from '@shared/settings';
 import type { FileService } from './files';
 import type { SettingsStore } from './settings';
 import type { WarehouseService } from './warehouse';
+import { statusOf, type AiProvider } from './ai/provider';
+import type { AiRequest } from '@shared/ai/types';
 
 function guard<T>(fn: () => T): Result<T> {
   try {
@@ -27,7 +29,7 @@ async function guardAsync<T>(fn: () => Promise<Result<T>>): Promise<Result<T>> {
 
 const isKind = (k: unknown): k is CompanyKind => k === 'symbols' || k === 'templates' || k === 'macros' || k === 'parts';
 
-export function registerIpc(deps: { settings: SettingsStore; files: FileService; warehouse: WarehouseService }): void {
+export function registerIpc(deps: { settings: SettingsStore; files: FileService; warehouse: WarehouseService; ai: AiProvider }): void {
   const { files } = deps;
   ipcMain.handle('app:info', (): Result<AppInfo> => guard(() => ({ name: app.getName(), version: app.getVersion(), platform: process.platform })));
   ipcMain.handle('settings:get', (): Result<Settings> => guard(() => deps.settings.get()));
@@ -60,6 +62,12 @@ export function registerIpc(deps: { settings: SettingsStore; files: FileService;
   ipcMain.handle('warehouse:refresh', () => safe(() => wh.refresh()));
   ipcMain.handle('warehouse:sample', () => safe(() => wh.sample()));
   ipcMain.handle('warehouse:watch', (_e, on: unknown) => safe(() => wh.watch(on === true)));
+  ipcMain.handle('ai:status', () => safe(() => ok(statusOf(deps.ai))));
+  ipcMain.handle('ai:ask', (_e, req: unknown) => guardAsync(async () => {
+    const r = req as Partial<AiRequest> | null;
+    if (!r || typeof r.prompt !== 'string' || !r.project || typeof r.pageId !== 'string' || !Array.isArray(r.selection)) return fail('ai.request', 'The request to the assistant is incomplete.', 'Report this on GitHub.');
+    return deps.ai.ask({ prompt: r.prompt.slice(0, 2000), lang: r.lang === 'it' ? 'it' : 'en', project: r.project, pageId: r.pageId, selection: r.selection.filter((x): x is string => typeof x === 'string') });
+  }));
   ipcMain.handle('company:list', (_e, kind: unknown) => safe(() => (isKind(kind) ? files.listCompany(kind) : fail('company.kind', 'Unknown library kind.', 'Report this on GitHub.'))));
   ipcMain.handle('company:save', (_e, kind: unknown, id: string, text: string) => safe(() => (isKind(kind) ? files.saveCompany(kind, String(id), String(text)) : fail('company.kind', 'Unknown library kind.', 'Report this on GitHub.'))));
   ipcMain.handle('company:folder', () => ok(files.companyFolder()));

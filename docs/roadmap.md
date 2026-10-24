@@ -86,15 +86,15 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 
 ## M6-CAD workspace with the AI inside (part 2 of M6)
 
-- [ ] AutoCAD arrangement and behaviour as closely as the law allows (ribbon on top, command line and status bar at the bottom, palettes at the sides, crosshair cursor, same commands, keys and prompts); only Autodesk logos, icon artwork, names and trademarks excluded
-- [ ] Ribbon with tabbed, grouped tools (Home, Insert, Wires, Reports, PLC, Layout, View)
-- [ ] Command line with history, autocomplete, the usual CAD aliases (L, PL, REC, C, M, CO, RO, MI, E, TR, EX, O, Z/ZE, U, PAN, LA, DI) and our commands; Enter/Space repeats, Esc cancels
-- [ ] Status-bar drafting aids: grid F7, ortho F8, snap F9, object snap F3 with modes, polar tracking F10; dynamic input with typed lengths, angles and relative coordinates
-- [ ] CAD selection: window and crossing, Shift to remove, grips, right-click menus with repeat
-- [ ] Layers (on/off, lock, colour, line type) mapped to the drawing styles
-- [ ] Dockable, resizable panels (pages, symbols, properties, layers, messages, AI chat); layout saved per user; full-screen canvas
-- [ ] AI chat panel docked by the canvas (project, page and selection as context); natural-language input on the command line goes to the assistant; context hints; works with the fake provider until M7
-- [ ] Tests: command-line drawing, snaps, window/crossing, saved panel layout, a chat proposal accepted and undone
+- [x] AutoCAD arrangement and behaviour as closely as the law allows (ribbon on top, command line and status bar at the bottom, palettes at the sides, crosshair cursor, same commands, keys and prompts); only Autodesk logos, icon artwork, names and trademarks excluded
+- [x] Ribbon with tabbed, grouped tools (Home, Insert, Wires, Reports, PLC, Layout, View)
+- [x] Command line with history, autocomplete, the usual CAD aliases (L, PL, REC, C, M, CO, RO, MI, E, TR, EX, O, Z/ZE, U, PAN, LA, DI) and our commands; Enter/Space repeats, Esc cancels
+- [x] Status-bar drafting aids: grid F7, ortho F8, snap F9, object snap F3 with modes, polar tracking F10; dynamic input with typed lengths, angles and relative coordinates
+- [x] CAD selection: window and crossing, Shift to remove, grips, right-click menus with repeat
+- [x] Layers (on/off, lock, colour, line type) mapped to the drawing styles
+- [x] Dockable, resizable panels (pages, symbols, properties, layers, messages, AI chat); layout saved per user; full-screen canvas
+- [x] AI chat panel docked by the canvas (project, page and selection as context); natural-language input on the command line goes to the assistant; context hints; works with the fake provider until M7
+- [x] Tests: command-line drawing, snaps, window/crossing, saved panel layout, a chat proposal accepted and undone
 
 ## M6 Cabinet layout
 

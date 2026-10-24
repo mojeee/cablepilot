@@ -276,3 +276,33 @@ One entry per milestone: what works, what is left, and anything the owner must d
 - Check the new rows of `docs/to-verify.md` against IEC 60364-5-52 (Tables B.52-14 and B.52-17, Annex G) and the
   generic breaking capacities; then set `CORRECTION_VERIFIED` and `VOLTAGE_DROP_VERIFIED` to true.
 - Try your own ERP export in the warehouse window and tell us which column layouts or encodings fail.
+
+## M6 part 2: CAD workspace with the AI inside (done)
+
+**What works**
+
+- Ribbon, command line (aliases, autocomplete, history, prompts, typed coordinates, repeat, cancel), status-bar drafting
+  aids with object snap and dynamic input, window/crossing selection, grips, context menus, layers, dockable panels
+  saved per user, full-screen canvas. Every ribbon button and dialog is also a command, and edits go through the command
+  layer (undo).
+- AI chat panel and the provider interface in `app/main/ai` with a deterministic built-in provider (contacts of a coil,
+  wire numbering, feeder sizing with `shared/sizing.ts`); proposals preview on the canvas, claims carry their source,
+  Accept is one undo step, and the panel says an API key is needed for free-form requests.
+- Tests: command parsing, aliases and routing, typed input, snapping, ortho and polar, window/crossing, trim/extend/
+  offset, grips, layers, panel layout, the built-in provider; end-to-end flows for command-line drawing with ortho, snaps,
+  window versus crossing, layers, a layout surviving a restart, and a chat proposal accepted then undone.
+
+**What is left**
+
+- TRIM, EXTEND and OFFSET work on straight two-point lines (and rectangles and circles for OFFSET); ROTATE turns by
+  multiples of 90 degrees about the selection centre; no hatching, arcs or splines; the wire tool keeps its own ortho
+  routing (it does not take typed coordinates).
+- Docking is by a dock selector in each panel header (left, right, bottom, hidden), not by dragging panels; panels in a
+  dock share the height equally unless collapsed.
+- Typed coordinates are page millimetres as the status bar shows them (y down); only angles run counter-clockwise.
+- The real providers (Claude, OpenAI, Gemini), key storage and free-form requests are M7.
+
+**What the owner must do by hand**
+
+- Try the workspace with the habits of your CAD users and tell us which command, key or prompt is missing or behaves
+  differently from what they expect.

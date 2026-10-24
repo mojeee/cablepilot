@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { t } from '@shared/i18n';
 import { TopBar } from './components/TopBar';
-import { PageNavigator } from './components/PageNavigator';
-import { SymbolBrowser } from './components/SymbolBrowser';
-import { CanvasView } from './components/CanvasView';
-import { PropertiesPanel } from './components/PropertiesPanel';
-import { MessageList } from './components/MessageList';
+import { Ribbon } from './components/Ribbon';
+import { Workspace } from './components/Workspace';
+import { CommandLine } from './components/CommandLine';
+import { StatusBar } from './components/StatusBar';
 import { PlcDialog } from './components/PlcDialog';
 import { AddPageDialog, RecoveryBanner, ShortcutsDialog } from './components/dialogs';
 import { ProjectSettingsDialog } from './components/ProjectSettings';
@@ -18,6 +17,7 @@ import { RevisionsDialog } from './components/RevisionsDialog';
 import { SizingDialog } from './components/SizingDialog';
 import { WarehouseDialog } from './components/WarehouseDialog';
 import { useEditor } from './state/editor';
+import { watchProposals } from './state/chat';
 import { listenForStockChanges, useStock } from './state/stock';
 import { useUi } from './state/ui';
 
@@ -45,6 +45,7 @@ export function App() {
     })();
   }, []);
   useEffect(() => listenForStockChanges(), []);
+  useEffect(() => watchProposals(), []);
   // Autosave: while the project has unsaved changes, write a recovery copy a few seconds after the
   // last change, and again when the window goes away. Saving clears it (state/editor.ts).
   useEffect(() => {
@@ -62,20 +63,18 @@ export function App() {
       window.removeEventListener('pagehide', onHide);
     };
   }, []);
+  const fullscreen = useUi((s) => s.fullscreen);
   return (
-    <div className="app" data-lang={language}>
-      <div>
-        <TopBar />
+    <div className={`app${fullscreen ? ' is-fullscreen' : ''}`} data-lang={language}>
+      <div className="app-top">
+        {!fullscreen && <TopBar />}
         <RecoveryBanner />
-        <ChecksBanner />
+        {!fullscreen && <ChecksBanner />}
+        {!fullscreen && <Ribbon />}
       </div>
-      <div className="workspace">
-        <PageNavigator />
-        <SymbolBrowser />
-        <CanvasView />
-        <PropertiesPanel />
-      </div>
-      <MessageList />
+      <Workspace />
+      <CommandLine />
+      <StatusBar />
       {dialog === 'settings' && <ProjectSettingsDialog />}
       {dialog === 'symbolEditor' && <SymbolEditorDialog />}
       {dialog === 'addPage' && <AddPageDialog />}

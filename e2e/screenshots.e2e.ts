@@ -5,7 +5,7 @@
 import { test } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { expect, launch } from './app';
+import { expect, launch, tab } from './app';
 
 const out = join(__dirname, '..', 'site', 'img');
 test.skip(!!process.env.CI || !process.env.CP_SCREENSHOTS, 'run with npm run screenshots (not in CI)');
@@ -46,6 +46,7 @@ test('screenshots of the sample projects, dark and light', async () => {
     await canvas().screenshot({ path: join(out, 'feat-schematic.png') });
     await goto('Relè di allarme');
     await canvas().screenshot({ path: join(out, 'feat-devices.png') });
+    await tab(page, 'reports');
     await page.getByTestId('reports').click();
     await page.getByTestId('report-wires').click();
     await page.getByRole('dialog').screenshot({ path: join(out, 'feat-reports.png') });
@@ -68,20 +69,25 @@ test('screenshots of the sample projects, dark and light', async () => {
     await page.mouse.click(at.x, at.y + 36);
     await page.getByTestId('prop-designation').fill('-KM1');
     await page.getByTestId('prop-designation').blur();
+    await tab(page, 'reports');
     await page.getByTestId('settings').click();
     await page.getByTestId('installation-method').selectOption('A1');
     await page.getByTestId('supply-ambient').selectOption('45');
     await page.keyboard.press('Escape');
     await expect(page.getByTestId('checks-banner')).toBeVisible();
     await goto('Motor power circuit');
-    await page.evaluate(() => document.documentElement.style.setProperty('--messages-h', '230px'));
+    // A taller message list for this shot: the bottom dock grows with the arrow keys on its splitter.
+    await page.getByTestId('split-bottom').focus();
+    for (let i = 0; i < 4; i++) await page.keyboard.press('ArrowUp');
     await page.waitForTimeout(500);
     await page.screenshot({ path: join(out, 'feat-checks.png') });
-    await page.evaluate(() => document.documentElement.style.removeProperty('--messages-h'));
+    await page.getByTestId('tab-view').click();
+    await page.getByTestId('rb-reset-layout').click();
 
     // The PLC I/O overview of the conveyor sample's rack.
     await open('conveyor');
     await theme('dark', 'dark');
+    await tab(page, 'plc');
     await page.getByTestId('plc').click();
     await expect(page.getByTestId('plc-table')).toBeVisible();
     // The top of the window, in the 12:7 shape of the other feature images.
@@ -93,6 +99,7 @@ test('screenshots of the sample projects, dark and light', async () => {
     // table proposes a contactor and an overload relay from stock, and the suggestion panel of the contactor is open.
     await open('conveyor');
     await theme('dark', 'dark');
+    await tab(page, 'reports');
     await page.getByTestId('warehouse').click();
     await page.getByTestId('wh-sample').click();
     await expect(page.getByTestId('wh-table')).toBeVisible();
@@ -111,6 +118,33 @@ test('screenshots of the sample projects, dark and light', async () => {
     const sb = (await page.getByRole('dialog').boundingBox())!;
     await page.screenshot({ path: join(out, 'feat-sizing.png'), clip: { x: sb.x, y: sb.y, width: sb.width, height: Math.min(sb.height, Math.round((sb.width * 7) / 12)) } });
     await page.keyboard.press('Escape');
+
+    // The CAD workspace: a typed line, a coil placed, and the assistant's proposal for its contacts, still a preview.
+    await open('conveyor');
+    await theme('dark', 'dark');
+    await goto('Control circuit');
+    await page.getByTestId('tab-home').click();
+    await page.getByTestId('panel-toggle-properties').click(); // room for the chat
+    await page.keyboard.press('f');
+    const cmdLine = page.getByTestId('cmd-input');
+    await cmdLine.click();
+    await cmdLine.fill('L');
+    await cmdLine.press('Enter');
+    for (const t of ['20,30', '@70,0']) {
+      await cmdLine.fill(t);
+      await cmdLine.press('Enter');
+    }
+    await cmdLine.press('Enter');
+    const wb = (await canvas().boundingBox())!;
+    await page.getByTestId('symbol-coil').click();
+    await page.mouse.click(wb.x + wb.width * 0.8, wb.y + wb.height * 0.62);
+    await page.keyboard.press('Escape');
+    await page.getByTestId('ai-hint-ask').click();
+    await expect(page.getByTestId('chat-proposal')).toBeVisible();
+    await page.mouse.move(wb.x + wb.width * 0.35, wb.y + wb.height * 0.4);
+    await page.waitForTimeout(500);
+    await page.screenshot({ path: join(out, 'feat-workspace.png') });
+    await page.getByTestId('panel-toggle-properties').click();
 
     // The drawing set: pages as they print (white), from the charger sample.
     await open('dc-charger');

@@ -18,6 +18,7 @@ import { reportPrims } from './report';
 import { coverPrims } from './cover';
 import { pageRevision } from '../revisions';
 import { pageNets } from '../connectivity';
+import { applyLayer, layerLookup } from '../layers';
 import { bundleLabel, colourHex, STRIPE_HEX, wireSpec } from '../wires';
 
 export interface FrameRect {
@@ -354,6 +355,7 @@ function elementPrims(el: El, project: Project, page: Page, lib: Library, pins: 
       if (el.label) out.push({ k: 'text', x: el.x + 1.5, y: ty, text: el.label, size: 2.8, anchor: 'start', rot: 0, c: st.colours.text, id: el.id });
       return out;
     }
+    case 'circle': return [{ k: 'circle', cx: el.x, cy: el.y, r: el.r, w: st.weights.annotation, c: st.colours.annotation, dash: el.dashed, id: el.id }];
     case 'table': return tablePrims(el, st.colours.annotation, st.weights.annotation, el.id);
     case 'image': return [{ k: 'image', x: el.x, y: el.y, w: el.w, h: el.h, assetId: el.assetId, id: el.id }];
     case 'warning': return warningPrims(el.sign, el.x, el.y, el.size, st.colours.annotation, el.id);
@@ -400,8 +402,11 @@ export function buildPage(project: Project, page: Page, libIn: Library, index: n
   const xref: XrefCtx = { idx: deviceIndex(project, libIn), page: page.id, lib: libIn };
   const netPot = new Map<string, string | undefined>();
   if (project.settings.wireColours) for (const n of pageNets(project, page, libIn)) for (const w of n.wires) netPot.set(w, n.potential);
+  const layerOfEl = layerLookup(project);
   for (const el of page.elements) {
-    const ps = elementPrims(el, project, page, lib, pins, xref, netPot);
+    const layer = layerOfEl(el);
+    if (!layer.on) continue;
+    const ps = applyLayer(elementPrims(el, project, page, lib, pins, xref, netPot), layer);
     prims.push(...ps);
     const box = unionBox(ps.map(primBox));
     if (box) items.push({ id: el.id, box: box as Box });

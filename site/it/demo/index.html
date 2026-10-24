@@ -60,6 +60,7 @@
             <li><a href="#step-5"><span>05</span> Panoramica I/O del PLC ed elenco dei simboli</a></li>
             <li><a href="#step-6"><span>06</span> PDF e XLSX</a></li>
             <li><a href="#step-7"><span>07</span> Dimensionamento dallo schema, articoli dal magazzino</a></li>
+            <li><a href="#step-8"><span>08</span> L’area di lavoro CAD e l’assistente</a></li>
           </ol>
         </div>
       </section>
@@ -129,9 +130,19 @@
           <h2 id="step-7-h"><span class="label">Passo 7</span> Dimensionamento dallo schema, articoli dal magazzino</h2>
           <p>Apri il campione del nastro trasportatore, apri <strong>Magazzino</strong> e carica la lista di magazzino di esempio (la tua arriva da un’esportazione CSV o XLSX del sistema di magazzino, tramite un’associazione delle colonne salvata per la tua azienda). Seleziona il motore nella pagina di potenza e porta la potenza nominale a 7,5 kW nel pannello Proprietà: la corrente di impiego viene ricalcolata. <strong>Dimensiona questa linea</strong> elenca interruttore, contattore, relè termico, cavo e fili trovati nello schema, ciascuno con il suo requisito. Il contattore non lo soddisfa più: apri i suoi suggerimenti per vedere il requisito, le ipotesi e gli articoli che lo soddisfano, in ordine di disponibilità a magazzino per questo progetto, con magazzino, ubicazione e quantità disponibile (giacenza, meno il riservato, meno ciò che il progetto già usa). Seleziona l’articolo disponibile e conferma: la distinta mostra il nuovo articolo con giacenza e quantità disponibile.</p>
           <p>- Il dimensionamento è calcolato dai dati del progetto e dichiara le sue ipotesi; i valori di tabella non ancora   verificati sulla norma sono segnalati e nessun risultato sostituisce la verifica del progettista. - Confermare una riga è un solo passo di annullamento, e <strong>Accetta tutte le proposte</strong> lo è per l’intero progetto.</p>
-          <p>Il video finisce sulla copertina del campione del nastro trasportatore.</p>
           </div>
           <figure class="step-shot"><img src="/img/demo-7.png" alt="La finestra di dimensionamento del campione nastro trasportatore con la riga del contattore aperta: il requisito, le sue ipotesi e gli articoli che lo soddisfano, in ordine di disponibilità a magazzino per il progetto." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step alt" id="step-8" aria-labelledby="step-8-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-8-h"><span class="label">Passo 8</span> L’area di lavoro CAD e l’assistente</h2>
+          <p>In una pagina del nastro trasportatore di esempio, fai clic sulla riga di comando e scrivi <code>L</code>, premi Invio, poi scrivi <code>30,40</code> e <code>@60,0</code> (Invio dopo ciascuno) e ancora Invio: la linea viene disegnata da coordinate scritte. Scrivi di nuovo <code>L</code> e avvicina il cursore all’estremità di quella linea: si aggancia e la barra di stato nomina lo snap (snap a oggetto, F3). Poi inserisci una bobina dall’elenco dei simboli: l’app propone «Aggiungere i contatti di -K1?». Chiedi: l’assistente integrato risponde nel pannello chat con un’anteprima evidenziata sul disegno e una fonte per ogni affermazione (questo progetto, oppure «suggerimento» dove propone un numero). <strong>Accetta</strong> inserisce i contatti in un solo passo di annullamento.</p>
+          <p>- La barra multifunzione, la riga di comando (alias come <code>L</code>, <code>PL</code>, <code>REC</code>, <code>M</code>, <code>CO</code>, <code>TR</code>, <code>Z</code>), gli ausili nella barra di stato   (griglia F7, orto F8, snap F9, snap a oggetto F3, polare F10), i livelli e i pannelli ancorabili sono tutti nell’app. - Fino a M7 la chat usa un provider integrato che capisce poche richieste e dice che le richieste libere richiedono una chiave   API; l’app è pienamente utilizzabile anche senza.</p>
+          <p>Il video finisce sulla copertina del campione del nastro trasportatore.</p>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-8.png" alt="Il nastro trasportatore di esempio dopo Accetta: i contatti della nuova bobina inseriti, la riga di comando sotto e il pannello chat con la proposta accettata e le sue fonti." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="band dark try" aria-labelledby="try-h">

@@ -51,6 +51,9 @@ export interface DrawOpts {
   /** Ids drawn highlighted. */
   selected?: Set<string>;
   highlight: string;
+  /** Ids an assistant proposal adds or changes: drawn in their own colour, dashed box around them. */
+  proposed?: Set<string>;
+  proposedColour?: string;
 }
 
 function drawPrim(ctx: CanvasRenderingContext2D, p: Prim, o: DrawOpts, colour: string): void {
@@ -126,6 +129,14 @@ export function drawBuilt(ctx: CanvasRenderingContext2D, built: Built, o: DrawOp
     ctx.lineWidth = 1 / k;
     ctx.strokeStyle = o.highlight;
     for (const it of built.items) if (o.selected.has(it.id)) ctx.strokeRect(it.box[0] - 1, it.box[1] - 1, it.box[2] - it.box[0] + 2, it.box[3] - it.box[1] + 2);
+  }
+  if (o.proposed && o.proposed.size) {
+    const c = o.proposedColour ?? '#52c98b';
+    for (const p of built.prims) if (p.id && o.proposed.has(p.id)) drawPrim(ctx, { ...p, w: 'w' in p ? p.w + 0.6 / k : 0 } as Prim, o, c);
+    ctx.setLineDash([2 / k, 2 / k]);
+    ctx.lineWidth = 1.2 / k;
+    ctx.strokeStyle = c;
+    for (const it of built.items) if (o.proposed.has(it.id)) ctx.strokeRect(it.box[0] - 1.5, it.box[1] - 1.5, it.box[2] - it.box[0] + 3, it.box[3] - it.box[1] + 3);
   }
   ctx.restore();
 }

@@ -2,6 +2,29 @@
 
 ## Unreleased
 
+### M6 part 2: CAD workspace with the AI inside
+
+- A CAD-style workspace: ribbon (Home, Insert, Wires, Reports, PLC, Layout, View; grouped tools with our own icons,
+  collapsible), crosshair cursor with pickbox, command line and status bar at the bottom, panels at the sides.
+- Command line: history (arrow keys), autocomplete (Tab), prompts with [options], Enter or Space repeats the last
+  command, Esc cancels, typed points (`x,y`, `@dx,dy`, `@d<a`, direct distance). Aliases L, PL, REC, C, M, CO, RO, MI,
+  E, TR, EX, O, Z, ZE, U, PAN, LA, DI plus INSERT, WIRE, NUMBER, REPORT, CHECK, SIZE and one command for every ribbon
+  button and dialog. Every edit goes through the command layer, so it undoes. A circle element was added to the model.
+- Drafting aids in the status bar: grid F7, ortho F8, grid snap F9, object snap F3 with endpoint, midpoint, connection
+  point, intersection, perpendicular and nearest and a snap marker, polar tracking F10, dynamic input next to the cursor.
+- Selection like CAD: window (left to right) and crossing (right to left), Shift removes, grips to stretch and move,
+  right-click menu with "Repeat <command>".
+- Layers (on/off, lock, colour, line type) mapped to the drawing-style groups, user layers, layer palette; the layer
+  state is saved in the project (optional `layers`, file format unchanged).
+- Dockable, resizable panels (pages, symbols, properties, layers, messages, AI chat), layout saved per user in the
+  settings of the main process, reset layout, full-screen canvas (Ctrl+0).
+- AI chat panel with the project, page and selection as context, natural-language input on the command line, proposals
+  as a highlighted preview with Accept / Reject (one undo step), a source on every claim, context hints (a placed coil
+  offers its contacts). Provider interface and a deterministic built-in provider in the main process ("add contacts for
+  -K1", "number the wires on this page", "size the feeder of -M1"); free-form requests say that an API key is needed (M7).
+- Website: feature block "A familiar CAD workspace, with the chat inside", an eighth demo step, refreshed screenshots
+  and recording (the AI wording still follows the M7 gate).
+
 ### M6 part 1: Sizing and warehouse
 
 - Load and feeder data on devices (motor power, current, cos phi, efficiency, starter, breaker curve, load current,

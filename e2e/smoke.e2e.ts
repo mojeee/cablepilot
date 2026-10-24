@@ -4,7 +4,7 @@ import { test } from '@playwright/test';
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { PDFDict, PDFDocument, PDFName } from 'pdf-lib';
-import { expect, launch } from './app';
+import { expect, launch, tab } from './app';
 
 interface SavedProject {
   pages: { type: string; elements: { kind: string; designation?: string }[] }[];
@@ -124,6 +124,7 @@ test('the sample projects open', async () => {
 test('project settings: drawing language and zone labels are saved in the project', async () => {
   const { page, out, close } = await launch();
   try {
+    await tab(page, 'reports');
     await page.getByTestId('settings').click();
     await page.getByTestId('drawing-language').selectOption('it');
     await page.getByTestId('tab-frame').click();
@@ -218,6 +219,7 @@ test('a device with a coil and a contact shows its cross-references, takes a par
     await page.getByTestId('part-add').click();
     await expect(page.getByTestId('device-parts')).toContainText('GEN-CONTACTOR-9A');
     // The BOM lists the device once, with the part code and the quantity.
+    await tab(page, 'reports');
     await page.getByTestId('bom').click();
     const table = page.getByTestId('bom-table');
     await expect(table).toContainText('-K1');
@@ -243,6 +245,7 @@ test('M3: number the wires, view the terminal diagram, export the PDF set and th
     await expect(page.getByTestId('project-name')).toContainText('Caricabatterie');
 
     // Number the wires: switch to the sequential scheme, number now, and see plain counters in the saved file.
+    await tab(page, 'wires');
     await page.getByTestId('wires').click();
     await page.getByTestId('num-scheme').selectOption('sequential');
     await page.getByTestId('wires-number-now').click();
@@ -261,6 +264,7 @@ test('M3: number the wires, view the terminal diagram, export the PDF set and th
     expect(again.pages.flatMap((p) => p.elements).some((e) => e.kind === 'wire' && /L\+$/.test(e.number ?? ''))).toBe(true);
 
     // The terminal diagram: destination, wire, terminal, function text and part of strip -X1 (Italian, the drawing language).
+    await tab(page, 'reports');
     await page.getByTestId('reports').click();
     await page.getByTestId('report-terminals').click();
     const table = page.getByTestId('report-table');
@@ -340,6 +344,7 @@ test('M4: issue a revision, see the changed page, compare, and read the cover sh
     // The power page and the lists that print from it (BOM, nameplates...) changed.
     await expect(page.getByTestId('page-changed').first()).toBeVisible();
     expect(await page.getByTestId('page-changed').count()).toBeGreaterThanOrEqual(2);
+    await tab(page, 'reports');
     await page.getByTestId('revisions').click();
     await expect(page.getByTestId('changed-pages')).toContainText('changed');
     await page.getByTestId('issue-status').selectOption('construction');
@@ -349,6 +354,7 @@ test('M4: issue a revision, see the changed page, compare, and read the cover sh
     await expect(page.getByRole('region', { name: 'Messages' })).toContainText('Revision 1 issued');
     await expect(page.getByTestId('page-changed')).toHaveCount(0);
     // The window lists both revisions and compares them: the changed page is highlighted.
+    await tab(page, 'reports');
     await page.getByTestId('revisions').click();
     await expect(page.getByTestId('revision-table').locator('tbody tr')).toHaveCount(2);
     await page.getByTestId('cmp-from').selectOption('0');
@@ -374,6 +380,7 @@ test('M5: assign an address in the PLC overview, export a tag list, import tags 
   try {
     await page.getByTestId('samples').selectOption('conveyor');
     await expect(page.getByTestId('checks-banner')).toHaveCount(0);
+    await tab(page, 'plc');
     await page.getByTestId('plc').click();
     const table = page.getByTestId('plc-table');
     await expect(table.locator('tbody tr')).toHaveCount(16);
@@ -405,6 +412,7 @@ test('M5: assign an address in the PLC overview, export a tag list, import tags 
     // The address change from above is still there; both edits are undoable steps.
     await page.keyboard.press('Escape');
     await page.getByTestId('undo').click();
+    await tab(page, 'plc');
     await page.getByTestId('plc').click();
     await expect(page.getByTestId('plc-tag-1')).toHaveValue('S1_Start');
     await expect(page.getByTestId('plc-address-0')).toHaveValue('I1.0');
@@ -430,6 +438,7 @@ test('M6: import stock, size a motor feeder, confirm, and see the BOM quantities
       'GEN-MCB-3P-C16A;MCB C16;60;10;A-01-02;Centrale;pz',
       'LABEL-ROLL-WHITE;Rotolo etichette;12;0;E-01-01;Centrale;pz',
     ].join('\n'));
+    await tab(page, 'reports');
     await page.getByTestId('warehouse').click();
     await page.getByTestId('wh-pick-file').click();
     await expect(page.getByTestId('wh-wizard')).toBeVisible();
@@ -474,6 +483,7 @@ test('M6: import stock, size a motor feeder, confirm, and see the BOM quantities
 
     // The BOM follows, with the stock columns: 18 on hand, 4 reserved, the project uses 1.
     await page.keyboard.press('Escape');
+    await tab(page, 'reports');
     await page.getByTestId('bom').click();
     const bom = page.getByTestId('bom-table');
     const row = bom.locator('tbody tr', { hasText: 'GEN-CONTACTOR-18A' });
@@ -496,12 +506,14 @@ test('M6: import stock, size a motor feeder, confirm, and see the BOM quantities
 
     // Undo takes the contactor back in one step; "size the whole project" accepts everything in one step.
     await page.getByTestId('bom-units').count();
+    await tab(page, 'reports');
     await page.getByTestId('sizing').click();
     await expect(page.getByTestId('sizing-feeder')).toHaveCount(1);
     await expect(km).toHaveAttribute('data-status', 'ok');
     await page.keyboard.press('Escape');
     await page.getByTestId('undo').click(); // units back to 1
     await page.getByTestId('undo').click(); // the contactor assignment
+    await tab(page, 'reports');
     await page.getByTestId('sizing').click();
     await expect(km).toHaveAttribute('data-status', 'change');
     await expect(page.getByTestId('sizing-accept-all')).toContainText('(2)');
@@ -509,11 +521,13 @@ test('M6: import stock, size a motor feeder, confirm, and see the BOM quantities
     await expect(page.locator('[data-testid="sizing-line"][data-status="change"]')).toHaveCount(0);
     await page.keyboard.press('Escape');
     await page.getByTestId('undo').click();
+    await tab(page, 'reports');
     await page.getByTestId('sizing').click();
     await expect(page.locator('[data-testid="sizing-line"][data-status="change"]')).toHaveCount(2);
     await page.keyboard.press('Escape');
 
     // An old stock list is flagged in the message list.
+    await tab(page, 'reports');
     await page.getByTestId('warehouse').click();
     await page.getByTestId('wh-date').fill('2026-01-01');
     await expect(page.getByTestId('wh-stale')).toBeVisible();

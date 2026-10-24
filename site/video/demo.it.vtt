@@ -1,77 +1,89 @@
 WEBVTT
 
 1
-00:00:00.850 --> 00:00:03.462
+00:00:00.850 --> 00:00:02.629
 Apri il caricabatterie di esempio: un set di disegni completo, 25 pagine.
 
 2
-00:00:03.712 --> 00:00:08.038
+00:00:02.879 --> 00:00:07.814
 La copertina: ogni foglio con la sua revisione, lo stato di emissione e l'approvazione del cliente.
 
 3
-00:00:08.288 --> 00:00:14.296
-Indice, unifilare e la pagina PLC con la sua scheda I/O.
-
-4
-00:00:14.546 --> 00:00:21.323
+00:00:08.064 --> 00:00:14.561
 Inserisci una bobina di contattore dalla libreria: la designazione è assegnata da sola.
 
-5
-00:00:21.573 --> 00:00:32.895
+4
+00:00:14.811 --> 00:00:25.434
 Inserisci il suo contatto: stesso dispositivo, e i riferimenti incrociati compaiono su entrambi.
 
-6
-00:00:33.145 --> 00:00:36.307
+5
+00:00:25.684 --> 00:00:28.336
 Assegna al dispositivo un articolo dalla libreria: la distinta lo conterà.
 
-7
-00:00:36.557 --> 00:00:41.275
+6
+00:00:28.586 --> 00:00:33.440
 Numera i fili con il tuo schema: 020L+, 021L+ ...
 
-8
-00:00:41.525 --> 00:00:44.416
+7
+00:00:33.690 --> 00:00:36.299
 L'elenco fili segue lo schema ...
 
-9
-00:00:44.666 --> 00:00:48.121
+8
+00:00:36.549 --> 00:00:39.654
 ... e la distinta conta già il nuovo contattore.
 
-10
-00:00:48.371 --> 00:00:54.270
+9
+00:00:39.904 --> 00:00:44.886
 Disegna un filo che non collega nulla: il banner dei controlli lo trova subito.
 
-11
-00:00:54.520 --> 00:00:57.115
+10
+00:00:45.136 --> 00:00:46.680
 Un clic sulla correzione e il problema sparisce.
 
-12
-00:00:57.365 --> 00:01:00.230
+11
+00:00:46.930 --> 00:00:49.194
 I/O PLC: ogni canale con indirizzo, simbolo e a cosa è collegato.
 
-13
-00:01:00.480 --> 00:01:09.180
+12
+00:00:49.444 --> 00:00:57.114
 Modifica un simbolo qui ed esporta l'elenco per lo strumento del PLC.
 
-14
-00:01:09.430 --> 00:01:11.820
+13
+00:00:57.364 --> 00:00:59.310
 Esporta il set di disegni in PDF ...
 
-15
-00:01:12.070 --> 00:01:14.784
+14
+00:00:59.560 --> 00:01:02.079
 ... e tutti gli elenchi in un'unica cartella XLSX.
 
-16
-00:01:15.034 --> 00:01:25.943
+15
+00:01:02.329 --> 00:01:12.211
 Dimensionamento: il motore passa a 7,5 kW e la linea è dimensionata dallo schema.
 
-17
-00:01:26.193 --> 00:01:30.006
+16
+00:01:12.461 --> 00:01:15.135
 Il contattore che soddisfa il requisito ed è a magazzino, con magazzino e ubicazione: seleziona e conferma.
 
-18
-00:01:30.256 --> 00:01:35.254
+17
+00:01:15.385 --> 00:01:19.956
 La distinta mostra il nuovo articolo con giacenza, disponibile e ubicazione.
 
+18
+00:01:20.206 --> 00:01:24.999
+L'area di lavoro CAD: scrivi L, poi le coordinate, e la linea è disegnata.
+
 19
-00:01:35.504 --> 00:01:38.795
+00:01:25.249 --> 00:01:27.696
+Snap a oggetto: il cursore si aggancia all'estremità della linea e lo dice.
+
+20
+00:01:27.946 --> 00:01:33.636
+Inserisci una bobina: l'assistente propone i suoi contatti, in anteprima e con le fonti.
+
+21
+00:01:33.886 --> 00:01:37.457
+Accetta, ed è un solo passo di annullamento. (Assistente integrato; i provider con la tua chiave API arrivano con M7.)
+
+22
+00:01:37.707 --> 00:01:39.999
 CablePilot: libero, open source, i tuoi file restano tuoi.

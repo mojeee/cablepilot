@@ -31,3 +31,8 @@ export async function launch(opts: { profile?: string; env?: Record<string, stri
 }
 
 export { expect };
+
+/** Opens a ribbon tab (home, insert, wires, reports, plc, layout, view): the tool buttons live on the active tab. */
+export async function tab(page: Page, id: string): Promise<void> {
+  await page.getByTestId(`tab-${id}`).click();
+}
