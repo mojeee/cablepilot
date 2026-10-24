@@ -29,7 +29,8 @@ It is built in two phases.
   - reports generated live from the schematic: terminal diagrams, cable lists, wire lists, PLC I/O
     lists, BOM;
   - a cabinet layout to scale in 2D, with a 3D view;
-  - PDF drawing sets and exports for the workshop.
+  - PDF drawing sets and exports for the workshop, in the company's own frame and title block, with
+    revisions and a cover sheet the customer signs off (rule 11).
 - **Phase 2, electronics:**
   - schematic capture for circuits and a 3D board view;
   - interoperate with KiCad's open file formats first (import and export) rather than build a full PCB
@@ -51,6 +52,9 @@ formats (EPLAN, AutoCAD Electrical project files).
    - Electrical equipment of machines: IEC 60204-1 (conductor colours, protective bonding).
    - Cable current-carrying capacity: IEC 60364-5-52.
    - Assemblies, where relevant: IEC 61439.
+   - Conductor identification by colour and alphanumeric code: IEC 60445; colour abbreviations
+     (BK, BU, RD, GY, OG, GNYE…): IEC 60757.
+   - Drawing sheets and title blocks: ISO 5457 and ISO 7200; lettering: ISO 3098.
    - North America, as an option: NFPA 79 and ANSI/IEEE symbols.
 
    Every rule and every table value in code cites its standard and clause in a comment. Never invent a
@@ -85,11 +89,19 @@ formats (EPLAN, AutoCAD Electrical project files).
 8. **Professional, still clear.** Keyboard-first, with the shortcuts electrical CAD users expect. Errors
    in plain language. English and Italian from day one.
 9. **Device data, legally.** Generic parts ship with the app (contactors, relays, MCBs, motor
-   protection, terminals, PLC I/O cards, cables, enclosures), with dimensions and electrical data and
-   their sources. Users import manufacturer data from files they are licensed to use. We never scrape or
+   protection, terminals, PLC I/O cards, cables, enclosures, and for DC and power-electronics panels:
+   batteries, diodes, rectifier and inverter modules, DC/DC converters, hall-effect current sensors, EMI
+   filters, transformers with vector group, phase-monitoring relays, HMI panels, network switches, RJ45
+   sockets), with dimensions and electrical data and their sources. Users import manufacturer data from files they are licensed to use. We never scrape or
    ship manufacturer catalogues without permission.
 10. **Demo mode.** Sample projects ship with the app, for example a conveyor with a motor starter and a
     PLC, and a pump-station panel, so every feature can be shown and tested without user files.
+11. **Production-ready drawing sets.** A finished project must print as a complete set that a workshop
+    builds from and a customer signs off, with nothing drawn by hand afterwards: cover sheet with sheet
+    index and revision status, project data sheets, legends, single-line and multi-line diagrams,
+    terminal and cable pages, nameplates, a dimensioned cabinet layout and a BOM, all in the company's
+    own frame, title block and drawing style. `docs/reference-drawing-check.md` lists what a real set
+    of this kind contains; every row must be possible before release 1.
 
 ## Stack
 
@@ -141,31 +153,75 @@ work, there is a CHANGELOG entry, and one commit.
 - **M1 Schematic editor:**
   - a project with pages of different types: cover, contents, power, control, PLC, terminals, cables,
     layout;
-  - a page frame with column and row zones and an IEC title block;
+  - single-line (overview) pages, with n-conductor tick marks on lines, next to the multi-line pages;
+  - project data pages: forms laid out on a page (text fields, tick boxes, tables) filled from project
+    and assembly properties, e.g. rated voltages, Icw, IP degree, form of segregation (IEC 61439);
+  - page frames with column and row zones; zone labels configurable (e.g. skip I and O), sheet sizes
+    A4–A0 per ISO 5457;
+  - company templates, stored as data in the project and reusable across projects: frame, title block
+    (logo image, drawing number, order number, client, product, sheet title, drawn / checked /
+    approved, issue date, sheet / next sheet / total, revision), margin text such as a copyright notice;
+    fields fill in automatically from project and page properties;
+  - drawing styles: colours per element type (e.g. designations and wire numbers in red), line weights,
+    fonts; print preview always on white;
+  - drawing language: a project setting separate from the UI language, used for report headers, legends
+    and title-block labels; device and function texts can hold English and Italian;
   - an IEC 60617 symbol library as data: graphics, connection points, function type;
+  - an in-app symbol editor, so companies draw their own symbols and save them to a company library
+    (still plain data files, checked by the same validation script);
   - place, move, rotate and mirror;
   - orthogonal wires with auto-connect and junctions;
-  - potentials (L1/L2/L3/N/PE, 24 V DC, 0 V);
-  - IEC 81346 designations with automatic numbering;
+  - potentials (L1/L2/L3/N/PE, L+/L−, 24 V DC, 0 V, 110 V DC);
+  - IEC 81346 designations with automatic numbering, including location (+DS, +MO…);
+  - free annotation: text (rotated, multi-line), lines, rectangles, dashed outlines, tables, images
+    (PNG, JPEG, SVG) such as device photos, and our own warning-sign graphics;
   - undo, save, PDF export of pages.
 - **M2 Devices and cross-references:**
   - a device is one or more symbols (coil and contacts, multi-pole breakers), with main and auxiliary
     functions;
-  - contact images under coils;
-  - cross-references as page.column;
-  - interruption points between pages;
-  - black boxes;
-  - parts assigned from the library;
-  - BOM.
+  - one device, several representations: the same -QF1 on a single-line page and on a multi-line page
+    is one device, counted once in the BOM and cross-referenced both ways;
+  - contact images under coils, with an optional note on the shown state (e.g. "contacts shown with
+    relay in alarm");
+  - cross-references with a configurable format: page.column, or page-column-row like `08-E3`;
+  - interruption points between pages, carrying a signal or potential name (e.g. IOUT, REF−);
+  - black boxes, and connectors and plugs with numbered, named pins (board headers, plug/socket pairs),
+    shown as pin-level connection points;
+  - nested assemblies: a device mounted on or inside another (a contactor on a switching plate, sensors
+    in a block), drawn with a dashed outline and grouped in the BOM;
+  - macros: a group of symbols, black boxes and wires saved to the company library and placed again in
+    other projects (e.g. a company's standard boards);
+  - parts assigned from the library; several parts per device (a module plus its capacitors), and
+    project-level parts with no designation (mounting plate, wiring kit);
+  - BOM with configurable columns: designation, position (page-column), quantity, part code,
+    description, manufacturer, user fields such as make-or-buy type and notes; quantity multiplied by
+    the number of units to build.
 - **M3 Wires and reports:**
-  - automatic wire numbering (potential-based, page-column or sequential);
+  - automatic wire numbering (potential-based, page-column or sequential), with a configurable pattern
+    such as counter plus potential suffix (`020L+`, `005U`, `030FL`);
+  - wire types (e.g. a single-core type with its cross-section and colour) and a company wire-class table
+    (function → colour, cross-section, type, suffix); conductors drawn in their colour on the canvas;
+    one label for a bundle of wires ("10 mm² BK");
   - terminals and terminal strips, generated from the schematic;
-  - cables with cores;
-  - reports, all live: terminal diagrams, cable list, wire list (from, to, cross-section, colour),
-    BOM, contents;
-  - exports: PDF drawing set, CSV and XLSX, wire-marker lists;
+  - cables with cores, including core colours (WH/YE/GN/BN), flat ribbon cables and patch cables
+    (RJ45) between connectors;
+  - reports, all live: terminal diagrams (destination, function text, terminal part, strip length),
+    cable list, wire list (from, to, cross-section, colour, type), connector pin lists, BOM, contents;
+  - generated pages: symbol legend (only the symbols the project uses), conductor colour and wire-suffix
+    tables, tightening-torque table for the terminals used (from library data, with sources);
+  - nameplates: label text per device (e.g. "-QF1 / AC input / auxiliary supply"), drawn on a page and
+    exported as a list;
+  - exports: PDF drawing set, CSV and XLSX, wire-marker, terminal-marker and nameplate lists;
   - DXF import and export of pages.
-- **M4 Checks:** the electrical rule check (rule 5), with the warnings banner and one-click fixes.
+- **M4 Checks and revisions:**
+  - the electrical rule check (rule 5), with the warnings banner and one-click fixes;
+  - issue status of the set: for proposal, for approval, for construction, as built;
+  - issue a revision (number, date, description, drawn / checked / approved); the app works out which
+    pages changed since the last issued revision;
+  - a generated cover sheet: sheet index with the revision of every sheet, the revision list, the issue
+    status and a customer approval and signature block;
+  - compare two revisions: changed pages highlighted, and a list of added, removed and changed devices,
+    wires and parts.
 - **M5 PLC:**
   - PLC racks and I/O cards as devices;
   - an I/O assignment overview;
@@ -173,7 +229,10 @@ work, there is a CHANGELOG entry, and one commit.
     against the vendor documentation before you ship it, and cite that documentation in the code.
 - **M6 Cabinet layout:**
   - enclosure and mounting plate from the library, DIN rails and wire ducts;
-  - devices placed from the BOM at real size, in a 2D front view to scale;
+  - devices placed from the BOM at real size, in a 2D front view to scale; a device's outline can come
+    from the library or from an imported DXF, SVG or image;
+  - a side view showing device depths;
+  - dimension lines, notes, hatched no-mount zones, covers, door-mounted devices;
   - a 3D view of the cabinet;
   - duct fill rate;
   - wire lengths estimated along the ducts;
@@ -194,7 +253,8 @@ work, there is a CHANGELOG entry, and one commit.
   - the website (below), with screenshots from the real app;
   - docs: getting started, the project file format, how numbering works;
   - end-to-end tests of every main workflow;
-  - a launch checklist.
+  - a launch checklist, which includes printing the DC battery-charger sample as a full drawing set and
+    ticking every row of `docs/reference-drawing-check.md`.
 - **M9 and later, phase 2 electronics:**
   - electronic schematic capture with IEC and ANSI symbols, nets and an electronics ERC;
   - KiCad schematic, symbol and footprint import and export;
@@ -202,23 +262,88 @@ work, there is a CHANGELOG entry, and one commit.
   - BOM.
 
   Decide on PCB layout together with me after M9.
+- **After release 1, decide with me:** importing an existing drawing set (PDF or DXF made in another
+  tool) as an editable, connected project, e.g. with AI recognising symbols, designations and wires
+  and proposing the result as a preview. Until then a DXF page can be imported as plain graphics.
 
 ## Website (generated from the repo into /site, static, English and Italian)
 
-- **Landing page for electrical design companies:**
-  - what the app does, in one sentence;
-  - real screenshots and a short clip ("draw the schematic once; terminals, cables, BOM and cabinet
-    follow");
-  - "free and open source, runs on your computer, your files stay yours";
-  - export formats;
-  - download buttons per OS;
-  - an honest comparison with the tools they know, with no claim we cannot back.
-- **"For companies" page:** support, training and custom features, with a contact link.
-- **Also:** docs, changelog, GitHub link.
-- **SEO pages generated from the library:** one page per IEC symbol and device type, plus short guides
-  (IEC 81346 designations explained, wire numbering schemes, choosing a cable cross-section, with
-  sources).
-- **Performance and privacy:** fast pages, no tracking without consent.
+Build it the way MechPilot (`mojeee/mechpilot`) builds its site: read its `docs/website.md`,
+`scripts/build-site.mjs`, `scripts/check-site.mjs`, `scripts/site/` and `e2e/screenshots.e2e.ts` as
+the reference, and write CablePilot's own `docs/website.md` in the same shape. Do not copy its texts.
+
+- **Landing page for electrical design companies,** in this order:
+  - hero: one-sentence promise ("draw the schematic once; terminals, cables, BOM and cabinet
+    follow"), "free and open source, runs on your computer, your files stay yours", Download and
+    "Watch the demo" buttons, and a status line (version, milestones done, "first release is not out
+    yet");
+  - "In the app today": one block per feature area (schematic, devices and cross-references, wires and
+    reports, checks and revisions, PLC, cabinet layout), each with an Available / Planned (Mx) tag,
+    the standards it follows as small tags (IEC 60617, 81346, 61082, 60204-1, 60445…), and real
+    screenshots in dark and light with a theme switch that needs no script;
+  - "A complete drawing set": the pages of the battery-charger sample shown as a strip of thumbnails
+    (cover with revisions, single-line, multi-line, terminals, layout, BOM): what the workshop gets;
+  - "AI inside, you decide": example prompts and an illustrated proposal with a source on every value
+    (project, standard and clause, library, "suggestion"), your own key, nothing sent elsewhere;
+  - "Why CablePilot": local-first, open format, sourced values, open source;
+  - an honest comparison table with the tools they know, with no claim we cannot back;
+  - export formats, download per OS, and a link to "For companies".
+- **Demo page** (`/demo/`, `/it/demo/`): built from `docs/demo.md` and its Italian file: numbered steps
+  with the prompts as chat bubbles, one screenshot per step, and a screen recording (WebM and MP4)
+  on top, or a "recording in progress" note until it exists.
+- **The recorded demo must impress an electrical engineer in the first 30 seconds.** It is the most
+  important thing on the site: a short loop of it plays muted in the landing-page hero (`<video
+  autoplay muted loop playsinline>` with a poster image, which needs no script), and the full version
+  is on the demo page.
+  - **Story (about 90 seconds, captions in English and Italian, no voice needed):**
+    1. open the battery-charger sample: the cover sheet, then flick through the full drawing set;
+    2. place a motor starter from the library: designations, wire numbers and cross-references
+       appear by themselves;
+    3. change one device on the schematic and watch the terminal diagram, the wire list, the BOM and
+       the cabinet layout update live, side by side;
+    4. the check finds an undersized cable and a duplicate designation; fix both with one click;
+    5. ask the assistant "add a star-delta starter for a 7.5 kW motor on page 5": the proposal
+       appears highlighted with its sources, then Accept;
+    6. turn the cabinet in 3D, then issue revision 1: the cover sheet marks the changed pages;
+    7. export the PDF drawing set and the XLSX lists; end on the printed set and "free, open source,
+       your files stay yours".
+  - **Recorded, not edited by hand:** a Playwright script drives the real built app through the story
+    with a fake AI provider. It records at 1920×1080, 60 fps, with smooth cursor moves, zoom-ins on
+    the area that changes and short pauses so a viewer can read. The same script gives the hero loop
+    (about 15 seconds: steps 3 and 6) and the step screenshots, so the demo is recorded again whenever
+    the UI changes (`npm run record:demo`).
+  - **Size and quality:** WebM (VP9) and MP4 (H.264), under 8 MB for the full version and 2 MB for
+    the hero loop; captions as WebVTT tracks; a poster frame for each; the check script fails if
+    any of these is missing once the recording exists.
+- **"For companies" page:** support, training and custom features (company symbol libraries, title
+  blocks and macros, data migration), why it is safe to build on (Apache-2.0, open format, no
+  vendor lock-in), and "get in touch" through GitHub Discussions.
+- **Also:** docs (getting started, file format, numbering, PDF and DXF), changelog from
+  `CHANGELOG.md`, GitHub link, 404.
+- **SEO pages generated from the library:** one page per IEC symbol and device type, standards tables
+  (conductor colours IEC 60445/60204-1, cable current-carrying capacity IEC 60364-5-52, terminal
+  tightening torques), each showing its source and verification status, plus short guides (IEC 81346
+  designations explained, wire numbering schemes, choosing a cable cross-section, reading a terminal
+  diagram), with sources. Italian URLs under `/it/` (e.g. `/it/norme/`, `/it/guide/`).
+- **Rules the build enforces** (same as MechPilot):
+  - every page in English and Italian; a missing Italian text fails the build;
+  - values come from the library data and are never typed into pages;
+  - Available / Planned tags, the status line and the AI wording are derived from the ticked boxes
+    in `docs/roadmap.md`, so a rebuild after a milestone updates the site; the assistant is described
+    as shipped only when M7 is ticked;
+  - screenshots are taken from the real app by a Playwright script, never retouched;
+  - deterministic output (no dates, stable order), committed to `/site`;
+  - a check script: every internal link, image and anchor resolves; every page has `lang`, one
+    `<title>`, one `<h1>`, a description, a canonical link and hreflang pairs; the sitemap lists only
+    existing pages; no `<script>`, no inline event handler, no email address, nothing loaded from
+    another origin.
+- **Performance and privacy:** no JavaScript, no cookies, no web fonts, no tracking, no third-party
+  requests; one stylesheet with colour tokens (text passes WCAG AA, motion respects reduced-motion);
+  `_headers` with a strict Content Security Policy and long caching for hashed assets; `_redirects`
+  with `/download` → latest GitHub release and `/discussions` → GitHub Discussions.
+- **Hosting:** Cloudflare Pages serves the committed `/site` with no build step. `docs/website.md`
+  ends with the owner's one-time setup (connect the repo, output directory `site`, custom domain
+  `cablepilot.agentflowbind.com`) and the curl commands to check the headers after a deploy.
 
 ## Open source
 
@@ -230,7 +355,9 @@ work, there is a CHANGELOG entry, and one commit.
 ## Conventions
 
 - TypeScript strict; no `any` in `/shared` or `/app/main`.
-- Every user-facing string goes through `t()` with an Italian entry, enforced by a test.
+- Every user-facing string goes through `t()` with an Italian entry, enforced by a test. Text printed
+  on drawings (report headers, legends, title-block labels) follows the project's drawing language,
+  not the UI language.
 - Connectivity, numbering, reports and checks have unit tests; every bug fix gets a test.
 - Secrets never go in the renderer or in git.
 - UI text is for professionals, in plain words.
@@ -252,7 +379,11 @@ work, there is a CHANGELOG entry, and one commit.
 - **Symbol standard:** IEC 60617 by default; NFPA 79/ANSI symbols as an option from M1 (a project
   setting), with the same devices behind both.
 - **Sample projects:** a conveyor with a direct-on-line motor starter, an emergency-stop circuit and a
-  small PLC; a pump-station panel with two pumps (star-delta starter) and a cabinet layout.
+  small PLC; a pump-station panel with two pumps (star-delta starter) and a cabinet layout; a 110 V DC
+  battery-charger panel (3-phase input, two rectifier modules, battery string, switching block, PLC
+  interface, alarm relays, HMI) with Italian drawing texts, built as a complete production set as
+  described in rule 11. Use generic parts only; never copy the reference drawing's company, numbers or
+  part codes.
 - **Scope:** build every milestone, M0 to M8, one after the other, without stopping for review. End
   each milestone as described (runs, tests pass, sample works, CHANGELOG, one commit) and push it.
 - **When you would have to ask me:** if the question is only a choice between reasonable options,
