@@ -161,3 +161,9 @@ table.bom input[type='text'], table.bom input[type='number'], table.bom select {
 .rev-list ul { list-style: none; margin: 0; padding: 0; max-height: 220px; overflow: auto; font-size: 12px; }
 .rev-list li, [data-testid='changed-pages'] li { padding: 1px 4px; }
 [data-testid='changed-pages'] { list-style: none; padding: 0; margin: 4px 0; font-size: 12px; }
+
+/* PLC I/O overview (M5) */
+.bom input.mono { width: 100%; box-sizing: border-box; min-width: 70px; }
+.bom button.link { background: none; border: none; padding: 0; color: inherit; text-decoration: underline; cursor: pointer; font: inherit; }
+.tag-formats { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.badge.warn { background: var(--warn, #b26a00); color: #fff; border-radius: 3px; padding: 0 6px; font-size: 11px; }

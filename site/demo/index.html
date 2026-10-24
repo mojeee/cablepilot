@@ -53,22 +53,23 @@
           </figure>
           <h2 class="toc-h">Steps</h2>
           <ol class="step-toc">
-            <li><a href="#step-1"><span>01</span> Open the sample and flick through the drawing set</a></li>
+            <li><a href="#step-1"><span>01</span> Open the sample, the cover sheet and the drawing set</a></li>
             <li><a href="#step-2"><span>02</span> A coil and a contact from the library</a></li>
-            <li><a href="#step-3"><span>03</span> Wire numbers, colours and a bundle</a></li>
-            <li><a href="#step-4"><span>04</span> Reports that follow the schematic</a></li>
-            <li><a href="#step-5"><span>05</span> Print preview, the PDF set and the XLSX lists</a></li>
+            <li><a href="#step-3"><span>03</span> Wire numbers and the lists that follow</a></li>
+            <li><a href="#step-4"><span>04</span> The check banner finds a problem; one click fixes it</a></li>
+            <li><a href="#step-5"><span>05</span> PLC I/O overview and a tag list</a></li>
+            <li><a href="#step-6"><span>06</span> PDF and XLSX</a></li>
           </ol>
         </div>
       </section>
       <section class="step" id="step-1" aria-labelledby="step-1-h">
         <div class="wrap step-grid">
           <div class="step-text">
-          <h2 id="step-1-h"><span class="label">Step 1</span> Open the sample and flick through the drawing set</h2>
-          <p>Choose <strong>Sample projects &gt; Caricabatterie 110 V DC</strong>. The project opens on its cover sheet. Click through the pages in the navigator: contents, single-line diagram, multi-line power page, PLC interface, terminal diagram, wire list and bill of materials. These are the pages of the set a workshop builds from and a customer signs off, all in the project's own frame and title block.</p>
+          <h2 id="step-1-h"><span class="label">Step 1</span> Open the sample, the cover sheet and the drawing set</h2>
+          <p>Choose <strong>Sample projects &gt; Caricabatterie 110 V DC</strong>. The project opens on its cover sheet: the sheet index with the revision of every sheet in a revision matrix, the issue status and the customer approval block. Click through the pages in the navigator: contents, single-line diagram and the PLC interface page with its I/O card. These are the pages of the set a workshop builds from and a customer signs off, all in the project's own frame and title block.</p>
           <ul class="bullets"><li>Sample projects ship with the app, so every feature can be shown without your own files.</li><li>The pages are drawn in the project's drawing language (Italian here), whatever language the interface uses.</li></ul>
           </div>
-          <figure class="step-shot"><img src="/img/demo-1.png" alt="The cover sheet of the battery-charger sample, the first page of the drawing set." width="1920" height="1080" loading="lazy" /></figure>
+          <figure class="step-shot"><img src="/img/demo-1.png" alt="The cover sheet of the battery-charger sample, zoomed on the sheet index with its revision columns." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="step alt" id="step-2" aria-labelledby="step-2-h">
@@ -84,31 +85,41 @@
       <section class="step" id="step-3" aria-labelledby="step-3-h">
         <div class="wrap step-grid">
           <div class="step-text">
-          <h2 id="step-3-h"><span class="label">Step 3</span> Wire numbers, colours and a bundle</h2>
-          <p>Open <strong>Wires</strong>, set the first number to 20 and click <strong>Number wires now</strong>: the wires are numbered with the pattern <code>{n:3}{suffix}</code> (020L+, 021L+ and so on) in one undo step. Conductors are drawn in the colour of their wire class (IEC 60757 abbreviations), and a wire marked as a bundle shows a single label with its cross-section and colour instead of a number.</p>
-          <ul class="bullets"><li>The company wire-class table is editable in the same window.</li><li>Wires on one net, and nets joined across pages, share one number. Numbers typed by hand stay.</li></ul>
+          <h2 id="step-3-h"><span class="label">Step 3</span> Wire numbers and the lists that follow</h2>
+          <p>Open <strong>Wires</strong>, set the first number to 20 and click <strong>Number wires now</strong>: the wires are numbered with the pattern <code>{n:3}{suffix}</code> (020L+, 021L+ and so on) in one undo step. Then open <strong>Reports</strong>: the wire list shows the new numbers and the bill of materials already counts the contactor you just placed. All lists are generated from the schematic and update with it.</p>
+          <ul class="bullets"><li>The company wire-class table is editable in the Wires window; numbers typed by hand stay.</li><li>The same lists can be added to the drawing set as pages.</li></ul>
           </div>
-          <figure class="step-shot"><img src="/img/demo-3.png" alt="The wires of the power page numbered and drawn in their colours, one of them as a bundle with a single label." width="1920" height="1080" loading="lazy" /></figure>
+          <figure class="step-shot"><img src="/img/demo-3.png" alt="The Reports window showing the bill of materials with the contactor that was just placed." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="step alt" id="step-4" aria-labelledby="step-4-h">
         <div class="wrap step-grid">
           <div class="step-text">
-          <h2 id="step-4-h"><span class="label">Step 4</span> Reports that follow the schematic</h2>
-          <p>Open <strong>Reports</strong>: the terminal diagram, the wire list with the new numbers, and the bill of materials, which already counts the contactor you just placed. All lists are generated from the schematic and update with it.</p>
-          <ul class="bullets"><li>The same lists can be added to the drawing set as pages.</li></ul>
+          <h2 id="step-4-h"><span class="label">Step 4</span> The check banner finds a problem; one click fixes it</h2>
+          <p>Draw a wire that connects to nothing. The warnings banner appears at once with the finding, its rule and its standard. Click the fix: the stray wire is removed, the banner goes away, and the whole thing is one undo step.</p>
+          <ul class="bullets"><li>The electrical rule check runs continuously; findings also show as markers on the page.</li><li><strong>Fix all that can be fixed</strong> applies every plain fix in one step.</li></ul>
           </div>
-          <figure class="step-shot"><img src="/img/demo-4.png" alt="The Reports window showing the bill of materials with the contactor that was just placed." width="1920" height="1080" loading="lazy" /></figure>
+          <figure class="step-shot"><img src="/img/demo-4.png" alt="The warnings banner and the finding for a wire that connects to nothing, with its one-click fix." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="step" id="step-5" aria-labelledby="step-5-h">
         <div class="wrap step-grid">
           <div class="step-text">
-          <h2 id="step-5-h"><span class="label">Step 5</span> Print preview, the PDF set and the XLSX lists</h2>
-          <p>Switch on <strong>Print preview (white)</strong> to see the page as it prints. Then <strong>Export PDF</strong> writes the complete drawing set (vector, text embedded), and <strong>Export all lists as XLSX</strong> writes every list as one workbook. The video ends on the cover sheet.</p>
+          <h2 id="step-5-h"><span class="label">Step 5</span> PLC I/O overview and a tag list</h2>
+          <p>Open <strong>PLC I/O</strong>: every channel of the PLC cards with its address, tag, comment, what it is wired to and where it is drawn, live from the schematic. Edit a tag here and the card on the PLC page shows it; edit it on the card and it changes here. <strong>Export</strong> writes the tag list for CODESYS (a global variable list) or TIA Portal (XML, marked unverified until it has been checked against Siemens' documentation).</p>
+          <ul class="bullets"><li>Addresses follow a scheme you configure (Siemens or IEC 61131-3 notation, first byte of each area).</li><li>Importing a tag list is previewed first and applied as one undo step.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-5.png" alt="The PLC I/O window listing every channel of the charger sample with address, tag and what it is wired to." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step alt" id="step-6" aria-labelledby="step-6-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-6-h"><span class="label">Step 6</span> PDF and XLSX</h2>
+          <p><strong>Export PDF</strong> writes the complete drawing set (vector, text embedded), and <strong>Export all lists as XLSX</strong> writes every list, the PLC I/O list included, as one workbook. The video ends on the cover sheet.</p>
           <ul class="bullets"><li>Files belong to you: an open project format, PDF and XLSX out, no account.</li></ul>
           </div>
-          <figure class="step-shot"><img src="/img/demo-5.png" alt="The same page in print preview (white), as it prints." width="1920" height="1080" loading="lazy" /></figure>
+          <figure class="step-shot"><img src="/img/demo-6.png" alt="The messages after exporting the PDF drawing set, over the PLC interface page." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="band dark try" aria-labelledby="try-h">

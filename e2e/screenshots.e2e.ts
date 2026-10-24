@@ -77,6 +77,16 @@ test('screenshots of the sample projects, dark and light', async () => {
     await page.screenshot({ path: join(out, 'feat-checks.png') });
     await page.evaluate(() => document.documentElement.style.removeProperty('--messages-h'));
 
+    // The PLC I/O overview of the conveyor sample's rack.
+    await open('conveyor');
+    await theme('dark', 'dark');
+    await page.getByTestId('plc').click();
+    await expect(page.getByTestId('plc-table')).toBeVisible();
+    // The top of the window, in the 12:7 shape of the other feature images.
+    const bb = (await page.getByRole('dialog').boundingBox())!;
+    await page.screenshot({ path: join(out, 'feat-plc.png'), clip: { x: bb.x, y: bb.y, width: bb.width, height: Math.min(bb.height, Math.round((bb.width * 7) / 12)) } });
+    await page.keyboard.press('Escape');
+
     // The drawing set: pages as they print (white), from the charger sample.
     await open('dc-charger');
     await theme('light', 'white');

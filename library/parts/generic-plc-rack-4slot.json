@@ -1,0 +1,21 @@
+{
+  "id": "generic-plc-rack-4slot",
+  "kind": "part",
+  "title": {
+    "en": "PLC rack, 4 slots",
+    "it": "Rack PLC, 4 slot"
+  },
+  "category": "plc",
+  "code": "GEN-PLC-RACK-4SLOT",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "PLC rack, 4 slots",
+    "it": "Rack PLC, 4 slot"
+  },
+  "data": {
+    "Slots": "4"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

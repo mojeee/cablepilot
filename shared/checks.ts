@@ -20,6 +20,7 @@ import { findPart, isTerminalPart, symbolRole, withProjectSymbols } from './libr
 import type { DeviceRec, Page, Project, Pt, SymbolEl, WireEl } from './model/types';
 import { nextDesignation, parseDesignation } from './numbering';
 import { capacityOf, minCrossSection } from './ampacity';
+import { canonicalAddress } from './plc';
 import { coreSpec } from './reports';
 import { isNumbered, wireSpec } from './wires';
 
@@ -61,7 +62,7 @@ const mk = (rule: RuleId, id: string, p: Omit<Finding, 'id' | 'rule' | 'severity
 // ---- per-page facts, cached while the page object and what it depends on are unchanged --------------
 
 interface DesigFact { key: string; cls: 'coil' | 'main' | 'box'; sl: boolean; el: string; x: number; y: number; des: string; letters: string; location?: string }
-interface PlcFact { address: string; el: string; x: number; y: number }
+interface PlcFact { address: string; el: string; id: string; x: number; y: number }
 interface PageFacts {
   local: Finding[];
   desig: DesigFact[];
@@ -113,7 +114,14 @@ function computeFacts(project: Project, page: Page, libIn: Library): PageFacts {
       symPins.set(el.id, pins);
       for (const p of pins) pinPts.add(ptKey(p));
       if (def.function === 'earth-pe') earthEls.add(el.id);
-    } else if (el.kind === 'box') for (const p of boxPinsWorld(el)) pinPts.add(ptKey(p));
+    } else if (el.kind === 'box') {
+      for (const p of boxPinsWorld(el)) pinPts.add(ptKey(p));
+      // PLC addresses of card channels (M5): the same project-wide duplicate check as the channel symbols.
+      if (el.plc && el.plc.type !== 'cpu') for (const w of boxPinsWorld(el)) {
+        const addr = el.pins.find((q) => q.id === w.id)?.address?.trim();
+        if (addr) f.plc.push({ address: canonicalAddress(addr), el: el.id, id: `${el.id}:${w.id}`, x: w.x, y: w.y });
+      }
+    }
     else if (el.kind === 'junction') pinPts.add(ptKey(el));
   }
 
@@ -203,8 +211,8 @@ function computeFacts(project: Project, page: Page, libIn: Library): PageFacts {
         if (n > max) f.local.push(mk('terminal-wires', `${page.id}:${el.id}:${p.id}`, { page: page.id, element: el.id, at: { x: p.x, y: p.y }, args: { des: el.designation, no: el.value ?? p.id, n, max } }));
       }
     }
-    // PLC addresses: collected for the project-wide duplicate check (the channel symbols; racks and cards arrive with M5).
-    if ((def.function === 'plc-input' || def.function === 'plc-output') && el.value?.trim()) f.plc.push({ address: el.value.trim().toUpperCase(), el: el.id, x: el.x, y: el.y });
+    // PLC addresses: collected for the project-wide duplicate check (channel symbols and the channels of PLC cards).
+    if ((def.function === 'plc-input' || def.function === 'plc-output') && el.value?.trim()) f.plc.push({ address: canonicalAddress(el.value), el: el.id, id: el.id, x: el.x, y: el.y });
     // Designations (duplicates): coils, power parts and boxes; contacts and terminals are representations of a device.
     if (el.designation && def.function !== 'terminal') {
       const role = symbolRole(def);
@@ -374,7 +382,7 @@ export function runChecks(project: Project, libIn: Library): CheckResult {
     for (const a of facts[i].plc) {
       const first = addr.get(a.address);
       if (!first) { addr.set(a.address, { page: pg }); continue; }
-      findings.push(mk('plc-address', `${pg.id}:${a.el}`, { page: pg.id, element: a.el, at: { x: a.x, y: a.y }, args: { address: a.address, other: first.page.id } }));
+      findings.push(mk('plc-address', `${pg.id}:${a.id}`, { page: pg.id, element: a.el, at: { x: a.x, y: a.y }, args: { address: a.address, other: first.page.id } }));
     }
   });
 

@@ -205,3 +205,36 @@ One entry per milestone: what works, what is left, and anything the owner must d
 - Open the three samples: they should show no banner; change the installation method in Project settings to A1 to
   see the cross-section findings and their fixes. Look at the new cover sheet and at an exported PDF.
 
+## M5 PLC (done)
+
+**What works**
+
+- PLC cards as devices: black boxes with a card type, rack and slot whose pins are the channels, from generic library
+  parts with channel counts (CPU, DI 8/16, DO 8/16, AI 8, AO 4; a 4-slot rack part sits on the CPU device). Placing a
+  card from the symbol browser gives a designation, the part, a slot and addresses in one undo step.
+- Configurable addressing scheme (Siemens or IEC 61131-3 notation, first byte per area), assignment per card and
+  channel (missing or all), manual edits, restyle when the scheme changes.
+- "PLC I/O" window: every channel live from the schematic (address, tag, comment, connected to, page-column),
+  editable, and the same list as a report page and a workbook sheet; the PLC address check covers cards.
+- Tag lists: CODESYS global variable list and TIA Portal tag table XML, export and import; import previewed and
+  undoable. CODESYS syntax checked against the CODESYS Online Help; the TIA format is marked unverified.
+- Samples: conveyor with a CPU and 8-channel DI and DO cards, charger with DI and AI cards; both with tagged I/O
+  and a PLC I/O list page; all three open with no findings. File format 5.
+- Tests: addressing, assignment, overview and edits, report, tag-list round trips and import preview, the check,
+  migration 4 to 5; an end-to-end flow (assign an address, export both formats, import with a preview, undo).
+- Demo recorded again with the cover matrix, the check banner and fix, and the PLC window; `npm run screenshots`
+  captured the PLC block of the landing page.
+
+**What is left**
+
+- The TIA Portal format is unverified (docs/to-verify.md); neither format has been tried in the vendor tool.
+- A rack is a name plus slot numbers; there is no backplane drawing, slot limit or power budget. Analog scaling,
+  channel data types beyond BOOL and WORD, symbol-table import that creates channels, and Excel formats are not built.
+  Channel symbols (plc-input and plc-output, used by the pump station sample) still work and show in the overview,
+  but have no tag or comment.
+- Cards are placed from the symbol browser with their pins on the left; resizing pins is done in the properties panel.
+
+**What the owner must do by hand**
+
+- Try an exported tag list in TIA Portal and in CODESYS and tell us what they reject (the TIA file is the risky one).
+- Check the default addressing start bytes against the controllers you use (docs/to-verify.md).

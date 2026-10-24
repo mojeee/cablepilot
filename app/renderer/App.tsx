@@ -6,6 +6,7 @@ import { SymbolBrowser } from './components/SymbolBrowser';
 import { CanvasView } from './components/CanvasView';
 import { PropertiesPanel } from './components/PropertiesPanel';
 import { MessageList } from './components/MessageList';
+import { PlcDialog } from './components/PlcDialog';
 import { AddPageDialog, RecoveryBanner, ShortcutsDialog } from './components/dialogs';
 import { ProjectSettingsDialog } from './components/ProjectSettings';
 import { SymbolEditorDialog } from './components/SymbolEditor';
@@ -78,6 +79,7 @@ export function App() {
       {dialog === 'reports' && <ReportsDialog />}
       {dialog === 'wires' && <WiresDialog />}
       {dialog === 'revisions' && <RevisionsDialog />}
+      {dialog === 'plc' && <PlcDialog />}
     </div>
   );
 }

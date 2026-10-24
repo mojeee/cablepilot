@@ -15,6 +15,7 @@ import { fullDesignation, nextDesignation, parseDesignation, renumber } from '..
 import { terminalStrips } from '../reports';
 import { renumberWires } from '../wires';
 import { makeSnapshot } from '../revisions';
+import { applyChannelEdits, assignEdits, type ChannelEdit } from '../plc';
 
 export type Command =
   | { type: 'project/set'; name?: string; properties?: Record<string, string>; assembly?: Record<string, string> }
@@ -59,6 +60,10 @@ export type Command =
   | { type: 'issue/status'; status: IssueStatus }
   /** Issues a revision: stores the number, date, description and names with a snapshot of every page, device, wire and part, and sets the status and the title-block fields. */
   | { type: 'revision/issue'; revision: Omit<Revision, 'pages' | 'inventory'> }
+  /** PLC channel edits: address, tag and comment of card channels (or the address of a channel symbol). One undo step, also for an import. */
+  | { type: 'plc/channels'; edits: ChannelEdit[] }
+  /** Gives channels their addresses by the project's scheme: only empty ones, or all. */
+  | { type: 'plc/assign'; all?: boolean }
   | { type: 'batch'; label: string; commands: Command[] };
 
 export interface Ctx {
@@ -401,6 +406,8 @@ export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
       const props = { ...project.properties, revision: r.number, issueDate: r.date, ...(r.drawn ? { drawn: r.drawn } : {}), ...(r.checked ? { checked: r.checked } : {}), ...(r.approved ? { approved: r.approved } : {}) };
       return { ...project, issueStatus: r.status, properties: props, revisions: [...project.revisions, { ...r, ...makeSnapshot(project, ctx.lib) }] };
     }
+    case 'plc/channels': return applyChannelEdits(project, cmd.edits);
+    case 'plc/assign': return applyChannelEdits(project, assignEdits(project, !!cmd.all));
     case 'batch': return cmd.commands.reduce((p, c) => apply(p, c, ctx), project);
   }
 }

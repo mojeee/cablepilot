@@ -39,6 +39,7 @@ export function TopBar() {
         <button type="button" data-testid="reports" title={t('Reports')} onClick={() => st().setDialog('reports')}>{t('Reports')}</button>
         <button type="button" data-testid="wires" title={t('Wires and cables')} onClick={() => st().setDialog('wires')}>{t('Wires')}</button>
         <button type="button" data-testid="number-wires" title={t('Number the wires automatically')} onClick={() => st().renumberWires()}>{t('Number wires')}</button>
+        <button type="button" data-testid="plc" title={t('PLC I/O overview and tag lists')} onClick={() => st().setDialog('plc')}>{t('PLC I/O')}</button>
         <button type="button" data-testid="revisions" title={t('Revisions and issue status')} onClick={() => st().setDialog('revisions')}>{t('Revisions')}</button>
         <button type="button" data-testid="settings" onClick={() => st().setDialog('settings')}>{t('Project settings...')}</button>
         <button type="button" title={t('Renumber designations automatically')} onClick={() => st().exec({ type: 'designation/renumber' })}>{t('Renumber')}</button>

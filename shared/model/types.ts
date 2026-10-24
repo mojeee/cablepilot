@@ -127,6 +127,24 @@ export interface BoxPin {
   side: 'left' | 'right' | 'top' | 'bottom';
   /** Millimetres along the side from the top-left corner. */
   offset: number;
+  /** PLC channels (cards): the I/O address as written in the project's addressing scheme, the tag (symbol name) and a comment. */
+  address?: string;
+  tag?: string;
+  comment?: string;
+}
+/** What a black box is when it is a PLC rack member (M5): a CPU or an I/O card; its pins are the channels. */
+export type PlcType = 'cpu' | 'di' | 'do' | 'ai' | 'ao';
+export interface PlcCard {
+  type: PlcType;
+  /** Rack name ("0", "R1"): cards with the same rack are one rack, in slot order. */
+  rack: string;
+  slot: number;
+}
+/** How PLC addresses are written and where each area starts (byte offsets). */
+export interface PlcSettings {
+  /** 'siemens': I0.0, Q0.1, IW64 (word address = byte). 'iec': %IX0.0, %QX0.1, %IW32 (word address = word index). */
+  style: 'siemens' | 'iec';
+  start: { di: number; do: number; ai: number; ao: number };
 }
 /** A black box (a board, a module drawn by its pins) or a connector (header, plug, socket) with pins. */
 export interface BoxEl {
@@ -141,6 +159,8 @@ export interface BoxEl {
   location?: string;
   functionText?: LText;
   pins: BoxPin[];
+  /** A PLC CPU or I/O card (channels are the pins). */
+  plc?: PlcCard;
   /** Connectors: which half this is. */
   gender?: 'plug' | 'socket';
   /** Connectors: the designation of the mating connector; pins with the same number join. */
@@ -162,7 +182,7 @@ export interface FormEl {
 }
 
 /** The reports a page can show (shared/reports.ts); they fill live from the schematic. */
-export const REPORT_IDS = ['terminals', 'cables', 'wires', 'pins', 'bom', 'contents', 'legend', 'colours', 'suffixes', 'torque', 'nameplates', 'wireMarkers', 'terminalMarkers'] as const;
+export const REPORT_IDS = ['terminals', 'cables', 'wires', 'pins', 'bom', 'contents', 'legend', 'colours', 'suffixes', 'torque', 'nameplates', 'wireMarkers', 'terminalMarkers', 'plcIo'] as const;
 export type ReportId = (typeof REPORT_IDS)[number];
 /** A live report drawn on a page: rows `offset` to `offset + rows` of the report's table. */
 export interface ReportEl {
@@ -366,6 +386,8 @@ export interface ProjectSettings {
   wireColours: boolean;
   /** Installation method of the conductors (IEC 60364-5-52 letter: B2, C, E...); empty: not stated, the cross-section check is skipped. */
   installationMethod: string;
+  /** PLC addressing scheme (M5). */
+  plc: PlcSettings;
 }
 
 export const PROJECT_FORMAT = 'cablepilot-project';

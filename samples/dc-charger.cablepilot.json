@@ -1,6 +1,6 @@
 {
   "format": "cablepilot-project",
-  "version": 4,
+  "version": 5,
   "id": "sample-dc-charger",
   "name": "Caricabatterie 110 V DC",
   "settings": {
@@ -28,6 +28,7 @@
     "drawingLanguage": "it",
     "installationMethod": "B1",
     "numbering": {"pattern":"{n:3}{suffix}","scheme":"potential","start":1,"step":1},
+    "plc": {"start":{"ai":64,"ao":64,"di":0,"do":0},"style":"siemens"},
     "style": {
       "colours": {
         "annotation": "#000000",
@@ -467,7 +468,7 @@
           "y": 70
         },
         {
-          "id": "e117",
+          "id": "e115",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -681,7 +682,7 @@
           "y": 90
         },
         {
-          "id": "e118",
+          "id": "e116",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -692,7 +693,7 @@
           "y": 25
         },
         {
-          "id": "e119",
+          "id": "e117",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -703,7 +704,7 @@
           "y": 25
         },
         {
-          "id": "e120",
+          "id": "e118",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -714,7 +715,7 @@
           "y": 25
         },
         {
-          "id": "e121",
+          "id": "e119",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -957,7 +958,7 @@
           "y": 215
         },
         {
-          "id": "e122",
+          "id": "e120",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -968,7 +969,7 @@
           "y": 60
         },
         {
-          "id": "e123",
+          "id": "e121",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -979,7 +980,7 @@
           "y": 67.5
         },
         {
-          "id": "e124",
+          "id": "e122",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -990,7 +991,7 @@
           "y": 125
         },
         {
-          "id": "e125",
+          "id": "e123",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1177,7 +1178,7 @@
         },
         {"id":"e92-j1","kind":"junction","x":335,"y":200},
         {
-          "id": "e126",
+          "id": "e124",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1188,7 +1189,7 @@
           "y": 60
         },
         {
-          "id": "e127",
+          "id": "e125",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1199,7 +1200,7 @@
           "y": 60
         },
         {
-          "id": "e128",
+          "id": "e126",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1210,7 +1211,7 @@
           "y": 200
         },
         {
-          "id": "e129",
+          "id": "e127",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1251,48 +1252,93 @@
         },
         {
           "id": "e94",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-input",
-          "value": "I0.0",
+          "kind": "box",
+          "designation": "-A2",
+          "functionText": {"en":"Digital inputs 24 V DC","it":"Ingressi digitali 24 V DC"},
+          "h": 90,
+          "pins": [
+            {
+              "id": "0",
+              "address": "I0.0",
+              "comment": "Mancanza rete",
+              "offset": 10,
+              "side": "left",
+              "tag": "K1_Mancanza_rete"
+            },
+            {
+              "id": "1",
+              "address": "I0.1",
+              "comment": "Batteria scarica",
+              "offset": 20,
+              "side": "left",
+              "tag": "K2_Batteria_scarica"
+            },
+            {"id":"2","address":"I0.2","offset":30,"side":"left"},
+            {"id":"3","address":"I0.3","offset":40,"side":"left"},
+            {"id":"4","address":"I0.4","offset":50,"side":"left"},
+            {"id":"5","address":"I0.5","offset":60,"side":"left"},
+            {"id":"6","address":"I0.6","offset":70,"side":"left"},
+            {"id":"7","address":"I0.7","offset":80,"side":"left"}
+          ],
+          "plc": {"type":"di","rack":"0","slot":1},
+          "variant": "blackbox",
+          "w": 44,
           "x": 250,
-          "y": 72
+          "y": 45
         },
         {
           "id": "e95",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-input",
-          "value": "I0.1",
+          "kind": "box",
+          "designation": "-A5",
+          "functionText": {"en":"Analog inputs","it":"Ingressi analogici"},
+          "h": 54,
+          "pins": [
+            {
+              "id": "0",
+              "address": "IW64",
+              "comment": "Corrente di uscita",
+              "offset": 6,
+              "side": "left",
+              "tag": "B1_Corrente_uscita"
+            },
+            {"id":"1","address":"IW66","offset":12,"side":"left"},
+            {"id":"2","address":"IW68","offset":18,"side":"left"},
+            {"id":"3","address":"IW70","offset":24,"side":"left"},
+            {"id":"4","address":"IW72","offset":30,"side":"left"},
+            {"id":"5","address":"IW74","offset":36,"side":"left"},
+            {"id":"6","address":"IW76","offset":42,"side":"left"},
+            {"id":"7","address":"IW78","offset":48,"side":"left"}
+          ],
+          "plc": {"type":"ai","rack":"0","slot":2},
+          "variant": "blackbox",
+          "w": 44,
           "x": 250,
-          "y": 102
+          "y": 146
         },
         {
           "id": "e96",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-input",
-          "value": "AI0",
-          "x": 250,
-          "y": 142
+          "kind": "box",
+          "designation": "-A1",
+          "functionText": {"en":"PLC CPU","it":"CPU PLC"},
+          "h": 20,
+          "pins": [],
+          "plc": {"type":"cpu","rack":"0","slot":0},
+          "variant": "blackbox",
+          "w": 40,
+          "x": 310,
+          "y": 60
         },
         {
           "id": "e97",
           "kind": "wire",
           "number": "011",
-          "points": [{"x":70,"y":67},{"x":150,"y":67},{"x":150,"y":72},{"x":250,"y":72}]
+          "points": [{"x":70,"y":67},{"x":150,"y":67},{"x":150,"y":55},{"x":250,"y":55}]
         },
         {
           "id": "e98",
           "kind": "wire",
           "number": "012",
-          "points": [{"x":70,"y":72},{"x":170,"y":72},{"x":170,"y":102},{"x":250,"y":102}]
+          "points": [{"x":70,"y":72},{"x":170,"y":72},{"x":170,"y":65},{"x":250,"y":65}]
         },
         {
           "id": "e99",
@@ -1317,9 +1363,9 @@
           "symbolId": "interruption-point",
           "value": "IOUT",
           "x": 170,
-          "y": 142
+          "y": 152
         },
-        {"id":"e102","kind":"wire","number":"010","points":[{"x":170,"y":142},{"x":250,"y":142}]},
+        {"id":"e102","kind":"wire","number":"010","points":[{"x":170,"y":152},{"x":250,"y":152}]},
         {
           "id": "e103",
           "kind": "text",
@@ -1328,37 +1374,10 @@
           "size": 3,
           "text": "Corrente di uscita",
           "x": 118,
-          "y": 132
+          "y": 142
         },
         {
           "id": "e104",
-          "kind": "rect",
-          "assembly": "-A1",
-          "dashed": true,
-          "h": 105,
-          "label": "PLC",
-          "w": 32,
-          "x": 238,
-          "y": 55
-        },
-        {
-          "id": "e105",
-          "kind": "table",
-          "cells": [
-            ["Indirizzo","Segnale","Dispositivo"],
-            ["I0.0","Mancanza rete","-K1"],
-            ["I0.1","Batteria scarica","-K2"],
-            ["AI0","Corrente di uscita","-B1"]
-          ],
-          "colWidths": [25,70,25],
-          "headerRow": true,
-          "rowHeight": 8,
-          "size": 3.2,
-          "x": 285,
-          "y": 62
-        },
-        {
-          "id": "e106",
           "kind": "box",
           "designation": "-A3",
           "functionText": {"en":"HMI operator panel","it":"Pannello operatore HMI"},
@@ -1374,7 +1393,7 @@
           "y": 200
         },
         {
-          "id": "e107",
+          "id": "e105",
           "kind": "box",
           "designation": "-A4",
           "functionText": {"en":"Network switch","it":"Switch di rete"},
@@ -1389,9 +1408,9 @@
           "x": 185,
           "y": 200
         },
-        {"id":"e108","kind":"wire","number":"013","points":[{"x":105,"y":205},{"x":185,"y":205}]},
+        {"id":"e106","kind":"wire","number":"013","points":[{"x":105,"y":205},{"x":185,"y":205}]},
         {
-          "id": "e109",
+          "id": "e107",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1401,28 +1420,28 @@
           "y": 198
         },
         {
-          "id": "e110",
+          "id": "e108",
           "kind": "wire",
           "number": "003P",
           "points": [{"x":55,"y":205},{"x":20,"y":205}],
           "potential": "24VDC"
         },
         {
-          "id": "e111",
+          "id": "e109",
           "kind": "wire",
           "number": "003M",
           "points": [{"x":55,"y":210},{"x":10,"y":210}],
           "potential": "0V"
         },
         {
-          "id": "e112",
+          "id": "e110",
           "kind": "wire",
           "number": "004P",
           "points": [{"x":235,"y":210},{"x":270,"y":210}],
           "potential": "24VDC"
         },
         {
-          "id": "e113",
+          "id": "e111",
           "kind": "box",
           "designation": "-X20",
           "functionText": {"en":"Interface board header","it":"Intestazione scheda interfaccia"},
@@ -1435,11 +1454,11 @@
           ],
           "variant": "connector",
           "w": 20,
-          "x": 300,
+          "x": 322,
           "y": 195
         },
         {
-          "id": "e114",
+          "id": "e112",
           "kind": "box",
           "designation": "-X21",
           "functionText": {"en":"PLC input header","it":"Intestazione ingressi PLC"},
@@ -1452,21 +1471,21 @@
           ],
           "variant": "connector",
           "w": 20,
-          "x": 350,
+          "x": 372,
           "y": 195
         },
         {
-          "id": "e115",
+          "id": "e113",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 2.5,
           "text": "Cavo piatto",
-          "x": 322,
+          "x": 346,
           "y": 192
         },
         {
-          "id": "e130",
+          "id": "e128",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1477,7 +1496,7 @@
           "y": 67
         },
         {
-          "id": "e131",
+          "id": "e129",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1488,7 +1507,7 @@
           "y": 97
         },
         {
-          "id": "e132",
+          "id": "e130",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1499,7 +1518,7 @@
           "y": 205
         },
         {
-          "id": "e133",
+          "id": "e131",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1510,7 +1529,7 @@
           "y": 210
         },
         {
-          "id": "e134",
+          "id": "e132",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1547,7 +1566,7 @@
       "type": "layout",
       "elements": [
         {
-          "id": "e116",
+          "id": "e114",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1583,71 +1602,87 @@
       "elements": [{"id":"r-rep10","kind":"report","offset":0,"report":"pins","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
-      "title": {"it":"Elenchi pin dei connettori"}
+      "title": {"it":"Elenchi pin dei connettori 1/2"}
     },
     {
       "id": "pg-rep11",
+      "type": "report",
+      "elements": [{"id":"r-rep12","kind":"report","offset":34,"report":"pins","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Elenchi pin dei connettori 2/2"}
+    },
+    {
+      "id": "pg-rep13",
       "type": "bom",
-      "elements": [{"id":"r-rep12","kind":"report","offset":0,"report":"bom","rows":34,"x":28,"y":18}],
+      "elements": [{"id":"r-rep14","kind":"report","offset":0,"report":"bom","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"it":"Distinta materiali 1/2"}
     },
     {
-      "id": "pg-rep13",
+      "id": "pg-rep15",
       "type": "bom",
-      "elements": [{"id":"r-rep14","kind":"report","offset":34,"report":"bom","rows":34,"x":28,"y":18}],
+      "elements": [{"id":"r-rep16","kind":"report","offset":34,"report":"bom","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"it":"Distinta materiali 2/2"}
     },
     {
-      "id": "pg-rep15",
+      "id": "pg-rep17",
       "type": "report",
-      "elements": [{"id":"r-rep16","kind":"report","offset":0,"report":"legend","rows":14,"x":28,"y":18}],
+      "elements": [{"id":"r-rep18","kind":"report","offset":0,"report":"legend","rows":14,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"it":"Legenda dei simboli 1/2"}
     },
     {
-      "id": "pg-rep17",
+      "id": "pg-rep19",
       "type": "report",
-      "elements": [{"id":"r-rep18","kind":"report","offset":14,"report":"legend","rows":14,"x":28,"y":18}],
+      "elements": [{"id":"r-rep20","kind":"report","offset":14,"report":"legend","rows":14,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"it":"Legenda dei simboli 2/2"}
     },
     {
-      "id": "pg-rep19",
+      "id": "pg-rep21",
       "type": "report",
-      "elements": [{"id":"r-rep20","kind":"report","offset":0,"report":"colours","rows":34,"x":28,"y":18}],
+      "elements": [{"id":"r-rep22","kind":"report","offset":0,"report":"colours","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"it":"Colori dei conduttori"}
     },
     {
-      "id": "pg-rep21",
+      "id": "pg-rep23",
       "type": "report",
-      "elements": [{"id":"r-rep22","kind":"report","offset":0,"report":"suffixes","rows":34,"x":28,"y":18}],
+      "elements": [{"id":"r-rep24","kind":"report","offset":0,"report":"suffixes","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"it":"Suffissi dei numeri filo"}
     },
     {
-      "id": "pg-rep23",
+      "id": "pg-rep25",
       "type": "report",
-      "elements": [{"id":"r-rep24","kind":"report","offset":0,"report":"torque","rows":34,"x":28,"y":18}],
+      "elements": [{"id":"r-rep26","kind":"report","offset":0,"report":"torque","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"it":"Coppie di serraggio dei morsetti"}
     },
     {
-      "id": "pg-rep25",
+      "id": "pg-rep27",
       "type": "report",
-      "elements": [{"id":"r-rep26","kind":"report","offset":0,"report":"nameplates","rows":40,"x":28,"y":18}],
+      "elements": [{"id":"r-rep28","kind":"report","offset":0,"report":"nameplates","rows":40,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"it":"Targhette"}
+    },
+    {
+      "id": "pg-rep29",
+      "type": "report",
+      "elements": [{"id":"r-rep30","kind":"report","offset":0,"report":"plcIo","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Elenco I/O PLC"}
     }
   ],
   "assets": {},
@@ -1656,19 +1691,16 @@
     {
       "designation": "+DS-A1",
       "fields": {},
-      "parts": [
-        {"part":"generic-plc-cpu-compact","qty":1},
-        {"part":"generic-plc-di-16-24vdc","qty":1},
-        {"part":"generic-plc-ai-8","qty":1}
-      ]
+      "parts": [{"part":"generic-plc-cpu-compact","qty":1},{"part":"generic-plc-rack-4slot","qty":1}]
     },
+    {"designation":"+DS-A2","fields":{},"parts":[{"part":"generic-plc-di-8-24vdc","qty":1}]},
     {"designation":"+DS-A3","fields":{},"parts":[{"part":"generic-hmi-7in-touch-24vdc","qty":1}]},
     {
       "designation": "+DS-A4",
       "fields": {},
       "parts": [{"part":"generic-switch-ethernet-5port-24vdc","qty":1}]
     },
-    {"designation":"+DS-A5","fields":{},"parts":[{"part":"generic-din-rail-35mm-1m","qty":1}]},
+    {"designation":"+DS-A5","fields":{},"parts":[{"part":"generic-plc-ai-8","qty":1}]},
     {
       "designation": "+DS-B1",
       "fields": {},
@@ -2050,7 +2082,7 @@
       "kind": "part",
       "category": "plc",
       "code": "GEN-PLC-CPU-COMPACT",
-      "data": {"Interface":"Ethernet","Supply voltage":"24 V DC"},
+      "data": {"Card type":"cpu","Interface":"Ethernet","Supply voltage":"24 V DC"},
       "description": {"en":"PLC CPU, compact, Ethernet, 24 V DC","it":"CPU PLC compatta, Ethernet, 24 V DC"},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
@@ -2059,20 +2091,33 @@
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
     },
     {
-      "id": "generic-plc-di-16-24vdc",
+      "id": "generic-plc-rack-4slot",
       "kind": "part",
       "category": "plc",
-      "code": "GEN-PLC-DI-16-24VDC",
-      "data": {"Channels":"16","Signal":"24 V DC"},
+      "code": "GEN-PLC-RACK-4SLOT",
+      "data": {"Slots":"4"},
+      "description": {"en":"PLC rack, 4 slots","it":"Rack PLC, 4 slot"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"PLC rack, 4 slots","it":"Rack PLC, 4 slot"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-plc-di-8-24vdc",
+      "kind": "part",
+      "category": "plc",
+      "code": "GEN-PLC-DI-8-24VDC",
+      "data": {"Card type":"di","Channels":"8","Signal":"24 V DC"},
       "description": {
-        "en": "PLC input card, 16 digital inputs 24 V DC",
-        "it": "Scheda PLC, 16 ingressi digitali 24 V DC"
+        "en": "PLC input card, 8 digital inputs 24 V DC",
+        "it": "Scheda PLC, 8 ingressi digitali 24 V DC"
       },
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
-        "en": "PLC input card, 16 digital inputs 24 V DC",
-        "it": "Scheda PLC, 16 ingressi digitali 24 V DC"
+        "en": "PLC input card, 8 digital inputs 24 V DC",
+        "it": "Scheda PLC, 8 ingressi digitali 24 V DC"
       },
       "verification": "secondary",
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
@@ -2082,7 +2127,7 @@
       "kind": "part",
       "category": "plc",
       "code": "GEN-PLC-AI-8",
-      "data": {"Channels":"8","Signal":"0-10 V / 4-20 mA"},
+      "data": {"Card type":"ai","Channels":"8","Signal":"0-10 V / 4-20 mA"},
       "description": {
         "en": "PLC analogue input card, 8 channels, 0-10 V / 4-20 mA",
         "it": "Scheda PLC ingressi analogici, 8 canali, 0-10 V / 4-20 mA"
@@ -2425,10 +2470,11 @@
       "drawn": "CablePilot",
       "inventory": {
         "devices": {
-          "+DS-A1": "19e477a7",
+          "+DS-A1": "08ff96e0",
+          "+DS-A2": "0c982cee",
           "+DS-A3": "04315227",
           "+DS-A4": "15313eff",
-          "+DS-A5": "19449b46",
+          "+DS-A5": "03ac7a0b",
           "+DS-B1": "1a987a4e",
           "+DS-F1": "036f843b",
           "+DS-G1": "081f4710",
@@ -2446,8 +2492,8 @@
           "+DS-X1": "15a9bef5",
           "+DS-X10": "1db59ff7",
           "+DS-X11": "166f66ba",
-          "+DS-X20": "18834114",
-          "+DS-X21": "1ab71022"
+          "+DS-X20": "00ce9df7",
+          "+DS-X21": "04e15b7d"
         },
         "parts": {
           "GEN-BATTERY-CELL-2V-100AH": 54,
@@ -2458,7 +2504,7 @@
           "GEN-CONNECTOR-HEADER-10PIN": 3,
           "GEN-CONNECTOR-PLUG-SOCKET-8POLE": 1,
           "GEN-CONTACTOR-DC-2P-63A": 1,
-          "GEN-DIN-RAIL-35MM-1M": 4,
+          "GEN-DIN-RAIL-35MM-1M": 3,
           "GEN-DIODE-POWER-50A-1600V": 1,
           "GEN-ENCLOSURE-800X1000X300": 1,
           "GEN-FUSE-HOLDER-DC-63A": 1,
@@ -2472,7 +2518,8 @@
           "GEN-PILOT-LAMP-22MM-24VDC": 2,
           "GEN-PLC-AI-8": 1,
           "GEN-PLC-CPU-COMPACT": 1,
-          "GEN-PLC-DI-16-24VDC": 1,
+          "GEN-PLC-DI-8-24VDC": 1,
+          "GEN-PLC-RACK-4SLOT": 1,
           "GEN-RECTIFIER-MODULE-3PH-110VDC-15A": 2,
           "GEN-RELAY-INTERFACE-2CO-24VDC": 1,
           "GEN-SWITCH-ETHERNET-5PORT-24VDC": 1,
@@ -2517,14 +2564,14 @@
           "009 -P1:1>-G1:+": "073027a2",
           "009 -V1:K>-X1:1": "073027a2",
           "009 -X1:1>-P1:1": "073027a2",
-          "010 -B1:OUT>AI0": "073027a2",
-          "011 -H1:1>-X10:1": "073027a2",
+          "010 -B1:OUT>-A5:0": "073027a2",
+          "011 -A2:0>-X10:1": "073027a2",
+          "011 -H1:1>-A2:0": "073027a2",
           "011 -K1:2>-H1:1": "073027a2",
-          "011 -X10:1>I0.0": "073027a2",
           "011 -X11:1>-K1:2": "073027a2",
-          "012 -H2:1>-X10:2": "073027a2",
+          "012 -A2:1>-X10:2": "073027a2",
+          "012 -H2:1>-A2:1": "073027a2",
           "012 -K2:2>-H2:1": "073027a2",
-          "012 -X10:2>I0.1": "073027a2",
           "012 -X11:2>-K2:2": "073027a2",
           "013 -A3:ETH>-A4:P1": "073027a2"
         }
@@ -2535,29 +2582,31 @@
         {"id":"p2","hash":"1da184b025ebc9","title":"Indice"},
         {"id":"p3","hash":"1a1e091f0157f6","title":"Dati generali dell'assieme"},
         {"id":"p4","hash":"013e24250aba0d","title":"Dati batteria e uscita DC"},
-        {"id":"p5","hash":"0eda4cd02d211a","title":"Schema unifilare"},
-        {"id":"p6","hash":"0e9a714ea30098","title":"Ingresso e moduli raddrizzatori"},
-        {"id":"p7","hash":"1599326d31ec20","title":"Uscita DC e batteria"},
-        {"id":"p8","hash":"179ad3642a68a3","title":"Relè di allarme"},
-        {"id":"p9","hash":"17feca6b3ab990","title":"Interfaccia PLC"},
+        {"id":"p5","hash":"184b75210c7f74","title":"Schema unifilare"},
+        {"id":"p6","hash":"18d249d805dd2f","title":"Ingresso e moduli raddrizzatori"},
+        {"id":"p7","hash":"1fa7a3c31c03df","title":"Uscita DC e batteria"},
+        {"id":"p8","hash":"05df5e870ae6f1","title":"Relè di allarme"},
+        {"id":"p9","hash":"092fc67109ed9f","title":"Interfaccia PLC"},
         {"id":"pg-rep1","hash":"0cda0e935a3e8c.1c474116","title":"Schema morsettiere"},
         {"id":"pg-rep3","hash":"1c90b582f359e4.003ff6a4","title":"Elenco cavi"},
-        {"id":"p10","hash":"0e40dc003d0c61","title":"Layout quadro"},
-        {"id":"pg-rep5","hash":"07ff9cae913bec.0e931628","title":"Elenco fili 1/2"},
-        {"id":"pg-rep7","hash":"01e59d5821eddd.0d24e259","title":"Elenco fili 2/2"},
-        {"id":"pg-rep9","hash":"16424cd7395cac.0a48947a","title":"Elenchi pin dei connettori"},
-        {"id":"pg-rep11","hash":"0a94598f5b21f6.01cb6786","title":"Distinta materiali 1/2"},
-        {"id":"pg-rep13","hash":"0b2c18325a41b2.003d0fcd","title":"Distinta materiali 2/2"},
-        {"id":"pg-rep15","hash":"0eb6983a3a7aa6.0224ac56","title":"Legenda dei simboli 1/2"},
-        {"id":"pg-rep17","hash":"0cda38d55516a5.0f41d0b2","title":"Legenda dei simboli 2/2"},
-        {"id":"pg-rep19","hash":"051ba61f905e80.16923503","title":"Colori dei conduttori"},
-        {"id":"pg-rep21","hash":"00a4a0b04d25ca.0ee8be20","title":"Suffissi dei numeri filo"},
+        {"id":"p10","hash":"1d32626414fd65","title":"Layout quadro"},
+        {"id":"pg-rep5","hash":"07ff9cae913bec.1e39807c","title":"Elenco fili 1/2"},
+        {"id":"pg-rep7","hash":"01e59d5821eddd.0454296f","title":"Elenco fili 2/2"},
+        {"id":"pg-rep9","hash":"06dee5c54293f9.13b1325b","title":"Elenchi pin dei connettori 1/2"},
+        {"id":"pg-rep11","hash":"021890a2a3f1d0.019f4c7f","title":"Elenchi pin dei connettori 2/2"},
+        {"id":"pg-rep13","hash":"125bfd39055dac.17ac9232","title":"Distinta materiali 1/2"},
+        {"id":"pg-rep15","hash":"142fbcfe81a67a.003d0fcd","title":"Distinta materiali 2/2"},
+        {"id":"pg-rep17","hash":"16722e30b16257.19bcb044","title":"Legenda dei simboli 1/2"},
+        {"id":"pg-rep19","hash":"01f7dae9629387.18b71b24","title":"Legenda dei simboli 2/2"},
+        {"id":"pg-rep21","hash":"147ff7699cd5dd.16923503","title":"Colori dei conduttori"},
+        {"id":"pg-rep23","hash":"144ce3e0221bbd.0ee8be20","title":"Suffissi dei numeri filo"},
         {
-          "id": "pg-rep23",
-          "hash": "1b26d9931e5017.00745559",
+          "id": "pg-rep25",
+          "hash": "106e77fccdefd0.00745559",
           "title": "Coppie di serraggio dei morsetti"
         },
-        {"id":"pg-rep25","hash":"167c79db2766f2.049d8a40","title":"Targhette"}
+        {"id":"pg-rep27","hash":"138302c1d59423.06b5568e","title":"Targhette"},
+        {"id":"pg-rep29","hash":"0b04a55fbec012.03af15d6","title":"Elenco I/O PLC"}
       ],
       "status": "approval"
     },
@@ -2569,10 +2618,11 @@
       "drawn": "CablePilot",
       "inventory": {
         "devices": {
-          "+DS-A1": "19e477a7",
+          "+DS-A1": "08ff96e0",
+          "+DS-A2": "0c982cee",
           "+DS-A3": "04315227",
           "+DS-A4": "15313eff",
-          "+DS-A5": "19449b46",
+          "+DS-A5": "03ac7a0b",
           "+DS-B1": "1a987a4e",
           "+DS-F1": "036f843b",
           "+DS-G1": "020ec200",
@@ -2590,8 +2640,8 @@
           "+DS-X1": "15a9bef5",
           "+DS-X10": "1db59ff7",
           "+DS-X11": "166f66ba",
-          "+DS-X20": "18834114",
-          "+DS-X21": "1ab71022"
+          "+DS-X20": "00ce9df7",
+          "+DS-X21": "04e15b7d"
         },
         "parts": {
           "GEN-BATTERY-CELL-2V-100AH": 55,
@@ -2602,7 +2652,7 @@
           "GEN-CONNECTOR-HEADER-10PIN": 3,
           "GEN-CONNECTOR-PLUG-SOCKET-8POLE": 1,
           "GEN-CONTACTOR-DC-2P-63A": 1,
-          "GEN-DIN-RAIL-35MM-1M": 4,
+          "GEN-DIN-RAIL-35MM-1M": 3,
           "GEN-DIODE-POWER-50A-1600V": 1,
           "GEN-ENCLOSURE-800X1000X300": 1,
           "GEN-FUSE-HOLDER-DC-63A": 1,
@@ -2616,7 +2666,8 @@
           "GEN-PILOT-LAMP-22MM-24VDC": 2,
           "GEN-PLC-AI-8": 1,
           "GEN-PLC-CPU-COMPACT": 1,
-          "GEN-PLC-DI-16-24VDC": 1,
+          "GEN-PLC-DI-8-24VDC": 1,
+          "GEN-PLC-RACK-4SLOT": 1,
           "GEN-RECTIFIER-MODULE-3PH-110VDC-15A": 2,
           "GEN-RELAY-INTERFACE-2CO-24VDC": 1,
           "GEN-SWITCH-ETHERNET-5PORT-24VDC": 1,
@@ -2661,14 +2712,14 @@
           "009 -P1:1>-G1:+": "073027a2",
           "009 -V1:K>-X1:1": "073027a2",
           "009 -X1:1>-P1:1": "073027a2",
-          "010 -B1:OUT>AI0": "073027a2",
-          "011 -H1:1>-X10:1": "073027a2",
+          "010 -B1:OUT>-A5:0": "073027a2",
+          "011 -A2:0>-X10:1": "073027a2",
+          "011 -H1:1>-A2:0": "073027a2",
           "011 -K1:2>-H1:1": "073027a2",
-          "011 -X10:1>I0.0": "073027a2",
           "011 -X11:1>-K1:2": "073027a2",
-          "012 -H2:1>-X10:2": "073027a2",
+          "012 -A2:1>-X10:2": "073027a2",
+          "012 -H2:1>-A2:1": "073027a2",
           "012 -K2:2>-H2:1": "073027a2",
-          "012 -X10:2>I0.1": "073027a2",
           "012 -X11:2>-K2:2": "073027a2",
           "013 -A3:ETH>-A4:P1": "073027a2"
         }
@@ -2679,29 +2730,31 @@
         {"id":"p2","hash":"1da184b025ebc9","title":"Indice"},
         {"id":"p3","hash":"1a1e091f0157f6","title":"Dati generali dell'assieme"},
         {"id":"p4","hash":"013e24250aba0d","title":"Dati batteria e uscita DC"},
-        {"id":"p5","hash":"0eda4cd02d211a","title":"Schema unifilare"},
-        {"id":"p6","hash":"0e9a714ea30098","title":"Ingresso e moduli raddrizzatori"},
-        {"id":"p7","hash":"0d771bd85a43ea","title":"Uscita DC e batteria"},
-        {"id":"p8","hash":"179ad3642a68a3","title":"Relè di allarme"},
-        {"id":"p9","hash":"17feca6b3ab990","title":"Interfaccia PLC"},
+        {"id":"p5","hash":"184b75210c7f74","title":"Schema unifilare"},
+        {"id":"p6","hash":"18d249d805dd2f","title":"Ingresso e moduli raddrizzatori"},
+        {"id":"p7","hash":"0eaa05b2f1d710","title":"Uscita DC e batteria"},
+        {"id":"p8","hash":"05df5e870ae6f1","title":"Relè di allarme"},
+        {"id":"p9","hash":"092fc67109ed9f","title":"Interfaccia PLC"},
         {"id":"pg-rep1","hash":"0cda0e935a3e8c.1c474116","title":"Schema morsettiere"},
         {"id":"pg-rep3","hash":"1c90b582f359e4.003ff6a4","title":"Elenco cavi"},
-        {"id":"p10","hash":"0e40dc003d0c61","title":"Layout quadro"},
-        {"id":"pg-rep5","hash":"07ff9cae913bec.0e931628","title":"Elenco fili 1/2"},
-        {"id":"pg-rep7","hash":"01e59d5821eddd.0d24e259","title":"Elenco fili 2/2"},
-        {"id":"pg-rep9","hash":"16424cd7395cac.0a48947a","title":"Elenchi pin dei connettori"},
-        {"id":"pg-rep11","hash":"0a94598f5b21f6.0ce6fd0c","title":"Distinta materiali 1/2"},
-        {"id":"pg-rep13","hash":"0b2c18325a41b2.003d0fcd","title":"Distinta materiali 2/2"},
-        {"id":"pg-rep15","hash":"0eb6983a3a7aa6.0224ac56","title":"Legenda dei simboli 1/2"},
-        {"id":"pg-rep17","hash":"0cda38d55516a5.0f41d0b2","title":"Legenda dei simboli 2/2"},
-        {"id":"pg-rep19","hash":"051ba61f905e80.16923503","title":"Colori dei conduttori"},
-        {"id":"pg-rep21","hash":"00a4a0b04d25ca.0ee8be20","title":"Suffissi dei numeri filo"},
+        {"id":"p10","hash":"1d32626414fd65","title":"Layout quadro"},
+        {"id":"pg-rep5","hash":"07ff9cae913bec.1e39807c","title":"Elenco fili 1/2"},
+        {"id":"pg-rep7","hash":"01e59d5821eddd.0454296f","title":"Elenco fili 2/2"},
+        {"id":"pg-rep9","hash":"06dee5c54293f9.13b1325b","title":"Elenchi pin dei connettori 1/2"},
+        {"id":"pg-rep11","hash":"021890a2a3f1d0.019f4c7f","title":"Elenchi pin dei connettori 2/2"},
+        {"id":"pg-rep13","hash":"125bfd39055dac.1e7a6bdb","title":"Distinta materiali 1/2"},
+        {"id":"pg-rep15","hash":"142fbcfe81a67a.003d0fcd","title":"Distinta materiali 2/2"},
+        {"id":"pg-rep17","hash":"16722e30b16257.19bcb044","title":"Legenda dei simboli 1/2"},
+        {"id":"pg-rep19","hash":"01f7dae9629387.18b71b24","title":"Legenda dei simboli 2/2"},
+        {"id":"pg-rep21","hash":"147ff7699cd5dd.16923503","title":"Colori dei conduttori"},
+        {"id":"pg-rep23","hash":"144ce3e0221bbd.0ee8be20","title":"Suffissi dei numeri filo"},
         {
-          "id": "pg-rep23",
-          "hash": "1b26d9931e5017.00745559",
+          "id": "pg-rep25",
+          "hash": "106e77fccdefd0.00745559",
           "title": "Coppie di serraggio dei morsetti"
         },
-        {"id":"pg-rep25","hash":"167c79db2766f2.049d8a40","title":"Targhette"}
+        {"id":"pg-rep27","hash":"138302c1d59423.06b5568e","title":"Targhette"},
+        {"id":"pg-rep29","hash":"0b04a55fbec012.03af15d6","title":"Elenco I/O PLC"}
       ],
       "status": "construction"
     }

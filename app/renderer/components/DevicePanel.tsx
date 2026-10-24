@@ -9,7 +9,8 @@ import { withPin } from '@shared/draw/box';
 import { newId } from '@shared/ids';
 import type { PartDef } from '@shared/library/types';
 import { findPart } from '@shared/library/types';
-import type { BoxEl, BoxPin, Page, PartUse, Project, SymbolEl } from '@shared/model/types';
+import type { BoxEl, BoxPin, Page, PartUse, PlcType, Project, SymbolEl } from '@shared/model/types';
+import { PLC_TYPES } from '@shared/plc';
 import { aspectsOf, parseDesignation } from '@shared/numbering';
 import { useEditor } from '../state/editor';
 import { NumField, Select, TextField } from './fields';
@@ -159,6 +160,8 @@ export function DeviceSection({ el, page, project }: { el: SymbolEl | BoxEl; pag
   );
 }
 
+const plcTypeLabel = (v: PlcType): string => (v === 'cpu' ? t('CPU') : v === 'di' ? t('Digital inputs') : v === 'do' ? t('Digital outputs') : v === 'ai' ? t('Analog inputs') : t('Analog outputs'));
+
 /** Properties of a black box or connector: names, size, mate and the numbered, named pins. */
 export function BoxProps({ el, page, project }: { el: BoxEl; page: Page; project: Project }) {
   const up = (patch: Record<string, unknown>) => patchEl(page.id, el.id, patch);
@@ -181,12 +184,26 @@ export function BoxProps({ el, page, project }: { el: BoxEl; page: Page; project
       )}
       <NumField label={t('Width (mm)')} value={el.w} min={5} onCommit={(v) => up({ w: v })} />
       <NumField label={t('Height (mm)')} value={el.h} min={5} onCommit={(v) => up({ h: v })} />
+      {el.plc && (
+        <>
+          <h4>{t('PLC card')}</h4>
+          <Select<PlcType> label={t('Card type')} testid="plc-type" value={el.plc.type} options={PLC_TYPES.map((v) => ({ value: v, label: plcTypeLabel(v) }))} onChange={(v) => up({ plc: { ...el.plc, type: v } })} />
+          <TextField label={t('Rack')} value={el.plc.rack} onCommit={(v) => v && up({ plc: { ...el.plc, rack: v } })} mono />
+          <NumField label={t('Slot')} value={el.plc.slot} min={0} step={1} onCommit={(v) => up({ plc: { ...el.plc, slot: v } })} />
+        </>
+      )}
       <h4>{t('Pins')}</h4>
       <ul className="pins" data-testid="box-pins">
         {el.pins.map((p, i) => (
           <li key={i}>
             <TextField label={t('Pin number')} value={p.id} onCommit={(v) => v && setPin(i, { id: v })} mono />
-            <TextField label={t('Pin name')} value={p.name ?? ''} onCommit={(v) => setPin(i, { name: v || undefined })} />
+            {el.plc ? (
+              <>
+                <TextField label={t('Address')} testid={`pin-address-${i}`} value={p.address ?? ''} onCommit={(v) => setPin(i, { address: v || undefined })} mono />
+                <TextField label={t('Tag')} value={p.tag ?? ''} onCommit={(v) => setPin(i, { tag: v || undefined })} mono />
+                <TextField label={t('Comment')} value={p.comment ?? ''} onCommit={(v) => setPin(i, { comment: v || undefined })} />
+              </>
+            ) : <TextField label={t('Pin name')} value={p.name ?? ''} onCommit={(v) => setPin(i, { name: v || undefined })} />}
             <Select<BoxPin['side']> label={t('Side')} value={p.side} options={sides} onChange={(v) => setPin(i, { side: v })} />
             <NumField label={t('Offset (mm)')} value={p.offset} min={0} step={2.5} onCommit={(v) => setPin(i, { offset: v })} />
             <button type="button" aria-label={t('Remove')} onClick={() => up({ pins: el.pins.filter((_, j) => j !== i) })}>✕</button>

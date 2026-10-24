@@ -70,14 +70,40 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 
 ## M5 PLC
 
-- [ ] PLC racks and I/O cards as devices
-- [ ] I/O assignment overview
-- [ ] Tag lists exported and imported in the formats TIA Portal and CODESYS accept, each verified against the vendor documentation and cited in code
+- [x] PLC racks and I/O cards as devices
+- [x] I/O assignment overview
+- [x] Tag lists exported and imported in the formats TIA Portal and CODESYS accept, each verified against the vendor documentation and cited in code (CODESYS checked against its Online Help; the TIA Portal XML could not be checked against Siemens' documentation and ships marked unverified)
+
+## M6-Sizing and warehouse (part 1 of M6, brief rule 12)
+
+- [ ] Load and feeder data on devices; project supply data (voltage, prospective short-circuit current, ambient temperature, installation method, grouping); cable lengths
+- [ ] Sizing engine in `/shared`: cable current-carrying capacity and correction factors (IEC 60364-5-52), protection coordination Ib ≤ In ≤ Iz and I2 ≤ 1.45 Iz (IEC 60364-4-43), voltage drop, breakers (IEC 60947-2), contactors and overload relays (IEC 60947-4-1), with sources and stated assumptions
+- [ ] Warehouse stock import from CSV/XLSX with a saved column mapping and refresh; stock items linked to library parts; "data missing" for items without technical data; generic sample stock file
+- [ ] Suggestions per device and per conductor: only parts that meet the requirement, ranked by availability, showing warehouse, location and the quantity available for this project; select and confirm as one undoable command
+- [ ] "Size the whole project" review table, accept line by line or all
+- [ ] Quantities: available = on hand − reserved − this project's use (× units to build, cable in metres); BOM columns on hand / available / short / location; shortages and stale stock flagged in the message list; picking-list export
+- [ ] Tests (sizing worked examples, availability arithmetic, import mapping) and e2e (import stock, size a motor feeder, confirm, BOM quantities)
+
+## M6-CAD workspace with the AI inside (part 2 of M6)
+
+- [ ] AutoCAD arrangement and behaviour as closely as the law allows (ribbon on top, command line and status bar at the bottom, palettes at the sides, crosshair cursor, same commands, keys and prompts); only Autodesk logos, icon artwork, names and trademarks excluded
+- [ ] Ribbon with tabbed, grouped tools (Home, Insert, Wires, Reports, PLC, Layout, View)
+- [ ] Command line with history, autocomplete, the usual CAD aliases (L, PL, REC, C, M, CO, RO, MI, E, TR, EX, O, Z/ZE, U, PAN, LA, DI) and our commands; Enter/Space repeats, Esc cancels
+- [ ] Status-bar drafting aids: grid F7, ortho F8, snap F9, object snap F3 with modes, polar tracking F10; dynamic input with typed lengths, angles and relative coordinates
+- [ ] CAD selection: window and crossing, Shift to remove, grips, right-click menus with repeat
+- [ ] Layers (on/off, lock, colour, line type) mapped to the drawing styles
+- [ ] Dockable, resizable panels (pages, symbols, properties, layers, messages, AI chat); layout saved per user; full-screen canvas
+- [ ] AI chat panel docked by the canvas (project, page and selection as context); natural-language input on the command line goes to the assistant; context hints; works with the fake provider until M7
+- [ ] Tests: command-line drawing, snaps, window/crossing, saved panel layout, a chat proposal accepted and undone
 
 ## M6 Cabinet layout
 
 - [ ] Enclosure and mounting plate from the library, DIN rails and wire ducts
-- [ ] Devices placed from the BOM at real size in a 2D front view to scale; outlines from the library or an imported DXF, SVG or image
+- [ ] Drawn by the user with the CAD workspace tools (snaps, typed coordinates, grips, layers)
+- [ ] Devices placed from the BOM at real size in a 2D front view to scale; outlines from the library or an imported DXF, SVG or image; snap to rails, align, distribute; list of devices not yet placed
+- [ ] Suggested layout (enclosure and plate size with spare space, rails, ducts, every device placed by function and schematic order, terminals by the cable entry, door devices, clearances, duct fill) as a preview; the user edits it freely; moved or locked items stay put when re-suggesting; the rules applied are listed
+- [ ] Layout templates saved to the company library and loaded into new projects
+- [ ] Layout exchange with an ERP or another system: documented, versioned JSON and CSV (designation, part code, enclosure/plate/door, rail, x, y, z, rotation, size) and DXF; import previewed and undoable; enclosure and device dimensions from the ERP item master via the CSV/XLSX mapping; files or a watched folder (live ERP connection decided with the owner)
 - [ ] Side view showing device depths
 - [ ] Dimension lines, notes, hatched no-mount zones, covers, door-mounted devices
 - [ ] 3D view of the cabinet

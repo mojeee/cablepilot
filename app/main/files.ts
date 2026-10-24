@@ -68,7 +68,8 @@ export class FileService {
     if (this.e2eDir) target = join(this.e2eDir, basename(suggestedName));
     else {
       const win = this.window();
-      const ext = suggestedName.split('.').pop()?.toLowerCase() === 'dxf' ? 'dxf' : 'csv';
+      const e = suggestedName.split('.').pop()?.toLowerCase() ?? '';
+      const ext = ['dxf', 'xml', 'txt'].includes(e) ? e : 'csv';
       const opts = { title: 'Export', defaultPath: suggestedName, filters: [{ name: ext.toUpperCase(), extensions: [ext] }] };
       const r = await (win ? dialog.showSaveDialog(win, opts) : dialog.showSaveDialog(opts));
       if (r.canceled || !r.filePath) return ok(null);
@@ -97,6 +98,24 @@ export class FileService {
     else {
       const win = this.window();
       const opts = { title: 'Import DXF', properties: ['openFile' as const], filters: [{ name: 'DXF', extensions: ['dxf'] }] };
+      const r = await (win ? dialog.showOpenDialog(win, opts) : dialog.showOpenDialog(opts));
+      if (r.canceled || !r.filePaths[0]) return ok(null);
+      path = r.filePaths[0];
+    }
+    try {
+      return ok({ text: readFileSync(path, 'utf8'), name: basename(path) });
+    } catch (e) {
+      return fail('file.read', `The file could not be read: ${(e as Error).message}`, 'Check that the file still exists and that you may read it.');
+    }
+  }
+
+  /** Reads a tag-list file (TIA Portal XML or CODESYS text) the user picks. With CP_E2E_DIR set it reads tags-import.xml or tags-import.txt from that folder. */
+  async importTags(ext: 'xml' | 'txt'): Promise<Result<{ text: string; name: string } | null>> {
+    let path: string;
+    if (this.e2eDir) path = join(this.e2eDir, `tags-import.${ext}`);
+    else {
+      const win = this.window();
+      const opts = { title: 'Import tag list', properties: ['openFile' as const], filters: [{ name: ext === 'xml' ? 'XML' : 'Text', extensions: [ext] }] };
       const r = await (win ? dialog.showOpenDialog(win, opts) : dialog.showOpenDialog(opts));
       if (r.canceled || !r.filePaths[0]) return ok(null);
       path = r.filePaths[0];

@@ -23,6 +23,7 @@ export function reportLabel(id: ReportId): string {
     case 'nameplates': return t('Nameplates');
     case 'wireMarkers': return t('Wire markers');
     case 'terminalMarkers': return t('Terminal markers');
+    case 'plcIo': return t('PLC I/O list');
   }
 }
 

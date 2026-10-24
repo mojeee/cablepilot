@@ -11,6 +11,32 @@
   `docs/demo.md` and `scripts/site/demo.it.md`. `npm run check:site` fails when a file of the recording is missing.
 - Input fields in the wire-class and wire-type tables are readable in the dark theme (they were white on white).
 
+### M5 PLC
+
+- Plan: added sizing and warehouse, and a CAD workspace with the AI inside (M6 parts 1 and 2); the cabinet layout is
+  now M6 part 3 (`docs/brief.md`, `docs/roadmap.md`, product rule 12).
+- PLC racks and I/O cards as devices: a card is a black box with a card type (CPU, digital or analog input or
+  output), a rack and a slot; its pins are the channels. Cards come from generic library parts (CPU, DI 8 and 16,
+  DO 8 and 16, AI 8, AO 4, a 4-slot rack) with their channel counts; place one from "PLC cards" in the symbol
+  browser: it gets a designation, its part, a slot and its addresses in one undo step.
+- Addressing scheme (project setting): Siemens notation (I0.0, Q0.1, IW64) or IEC 61131-3 (%IX0.0, %QX0.1, %IW32)
+  and the first byte of each area; addresses are assigned per card and channel in rack and slot order (fill missing
+  or reassign all), edited by hand, and rewritten when the style changes.
+- "PLC I/O" window: every channel with address, tag, comment, what it is wired to and page-column, live from the
+  schematic and editable (address, tag and comment here or on the card, every edit a command), plus the same list
+  as a report page ("PLC I/O list", also in the XLSX workbook).
+- Tag lists: export and import for CODESYS (global variable list, `name AT %IX0.0 : BOOL;`, checked against the
+  CODESYS Online Help) and TIA Portal (PLC tag table XML in the Openness layout, marked unverified: Siemens'
+  documentation was not reachable, see `docs/to-verify.md`). Import is previewed (tags matched to channels by
+  address, nothing created) and applied as one undo step.
+- The PLC-address-used-twice check now covers card channels and channel symbols, in any spelling of an address.
+- Samples: the conveyor has a rack (CPU, 8 DI, 8 DO) with tagged I/O and a PLC I/O list page; the charger's PLC
+  interface page uses DI and AI cards and has the list page too. All samples still open with no findings.
+- File format 5 (migration from 4: `settings.plc`), JSON Schema updated.
+- Demo video recorded again: cover sheet with the revision matrix, the check banner and one-click fix, the PLC I/O
+  window and a tag export; the walkthrough in `docs/demo.md` and the Italian `scripts/site/demo.it.md` follow.
+- Website: the PLC block shows a screenshot of the PLC I/O window.
+
 ### M4 Checks and revisions
 
 - Electrical rule check, continuous and incremental (only the page that changed is rechecked): duplicate

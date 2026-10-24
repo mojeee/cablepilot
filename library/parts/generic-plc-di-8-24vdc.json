@@ -1,0 +1,23 @@
+{
+  "id": "generic-plc-di-8-24vdc",
+  "kind": "part",
+  "title": {
+    "en": "PLC input card, 8 digital inputs 24 V DC",
+    "it": "Scheda PLC, 8 ingressi digitali 24 V DC"
+  },
+  "category": "plc",
+  "code": "GEN-PLC-DI-8-24VDC",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "PLC input card, 8 digital inputs 24 V DC",
+    "it": "Scheda PLC, 8 ingressi digitali 24 V DC"
+  },
+  "data": {
+    "Card type": "di",
+    "Channels": "8",
+    "Signal": "24 V DC"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

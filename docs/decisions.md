@@ -267,6 +267,33 @@ IEC 60617 symbols by default with NFPA 79 / ANSI as an option from M1; three sam
   breaker are then too small), captured by `npm run screenshots`.
 - **No new dependencies.**
 
+## M5 PLC
+
+- **A card is a black box with `plc` set** (type, rack, slot), and its pins are the channels. This reuses wires,
+  connectivity, devices, parts, the BOM and the cross-references; the card is a device with its library part. A rack
+  is a rack name shared by cards plus slot numbers; the rack part is assigned to the CPU device. Chosen over a new
+  element kind to avoid a second connectivity path.
+- **Addresses are stored on the pins** (`address`, `tag`, `comment`), assigned by a command from the scheme, not
+  computed on the fly: hand edits and imports then need no override layer, and the check, overview, report and tag
+  lists read one place. Changing the scheme's style rewrites the spelling of the stored addresses, it never moves them.
+- **Two notations.** Siemens (I0.0, Q0.1, IW64, word address = byte) and IEC 61131-3 (%IX0.0, %QX0.1, %IW32, word
+  address = word index) are the same address in two spellings: the model keeps byte and bit, so they convert
+  without loss. The duplicate check compares one canonical spelling (no percent sign, IX = I).
+- **Default start bytes** (digital 0, analog 64) are editable company defaults, listed in `docs/to-verify.md`.
+- **Tag lists.** CODESYS: the declaration text of a global variable list (AT syntax from the CODESYS Online Help),
+  because it needs no archive or schema version. TIA Portal: the PLC tag table XML of the Openness layout, shipped
+  marked "unverified" in the UI and in `docs/to-verify.md`, because Siemens' own documentation could not be
+  reached and the layout rests on a published example of an exported table. We did not ship an Excel format: its
+  header names are localised by TIA Portal and could not be verified at all.
+- **Import never creates channels.** Tags are matched to existing channels by address and give them their name and
+  comment; unmatched and invalid rows are listed in the preview. Names the export made up for untagged channels, or
+  a tag in identifier form, are not changes, so exporting and importing the same project changes nothing.
+- **Tag names are identifiers** on export (letters, digits, underscore, not starting with a digit, unique) so both
+  tools accept them; the tag stored in the project keeps what the user typed.
+- **File format 5** adds `settings.plc`; cards and channel fields are optional properties of boxes, so older files
+  open unchanged. The conveyor and charger samples use cards; the pump station keeps channel symbols to show that
+  they still work.
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite

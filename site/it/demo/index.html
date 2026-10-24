@@ -53,22 +53,23 @@
           </figure>
           <h2 class="toc-h">Passi</h2>
           <ol class="step-toc">
-            <li><a href="#step-1"><span>01</span> Apri l’esempio e sfoglia il set di disegni</a></li>
+            <li><a href="#step-1"><span>01</span> Apri l’esempio, la copertina e il set di disegni</a></li>
             <li><a href="#step-2"><span>02</span> Una bobina e un contatto dalla libreria</a></li>
-            <li><a href="#step-3"><span>03</span> Numeri filo, colori e un fascio</a></li>
-            <li><a href="#step-4"><span>04</span> Elenchi che seguono lo schema</a></li>
-            <li><a href="#step-5"><span>05</span> Anteprima di stampa, PDF e XLSX</a></li>
+            <li><a href="#step-3"><span>03</span> Numeri filo e gli elenchi che seguono</a></li>
+            <li><a href="#step-4"><span>04</span> Il banner dei controlli trova un problema; un clic lo corregge</a></li>
+            <li><a href="#step-5"><span>05</span> Panoramica I/O del PLC ed elenco dei simboli</a></li>
+            <li><a href="#step-6"><span>06</span> PDF e XLSX</a></li>
           </ol>
         </div>
       </section>
       <section class="step" id="step-1" aria-labelledby="step-1-h">
         <div class="wrap step-grid">
           <div class="step-text">
-          <h2 id="step-1-h"><span class="label">Passo 1</span> Apri l’esempio e sfoglia il set di disegni</h2>
-          <p>Scegli <strong>Progetti di esempio &gt; Caricabatterie 110 V DC</strong>. Il progetto si apre sulla copertina. Fai clic sulle pagine del navigatore: indice, schema unifilare, pagina multifilare di potenza, interfaccia PLC, schema delle morsettiere, elenco fili e distinta materiali. Sono le pagine del set con cui l’officina costruisce e il cliente approva, tutte nella cornice e nel cartiglio del progetto.</p>
+          <h2 id="step-1-h"><span class="label">Passo 1</span> Apri l’esempio, la copertina e il set di disegni</h2>
+          <p>Scegli <strong>Progetti di esempio &gt; Caricabatterie 110 V DC</strong>. Il progetto si apre sulla copertina: l’indice dei fogli con la revisione di ogni foglio in una matrice delle revisioni, lo stato di emissione e il blocco di approvazione del cliente. Fai clic sulle pagine del navigatore: indice, schema unifilare e la pagina di interfaccia PLC con la sua scheda I/O. Sono le pagine del set con cui l’officina costruisce e il cliente approva, tutte nella cornice e nel cartiglio del progetto.</p>
           <ul class="bullets"><li>I progetti di esempio sono inclusi nel programma, così ogni funzione si mostra senza file propri.</li><li>Le pagine sono disegnate nella lingua di disegno del progetto (qui l’italiano), qualunque sia la lingua dell’interfaccia.</li></ul>
           </div>
-          <figure class="step-shot"><img src="/img/demo-1.png" alt="La copertina del caricabatterie di esempio, prima pagina del set di disegni." width="1920" height="1080" loading="lazy" /></figure>
+          <figure class="step-shot"><img src="/img/demo-1.png" alt="La copertina del caricabatterie di esempio, ingrandita sull’indice dei fogli con le colonne delle revisioni." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="step alt" id="step-2" aria-labelledby="step-2-h">
@@ -84,31 +85,41 @@
       <section class="step" id="step-3" aria-labelledby="step-3-h">
         <div class="wrap step-grid">
           <div class="step-text">
-          <h2 id="step-3-h"><span class="label">Passo 3</span> Numeri filo, colori e un fascio</h2>
-          <p>Apri <strong>Fili</strong>, imposta il primo numero a 20 e fai clic su <strong>Numera i fili ora</strong>: i fili sono numerati con lo schema <code>{n:3}{suffix}</code> (020L+, 021L+ e così via) in un solo passo di annullamento. I conduttori sono disegnati nel colore della loro classe (sigle IEC 60757) e un filo segnato come fascio mostra una sola etichetta con sezione e colore al posto del numero.</p>
-          <ul class="bullets"><li>La tabella delle classi di filo dell’azienda si modifica nella stessa finestra.</li><li>I fili di una stessa rete, e le reti unite tra pagine, hanno un solo numero. I numeri scritti a mano restano.</li></ul>
+          <h2 id="step-3-h"><span class="label">Passo 3</span> Numeri filo e gli elenchi che seguono</h2>
+          <p>Apri <strong>Fili</strong>, imposta il primo numero a 20 e fai clic su <strong>Numera i fili ora</strong>: i fili sono numerati con lo schema <code>{n:3}{suffix}</code> (020L+, 021L+ e così via) in un solo passo di annullamento. Poi apri <strong>Report</strong>: l’elenco fili mostra i nuovi numeri e la distinta materiali conta già il contattore appena inserito. Tutti gli elenchi nascono dallo schema e si aggiornano con lui.</p>
+          <ul class="bullets"><li>La tabella delle classi di filo dell’azienda si modifica nella finestra Fili; i numeri scritti a mano restano.</li><li>Gli stessi elenchi si possono aggiungere al set di disegni come pagine.</li></ul>
           </div>
-          <figure class="step-shot"><img src="/img/demo-3.png" alt="I fili della pagina di potenza numerati e disegnati nei loro colori, uno come fascio con una sola etichetta." width="1920" height="1080" loading="lazy" /></figure>
+          <figure class="step-shot"><img src="/img/demo-3.png" alt="La finestra Report con la distinta materiali e il contattore appena inserito." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="step alt" id="step-4" aria-labelledby="step-4-h">
         <div class="wrap step-grid">
           <div class="step-text">
-          <h2 id="step-4-h"><span class="label">Passo 4</span> Elenchi che seguono lo schema</h2>
-          <p>Apri <strong>Report</strong>: lo schema delle morsettiere, l’elenco fili con i nuovi numeri e la distinta materiali, che conta già il contattore appena inserito. Tutti gli elenchi nascono dallo schema e si aggiornano con lui.</p>
-          <ul class="bullets"><li>Gli stessi elenchi si possono aggiungere al set di disegni come pagine.</li></ul>
+          <h2 id="step-4-h"><span class="label">Passo 4</span> Il banner dei controlli trova un problema; un clic lo corregge</h2>
+          <p>Disegna un filo che non collega nulla. Il banner degli avvisi compare subito con la segnalazione, la sua regola e la sua norma. Fai clic sulla correzione: il filo isolato viene rimosso, il banner sparisce e tutto è un solo passo di annullamento.</p>
+          <ul class="bullets"><li>Il controllo delle regole elettriche è continuo; le segnalazioni compaiono anche come marcatori sulla pagina.</li><li><strong>Correggi tutto il correggibile</strong> applica ogni correzione semplice in un solo passo.</li></ul>
           </div>
-          <figure class="step-shot"><img src="/img/demo-4.png" alt="La finestra Report con la distinta materiali e il contattore appena inserito." width="1920" height="1080" loading="lazy" /></figure>
+          <figure class="step-shot"><img src="/img/demo-4.png" alt="Il banner degli avvisi e la segnalazione di un filo che non collega nulla, con la correzione in un clic." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="step" id="step-5" aria-labelledby="step-5-h">
         <div class="wrap step-grid">
           <div class="step-text">
-          <h2 id="step-5-h"><span class="label">Passo 5</span> Anteprima di stampa, PDF e XLSX</h2>
-          <p>Attiva <strong>Anteprima di stampa (bianca)</strong> per vedere la pagina come viene stampata. Poi <strong>Esporta PDF</strong> scrive il set di disegni completo (vettoriale, testo incorporato) e <strong>Esporta tutti gli elenchi in XLSX</strong> scrive ogni elenco in un’unica cartella di lavoro. Il video finisce sulla copertina.</p>
+          <h2 id="step-5-h"><span class="label">Passo 5</span> Panoramica I/O del PLC ed elenco dei simboli</h2>
+          <p>Apri <strong>I/O PLC</strong>: ogni canale delle schede PLC con indirizzo, simbolo, commento, a cosa è collegato e dove è disegnato, in tempo reale dallo schema. Modifica un simbolo qui e la scheda nella pagina PLC lo mostra; modificalo sulla scheda e cambia qui. <strong>Esporta</strong> scrive l’elenco dei simboli per CODESYS (una lista di variabili globali) o per TIA Portal (XML, segnato come non verificato finché non è controllato sulla documentazione Siemens).</p>
+          <ul class="bullets"><li>Gli indirizzi seguono uno schema configurabile (notazione Siemens o IEC 61131-3, primo byte di ogni area).</li><li>L’importazione di un elenco di simboli ha prima un’anteprima e si applica in un solo passo di annullamento.</li></ul>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-5.png" alt="La finestra I/O PLC con ogni canale del caricabatterie di esempio: indirizzo, simbolo e collegamento." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step alt" id="step-6" aria-labelledby="step-6-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-6-h"><span class="label">Passo 6</span> PDF e XLSX</h2>
+          <p><strong>Esporta PDF</strong> scrive il set di disegni completo (vettoriale, testo incorporato) e <strong>Esporta tutti gli elenchi in XLSX</strong> scrive ogni elenco, compreso l’elenco I/O del PLC, in un’unica cartella di lavoro. Il video finisce sulla copertina.</p>
           <ul class="bullets"><li>I file sono tuoi: formato di progetto aperto, PDF e XLSX in uscita, nessun account.</li></ul>
           </div>
-          <figure class="step-shot"><img src="/img/demo-5.png" alt="La stessa pagina nell’anteprima di stampa (bianca), come viene stampata." width="1920" height="1080" loading="lazy" /></figure>
+          <figure class="step-shot"><img src="/img/demo-6.png" alt="I messaggi dopo l’esportazione del set di disegni in PDF, sopra la pagina dell’interfaccia PLC." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="band dark try" aria-labelledby="try-h">

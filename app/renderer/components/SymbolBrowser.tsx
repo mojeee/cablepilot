@@ -78,6 +78,7 @@ export function SymbolBrowser() {
     for (const d of all) if (!order.includes(d.category)) order.push(d.category);
     return order.map((c) => ({ c, items: all.filter((d) => d.category === c).sort((a, b) => a.title[lang].localeCompare(b.title[lang])) })).filter((g) => g.items.length);
   }, [lib, query, lang]);
+  const plcParts = useMemo(() => [...lib.parts.values()].filter((p) => p.data['Card type'] && (!query.trim() || p.title[lang].toLowerCase().includes(query.trim().toLowerCase()) || p.title.en.toLowerCase().includes(query.trim().toLowerCase()))).sort((a, b) => a.code.localeCompare(b.code)), [lib, query, lang]);
   const isCompany = (d: SymbolDef) => company.some((c) => c.id === d.id);
   return (
     <aside className="panel browser" aria-label={t('Symbols and devices')}>
@@ -100,6 +101,21 @@ export function SymbolBrowser() {
             ))}
         </ul>
       </section>
+      {plcParts.length > 0 && (
+        <section>
+          <h3>{t('PLC cards')}</h3>
+          <ul className="symbols">
+            {plcParts.map((pt) => (
+              <li key={pt.id}>
+                <button type="button" data-testid={`plc-card-${pt.id}`} className={placing === `plc:${pt.id}` ? 'sym on' : 'sym'} title={`${pt.title[lang]} (${pt.source})`} onClick={() => useEditor.getState().setTool('symbol', `plc:${pt.id}`)}>
+                  <SymbolSvg gfx={[{ t: 'rect', x: -6, y: -5, w: 12, h: 10 }, { t: 'circle', cx: -6, cy: -2.5, r: 0.8, fill: true }, { t: 'circle', cx: -6, cy: 0, r: 0.8, fill: true }, { t: 'circle', cx: -6, cy: 2.5, r: 0.8, fill: true }]} />
+                  <span>{pt.title[lang]}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       {macros.length > 0 && (
         <section>
           <h3>{t('Macros')}</h3>

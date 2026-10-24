@@ -14,7 +14,8 @@
   },
   "data": {
     "Supply voltage": "24 V DC",
-    "Interface": "Ethernet"
+    "Interface": "Ethernet",
+    "Card type": "cpu"
   },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",

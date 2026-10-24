@@ -102,6 +102,33 @@ formats (EPLAN, AutoCAD Electrical project files).
     terminal and cable pages, nameplates, a dimensioned cabinet layout and a BOM, all in the company's
     own frame, title block and drawing style. `docs/reference-drawing-check.md` lists what a real set
     of this kind contains; every row must be possible before release 1.
+12. **Sizing from the schematic, parts from the warehouse.** The app sizes cables and components and
+    proposes parts the company actually has in stock; the user only selects and confirms.
+    - **Sizing** is computed, never guessed, from data in the project (load or motor rating, voltage,
+      power factor, supply, prospective short-circuit current, installation method, ambient
+      temperature, grouping, cable length), with sources: cable current-carrying capacity and
+      correction factors (IEC 60364-5-52), overcurrent protection and coordination Ib ≤ In ≤ Iz and
+      I2 ≤ 1.45 Iz (IEC 60364-4-43), voltage drop (IEC 60364-5-52), circuit-breakers (IEC 60947-2),
+      contactors and overload relays with their utilisation category (IEC 60947-4-1). Each result shows
+      its requirement ("In ≥ 16 A, curve D, 3 poles, Icu ≥ 10 kA"; "cable ≥ 2.5 mm², method B1,
+      30 °C"), its assumptions, and says it does not replace the engineer's verification.
+    - **The warehouse** is the company's own stock list, imported from CSV or XLSX exported by their
+      ERP or warehouse system (a column-mapping wizard, saved per company; refresh from a file or a
+      watched folder): part code, manufacturer, description, quantity on hand, reserved, location,
+      unit. Stock items are linked to library parts, which carry the technical data sizing needs; an
+      item without that data is shown as "data missing", never suggested for a rating it cannot prove.
+      Live connections to an ERP come later and are decided with the owner.
+    - **Suggestions** list only parts that meet the requirement, ranked: in stock with enough quantity
+      first, then in stock but short, then not in stock. Each row shows the warehouse, location and the
+      quantity **available for this project**: on hand − reserved − what this project already uses
+      (quantity per device × units to build; cable in metres from the wire lengths). Picking one and
+      confirming is one undoable command; nothing changes without the user's confirmation. "Size the
+      whole project" shows every proposal in one review table to accept line by line or all at once.
+    - **Quantities stay correct:** the BOM shows on hand, available, short and location per row;
+      shortages appear in the message list; the stock date is shown and an old stock list is flagged;
+      a picking list (CSV/XLSX) is exported for the warehouse. When the stock list is refreshed, parts
+      the project uses that are no longer available are flagged.
+    - The AI assistant (M7) uses the same sizing engine and stock data; it never invents a rating.
 
 ## Stack
 
@@ -227,10 +254,80 @@ work, there is a CHANGELOG entry, and one commit.
   - an I/O assignment overview;
   - tag lists exported and imported in the formats TIA Portal and CODESYS accept. Verify each format
     against the vendor documentation before you ship it, and cite that documentation in the code.
-- **M6 Cabinet layout:**
-  - enclosure and mounting plate from the library, DIN rails and wire ducts;
+- **M6 part 1, Sizing and warehouse** (rule 12; built before the cabinet layout so the layout places
+  the parts actually chosen):
+  - load and feeder data on devices (motor kW and current from the nameplate, load current, cos φ),
+    project supply data (voltage, prospective short-circuit current, ambient temperature, installation
+    method, grouping), cable lengths entered by hand until the M6 layout estimates them;
+  - the sizing engine in `/shared` as pure functions, every table value with its source, unverified
+    values in `docs/to-verify.md`;
+  - warehouse import (CSV/XLSX, column mapping, refresh), linking stock items to library parts, and a
+    generic sample stock file for the samples and the demo;
+  - a suggestion panel per device and per conductor, and the project-wide review table; confirm is an
+    undoable command;
+  - BOM stock columns, shortages in the message list, picking-list export;
+  - tests: sizing worked examples, availability arithmetic (units to build, metres of cable, reserved
+    stock), import mapping; e2e: import stock, size a motor feeder, confirm, see the BOM quantities.
+- **M6 part 2, CAD workspace with the AI inside** (built before the cabinet layout, so the layout and
+  every later feature live in it): a workspace that AutoCAD and AutoCAD Electrical users feel at home
+  in within minutes. Go as close to AutoCAD's way of working as the law allows: the same arrangement
+  (ribbon on top, drawing area in the middle, command line and status bar at the bottom, palettes at
+  the sides), the same command names, aliases, keys, prompts and interactions, a dark drawing area
+  with crosshair cursor and pickbox. Only Autodesk's protected elements stay out: their logos, icon
+  artwork, product names and trademarks, and pixel copies of their screens. Our icons and styling are
+  drawn by us in the same spirit.
+  - **Ribbon:** tabbed, grouped tools (Home, Insert, Wires, Reports, PLC, Layout, View), collapsible;
+  - **Command line** at the bottom: history, autocomplete, the aliases CAD users type (L, PL, REC, C,
+    M, CO, RO, MI, E, TR, EX, O, Z/ZE, U, PAN, LA, DI…) plus ours (symbol insert, wire, number wires,
+    report, check); options shown in brackets; Enter or Space repeats the last command, Esc cancels;
+  - **Drafting aids** in a status bar: grid (F7), ortho (F8), snap (F9), object snap (F3) with modes
+    (endpoint, midpoint, connection point, intersection, perpendicular, nearest), polar tracking
+    (F10); dynamic input next to the cursor showing length and angle and accepting typed values and
+    relative coordinates (`@100,0`, `@50<90`);
+  - **Selection like CAD:** window (left to right) and crossing (right to left), Shift to remove,
+    grips to move and stretch, right-click menus with "repeat last command";
+  - **Layers:** on/off, lock, colour, line type, with the drawing styles mapped to layers;
+  - **Dockable, resizable panels** (pages, symbols and devices, properties, layers, messages, AI chat),
+    layout saved per user; full-screen canvas toggle;
+  - **The AI inside:**
+    - an AI chat panel docked next to the canvas that knows the project, the current page and the
+      selection;
+    - the command line is smart: anything that is not a command goes to the assistant ("add a
+      star-delta starter for a 7.5 kW motor on page 5"), and the answer comes back as a highlighted
+      preview to accept or reject;
+    - context hints, e.g. after placing a coil: "add its contacts?";
+    - until M7 connects real providers, the panel works with the fake provider and says that an API
+      key is needed. Rule 6 applies throughout: proposals only, sources on every claim, the app fully
+      usable without AI;
+  - **Tests:** e2e for command-line drawing (`L`, typed coordinates, ortho), snaps, window vs crossing
+    selection, a docked-panel layout surviving a restart, and a chat proposal accepted and undone (fake
+    provider).
+- **M6 part 3, Cabinet layout:** drawn by the user in the app, with the same CAD workspace tools
+  (snaps, typed coordinates, grips, layers) as the schematic:
+  - enclosure and mounting plate from the library, DIN rails and wire ducts, drawn, moved and
+    resized by the user;
   - devices placed from the BOM at real size, in a 2D front view to scale; a device's outline can come
-    from the library or from an imported DXF, SVG or image;
+    from the library or from an imported DXF, SVG or image; devices snap to rails, align and
+    distribute, and a device not yet placed is listed so nothing is forgotten;
+  - a suggested layout that the user then modifies freely:
+    - from the BOM and the schematic it proposes the enclosure and plate size (with the company's
+      spare-space percentage), rails and ducts, and a placement of every device: power at the top and
+      control below, devices grouped by function and by the schematic's order, terminals near the
+      cable entry, door devices on the door, clearances and no-mount zones respected, duct fill kept
+      under its limit;
+    - shown as a preview to accept, then edited with the normal tools; items the user moved or locked
+      stay put when the suggestion is run again on the rest;
+    - every rule it applied is listed (and sourced where a standard or a manufacturer clearance
+      applies), and the AI assistant can explain or adjust it on request (rule 6);
+  - layout templates: a finished layout (enclosure, plate, rails, ducts, standard device groups)
+    saved to the company library and loaded into new projects;
+  - layout exchange with an ERP or another system, in a documented, versioned format:
+    - export and import the layout as JSON and CSV (per item: designation, part code, enclosure,
+      plate or door, rail, x, y, z, rotation, size) and as DXF (2D views), and later STEP (3D);
+    - enclosures, plates and device dimensions can come from the ERP item master through the same
+      CSV/XLSX import and mapping as the warehouse (rule 12);
+    - import is previewed and undoable; exchange runs through files or a watched folder, and a live
+      connection to a specific ERP is decided with the owner;
   - a side view showing device depths;
   - dimension lines, notes, hatched no-mount zones, covers, door-mounted devices;
   - a 3D view of the cabinet;

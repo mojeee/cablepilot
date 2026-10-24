@@ -1,57 +1,65 @@
 WEBVTT
 
 1
-00:00:00.850 --> 00:00:05.309
-Open the battery-charger sample: a complete drawing set, 23 pages.
+00:00:00.850 --> 00:00:04.216
+Open the battery-charger sample: a complete drawing set, 25 pages.
 
 2
-00:00:05.559 --> 00:00:18.208
-Cover, contents, single-line, multi-line power, PLC, terminals, wire list, BOM.
+00:00:04.466 --> 00:00:09.742
+The cover sheet: every sheet with its revision, issue status and the customer's approval.
 
 3
-00:00:18.458 --> 00:00:27.664
-Place a contactor coil from the library: its designation is assigned by itself.
+00:00:09.992 --> 00:00:16.696
+Contents, single-line, and the PLC page with its I/O card.
 
 4
-00:00:27.914 --> 00:00:40.805
-Place its contact: same device, and the cross-references appear on both.
+00:00:16.946 --> 00:00:24.621
+Place a contactor coil from the library: its designation is assigned by itself.
 
 5
-00:00:41.055 --> 00:00:46.132
-Give the device a part from the library: the BOM will know about it.
+00:00:24.871 --> 00:00:36.950
+Place its contact: same device, and the cross-references appear on both.
 
 6
-00:00:46.382 --> 00:00:58.252
-Number the wires with your own pattern: 020L+, 021L+ ...
+00:00:37.200 --> 00:00:40.879
+Give the device a part from the library: the BOM will know about it.
 
 7
-00:00:58.502 --> 00:01:09.432
-Conductors in their IEC 60757 colours; a bundle gets a single label.
+00:00:41.129 --> 00:00:46.379
+Number the wires with your own pattern: 020L+, 021L+ ...
 
 8
-00:01:09.682 --> 00:01:14.486
-Reports come from the schematic. The terminal diagram ...
+00:00:46.629 --> 00:00:50.197
+The wire list follows the schematic ...
 
 9
-00:01:14.736 --> 00:01:17.884
-... the wire list with the new numbers ...
+00:00:50.447 --> 00:00:54.622
+... and the BOM already counts the new contactor.
 
 10
-00:01:18.134 --> 00:01:24.186
-... and the BOM, which already counts the new contactor.
+00:00:54.872 --> 00:01:01.666
+Draw a wire that connects to nothing: the check banner finds it at once.
 
 11
-00:01:24.436 --> 00:01:31.145
-Print preview: the page exactly as it prints.
+00:01:01.916 --> 00:01:05.275
+One click on the fix, and the problem is gone.
 
 12
-00:01:31.395 --> 00:01:34.865
-Export the PDF drawing set ...
+00:01:05.525 --> 00:01:09.323
+PLC I/O: every channel with address, tag and what it is wired to.
 
 13
-00:01:35.115 --> 00:01:40.864
-... and every list as one XLSX workbook.
+00:01:09.573 --> 00:01:19.831
+Edit a tag here, export the tag list for the PLC tool.
 
 14
-00:01:41.114 --> 00:01:45.624
+00:01:20.081 --> 00:01:22.974
+Export the PDF drawing set ...
+
+15
+00:01:23.224 --> 00:01:27.978
+... and every list as one XLSX workbook.
+
+16
+00:01:28.228 --> 00:01:31.959
 CablePilot: free, open source, your files stay yours.

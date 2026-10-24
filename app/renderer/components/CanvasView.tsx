@@ -139,7 +139,7 @@ export function CanvasView() {
     const opts = { view, dark, font: shown.settings.style.font, assets: shown.assets, onImageLoad: () => setRedrawTick((n) => n + 1), selected: printPreview ? undefined : new Set(selection), highlight };
     drawBuilt(ctx, built, opts, sheetBg);
     if (printPreview) return;
-    if (tool === 'symbol' && placing && cursor && !placing.startsWith('box:') && !placing.startsWith('macro:')) {
+    if (tool === 'symbol' && placing && cursor && !placing.startsWith('box:') && !placing.startsWith('plc:') && !placing.startsWith('macro:')) {
       const gel: SymbolEl = { id: 'ghost', kind: 'symbol', symbolId: placing, x: cursor.x, y: cursor.y, rot: ghost.rot, mirror: ghost.mirror, designation: '' };
       ctx.globalAlpha = 0.65;
       drawBuilt(ctx, { prims: symbolPrims(gel, shown, fullLib) as Prim[], items: [], width: 0, height: 0 }, { ...opts, selected: undefined }, 'rgba(0,0,0,0)');

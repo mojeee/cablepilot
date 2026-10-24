@@ -1,6 +1,6 @@
 {
   "format": "cablepilot-project",
-  "version": 4,
+  "version": 5,
   "id": "sample-conveyor",
   "name": "Conveyor with direct-on-line starter",
   "settings": {
@@ -28,6 +28,7 @@
     "drawingLanguage": "en",
     "installationMethod": "B1",
     "numbering": {"pattern":"{n:3}{suffix}","scheme":"potential","start":1,"step":1},
+    "plc": {"start":{"ai":64,"ao":64,"di":0,"do":0},"style":"siemens"},
     "style": {
       "colours": {
         "annotation": "#000000",
@@ -375,7 +376,7 @@
         },
         {"id":"e10","kind":"warning","sign":"electric","size":12,"x":290,"y":70},
         {
-          "id": "e94",
+          "id": "e90",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -616,7 +617,7 @@
           "y": 80
         },
         {
-          "id": "e95",
+          "id": "e91",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -627,7 +628,7 @@
           "y": 25
         },
         {
-          "id": "e96",
+          "id": "e92",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -638,7 +639,7 @@
           "y": 25
         },
         {
-          "id": "e97",
+          "id": "e93",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -649,7 +650,7 @@
           "y": 25
         },
         {
-          "id": "e98",
+          "id": "e94",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -845,7 +846,7 @@
           "y": 70
         },
         {
-          "id": "e99",
+          "id": "e95",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -856,7 +857,7 @@
           "y": 25
         },
         {
-          "id": "e100",
+          "id": "e96",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -867,7 +868,7 @@
           "y": 25
         },
         {
-          "id": "e101",
+          "id": "e97",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -889,72 +890,131 @@
       "elements": [
         {
           "id": "e68",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-input",
-          "value": "I0.0",
-          "x": 200,
-          "y": 60
+          "kind": "box",
+          "designation": "-A2",
+          "functionText": {"en":"Digital inputs 24 V DC","it":"Ingressi digitali 24 V DC"},
+          "h": 108,
+          "pins": [
+            {
+              "id": "0",
+              "address": "I0.0",
+              "comment": "Emergency stop healthy",
+              "offset": 12,
+              "side": "left",
+              "tag": "S0_EStop_OK"
+            },
+            {
+              "id": "1",
+              "address": "I0.1",
+              "comment": "Start pushbutton",
+              "offset": 24,
+              "side": "left",
+              "tag": "S1_Start"
+            },
+            {
+              "id": "2",
+              "address": "I0.2",
+              "comment": "Stop pushbutton",
+              "offset": 36,
+              "side": "left",
+              "tag": "S2_Stop"
+            },
+            {"id":"3","address":"I0.3","offset":48,"side":"left"},
+            {"id":"4","address":"I0.4","offset":60,"side":"left"},
+            {"id":"5","address":"I0.5","offset":72,"side":"left"},
+            {"id":"6","address":"I0.6","offset":84,"side":"left"},
+            {"id":"7","address":"I0.7","offset":96,"side":"left"}
+          ],
+          "plc": {"type":"di","rack":"0","slot":1},
+          "variant": "blackbox",
+          "w": 46,
+          "x": 125,
+          "y": 50
         },
         {
           "id": "e69",
+          "kind": "box",
+          "designation": "-A3",
+          "functionText": {"en":"Digital outputs 24 V DC","it":"Uscite digitali 24 V DC"},
+          "h": 108,
+          "pins": [
+            {
+              "id": "0",
+              "address": "Q0.0",
+              "comment": "Conveyor contactor",
+              "offset": 12,
+              "side": "left",
+              "tag": "KM1_Run"
+            },
+            {
+              "id": "1",
+              "address": "Q0.1",
+              "comment": "Running lamp",
+              "offset": 24,
+              "side": "left",
+              "tag": "H1_Running"
+            },
+            {"id":"2","address":"Q0.2","offset":36,"side":"left"},
+            {"id":"3","address":"Q0.3","offset":48,"side":"left"},
+            {"id":"4","address":"Q0.4","offset":60,"side":"left"},
+            {"id":"5","address":"Q0.5","offset":72,"side":"left"},
+            {"id":"6","address":"Q0.6","offset":84,"side":"left"},
+            {"id":"7","address":"Q0.7","offset":96,"side":"left"}
+          ],
+          "plc": {"type":"do","rack":"0","slot":2},
+          "variant": "blackbox",
+          "w": 46,
+          "x": 325,
+          "y": 50
+        },
+        {
+          "id": "e70",
+          "kind": "box",
+          "designation": "-A1",
+          "functionText": {"en":"PLC CPU","it":"CPU PLC"},
+          "h": 20,
+          "pins": [],
+          "plc": {"type":"cpu","rack":"0","slot":0},
+          "variant": "blackbox",
+          "w": 40,
+          "x": 182,
+          "y": 200
+        },
+        {
+          "id": "e71",
           "kind": "symbol",
           "designation": "-X2",
           "mirror": false,
           "rot": 90,
           "symbolId": "terminal",
           "value": "1",
-          "x": 155,
-          "y": 60
+          "x": 80,
+          "y": 62
         },
-        {"id":"e70","kind":"wire","number":"021","points":[{"x":160,"y":60},{"x":200,"y":60}]},
+        {"id":"e72","kind":"wire","number":"021","points":[{"x":85,"y":62},{"x":125,"y":62}]},
         {
-          "id": "e71",
+          "id": "e73",
           "kind": "text",
-          "align": "left",
+          "align": "right",
           "rot": 0,
           "size": 3,
           "text": "Emergency stop healthy",
-          "x": 65,
-          "y": 61.5
+          "x": 74,
+          "y": 63.5
         },
         {
-          "id": "e72",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-input",
-          "value": "I0.1",
-          "x": 200,
-          "y": 76
-        },
-        {
-          "id": "e73",
+          "id": "e74",
           "kind": "symbol",
           "designation": "-X2",
           "mirror": false,
           "rot": 90,
           "symbolId": "terminal",
           "value": "2",
-          "x": 155,
-          "y": 76
+          "x": 80,
+          "y": 74
         },
-        {"id":"e74","kind":"wire","number":"022","points":[{"x":160,"y":76},{"x":200,"y":76}]},
-        {"id":"e75","kind":"text","align":"left","rot":0,"size":3,"text":"Start","x":65,"y":77.5},
-        {
-          "id": "e76",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-input",
-          "value": "I0.2",
-          "x": 200,
-          "y": 92
-        },
+        {"id":"e75","kind":"wire","number":"022","points":[{"x":85,"y":74},{"x":125,"y":74}]},
+        {"id":"e76","kind":"text","align":"right","rot":0,"size":3,"text":"Start","x":74,"y":75.5},
         {
           "id": "e77",
           "kind": "symbol",
@@ -963,97 +1023,64 @@
           "rot": 90,
           "symbolId": "terminal",
           "value": "3",
-          "x": 155,
-          "y": 92
+          "x": 80,
+          "y": 86
         },
-        {"id":"e78","kind":"wire","number":"023","points":[{"x":160,"y":92},{"x":200,"y":92}]},
-        {"id":"e79","kind":"text","align":"left","rot":0,"size":3,"text":"Stop","x":65,"y":93.5},
+        {"id":"e78","kind":"wire","number":"023","points":[{"x":85,"y":86},{"x":125,"y":86}]},
+        {"id":"e79","kind":"text","align":"right","rot":0,"size":3,"text":"Stop","x":74,"y":87.5},
         {
           "id": "e80",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-output",
-          "value": "Q0.0",
-          "x": 200,
-          "y": 108
-        },
-        {
-          "id": "e81",
           "kind": "symbol",
           "designation": "-X2",
           "mirror": false,
           "rot": 90,
           "symbolId": "terminal",
           "value": "4",
-          "x": 155,
-          "y": 108
+          "x": 280,
+          "y": 62
         },
-        {"id":"e82","kind":"wire","number":"024","points":[{"x":160,"y":108},{"x":200,"y":108}]},
+        {"id":"e81","kind":"wire","number":"024","points":[{"x":285,"y":62},{"x":325,"y":62}]},
         {
-          "id": "e83",
+          "id": "e82",
           "kind": "text",
-          "align": "left",
+          "align": "right",
           "rot": 0,
           "size": 3,
           "text": "Conveyor contactor",
-          "x": 65,
-          "y": 109.5
+          "x": 274,
+          "y": 63.5
         },
         {
-          "id": "e84",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-output",
-          "value": "Q0.1",
-          "x": 200,
-          "y": 124
-        },
-        {
-          "id": "e85",
+          "id": "e83",
           "kind": "symbol",
           "designation": "-X2",
           "mirror": false,
           "rot": 90,
           "symbolId": "terminal",
           "value": "5",
-          "x": 155,
-          "y": 124
+          "x": 280,
+          "y": 74
         },
-        {"id":"e86","kind":"wire","number":"025","points":[{"x":160,"y":124},{"x":200,"y":124}]},
+        {"id":"e84","kind":"wire","number":"025","points":[{"x":285,"y":74},{"x":325,"y":74}]},
         {
-          "id": "e87",
+          "id": "e85",
           "kind": "text",
-          "align": "left",
+          "align": "right",
           "rot": 0,
           "size": 3,
           "text": "Running lamp",
-          "x": 65,
-          "y": 125.5
+          "x": 274,
+          "y": 75.5
         },
         {
-          "id": "e88",
-          "kind": "rect",
-          "assembly": "-A1",
-          "dashed": true,
-          "h": 90,
-          "label": "PLC",
-          "w": 28,
-          "x": 198,
-          "y": 48
-        },
-        {
-          "id": "e89",
+          "id": "e86",
           "kind": "wire",
           "number": "001P",
           "points": [{"x":100,"y":35},{"x":160,"y":35}],
           "potential": "24VDC"
         },
         {
-          "id": "e90",
+          "id": "e87",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1064,7 +1091,7 @@
           "y": 35
         },
         {
-          "id": "e91",
+          "id": "e88",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1074,25 +1101,7 @@
           "y": 28
         },
         {
-          "id": "e92",
-          "kind": "table",
-          "cells": [
-            ["Address","Signal","Device"],
-            ["I0.0","Emergency stop healthy","-S0"],
-            ["I0.1","Start","-S1"],
-            ["I0.2","Stop","-S2"],
-            ["Q0.0","Conveyor contactor","-KM1"],
-            ["Q0.1","Running lamp","-H1"]
-          ],
-          "colWidths": [25,70,25],
-          "headerRow": true,
-          "rowHeight": 8,
-          "size": 3.2,
-          "x": 260,
-          "y": 60
-        },
-        {
-          "id": "e102",
+          "id": "e98",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1129,7 +1138,7 @@
       "type": "layout",
       "elements": [
         {
-          "id": "e93",
+          "id": "e89",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1206,6 +1215,14 @@
       "size": "A3",
       "templateId": "",
       "title": {"en":"Nameplates"}
+    },
+    {
+      "id": "pg-rep21",
+      "type": "report",
+      "elements": [{"id":"r-rep22","kind":"report","offset":0,"report":"plcIo","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"PLC I/O list"}
     }
   ],
   "assets": {},
@@ -1214,12 +1231,10 @@
     {
       "designation": "+DS-A1",
       "fields": {},
-      "parts": [
-        {"part":"generic-plc-cpu-compact","qty":1},
-        {"part":"generic-plc-di-16-24vdc","qty":1},
-        {"part":"generic-plc-do-16-24vdc","qty":1}
-      ]
+      "parts": [{"part":"generic-plc-cpu-compact","qty":1},{"part":"generic-plc-rack-4slot","qty":1}]
     },
+    {"designation":"+DS-A2","fields":{},"parts":[{"part":"generic-plc-di-8-24vdc","qty":1}]},
+    {"designation":"+DS-A3","fields":{},"parts":[{"part":"generic-plc-do-8-24vdc","qty":1}]},
     {"designation":"+DS-FR1","fields":{},"parts":[{"part":"generic-overload-relay-9a-13a","qty":1}]},
     {"designation":"+DS-G1","fields":{},"parts":[{"part":"generic-psu-24vdc-10a","qty":1}]},
     {"designation":"+DS-H1","fields":{},"parts":[{"part":"generic-pilot-lamp-22mm-24vdc","qty":1}]},
@@ -1462,7 +1477,7 @@
       "kind": "part",
       "category": "plc",
       "code": "GEN-PLC-CPU-COMPACT",
-      "data": {"Interface":"Ethernet","Supply voltage":"24 V DC"},
+      "data": {"Card type":"cpu","Interface":"Ethernet","Supply voltage":"24 V DC"},
       "description": {"en":"PLC CPU, compact, Ethernet, 24 V DC","it":"CPU PLC compatta, Ethernet, 24 V DC"},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
@@ -1471,39 +1486,52 @@
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
     },
     {
-      "id": "generic-plc-di-16-24vdc",
+      "id": "generic-plc-rack-4slot",
       "kind": "part",
       "category": "plc",
-      "code": "GEN-PLC-DI-16-24VDC",
-      "data": {"Channels":"16","Signal":"24 V DC"},
+      "code": "GEN-PLC-RACK-4SLOT",
+      "data": {"Slots":"4"},
+      "description": {"en":"PLC rack, 4 slots","it":"Rack PLC, 4 slot"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"PLC rack, 4 slots","it":"Rack PLC, 4 slot"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-plc-di-8-24vdc",
+      "kind": "part",
+      "category": "plc",
+      "code": "GEN-PLC-DI-8-24VDC",
+      "data": {"Card type":"di","Channels":"8","Signal":"24 V DC"},
       "description": {
-        "en": "PLC input card, 16 digital inputs 24 V DC",
-        "it": "Scheda PLC, 16 ingressi digitali 24 V DC"
+        "en": "PLC input card, 8 digital inputs 24 V DC",
+        "it": "Scheda PLC, 8 ingressi digitali 24 V DC"
       },
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
-        "en": "PLC input card, 16 digital inputs 24 V DC",
-        "it": "Scheda PLC, 16 ingressi digitali 24 V DC"
+        "en": "PLC input card, 8 digital inputs 24 V DC",
+        "it": "Scheda PLC, 8 ingressi digitali 24 V DC"
       },
       "verification": "secondary",
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
     },
     {
-      "id": "generic-plc-do-16-24vdc",
+      "id": "generic-plc-do-8-24vdc",
       "kind": "part",
       "category": "plc",
-      "code": "GEN-PLC-DO-16-24VDC",
-      "data": {"Channels":"16","Signal":"24 V DC"},
+      "code": "GEN-PLC-DO-8-24VDC",
+      "data": {"Card type":"do","Channels":"8","Signal":"24 V DC"},
       "description": {
-        "en": "PLC output card, 16 digital outputs 24 V DC",
-        "it": "Scheda PLC, 16 uscite digitali 24 V DC"
+        "en": "PLC output card, 8 digital outputs 24 V DC",
+        "it": "Scheda PLC, 8 uscite digitali 24 V DC"
       },
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
-        "en": "PLC output card, 16 digital outputs 24 V DC",
-        "it": "Scheda PLC, 16 uscite digitali 24 V DC"
+        "en": "PLC output card, 8 digital outputs 24 V DC",
+        "it": "Scheda PLC, 8 uscite digitali 24 V DC"
       },
       "verification": "secondary",
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
@@ -1709,7 +1737,9 @@
       "drawn": "CablePilot",
       "inventory": {
         "devices": {
-          "+DS-A1": "088cca10",
+          "+DS-A1": "1150af33",
+          "+DS-A2": "0e7b3d4c",
+          "+DS-A3": "1d81437c",
           "+DS-FR1": "07abea67",
           "+DS-G1": "188bc9ab",
           "+DS-H1": "0d044b54",
@@ -1721,7 +1751,7 @@
           "+DS-S1": "11f7fd20",
           "+DS-S2": "0ade04fe",
           "+DS-X1": "1978dd93",
-          "+DS-X2": "08ae931e"
+          "+DS-X2": "1fa1df6f"
         },
         "parts": {
           "GEN-AUX-BLOCK-1NO1NC": 1,
@@ -1735,8 +1765,9 @@
           "GEN-OVERLOAD-RELAY-9A-13A": 1,
           "GEN-PILOT-LAMP-22MM-24VDC": 1,
           "GEN-PLC-CPU-COMPACT": 1,
-          "GEN-PLC-DI-16-24VDC": 1,
-          "GEN-PLC-DO-16-24VDC": 1,
+          "GEN-PLC-DI-8-24VDC": 1,
+          "GEN-PLC-DO-8-24VDC": 1,
+          "GEN-PLC-RACK-4SLOT": 1,
           "GEN-PSU-24VDC-10A": 1,
           "GEN-PUSHBUTTON-22MM-NC": 1,
           "GEN-PUSHBUTTON-22MM-NO": 1,
@@ -1774,11 +1805,11 @@
           "018 -S1:4>-KM1:2": "073027a2",
           "019 -FR1:2>-KM1:A1": "073027a2",
           "020 -KM1:2>-H1:1": "073027a2",
-          "021 -X2:1>I0.0": "073027a2",
-          "022 -X2:2>I0.1": "073027a2",
-          "023 -X2:3>I0.2": "073027a2",
-          "024 -X2:4>Q0.0": "073027a2",
-          "025 -X2:5>Q0.1": "073027a2"
+          "021 -A2:0>-X2:1": "073027a2",
+          "022 -A2:1>-X2:2": "073027a2",
+          "023 -A2:2>-X2:3": "073027a2",
+          "024 -A3:0>-X2:4": "073027a2",
+          "025 -A3:1>-X2:5": "073027a2"
         }
       },
       "number": "0",
@@ -1786,21 +1817,22 @@
         {"id":"p1","hash":"17934a6b596445","title":"Cover sheet"},
         {"id":"p2","hash":"0ad3e65d6bdf2b","title":"Contents"},
         {"id":"p3","hash":"1a1e091f0157f6","title":"General data of the assembly"},
-        {"id":"p4","hash":"16f0656d8c0b99","title":"Single-line diagram"},
-        {"id":"p5","hash":"1528e0996c365d","title":"Motor power circuit"},
-        {"id":"p6","hash":"16678395bc851b","title":"Control circuit 24 V DC"},
-        {"id":"p7","hash":"1df3cdef220174","title":"PLC inputs and outputs"},
-        {"id":"pg-rep1","hash":"06ff2ec9041b9a.0557c314","title":"Terminal diagram"},
+        {"id":"p4","hash":"14fba6a4da8283","title":"Single-line diagram"},
+        {"id":"p5","hash":"0ceaed1af6e78f","title":"Motor power circuit"},
+        {"id":"p6","hash":"139ab5c46d4956","title":"Control circuit 24 V DC"},
+        {"id":"p7","hash":"0ff991bec9709f","title":"PLC inputs and outputs"},
+        {"id":"pg-rep1","hash":"06ff2ec9041b9a.0136b26e","title":"Terminal diagram"},
         {"id":"pg-rep3","hash":"10d57a4ef38aba.0c821d03","title":"Cable list"},
-        {"id":"p8","hash":"060d05ae899ecd","title":"Cabinet layout"},
-        {"id":"pg-rep5","hash":"198990f51ffcfa.1a6eb022","title":"Wire list"},
-        {"id":"pg-rep7","hash":"1841cd26871c95.0615b75e","title":"Bill of materials"},
-        {"id":"pg-rep9","hash":"18862e7ab392df.02ac9e17","title":"Symbol legend 1/2"},
-        {"id":"pg-rep11","hash":"0bc3a8de6953bc.08e489bb","title":"Symbol legend 2/2"},
+        {"id":"p8","hash":"1663abaf700e76","title":"Cabinet layout"},
+        {"id":"pg-rep5","hash":"198990f51ffcfa.0ab83cc6","title":"Wire list"},
+        {"id":"pg-rep7","hash":"1841cd26871c95.04af1646","title":"Bill of materials"},
+        {"id":"pg-rep9","hash":"18862e7ab392df.056145a5","title":"Symbol legend 1/2"},
+        {"id":"pg-rep11","hash":"0bc3a8de6953bc.12044c0d","title":"Symbol legend 2/2"},
         {"id":"pg-rep13","hash":"0971cb79b57391.06a62597","title":"Conductor colours"},
         {"id":"pg-rep15","hash":"0af6beb17a9024.191b8d15","title":"Wire number suffixes"},
         {"id":"pg-rep17","hash":"1e7f7e570c3ded.1e1b77a6","title":"Terminal tightening torques"},
-        {"id":"pg-rep19","hash":"0c6b113eabc420.19d2386d","title":"Nameplates"}
+        {"id":"pg-rep19","hash":"0c6b113eabc420.121d9697","title":"Nameplates"},
+        {"id":"pg-rep21","hash":"0b72e2120a1857.118a990b","title":"PLC I/O list"}
       ],
       "status": "approval"
     }

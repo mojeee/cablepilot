@@ -37,12 +37,15 @@ export function boxPrims(el: BoxEl, project: Project, refText?: string): Prim[] 
   const loc = el.location ? `+${el.location}` : '';
   if (el.designation) out.push(T(el.x, el.y - 2.2, loc + el.designation, st.textSizes.designation, 'start', st.colours.designation));
   const title = pick(el.functionText, lang);
-  if (title) out.push(T(el.x + el.w / 2, el.y + 3.2, title, 2.8, 'middle', st.colours.text, true));
+  // A PLC card keeps its pins from the top edge: the title goes above the box, the rack and slot below.
+  if (title) out.push(el.plc ? T(el.x + el.w, el.y - 2.2, title, 2.4, 'end', st.colours.text, true) : T(el.x + el.w / 2, el.y + 3.2, title, 2.8, 'middle', st.colours.text, true));
+  if (el.plc) out.push(T(el.x + el.w, el.y + el.h + 3.2, `${el.plc.rack}/${el.plc.slot} ${el.plc.type.toUpperCase()}`, 2.2, 'end'));
   if (refText) out.push(T(el.x, el.y + el.h + 3.2, refText, 2.2, 'start'));
   for (const p of el.pins) {
     const w = boxPinsWorld({ ...el, pins: [p] })[0];
     out.push({ k: 'circle', cx: w.x, cy: w.y, r: el.variant === 'connector' ? 0.9 : 0.6, w: st.weights.symbol, c: st.colours.symbol, fill: el.variant === 'connector', id: el.id });
-    const label = p.name ? `${p.id} ${p.name}` : p.id;
+    // Channels of a PLC card show the address and the tag, cut to the box width.
+    const label = el.plc && el.plc.type !== 'cpu' ? `${p.address ?? p.id}${p.tag ? ` ${p.tag}` : ''}`.slice(0, Math.max(4, Math.floor((el.w - 4) / 1.3))) : p.name ? `${p.id} ${p.name}` : p.id;
     switch (p.side) {
       case 'left': out.push(T(w.x + 1.6, w.y, label, 2, 'start')); break;
       case 'right': out.push(T(w.x - 1.6, w.y, label, 2, 'end')); break;

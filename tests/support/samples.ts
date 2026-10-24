@@ -78,6 +78,23 @@ function channel(b: B, pg: string, kind: 'plc-input' | 'plc-output', addr: strin
   b.text(pg, x - 135, y + 1.5, text, { size: 3 });
   return ch;
 }
+/** A PLC card as a black box with `n` channel pins (0..n-1) on the left; the part gives its type. */
+function plcCard(b: B, pg: string, o: { x: number; y: number; des: string; type: 'cpu' | 'di' | 'do' | 'ai' | 'ao'; slot: number; n: number; title: { en: string; it: string }; pitch?: number; w?: number }) {
+  return b.box(pg, { variant: 'blackbox', x: o.x, y: o.y, w: o.w ?? (o.type === 'cpu' ? 40 : 46), h: 20, designation: o.des, title: o.title, plc: { type: o.type, rack: '0', slot: o.slot }, pitch: o.pitch ?? 5, pins: Array.from({ length: o.n }, (_, i): [string, 'left'] => [String(i), 'left']) });
+}
+/** Wires one channel of a card: a field terminal of strip -X2 on its left, the wire to the channel pin, the signal text beside the terminal. */
+function cardChannel(b: B, pg: string, card: ReturnType<typeof plcCard>, pin: string, text: string) {
+  const pp = card.pin(pin);
+  const t = b.place(pg, 'terminal', pp.x - 45, pp.y, { designation: '-X2', rot: 90 });
+  const right = ['1', '2'].map((id) => t.pin(id)).sort((p, q) => q.x - p.x)[0];
+  b.wire(pg, [right, pp]);
+  b.text(pg, pp.x - 51, pp.y + 1.5, text, { size: 3, align: 'right' });
+}
+/** Gives the cards their addresses by the project's scheme, then tags and comments to the used channels: [card element id, pin, tag, comment]. */
+function plcTags(b: B, pg: string, tags: [string, string, string, string][]) {
+  b.run({ type: 'plc/assign' });
+  b.run({ type: 'plc/channels', edits: tags.map(([el, pin, tag, comment]) => ({ page: pg, el, pin, patch: { tag, comment } })) });
+}
 /** Protective earth: an earth symbol joined to the incoming PE conductor (a PE tag on the free end). */
 function peFeed(b: B, pg: string, x: number, y: number) {
   const e = b.place(pg, 'earth-pe', x, y);
@@ -184,13 +201,18 @@ export function conveyorSample(lib: Library) {
   b.place(ct, 'interruption-point', 320, 70, { value: 'PLC-24V' });
   // PLC page.
   const plc = b.addPage('plc', { en: 'PLC inputs and outputs' }, { location: 'DS' });
-  const io: [string, string, string, 'plc-input' | 'plc-output'][] = [['I0.0', 'Emergency stop healthy', '-S0', 'plc-input'], ['I0.1', 'Start', '-S1', 'plc-input'], ['I0.2', 'Stop', '-S2', 'plc-input'], ['Q0.0', 'Conveyor contactor', '-KM1', 'plc-output'], ['Q0.1', 'Running lamp', '-H1', 'plc-output']];
-  io.forEach(([addr, sig, , sym], i) => channel(b, plc, sym, addr, sig, 60 + i * 16));
-  b.assembly(plc, '-A1', { x: 198, y: 48, w: 28, h: 90, label: 'PLC' }, []);
+  const di = plcCard(b, plc, { x: 125, y: 50, des: '-A2', type: 'di', slot: 1, n: 8, pitch: 12, title: { en: 'Digital inputs 24 V DC', it: 'Ingressi digitali 24 V DC' } });
+  const dq = plcCard(b, plc, { x: 325, y: 50, des: '-A3', type: 'do', slot: 2, n: 8, pitch: 12, title: { en: 'Digital outputs 24 V DC', it: 'Uscite digitali 24 V DC' } });
+  plcCard(b, plc, { x: 182, y: 200, des: '-A1', type: 'cpu', slot: 0, n: 0, title: { en: 'PLC CPU', it: 'CPU PLC' } });
+  cardChannel(b, plc, di, '0', 'Emergency stop healthy');
+  cardChannel(b, plc, di, '1', 'Start');
+  cardChannel(b, plc, di, '2', 'Stop');
+  cardChannel(b, plc, dq, '0', 'Conveyor contactor');
+  cardChannel(b, plc, dq, '1', 'Running lamp');
+  plcTags(b, plc, [[di.id, '0', 'S0_EStop_OK', 'Emergency stop healthy'], [di.id, '1', 'S1_Start', 'Start pushbutton'], [di.id, '2', 'S2_Stop', 'Stop pushbutton'], [dq.id, '0', 'KM1_Run', 'Conveyor contactor'], [dq.id, '1', 'H1_Running', 'Running lamp']]);
   b.wire(plc, [P(100, 35), P(160, 35)], { potential: '24VDC' });
   b.place(plc, 'interruption-point', 160, 35, { value: 'PLC-24V' });
   b.text(plc, 100, 28, 'Supply of the PLC outputs', { size: 3 });
-  b.run({ type: 'el/add', page: plc, elements: [{ id: b.nid(), kind: 'table', x: 260, y: 60, colWidths: [25, 70, 25], rowHeight: 8, size: 3.2, headerRow: true, cells: [['Address', 'Signal', 'Device'], ...io.map(([a, s, d]) => [a, s, d])] }] });
   layoutPage(b, 'en');
   // Parts (generic): the BOM is generated from these assignments and the schematic.
   b.parts(pw, '-QS1', [['generic-switch-disconnector-3p-63a', 1]]);
@@ -203,7 +225,9 @@ export function conveyorSample(lib: Library) {
   b.parts(ct, '-S1', [['generic-pushbutton-22mm-no', 1]]);
   b.parts(ct, '-S2', [['generic-pushbutton-22mm-nc', 1]]);
   b.parts(ct, '-H1', [['generic-pilot-lamp-22mm-24vdc', 1]]);
-  b.parts(plc, '-A1', [['generic-plc-cpu-compact', 1], ['generic-plc-di-16-24vdc', 1], ['generic-plc-do-16-24vdc', 1]]);
+  b.parts(plc, '-A1', [['generic-plc-cpu-compact', 1], ['generic-plc-rack-4slot', 1]]);
+  b.parts(plc, '-A2', [['generic-plc-di-8-24vdc', 1]]);
+  b.parts(plc, '-A3', [['generic-plc-do-8-24vdc', 1]]);
   b.fields(pw, '-QS1', { make: 'Buy' });
   b.fields(pw, '-M1', { make: 'Buy', notes: 'Supplied by the customer' });
   b.projectPart('generic-enclosure-600x800x300', 1, { make: 'Buy' });
@@ -216,7 +240,7 @@ export function conveyorSample(lib: Library) {
   b.run({ type: 'part/embed', def: lib.parts.get('generic-cable-power-4x2.5mm2')! });
   b.run({ type: 'cable/set', cable: { id: '-W1', kind: 'multicore', part: 'generic-cable-power-4x2.5mm2', length: '12 m', functionText: { en: 'Motor cable' } } });
   b.fields(pw, '-QF1', { nameplate: 'Conveyor motor\nbreaker' });
-  finishSample(b, lib, ['terminals', 'cables'], ['wires', 'bom', 'legend', 'colours', 'suffixes', 'torque', 'nameplates']);
+  finishSample(b, lib, ['terminals', 'cables'], ['wires', 'bom', 'legend', 'colours', 'suffixes', 'torque', 'nameplates', 'plcIo']);
   issue(b, '0', '2026-10-24', 'First issue for approval', 'approval');
   return b.project;
 }
@@ -461,20 +485,18 @@ export function chargerSample(lib: Library) {
   // PLC interface (page 09): the socket -X10 on the board, the PLC channels, the HMI and the switch.
   const plc = b.addPage('plc', { en: 'PLC interface', it: 'Interfaccia PLC' }, { location: 'DS' });
   const x10 = b.box(plc, { variant: 'connector', x: 55, y: 62, w: 15, h: 20, designation: '-X10', gender: 'socket', mate: '-X11', title: { it: 'Presa', en: 'Socket' }, pins: [['1', 'right', 'K1'], ['2', 'right', 'K2'], ['3', 'left', '24V'], ['4', 'left', '0V']] });
-  const c1 = b.place(plc, 'plc-input', 250, 72, { value: 'I0.0' });
-  const c2 = b.place(plc, 'plc-input', 250, 102, { value: 'I0.1' });
-  const c3 = b.place(plc, 'plc-input', 250, 142, { value: 'AI0' });
+  const di = plcCard(b, plc, { x: 250, y: 45, des: '-A2', type: 'di', slot: 1, n: 8, pitch: 10, w: 44, title: { en: 'Digital inputs 24 V DC', it: 'Ingressi digitali 24 V DC' } });
+  const ai = plcCard(b, plc, { x: 250, y: 146, des: '-A5', type: 'ai', slot: 2, n: 8, pitch: 6, w: 44, title: { en: 'Analog inputs', it: 'Ingressi analogici' } });
+  plcCard(b, plc, { x: 310, y: 60, des: '-A1', type: 'cpu', slot: 0, n: 0, title: { en: 'PLC CPU', it: 'CPU PLC' } });
   const route = (from: Pt, to: Pt, mx: number) => b.wire(plc, [from, P(mx, from.y), P(mx, to.y), to]);
-  route(x10.pin('1'), c1.pin('1'), 150);
-  route(x10.pin('2'), c2.pin('1'), 170);
+  route(x10.pin('1'), di.pin('0'), 150);
+  route(x10.pin('2'), di.pin('1'), 170);
   b.wire(plc, [x10.pin('3'), P(x10.pin('3').x - 35, x10.pin('3').y)], { potential: '24VDC' });
   b.wire(plc, [x10.pin('4'), P(x10.pin('4').x - 45, x10.pin('4').y), P(x10.pin('4').x - 45, x10.pin('4').y + 25)], { potential: '0V' });
-  b.place(plc, 'interruption-point', 170, 142, { value: 'IOUT', mirror: true });
-  b.wire(plc, [P(170, 142), c3.pin('1')]);
-  b.text(plc, 118, 132, 'Corrente di uscita', { size: 3 });
-  b.assembly(plc, '-A1', { x: 238, y: 55, w: 32, h: 105, label: 'PLC' }, []);
-  const io: [string, string, string][] = [['I0.0', 'Mancanza rete', '-K1'], ['I0.1', 'Batteria scarica', '-K2'], ['AI0', 'Corrente di uscita', '-B1']];
-  b.run({ type: 'el/add', page: plc, elements: [{ id: b.nid(), kind: 'table', x: 285, y: 62, colWidths: [25, 70, 25], rowHeight: 8, size: 3.2, headerRow: true, cells: [['Indirizzo', 'Segnale', 'Dispositivo'], ...io.map(([a, s, d]) => [a, s, d])] }] });
+  b.place(plc, 'interruption-point', 170, 152, { value: 'IOUT', mirror: true });
+  b.wire(plc, [P(170, 152), ai.pin('0')]);
+  b.text(plc, 118, 142, 'Corrente di uscita', { size: 3 });
+  plcTags(b, plc, [[di.id, '0', 'K1_Mancanza_rete', 'Mancanza rete'], [di.id, '1', 'K2_Batteria_scarica', 'Batteria scarica'], [ai.id, '0', 'B1_Corrente_uscita', 'Corrente di uscita']]);
   const hmi = b.box(plc, { variant: 'blackbox', x: 55, y: 200, w: 50, h: 30, designation: '-A3', title: { it: 'Pannello operatore HMI', en: 'HMI operator panel' }, pins: [['ETH', 'right', 'RJ45'], ['24V', 'left'], ['0V', 'left']] });
   const sw = b.box(plc, { variant: 'blackbox', x: 185, y: 200, w: 50, h: 30, designation: '-A4', title: { it: 'Switch di rete', en: 'Network switch' }, pins: [['P1', 'left', 'RJ45'], ['P2', 'right', 'RJ45'], ['24V', 'right']] });
   b.wire(plc, [hmi.pin('ETH'), sw.pin('P1')]);
@@ -483,9 +505,9 @@ export function chargerSample(lib: Library) {
   b.wire(plc, [hmi.pin('0V'), P(hmi.pin('0V').x - 45, hmi.pin('0V').y)], { potential: '0V' });
   b.wire(plc, [sw.pin('24V'), P(sw.pin('24V').x + 35, sw.pin('24V').y)], { potential: '24VDC' });
   // Flat ribbon cable between the interface board header and the PLC input header.
-  b.box(plc, { variant: 'connector', x: 300, y: 195, w: 20, h: 25, designation: '-X20', title: { it: 'Intestazione scheda interfaccia', en: 'Interface board header' }, pins: [['1', 'right', 'K1'], ['2', 'right', 'K2'], ['3', 'right', '24V'], ['4', 'right', '0V']] });
-  b.box(plc, { variant: 'connector', x: 350, y: 195, w: 20, h: 25, designation: '-X21', title: { it: 'Intestazione ingressi PLC', en: 'PLC input header' }, pins: [['1', 'left', 'I0.0'], ['2', 'left', 'I0.1'], ['3', 'left', '24V'], ['4', 'left', '0V']] });
-  b.text(plc, 322, 192, 'Cavo piatto', { size: 2.5 });
+  b.box(plc, { variant: 'connector', x: 322, y: 195, w: 20, h: 25, designation: '-X20', title: { it: 'Intestazione scheda interfaccia', en: 'Interface board header' }, pins: [['1', 'right', 'K1'], ['2', 'right', 'K2'], ['3', 'right', '24V'], ['4', 'right', '0V']] });
+  b.box(plc, { variant: 'connector', x: 372, y: 195, w: 20, h: 25, designation: '-X21', title: { it: 'Intestazione ingressi PLC', en: 'PLC input header' }, pins: [['1', 'left', 'I0.0'], ['2', 'left', 'I0.1'], ['3', 'left', '24V'], ['4', 'left', '0V']] });
+  b.text(plc, 346, 192, 'Cavo piatto', { size: 2.5 });
   layoutPage(b, 'it');
   // Parts: several parts per device (a module plus its capacitors), project-level parts without designation.
   b.parts(pw, '-QF1', [['generic-mcb-3p-c32a', 1]]);
@@ -504,7 +526,9 @@ export function chargerSample(lib: Library) {
   b.parts(al, '-H1', [['generic-pilot-lamp-22mm-24vdc', 1]]);
   b.parts(al, '-H2', [['generic-pilot-lamp-22mm-24vdc', 1]]);
   b.parts(al, '-X11', [['generic-connector-plug-socket-8pole', 1]]);
-  b.parts(plc, '-A1', [['generic-plc-cpu-compact', 1], ['generic-plc-di-16-24vdc', 1], ['generic-plc-ai-8', 1]]);
+  b.parts(plc, '-A1', [['generic-plc-cpu-compact', 1], ['generic-plc-rack-4slot', 1]]);
+  b.parts(plc, '-A2', [['generic-plc-di-8-24vdc', 1]]);
+  b.parts(plc, '-A5', [['generic-plc-ai-8', 1]]);
   b.parts(plc, '-A3', [['generic-hmi-7in-touch-24vdc', 1]]);
   b.parts(plc, '-A4', [['generic-switch-ethernet-5port-24vdc', 1]]);
   b.parts(plc, '-X10', [['generic-connector-header-10pin', 1]]);
@@ -525,7 +549,7 @@ export function chargerSample(lib: Library) {
   b.run({ type: 'cable/set', cable: { id: '-W2', kind: 'patch', part: 'generic-cable-patch-rj45-cat5e', from: '-A3:ETH', to: '-A4:P1', length: '2 m', functionText: { it: 'Collegamento HMI - switch', en: 'HMI to switch link' } } });
   b.fields(pw, '-QF1', { nameplate: 'Ingresso c.a.\nalimentazione ausiliari' });
   b.fields(dc, '-F1', { nameplate: 'Fusibile batteria\n63 A DC' });
-  finishSample(b, lib, ['terminals', 'cables'], ['wires', 'pins', 'bom', 'legend', 'colours', 'suffixes', 'torque', 'nameplates']);
+  finishSample(b, lib, ['terminals', 'cables'], ['wires', 'pins', 'bom', 'legend', 'colours', 'suffixes', 'torque', 'nameplates', 'plcIo']);
   // A real production set: revision 0 went out for approval; revision 1 changes the battery string, which changes the DC page and the BOM.
   issue(b, '0', '2026-09-15', 'Prima emissione per approvazione', 'approval', { drawn: 'CablePilot', checked: 'Ufficio tecnico', approved: '' });
   const noteEl = b.project.pages.find((p) => p.id === dc)!.elements.find((e) => e.kind === 'text' && e.text.startsWith('Batteria:'))!;

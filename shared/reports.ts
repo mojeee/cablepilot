@@ -12,6 +12,7 @@ import type { Library, PartDef } from './library/types';
 import { findPart, isTerminalPart, withProjectSymbols } from './library/types';
 import type { CableRec, Page, Project, ReportId, SymbolEl } from './model/types';
 import { netlist, destinations, type NetlistGroup } from './netlist';
+import { plcChannels } from './plc';
 import { rt, type ReportTextKey } from './reportText';
 import { colourName, formatWireNumber, isNumbered, wireSpec } from './wires';
 
@@ -342,6 +343,11 @@ function terminalMarkerTable(project: Project, lib: Library, lang: Lang): Report
   return { id: 'terminalMarkers', title: rt(lang, 'report.terminalMarkers'), headers: [rt(lang, 'col.strip'), rt(lang, 'col.marker'), rt(lang, 'col.qty')], widths: [60, 40, 24], rows };
 }
 
+function plcIoTable(project: Project, lib: Library, lang: Lang): ReportTable {
+  const rows = plcChannels(project, lib).map((r) => R(r.address, r.tag, r.comment, r.card ? `${r.card}${r.pin ? `:${r.pin}` : ''}` : '', r.connected, r.position));
+  return { id: 'plcIo', title: rt(lang, 'report.plcIo'), headers: [rt(lang, 'col.address'), rt(lang, 'col.tag'), rt(lang, 'col.comment'), rt(lang, 'col.card'), rt(lang, 'col.connectedTo'), rt(lang, 'col.pageColumn')], widths: [26, 40, 70, 34, 34, 20], rows };
+}
+
 const memo = new WeakMap<Project, { lib: Library; tables: Map<ReportId, ReportTable> }>();
 
 /** A report as a table, in the project's drawing language; cached until the project changes. */
@@ -366,6 +372,7 @@ export function reportTable(project: Project, lib: Library, id: ReportId): Repor
     case 'nameplates': t = nameplateTable(project, lib, lang); break;
     case 'wireMarkers': t = wireMarkerTable(project, lib, lang); break;
     case 'terminalMarkers': t = terminalMarkerTable(project, lib, lang); break;
+    case 'plcIo': t = plcIoTable(project, lib, lang); break;
   }
   hit.tables.set(id, t);
   return t;

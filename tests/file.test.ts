@@ -103,7 +103,7 @@ describe('project file', () => {
     const { installationMethod, ...settings } = v3.settings as Record<string, unknown>;
     void installationMethod;
     const r = parseProject(JSON.stringify({ ...v3, version: 3, settings }));
-    expect(r.ok && r.value.version).toBe(4);
+    expect(r.ok && r.value.version).toBe(5);
     if (r.ok) {
       expect(r.value.issueStatus).toBe('proposal');
       expect(r.value.revisions).toEqual([]);

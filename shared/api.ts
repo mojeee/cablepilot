@@ -54,6 +54,8 @@ export interface CablePilotApi {
     exportBinary(bytes: Uint8Array, suggestedName: string): Promise<Result<SavedFile | null>>;
     /** Asks for a DXF file and reads it; null when the user cancels. */
     importDxf(): Promise<Result<{ text: string; name: string } | null>>;
+    /** Asks for a tag-list file (TIA Portal XML or CODESYS text) and reads it; null when the user cancels. */
+    importTags(ext: 'xml' | 'txt'): Promise<Result<{ text: string; name: string } | null>>;
   };
   samples: {
     list(): Promise<Result<SampleInfo[]>>;

@@ -45,8 +45,8 @@ const vf = 'scale=1920:1080:flags=lanczos,fps=30';
 run([...trim, '-i', raw, '-vf', vf, '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', '33', '-row-mt', '1', '-deadline', 'good', '-cpu-used', '4', '-an', join(videoDir, 'demo.webm')]);
 run([...trim, '-i', raw, '-vf', vf, '-c:v', 'libx264', '-preset', 'slow', '-crf', '25', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', join(videoDir, 'demo.mp4')]);
 
-// The hero loop: about 15 s from the wire numbering, bundle label and reports (from the mark "colours": numbered, coloured wires, a bundle label).
-const heroFrom = at('colours');
+// The hero loop: about 15 s from the wire numbering and the reports that follow (from the mark "number").
+const heroFrom = at('number');
 const heroLen = 15;
 const htrim = ['-ss', heroFrom.toFixed(2), '-t', String(heroLen)];
 const hvf = 'scale=1280:720:flags=lanczos,fps=25';
@@ -55,13 +55,14 @@ run([...htrim, '-i', raw, '-vf', hvf, '-c:v', 'libx264', '-preset', 'slow', '-cr
 
 // Frames of the recording for the demo page: one per step (site/img/demo-N.png), and the posters.
 const frame = (id, offset, out, src = join(videoDir, 'demo.mp4')) => run(['-ss', Math.max(0, at(id) - start + offset).toFixed(2), '-i', src, '-frames:v', '1', join(imgDir, out)]);
-frame('open', 3.0, 'demo-1.png');
+frame('cover', 3.0, 'demo-1.png');
 frame('part', -0.8, 'demo-2.png');
-frame('terminals', -1.4, 'demo-3.png');
-frame('bom', 2.6, 'demo-4.png');
-frame('print', 3.4, 'demo-5.png');
-frame('terminals', -1.4, 'demo-poster.png');
-run(['-ss', String(Math.max(0, at('terminals') - heroFrom - 1.4).toFixed(2)), '-i', join(videoDir, 'hero.mp4'), '-frames:v', '1', join(imgDir, 'hero-poster.png')]);
+frame('bom', 2.6, 'demo-3.png');
+frame('loose', 2.6, 'demo-4.png');
+frame('plc', 2.2, 'demo-5.png');
+frame('pdf', 1.2, 'demo-6.png');
+frame('open', 3.0, 'demo-poster.png');
+run(['-ss', String(Math.max(0, at('wirelist') - heroFrom + 1.2).toFixed(2)), '-i', join(videoDir, 'hero.mp4'), '-frames:v', '1', join(imgDir, 'hero-poster.png')]);
 
 // Captions: each starts at its mark and ends when the next starts (the last at the end of the video).
 const ts = (s) => {

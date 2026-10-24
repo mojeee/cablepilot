@@ -7,6 +7,7 @@ import app from './it/app';
 import checks from './it/checks';
 import devices from './it/devices';
 import editor from './it/editor';
+import plc from './it/plc';
 import reports from './it/reports';
 
 export type Lang = 'en' | 'it';
@@ -15,7 +16,7 @@ export const LANGS: { id: Lang; label: string }[] = [
   { id: 'it', label: 'Italiano' },
 ];
 
-export const IT: Record<string, string> = { ...app, ...editor, ...devices, ...reports, ...checks };
+export const IT: Record<string, string> = { ...app, ...editor, ...devices, ...reports, ...checks, ...plc };
 
 let current: Lang = 'en';
 const listeners = new Set<(l: Lang) => void>();

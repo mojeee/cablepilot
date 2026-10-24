@@ -1,57 +1,65 @@
 WEBVTT
 
 1
-00:00:00.850 --> 00:00:05.309
-Apri il caricabatterie di esempio: un set di disegni completo, 23 pagine.
+00:00:00.850 --> 00:00:04.216
+Apri il caricabatterie di esempio: un set di disegni completo, 25 pagine.
 
 2
-00:00:05.559 --> 00:00:18.208
-Copertina, indice, unifilare, multifilare di potenza, PLC, morsettiere, elenco fili, distinta.
+00:00:04.466 --> 00:00:09.742
+La copertina: ogni foglio con la sua revisione, lo stato di emissione e l'approvazione del cliente.
 
 3
-00:00:18.458 --> 00:00:27.664
-Inserisci una bobina di contattore dalla libreria: la designazione è assegnata da sola.
+00:00:09.992 --> 00:00:16.696
+Indice, unifilare e la pagina PLC con la sua scheda I/O.
 
 4
-00:00:27.914 --> 00:00:40.805
-Inserisci il suo contatto: stesso dispositivo, e i riferimenti incrociati compaiono su entrambi.
+00:00:16.946 --> 00:00:24.621
+Inserisci una bobina di contattore dalla libreria: la designazione è assegnata da sola.
 
 5
-00:00:41.055 --> 00:00:46.132
-Assegna al dispositivo un articolo dalla libreria: la distinta lo conterà.
+00:00:24.871 --> 00:00:36.950
+Inserisci il suo contatto: stesso dispositivo, e i riferimenti incrociati compaiono su entrambi.
 
 6
-00:00:46.382 --> 00:00:58.252
-Numera i fili con il tuo schema: 020L+, 021L+ ...
+00:00:37.200 --> 00:00:40.879
+Assegna al dispositivo un articolo dalla libreria: la distinta lo conterà.
 
 7
-00:00:58.502 --> 00:01:09.432
-Conduttori nei colori IEC 60757; un fascio ha una sola etichetta.
+00:00:41.129 --> 00:00:46.379
+Numera i fili con il tuo schema: 020L+, 021L+ ...
 
 8
-00:01:09.682 --> 00:01:14.486
-Gli elenchi nascono dallo schema. Lo schema delle morsettiere ...
+00:00:46.629 --> 00:00:50.197
+L'elenco fili segue lo schema ...
 
 9
-00:01:14.736 --> 00:01:17.884
-... l'elenco fili con i nuovi numeri ...
+00:00:50.447 --> 00:00:54.622
+... e la distinta conta già il nuovo contattore.
 
 10
-00:01:18.134 --> 00:01:24.186
-... e la distinta, che conta già il nuovo contattore.
+00:00:54.872 --> 00:01:01.666
+Disegna un filo che non collega nulla: il banner dei controlli lo trova subito.
 
 11
-00:01:24.436 --> 00:01:31.145
-Anteprima di stampa: la pagina esattamente come viene stampata.
+00:01:01.916 --> 00:01:05.275
+Un clic sulla correzione e il problema sparisce.
 
 12
-00:01:31.395 --> 00:01:34.865
-Esporta il set di disegni in PDF ...
+00:01:05.525 --> 00:01:09.323
+I/O PLC: ogni canale con indirizzo, simbolo e a cosa è collegato.
 
 13
-00:01:35.115 --> 00:01:40.864
-... e tutti gli elenchi in un'unica cartella XLSX.
+00:01:09.573 --> 00:01:19.831
+Modifica un simbolo qui ed esporta l'elenco per lo strumento del PLC.
 
 14
-00:01:41.114 --> 00:01:45.624
+00:01:20.081 --> 00:01:22.974
+Esporta il set di disegni in PDF ...
+
+15
+00:01:23.224 --> 00:01:27.978
+... e tutti gli elenchi in un'unica cartella XLSX.
+
+16
+00:01:28.228 --> 00:01:31.959
 CablePilot: libero, open source, i tuoi file restano tuoi.

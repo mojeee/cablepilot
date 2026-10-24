@@ -3,11 +3,11 @@
 import { DEFAULT_POTENTIALS } from '../potentials';
 import { zoneRange } from './zones';
 import { DEFAULT_NUMBERING, DEFAULT_WIRE_CLASSES } from './wireDefaults';
-import type { BomSettings, CrossRefSettings, DrawingStyle, Page, Project, ProjectSettings, Template, TitleCell } from './types';
+import type { BomSettings, CrossRefSettings, DrawingStyle, Page, PlcSettings, Project, ProjectSettings, Template, TitleCell } from './types';
 import { PROJECT_FORMAT } from './types';
 import type { SheetSize } from '../sheets';
 
-export const CURRENT_VERSION = 4;
+export const CURRENT_VERSION = 5;
 
 /** Designations and wire numbers in red, as on the reference style of production sets (brief, M1). */
 export const DEFAULT_STYLE: DrawingStyle = {
@@ -69,6 +69,9 @@ export const DEFAULT_BOM: BomSettings = {
   ],
 };
 
+/** Editable company defaults, not requirements: digital areas start at byte 0, analog at byte 64. */
+export const DEFAULT_PLC: PlcSettings = { style: 'siemens', start: { di: 0, do: 0, ai: 64, ao: 64 } };
+
 export function defaultSettings(): ProjectSettings {
   return {
     drawingLanguage: 'en',
@@ -81,6 +84,7 @@ export function defaultSettings(): ProjectSettings {
     numbering: { ...DEFAULT_NUMBERING },
     wireColours: false,
     installationMethod: '',
+    plc: structuredClone(DEFAULT_PLC),
   };
 }
 

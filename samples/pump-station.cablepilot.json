@@ -1,6 +1,6 @@
 {
   "format": "cablepilot-project",
-  "version": 4,
+  "version": 5,
   "id": "sample-pump-station",
   "name": "Pump station, two pumps",
   "settings": {
@@ -28,6 +28,7 @@
     "drawingLanguage": "en",
     "installationMethod": "B1",
     "numbering": {"pattern":"{n:3}{suffix}","scheme":"potential","start":1,"step":1},
+    "plc": {"start":{"ai":64,"ao":64,"di":0,"do":0},"style":"siemens"},
     "style": {
       "colours": {
         "annotation": "#000000",
@@ -1724,7 +1725,7 @@
       "kind": "part",
       "category": "plc",
       "code": "GEN-PLC-CPU-COMPACT",
-      "data": {"Interface":"Ethernet","Supply voltage":"24 V DC"},
+      "data": {"Card type":"cpu","Interface":"Ethernet","Supply voltage":"24 V DC"},
       "description": {"en":"PLC CPU, compact, Ethernet, 24 V DC","it":"CPU PLC compatta, Ethernet, 24 V DC"},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
@@ -1737,7 +1738,7 @@
       "kind": "part",
       "category": "plc",
       "code": "GEN-PLC-DI-16-24VDC",
-      "data": {"Channels":"16","Signal":"24 V DC"},
+      "data": {"Card type":"di","Channels":"16","Signal":"24 V DC"},
       "description": {
         "en": "PLC input card, 16 digital inputs 24 V DC",
         "it": "Scheda PLC, 16 ingressi digitali 24 V DC"
@@ -1756,7 +1757,7 @@
       "kind": "part",
       "category": "plc",
       "code": "GEN-PLC-DO-16-24VDC",
-      "data": {"Channels":"16","Signal":"24 V DC"},
+      "data": {"Card type":"do","Channels":"16","Signal":"24 V DC"},
       "description": {
         "en": "PLC output card, 16 digital outputs 24 V DC",
         "it": "Scheda PLC, 16 uscite digitali 24 V DC"

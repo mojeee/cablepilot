@@ -3,7 +3,7 @@
 
 import { PAGE_TYPES } from './sheets';
 import { SHEET_SIZES } from './sheets';
-import { CURRENT_VERSION, DEFAULT_BOM, DEFAULT_CROSSREF } from './model/defaults';
+import { CURRENT_VERSION, DEFAULT_BOM, DEFAULT_CROSSREF, DEFAULT_PLC } from './model/defaults';
 import { DEFAULT_NUMBERING, DEFAULT_WIRE_CLASSES } from './model/wireDefaults';
 import { ISSUE_STATUSES, PROJECT_FORMAT, type Project } from './model/types';
 import { fail, ok, type Result } from './result';
@@ -59,6 +59,11 @@ export const MIGRATIONS: Record<number, Migration> = {
     const settings = (d.settings ?? {}) as Record<string, unknown>;
     return { ...d, settings: { ...settings, installationMethod: '' }, issueStatus: 'proposal', revisions: [] };
   },
+  // 4 -> 5 (M5): the PLC addressing scheme. Cards and channel fields live on the boxes and need no migration.
+  4: (d) => {
+    const settings = (d.settings ?? {}) as Record<string, unknown>;
+    return { ...d, settings: { ...settings, plc: structuredClone(DEFAULT_PLC) } };
+  },
 };
 
 export function migrate(data: Record<string, unknown>, migrations: Record<number, Migration> = MIGRATIONS, target = CURRENT_VERSION): Result<Record<string, unknown>> {
@@ -91,7 +96,7 @@ const NEEDS: Record<string, (e: Record<string, unknown>) => boolean> = {
   text: (e) => isNum(e.x) && isNum(e.y) && isNum(e.rot) && isStr(e.text) && isNum(e.size) && ['left', 'center', 'right'].includes(e.align as string),
   line: (e) => isPts(e.points),
   rect: (e) => isNum(e.x) && isNum(e.y) && isNum(e.w) && isNum(e.h) && (e.assembly === undefined || isStr(e.assembly)),
-  box: (e) => isNum(e.x) && isNum(e.y) && isNum(e.w) && isNum(e.h) && ['blackbox', 'connector'].includes(e.variant as string) && isStr(e.designation) && Array.isArray(e.pins) && e.pins.every((p) => isObj(p) && isStr(p.id) && isNum(p.offset) && ['left', 'right', 'top', 'bottom'].includes(p.side as string)),
+  box: (e) => isNum(e.x) && isNum(e.y) && isNum(e.w) && isNum(e.h) && ['blackbox', 'connector'].includes(e.variant as string) && isStr(e.designation) && Array.isArray(e.pins) && e.pins.every((p) => isObj(p) && isStr(p.id) && isNum(p.offset) && ['left', 'right', 'top', 'bottom'].includes(p.side as string)) && (e.plc === undefined || (isObj(e.plc) && ['cpu', 'di', 'do', 'ai', 'ao'].includes(e.plc.type as string) && isStr(e.plc.rack) && isNum(e.plc.slot))),
   table: (e) => isNum(e.x) && isNum(e.y) && Array.isArray(e.colWidths) && e.colWidths.every(isNum) && isNum(e.rowHeight) && Array.isArray(e.cells) && e.cells.every((r) => Array.isArray(r) && r.every(isStr)) && isNum(e.size),
   image: (e) => isNum(e.x) && isNum(e.y) && isNum(e.w) && isNum(e.h) && isStr(e.assetId),
   warning: (e) => isNum(e.x) && isNum(e.y) && isNum(e.size) && ['general', 'electric', 'hot', 'autostart'].includes(e.sign as string),
@@ -131,7 +136,7 @@ export function validateProject(d: unknown): string[] {
   if (!Array.isArray(d.devices) || !d.devices.every((r) => isObj(r) && isStr(r.designation) && Array.isArray(r.parts) && isObj(r.fields))) errs.push('devices must be an array of device records');
   if (!Array.isArray(d.parts)) errs.push('parts must be an array');
   if (!Array.isArray(d.projectParts) || !d.projectParts.every((r) => isObj(r) && isStr(r.id) && isStr(r.part) && isNum(r.qty))) errs.push('projectParts must be an array of parts');
-  if (isObj(s) && (!isObj(s.crossRef) || !isObj(s.bom) || !isObj(s.numbering))) errs.push('settings.crossRef, settings.bom and settings.numbering are required');
+  if (isObj(s) && (!isObj(s.crossRef) || !isObj(s.bom) || !isObj(s.numbering) || !isObj(s.plc))) errs.push('settings.crossRef, settings.bom, settings.numbering and settings.plc are required');
   if (!Array.isArray(d.wireClasses) || !Array.isArray(d.wireTypes) || !Array.isArray(d.cables)) errs.push('wireClasses, wireTypes and cables must be arrays');
   if (!ISSUE_STATUSES.includes(d.issueStatus as never)) errs.push('issueStatus must be proposal, approval, construction or asBuilt');
   if (!Array.isArray(d.revisions) || !d.revisions.every((r) => isObj(r) && isStr(r.number) && isStr(r.date) && Array.isArray(r.pages) && isObj(r.inventory))) errs.push('revisions must be an array of issued revisions');

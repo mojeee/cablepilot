@@ -71,10 +71,11 @@ export function builder(lib: Library, projectId: string, name: string, settings:
       run({ type: 'el/add', page, elements: [{ id: nid(), kind: 'warning', x, y, size, sign }] });
     },
     /** A black box or connector; pins are [number, side, name?] and are spaced along their side. */
-    box(page: string, o: { variant: BoxEl['variant']; x: number; y: number; w?: number; h?: number; designation?: string; title?: LText; pins?: [string, BoxPin['side'], string?][]; gender?: 'plug' | 'socket'; mate?: string; location?: string }) {
+    box(page: string, o: { variant: BoxEl['variant']; x: number; y: number; w?: number; h?: number; designation?: string; title?: LText; pins?: [string, BoxPin['side'], string?][]; gender?: 'plug' | 'socket'; mate?: string; location?: string; plc?: BoxEl['plc']; pitch?: number }) {
       const id = nid();
-      let element: BoxEl = { id, kind: 'box', variant: o.variant, x: o.x, y: o.y, w: o.w ?? 30, h: o.h ?? 20, designation: o.designation ?? '', pins: [], ...(o.title ? { functionText: o.title } : {}), ...(o.gender ? { gender: o.gender } : {}), ...(o.mate ? { mate: o.mate } : {}), ...(o.location ? { location: o.location } : {}) };
+      let element: BoxEl = { id, kind: 'box', variant: o.variant, x: o.x, y: o.y, w: o.w ?? 30, h: o.h ?? 20, designation: o.designation ?? '', pins: [], ...(o.title ? { functionText: o.title } : {}), ...(o.gender ? { gender: o.gender } : {}), ...(o.mate ? { mate: o.mate } : {}), ...(o.location ? { location: o.location } : {}), ...(o.plc ? { plc: o.plc } : {}) };
       for (const [pid, side, name] of o.pins ?? []) element = withPin(element, side, pid, name);
+      if (o.pitch) element = { ...element, pins: element.pins.map((p, i) => ({ ...p, offset: o.pitch! * (i + 1) })), h: Math.max(element.h, o.pitch * ((o.pins ?? []).length + 1)) };
       run({ type: 'box/place', page, element, autoNumber: !o.designation });
       const placed = project.pages.find((p) => p.id === page)?.elements.find((e) => e.id === id) as BoxEl;
       return {

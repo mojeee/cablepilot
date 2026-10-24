@@ -112,142 +112,149 @@ test('demo recording: the battery-charger story', async () => {
       return { x: b.x + b.width / 2 + (x - 210) * zoom, y: b.y + b.height / 2 + (y - 148.5) * zoom };
     };
 
-    // ============ 1. Open the sample, the cover, the drawing set ============
-    await wait(1200);
+    // ============ 1. Open the sample, the cover sheet with its revision matrix, the drawing set ============
+    await wait(1000);
     await cue('open');
-    await glide(700, 22, 900);
-    await wait(500);
+    await glide(700, 22, 800);
+    await wait(400);
     await page.getByTestId('samples').selectOption('dc-charger');
     await expect(messages).toContainText('Opened');
+    await wait(2200);
+
+    await cue('cover');
+    const matrix = await mm(205, 118);
+    await zoomAt(matrix.x, matrix.y, 7);
     await wait(3200);
+    await fit();
+    await wait(300);
 
     await cue('flick');
-    await gotoPage(2, 1300);
-    await gotoPage(5, 1500);
-    await gotoPage(9, 1500);
-    await gotoPage(10, 1500);
-    await gotoPage(16, 1500);
+    await gotoPage(2, 900);
+    await gotoPage(5, 1000);
+    await gotoPage(9, 1300);
 
     // ============ 2. A coil and a contact from the library, on the control page ============
-    await gotoPage(8, 1500);
+    await gotoPage(8, 1000);
     await cue('coil');
     await typeInto(page.getByTestId('symbol-search'), 'coil', false);
-    await wait(500);
+    await wait(300);
     const coilAt = await mm(250, 100);
-    await clickOn(page.getByTestId('symbol-coil'), 700);
-    await wait(500);
-    await clickAt(coilAt.x, coilAt.y, 800);
+    await clickOn(page.getByTestId('symbol-coil'), 600);
+    await wait(300);
+    await clickAt(coilAt.x, coilAt.y, 700);
     await expect(messages).toContainText(/Placed -K\d+/);
     const dsg = /Placed (-K\d+)/.exec(await messages.innerText())![1];
     await page.keyboard.press('Escape');
-    await wait(1100);
-    await zoomAt(coilAt.x, coilAt.y, 9);
-    await wait(2000);
+    await wait(700);
+    await zoomAt(coilAt.x, coilAt.y, 8);
+    await wait(1400);
     await fit();
-    await wait(600);
+    await wait(300);
 
     await cue('contact');
     await typeInto(page.getByTestId('symbol-search'), 'contact', false);
-    await wait(400);
-    const contactAt = await mm(250, 178);
-    await clickOn(page.getByTestId('symbol-contact-no'), 700);
-    await clickAt(contactAt.x, contactAt.y, 800);
-    await page.keyboard.press('Escape');
     await wait(300);
-    await clickAt(contactAt.x, contactAt.y, 400);
+    const contactAt = await mm(250, 178);
+    await clickOn(page.getByTestId('symbol-contact-no'), 600);
+    await clickAt(contactAt.x, contactAt.y, 700);
+    await page.keyboard.press('Escape');
+    await wait(250);
+    await clickAt(contactAt.x, contactAt.y, 350);
     await typeInto(page.getByTestId('prop-designation'), dsg, true);
     await expect(page.getByTestId('device-reps')).toContainText('Coil');
+    await wait(400);
+    await clickOn(page.getByTestId('device-reps').locator('li').first(), 500);
     await wait(500);
-    await clickOn(page.getByTestId('device-reps').locator('li').first(), 600);
-    await wait(600);
-    await zoomAt(coilAt.x, (coilAt.y + contactAt.y) / 2, 6);
-    await wait(2000);
+    await zoomAt(coilAt.x, (coilAt.y + contactAt.y) / 2, 5);
+    await wait(1600);
     await fit();
     // select the contact again to keep the Properties panel on the device
-    await clickAt(contactAt.x, contactAt.y, 700);
+    await clickAt(contactAt.x, contactAt.y, 600);
 
     await cue('part');
-    await clickOn(page.getByTestId('part-select'), 700);
+    await clickOn(page.getByTestId('part-select'), 600);
     await page.getByTestId('part-select').selectOption('generic-contactor-9a');
-    await wait(500);
-    await clickOn(page.getByTestId('part-add'), 500);
+    await wait(300);
+    await clickOn(page.getByTestId('part-add'), 450);
     await expect(page.getByTestId('device-parts')).toContainText('GEN-CONTACTOR-9A');
-    await wait(1800);
+    await wait(1300);
     await page.keyboard.press('Escape');
 
-    // ============ 3. Wire numbers, colours, a bundle ============
+    // ============ 3. Wire numbers, then the lists that follow ============
     await cue('number');
-    await clickOn(page.getByTestId('wires'), 800);
-    await wait(900);
+    await clickOn(page.getByTestId('wires'), 700);
+    await wait(600);
     await typeInto(page.getByLabel('Start at'), '20', true);
-    await wait(700);
-    await clickOn(page.getByTestId('wires-number-now'), 700);
-    await expect(messages).toContainText('Wires numbered.');
-    await wait(1800);
-    await clickOn(page.getByTestId('wires-tab-classes'), 700);
-    await wait(2000);
-    await page.keyboard.press('Escape');
-    await wait(500);
-    await gotoPage(6, 1200);
-
-    await cue('colours');
-    const dc = await mm(250, 222);
-    await zoomAt(dc.x, dc.y, 10);
-    await wait(1800);
-    await fit();
     await wait(400);
-    const bundleAt = await mm(200, 222);
-    await clickAt(bundleAt.x, bundleAt.y, 800);
-    await clickOn(page.getByLabel('Bundle of wires (one label)'), 700);
-    await wait(500);
-    await zoomAt(bundleAt.x, bundleAt.y, 9);
-    await wait(2200);
-    await fit();
+    await clickOn(page.getByTestId('wires-number-now'), 600);
+    await expect(messages).toContainText('Wires numbered.');
+    await wait(1300);
     await page.keyboard.press('Escape');
+    await wait(300);
 
-    // ============ 4. Reports window, live ============
-    await cue('terminals');
-    await clickOn(page.getByTestId('reports'), 800);
-    await clickOn(page.getByTestId('report-terminals'), 600);
-    await wait(2600);
     await cue('wirelist');
-    await clickOn(page.getByTestId('report-wires'), 600);
+    await clickOn(page.getByTestId('reports'), 700);
+    await clickOn(page.getByTestId('report-wires'), 500);
     await expect(page.getByTestId('report-table')).toContainText('020');
-    await wait(2600);
+    await wait(1800);
     await cue('bom');
-    await clickOn(page.getByTestId('report-bom'), 600);
-    await wait(900);
+    await clickOn(page.getByTestId('report-bom'), 500);
+    await wait(700);
     const row = page.getByTestId('report-table').locator('tr', { hasText: dsg }).first();
     await expect(row).toContainText('GEN-CONTACTOR-9A');
     const rp = await centre(row);
-    await glide(rp.x, rp.y, 700);
+    await glide(rp.x, rp.y, 600);
+    await wait(2000);
+    await page.keyboard.press('Escape');
+    await wait(300);
+
+    // ============ 4. The check banner finds a loose wire; one click fixes it ============
+    await cue('loose');
+    await gotoPage(8, 500);
+    await clickOn(page.getByTestId('tool-wire'), 600);
+    const w1 = await mm(40, 238), w2 = await mm(105, 238);
+    await clickAt(w1.x, w1.y, 700);
+    await clickAt(w2.x, w2.y, 500);
+    await page.keyboard.press('Enter');
+    await expect(page.getByTestId('checks-banner')).toBeVisible();
+    await expect(page.getByTestId('checks-summary')).toContainText('0 errors, 1 warnings');
     await wait(2800);
+    await cue('fix');
+    await clickOn(page.getByTestId('fix-one'), 800);
+    await expect(page.getByTestId('checks-banner')).toHaveCount(0);
+    await wait(2200);
+
+    // ============ 5. The PLC I/O overview: tags, and a tag list for the PLC tool ============
+    await cue('plc');
+    await clickOn(page.getByTestId('plc'), 800);
+    await expect(page.getByTestId('plc-table')).toBeVisible();
+    await wait(2800);
+    await cue('tags');
+    await typeInto(page.getByTestId('plc-tag-1'), 'K2_Batteria_bassa', true);
+    await wait(900);
+    await clickOn(page.getByTestId('tags-export-codesys'), 700);
+    await expect(messages).toContainText('Tag list exported');
+    await wait(2200);
     await page.keyboard.press('Escape');
-    await wait(500);
+    await wait(300);
+    await gotoPage(9, 2200);
 
-    // ============ 5. Print preview, PDF, XLSX, the cover ============
-    await cue('print');
-    await gotoPage(6, 600);
-    await clickOn(page.getByTestId('print-preview'), 800);
-    await wait(3000);
-    await clickOn(page.getByTestId('print-preview'), 700);
-    await wait(500);
-
+    // ============ 6. PDF, XLSX, the cover ============
     await cue('pdf');
-    await clickOn(page.getByTestId('export-pdf'), 800);
+    await clickOn(page.getByTestId('export-pdf'), 700);
     await expect(messages).toContainText('PDF exported');
-    await wait(2000);
+    await wait(1500);
     await cue('xlsx');
-    await clickOn(page.getByTestId('reports'), 700);
-    await clickOn(page.getByTestId('export-xlsx'), 700);
+    await clickOn(page.getByTestId('reports'), 600);
+    await clickOn(page.getByTestId('export-xlsx'), 600);
     await expect(messages).toContainText('Lists exported');
-    await wait(2000);
+    await wait(1500);
     await page.keyboard.press('Escape');
-    await wait(400);
-    await gotoPage(1, 600);
+    await wait(300);
+    await gotoPage(1, 500);
     await cue('end');
-    await glide(1500, 1000, 800);
-    await wait(3500);
+    await glide(1500, 1000, 700);
+    await wait(3000);
     expect(readdirSync(out).some((f) => f.endsWith('.pdf'))).toBe(true);
     marks.__end = Date.now();
   } finally {

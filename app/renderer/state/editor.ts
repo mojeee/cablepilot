@@ -4,7 +4,9 @@
 
 import { create } from 'zustand';
 import { t, getLanguage } from '@shared/i18n';
-import type { Command } from '@shared/commands';
+import { apply, type Command } from '@shared/commands';
+import { cardFromPart, exportTags, nextSlot, parseTags, planImport, TAG_FORMATS, type ImportPlan, type TagFormat } from '@shared/plc';
+import { keyOf } from '@shared/devices';
 import { createHistory, exec as execHistory, redo as redoHistory, undo as undoHistory, type History } from '@shared/commands/history';
 import { MIGRATIONS, parseProject, projectFileName, serializeProject } from '@shared/file';
 import { newId } from '@shared/ids';
@@ -32,7 +34,7 @@ import { loadPdfFonts } from '../render/fonts';
 import { useUi } from './ui';
 
 export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'line' | 'rect' | 'dashed' | 'table' | 'image' | 'warning';
-export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions';
+export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc';
 
 export interface Recovery {
   id: string;
@@ -99,6 +101,11 @@ interface EditorState {
   exportReportCsv(id: ReportId): Promise<void>;
   exportXlsx(): Promise<void>;
   exportDxf(): Promise<void>;
+  /** Places a PLC card made from a library part (its designation, part, slot and addresses in one undo step). */
+  placePlcCard(partId: string, x: number, y: number): void;
+  exportTags(format: TagFormat): Promise<void>;
+  /** Asks for a tag-list file and works out what importing it would change (nothing is applied). */
+  readTags(format: TagFormat): Promise<{ name: string; plan: ImportPlan } | null>;
   importDxf(): Promise<void>;
   addReportPages(ids: ReportId[]): void;
   syncReportPages(): void;
@@ -354,6 +361,38 @@ export const useEditor = create<EditorState>((set, get) => {
       if (!r.ok) return errMsg(r.error);
       if (r.value) { const file = r.value.name; flash('info', () => t('Lists exported to {name}.', { name: file })); }
     },
+    placePlcCard: (partId, x, y) => {
+      const pg = get().page();
+      const part = get().lib.parts.get(partId);
+      if (!pg || !part) return;
+      const p = get().project();
+      const id = newId('b');
+      const el = cardFromPart(part, { id, x, y, rack: '0', slot: nextSlot(p, '0') });
+      if (!el) return;
+      const place: Command = { type: 'box/place', page: pg.id, autoNumber: true, element: el };
+      const trial = apply(p, place, { lib: get().lib }).pages.find((q) => q.id === pg.id)?.elements.find((e) => e.id === id);
+      if (!trial || trial.kind !== 'box') return;
+      const key = keyOf(pg, trial.designation, trial.location);
+      get().exec({ type: 'batch', label: 'Place PLC card', commands: [{ type: 'part/embed', def: part }, place, { type: 'device/update', key, patch: { parts: [{ part: part.id, qty: 1 }] } }, { type: 'plc/assign' }] });
+      const des = trial.designation;
+      const title = part.title[getLanguage()];
+      flash('info', () => t('Placed {designation} ({symbol}).', { designation: des, symbol: title }));
+      set({ selection: [id], tool: 'select', placing: null });
+    },
+    exportTags: async (format) => {
+      const p = get().project();
+      const f = TAG_FORMATS.find((x) => x.id === format)!;
+      const r = await window.cablepilot.files.exportText(exportTags(p, get().lib, format), `${projectFileName(p).replace(/\.cablepilot\.json$/, '')}-tags-${format}.${f.ext}`);
+      if (!r.ok) return errMsg(r.error);
+      if (r.value) { const file = r.value.name; flash('info', () => t('Tag list exported to {name}.', { name: file })); }
+    },
+    readTags: async (format) => {
+      const f = TAG_FORMATS.find((x) => x.id === format)!;
+      const r = await window.cablepilot.files.importTags(f.ext as 'xml' | 'txt');
+      if (!r.ok) { errMsg(r.error); return null; }
+      if (!r.value) return null;
+      return { name: r.value.name, plan: planImport(get().project(), get().lib, parseTags(r.value.text, format), format) };
+    },
     exportDxf: async () => {
       const p = get().project();
       const i = p.pages.findIndex((x) => x.id === get().pageId);
@@ -411,6 +450,7 @@ export const useEditor = create<EditorState>((set, get) => {
     },
 
     placeSymbol: (symbolId, x, y, rot, mirror) => {
+      if (symbolId.startsWith('plc:')) return get().placePlcCard(symbolId.slice(4), x, y);
       if (symbolId.startsWith('box:')) return get().placeBox(symbolId.slice(4) === 'connector' ? 'connector' : 'blackbox', x, y);
       if (symbolId.startsWith('macro:')) return get().placeMacro(symbolId.slice(6), x, y);
       const { lib } = get();

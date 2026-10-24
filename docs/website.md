@@ -41,10 +41,10 @@ tables and symbol/device pages generated from `library/`, the guides and real sc
 - **Screenshots from the real app** (Playwright script, M8), never retouched. Until then the pages
   show a placeholder.
 - **The recorded demo.** `npm run record:demo` builds the app, records the story with Playwright
-  (`e2e/demo.e2e.ts`, 1920 x 1080, DC battery-charger sample, a visible pointer, zoom-ins, print preview;
+  (`e2e/demo.e2e.ts`, 1920 x 1080, DC battery-charger sample, a visible pointer, zoom-ins, cover matrix, check banner and fix, PLC I/O window;
   nothing is faked or edited), encodes it (`scripts/demo-video.mjs`, ffmpeg) and rebuilds the site. The
   captions' texts are in `e2e/demo-captions.json` (English and Italian) and are timed from the moments the
-  script marks. Files: `site/video/demo.webm` (VP9) and `demo.mp4` (H.264, faststart), the 15 s muted loop
+  script marks. Files: `site/video/demo.webm` (VP9) and `demo.mp4` (H.264, faststart), the 15 s muted loop (from the wire numbering)
   `hero.webm` and `hero.mp4`, captions `demo.en.vtt` and `demo.it.vtt`; posters `site/img/hero-poster.png`
   and `demo-poster.png`, and one frame per step `site/img/demo-1.png` ... `demo-5.png`. The landing-page hero
   plays the loop (`<video autoplay muted loop playsinline poster=...>`, no script) and "Watch the demo" opens

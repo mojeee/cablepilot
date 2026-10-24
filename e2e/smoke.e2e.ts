@@ -1,7 +1,7 @@
 // End-to-end tests of the built app. Run: npm run test:e2e (builds first).
 /// <reference lib="dom" />
 import { test } from '@playwright/test';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { PDFDict, PDFDocument, PDFName } from 'pdf-lib';
 import { expect, launch } from './app';
@@ -106,7 +106,7 @@ test('place a symbol, draw a wire, undo, save and export a PDF', async () => {
 test('the sample projects open', async () => {
   const { page, close } = await launch();
   try {
-    for (const [id, name, pages] of [['conveyor', 'Conveyor with direct-on-line starter', 18], ['pump-station', 'Pump station, two pumps', 21], ['dc-charger', 'Caricabatterie 110 V DC', 23]] as const) {
+    for (const [id, name, pages] of [['conveyor', 'Conveyor with direct-on-line starter', 19], ['pump-station', 'Pump station, two pumps', 21], ['dc-charger', 'Caricabatterie 110 V DC', 25]] as const) {
       await page.getByTestId('samples').selectOption(id);
       await expect(page.getByTestId('project-name')).toContainText(name);
       await expect(page.getByRole('region', { name: 'Messages' })).toContainText(`Opened ${name}.`);
@@ -282,7 +282,7 @@ test('M3: number the wires, view the terminal diagram, export the PDF set and th
     const pdf = readdirSync(out).find((f) => f.endsWith('.pdf'))!;
     const pdfBytes = readFileSync(join(out, pdf));
     const doc = await PDFDocument.load(pdfBytes);
-    expect(doc.getPageCount()).toBe(23);
+    expect(doc.getPageCount()).toBe(25);
     // The text is embedded (a font file in the PDF), so it shows in every viewer.
     expect(doc.context.enumerateIndirectObjects().some(([, o]) => o instanceof PDFDict && o.has(PDFName.of('FontFile2')))).toBe(true);
   } finally {
@@ -360,10 +360,54 @@ test('M4: issue a revision, see the changed page, compare, and read the cover sh
     await page.getByTestId('save').click();
     const file = readdirSync(out).find((f) => f.endsWith('.cablepilot.json'))!;
     const saved = JSON.parse(readFileSync(join(out, file), 'utf8')) as { issueStatus: string; version: number; revisions: { number: string; description: string; pages: unknown[] }[] };
-    expect(saved.version).toBe(4);
+    expect(saved.version).toBe(5);
     expect(saved.issueStatus).toBe('construction');
     expect(saved.revisions.map((r) => r.number)).toEqual(['0', '1']);
     expect(saved.revisions[1].description).toBe('Lamp added');
+  } finally {
+    await close();
+  }
+});
+
+test('M5: assign an address in the PLC overview, export a tag list, import tags with a preview', async () => {
+  const { page, out, close } = await launch();
+  try {
+    await page.getByTestId('samples').selectOption('conveyor');
+    await expect(page.getByTestId('checks-banner')).toHaveCount(0);
+    await page.getByTestId('plc').click();
+    const table = page.getByTestId('plc-table');
+    await expect(table.locator('tbody tr')).toHaveCount(16);
+    await expect(page.getByTestId('plc-address-0')).toHaveValue('I0.0');
+    await expect(page.getByTestId('plc-tag-0')).toHaveValue('S0_EStop_OK');
+    // Give the first input another address: the overview keeps it and the file gets it.
+    await page.getByTestId('plc-address-0').fill('I1.0');
+    await page.getByTestId('plc-address-0').blur();
+    await expect(page.getByTestId('plc-address-0')).toHaveValue('I1.0');
+    // The TIA format is marked unverified; CODESYS is not.
+    await expect(page.getByTestId('tags-unverified-tia')).toBeVisible();
+    await expect(page.getByTestId('tags-unverified-codesys')).toHaveCount(0);
+    await page.getByTestId('tags-export-codesys').click();
+    await expect(page.getByRole('region', { name: 'Messages' })).toContainText('Tag list exported');
+    const gvl = readdirSync(out).find((f) => f.endsWith('-tags-codesys.txt'))!;
+    expect(readFileSync(join(out, gvl), 'utf8')).toContain('S0_EStop_OK AT %IX1.0 : BOOL;');
+    await page.getByTestId('tags-export-tia').click();
+    const xml = readdirSync(out).find((f) => f.endsWith('-tags-tia.xml'))!;
+    expect(readFileSync(join(out, xml), 'utf8')).toContain('<LogicalAddress>%I1.0</LogicalAddress>');
+    // Import: previewed first, applied as one change.
+    writeFileSync(join(out, 'tags-import.txt'), 'VAR_GLOBAL\n  Start_PB AT %IX0.1 : BOOL; (* Start pushbutton NO *)\n  Nowhere AT %IX9.9 : BOOL;\nEND_VAR\n');
+    await page.getByTestId('tags-import-codesys').click();
+    const preview = page.getByTestId('tags-preview');
+    await expect(preview).toContainText('will be set');
+    await expect(preview).toContainText('not an address');
+    await page.getByTestId('tags-apply').click();
+    await expect(preview).toHaveCount(0);
+    await expect(page.getByTestId('plc-tag-1')).toHaveValue('Start_PB');
+    // The address change from above is still there; both edits are undoable steps.
+    await page.keyboard.press('Escape');
+    await page.getByTestId('undo').click();
+    await page.getByTestId('plc').click();
+    await expect(page.getByTestId('plc-tag-1')).toHaveValue('S1_Start');
+    await expect(page.getByTestId('plc-address-0')).toHaveValue('I1.0');
   } finally {
     await close();
   }

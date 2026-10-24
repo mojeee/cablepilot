@@ -14,7 +14,8 @@
   },
   "data": {
     "Channels": "16",
-    "Signal": "24 V DC"
+    "Signal": "24 V DC",
+    "Card type": "di"
   },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",
