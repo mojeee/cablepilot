@@ -1,0 +1,127 @@
+<section class="hero dark">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">{{t:hero.eyebrow}}</p>
+      <h1>{{t:hero.title}}</h1>
+      <p class="lead">{{t:hero.lead}}</p>
+      <p class="actions">
+        <a class="btn primary" href="{{RELEASES}}">{{t:hero.download}}</a>
+        <a class="btn" href="#demo">{{t:hero.demo}}</a>
+      </p>
+      <p class="status">{{status}}</p>
+    </div>
+    <div class="hero-media">{{heroMedia}}</div>
+  </div>
+</section>
+
+<section class="band dark" id="today">
+  <div class="wrap">
+    <h2>{{t:today.title}}</h2>
+    <p class="lead">{{t:today.lead}}</p>
+    <div class="grid features">
+      {{features}}
+    </div>
+    <div class="shots">
+      <input type="radio" name="shot-theme" id="shot-dark" checked />
+      <input type="radio" name="shot-theme" id="shot-light" />
+      <div class="shot-switch" role="group" aria-label="{{t:shot.theme}}">
+        <label for="shot-dark">{{t:shot.dark}}</label>
+        <label for="shot-light">{{t:shot.light}}</label>
+      </div>
+      <div class="shot shot-dark-img"><p>{{t:shot.pending}}</p></div>
+      <div class="shot shot-light-img"><p>{{t:shot.pending}}</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band light" id="set">
+  <div class="wrap">
+    <h2>{{t:set.title}}</h2>
+    <p class="lead">{{t:set.lead}}</p>
+    <ul class="strip">
+      {{strip}}
+    </ul>
+  </div>
+</section>
+
+<section class="band dark" id="ai">
+  <div class="wrap">
+    <h2>{{t:ai.title}}</h2>
+    <!-- if ai -->
+    <p class="lead">{{t:ai.lead.shipped}}</p>
+    <!-- else -->
+    <p class="tag soon">{{t:tag.comingNext}}</p>
+    <p class="lead">{{t:ai.lead.coming}}</p>
+    <!-- end -->
+    <div class="grid two">
+      <div>
+        <h3>{{t:ai.prompts}}</h3>
+        <ul class="bubbles">
+          <li>{{t:ai.p1}}</li>
+          <li>{{t:ai.p2}}</li>
+          <li>{{t:ai.p3}}</li>
+        </ul>
+      </div>
+      <div class="proposal">
+        <h3>{{t:ai.proposal}}</h3>
+        <ul>
+          <li><span class="src">{{t:ai.src.project}}</span></li>
+          <li><span class="src">{{t:ai.src.standard}}</span></li>
+          <li><span class="src">{{t:ai.src.library}}</span></li>
+          <li><span class="src sug">{{t:ai.src.suggestion}}</span></li>
+        </ul>
+        <p class="actions"><span class="btn primary sm">{{t:ai.accept}}</span> <span class="btn sm">{{t:ai.reject}}</span></p>
+        <p class="note">{{t:ai.note}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band light" id="why">
+  <div class="wrap">
+    <h2>{{t:why.title}}</h2>
+    <div class="grid four">
+      <div><h3>{{t:why.local.title}}</h3><p>{{t:why.local.text}}</p></div>
+      <div><h3>{{t:why.format.title}}</h3><p>{{t:why.format.text}}</p></div>
+      <div><h3>{{t:why.sourced.title}}</h3><p>{{t:why.sourced.text}}</p></div>
+      <div><h3>{{t:why.open.title}}</h3><p>{{t:why.open.text}}</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band light" id="compare">
+  <div class="wrap">
+    <h2>{{t:cmp.title}}</h2>
+    <p class="lead">{{t:cmp.lead}}</p>
+    {{compare}}
+  </div>
+</section>
+
+<section class="band dark" id="demo">
+  <div class="wrap">
+    <h2>{{t:demo.title}}</h2>
+    {{demoMedia}}
+  </div>
+</section>
+
+<section class="band light" id="download">
+  <div class="wrap">
+    <h2>{{t:dl.title}}</h2>
+    <div class="grid two">
+      <div>
+        <h3>{{t:dl.formats}}</h3>
+        <p>{{t:dl.formats.text}}</p>
+      </div>
+      <div>
+        <h3>{{t:dl.os}}</h3>
+        <ul class="os">
+          <li><a class="btn primary" href="{{RELEASES}}">{{t:dl.mac}}</a></li>
+          <li><a class="btn primary" href="{{RELEASES}}">{{t:dl.win}}</a></li>
+          <li><a class="btn primary" href="{{RELEASES}}">{{t:dl.linux}}</a></li>
+        </ul>
+        <p class="note">{{t:dl.note}}</p>
+        <p><a href="{{companiesHref}}">{{t:dl.companies}}</a></p>
+      </div>
+    </div>
+  </div>
+</section>

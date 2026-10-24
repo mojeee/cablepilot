@@ -1,0 +1,16 @@
+name: Feature request
+description: Something the app should do.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What you need to do
+      description: The drawing, list or report you are making and what gets in the way today.
+    validations:
+      required: true
+  - type: textarea
+    id: standard
+    attributes:
+      label: Standard or reference, if any
+      description: IEC or other standard and clause, or how another tool does it.

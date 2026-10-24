@@ -1,0 +1,23 @@
+name: Bug report
+description: Something does not work as it should.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what you got. Plain words are fine.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: CablePilot version and OS
+      placeholder: "0.1.0, Windows 11"
+    validations:
+      required: true
+  - type: textarea
+    id: file
+    attributes:
+      label: File that shows the problem
+      description: Attach the .cablepilot.json or DXF file if you can (remove anything confidential first).

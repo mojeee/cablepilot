@@ -1,0 +1,52 @@
+/* Design tokens. Dark UI by default; the light UI is data-theme="light" on <html>. The canvas theme
+   is separate: data-canvas="dark" | "white". Print preview is always white (M1). */
+:root {
+  --bg: #15191e;
+  --chrome: #11151a;
+  --panel: #1b2027;
+  --raised: #272e38;
+  --line: #2b333e;
+  --text: #e8ecf0;
+  --muted: #a3afbb;
+  --dim: #76828f;
+  --accent: #4da3ff;
+  --ok: #52c98b;
+  --warn: #f0a63a;
+  --err: #ff5a4f;
+  --sel: #ffb020;
+  --canvas-bg: #0f1216;
+  --sheet-bg: #181d23;
+  --sheet-ink: #c9d3dc;
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --topbar-h: 44px;
+  --panel-w: 300px;
+  --nav-w: 200px;
+  --browser-w: 240px;
+  --messages-h: 120px;
+}
+:root[data-theme='light'] {
+  --bg: #f3f5f7;
+  --chrome: #e6eaee;
+  --panel: #ffffff;
+  --raised: #eef1f4;
+  --line: #d2d9e0;
+  --text: #1a2129;
+  --muted: #4a5662;
+  --dim: #6b7783;
+  --accent: #0b63c5;
+  --ok: #17794a;
+  --warn: #965d00;
+  --err: #c0271c;
+  --sel: #c47a00;
+}
+:root[data-canvas='dark'] {
+  --canvas-bg: #0f1216;
+  --sheet-bg: #181d23;
+  --sheet-ink: #c9d3dc;
+}
+:root[data-canvas='white'] {
+  --canvas-bg: #d9dee3;
+  --sheet-bg: #ffffff;
+  --sheet-ink: #1a1a1a;
+}

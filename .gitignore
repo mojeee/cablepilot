@@ -1,0 +1,13 @@
+node_modules/
+out/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.claude/
+THIRD_PARTY_LICENSES.md
+test-results/
+playwright-report/
+*.tsbuildinfo

@@ -1,0 +1,50 @@
+{
+  "name": "cablepilot",
+  "productName": "CablePilot",
+  "version": "0.1.0",
+  "description": "Open-source electrical design for machines, control panels and electronics: multi-page schematics, live reports, cabinet layout and production drawing sets. Local, no account, your files stay yours.",
+  "private": true,
+  "license": "Apache-2.0",
+  "main": "out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "prebuild": "node scripts/check-licenses.mjs --write",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "node scripts/e2e.mjs",
+    "check:licenses": "node scripts/check-licenses.mjs",
+    "check:library": "node scripts/check-library.mjs",
+    "build:site": "node scripts/build-site.mjs",
+    "check:site": "node scripts/check-site.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^45.0.0",
+    "electron-vite": "^6.0.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5",
+    "zustand": "^5.0.16"
+  },
+  "author": {
+    "name": "Mojtaba Amini",
+    "url": "https://github.com/mojeee"
+  },
+  "homepage": "https://cablepilot.agentflowbind.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mojeee/cablepilot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mojeee/cablepilot/issues"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "iec-60757",
+  "kind": "colour-codes",
+  "title": "Colour codes for conductors and cores",
+  "source": "IEC 60757 (code for designation of colours)",
+  "verification": "secondary",
+  "verifiedFrom": "Widely published two-letter code tables; the standard's own text has not been seen. Listed in docs/to-verify.md.",
+  "colours": [
+    { "code": "BK", "name": { "en": "black", "it": "nero" } },
+    { "code": "BN", "name": { "en": "brown", "it": "marrone" } },
+    { "code": "RD", "name": { "en": "red", "it": "rosso" } },
+    { "code": "OG", "name": { "en": "orange", "it": "arancione" } },
+    { "code": "YE", "name": { "en": "yellow", "it": "giallo" } },
+    { "code": "GN", "name": { "en": "green", "it": "verde" } },
+    { "code": "BU", "name": { "en": "blue", "it": "blu" } },
+    { "code": "VT", "name": { "en": "violet", "it": "viola" } },
+    { "code": "GY", "name": { "en": "grey", "it": "grigio" } },
+    { "code": "WH", "name": { "en": "white", "it": "bianco" } },
+    { "code": "PK", "name": { "en": "pink", "it": "rosa" } },
+    { "code": "TQ", "name": { "en": "turquoise", "it": "turchese" } },
+    { "code": "GNYE", "name": { "en": "green-and-yellow", "it": "giallo-verde" } }
+  ]
+}

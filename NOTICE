@@ -1,0 +1,11 @@
+CablePilot
+Copyright 2026 Mojtaba Amini
+
+This product includes software developed by Mojtaba Amini and the CablePilot contributors
+(https://github.com/mojeee/cablepilot).
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+Third-party components and their licences are listed in THIRD_PARTY_LICENSES.md, generated at build
+time by scripts/check-licenses.mjs. KiCad is GPL-licensed: CablePilot may read and write KiCad's
+documented file formats (from M9) but contains no KiCad code.
