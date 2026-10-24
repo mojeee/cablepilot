@@ -36,6 +36,9 @@ export function TopBar() {
           <option value="page">{t('This page')}</option>
         </select>
         <button type="button" data-testid="bom" title={t('Bill of materials')} onClick={() => st().setDialog('bom')}>{t('BOM')}</button>
+        <button type="button" data-testid="reports" title={t('Reports')} onClick={() => st().setDialog('reports')}>{t('Reports')}</button>
+        <button type="button" data-testid="wires" title={t('Wires and cables')} onClick={() => st().setDialog('wires')}>{t('Wires')}</button>
+        <button type="button" data-testid="number-wires" title={t('Number the wires automatically')} onClick={() => st().renumberWires()}>{t('Number wires')}</button>
         <button type="button" data-testid="settings" onClick={() => st().setDialog('settings')}>{t('Project settings...')}</button>
         <button type="button" title={t('Renumber designations automatically')} onClick={() => st().exec({ type: 'designation/renumber' })}>{t('Renumber')}</button>
       </div>

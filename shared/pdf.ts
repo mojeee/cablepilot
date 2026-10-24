@@ -1,8 +1,11 @@
 // Vector PDF export of pages at true scale (CLAUDE.md, rule 11): 1 mm on the sheet is 1 mm in the
 // PDF (72 / 25.4 points per millimetre, never rounded). The same display primitives the canvas
 // draws are written as PDF paths and text, always on white paper, in the project's drawing style.
-// pdf-lib (MIT) does the writing; text uses the standard PDF fonts, so nothing is embedded.
+// pdf-lib (MIT) does the writing. With the bundled font (Roboto, SIL OFL, shared/fonts) the text is
+// embedded as a subset, so it shows in every viewer and renderer; without it (or in the serif and
+// mono styles) the standard PDF fonts are used.
 
+import fontkit from '@pdf-lib/fontkit';
 import { PDFDocument, PDFName, StandardFonts, type PDFFont, type PDFImage } from 'pdf-lib';
 import { buildPage } from './draw/page';
 import type { Library } from './library/types';
@@ -19,6 +22,8 @@ export interface PdfOptions {
   pageIds?: string[];
   /** Turns an SVG asset into PNG bytes (needs a canvas, so the renderer supplies it). */
   rasterizeSvg?: (asset: Asset) => Promise<Uint8Array>;
+  /** TrueType bytes of the regular and bold font to embed (the sans style). */
+  fonts?: { regular: Uint8Array; bold: Uint8Array };
   creator?: string;
   /** Fixed dates, for byte-identical output in tests. */
   deterministic?: boolean;
@@ -70,8 +75,21 @@ function b64(data: string): Uint8Array {
 export async function exportPdf(project: Project, lib: Library, opts: PdfOptions = {}): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   const family = project.settings.style.font;
-  const regular = await doc.embedFont(family === 'serif' ? StandardFonts.TimesRoman : family === 'mono' ? StandardFonts.Courier : StandardFonts.Helvetica);
-  const bold = await doc.embedFont(family === 'serif' ? StandardFonts.TimesRomanBold : family === 'mono' ? StandardFonts.CourierBold : StandardFonts.HelveticaBold);
+  const embedded = !!opts.fonts && family === 'sans';
+  let regular: PDFFont, bold: PDFFont;
+  if (embedded && opts.fonts) {
+    doc.registerFontkit(fontkit);
+    regular = await doc.embedFont(opts.fonts.regular, { subset: true });
+    bold = await doc.embedFont(opts.fonts.bold, { subset: true });
+  } else {
+    regular = await doc.embedFont(family === 'serif' ? StandardFonts.TimesRoman : family === 'mono' ? StandardFonts.Courier : StandardFonts.Helvetica);
+    bold = await doc.embedFont(family === 'serif' ? StandardFonts.TimesRomanBold : family === 'mono' ? StandardFonts.CourierBold : StandardFonts.HelveticaBold);
+  }
+  const chars = embedded ? new Set(regular.getCharacterSet()) : null;
+  const safe = (s: string): string => {
+    if (!chars) return pdfSafeText(s);
+    return s.replace(/[^\x20-\x7e]/g, (ch) => (chars.has(ch.codePointAt(0) as number) ? ch : (SUBS[ch] ?? '?')));
+  };
   const images = new Map<string, PDFImage | null>();
   const imageFor = async (id: string): Promise<PDFImage | null> => {
     if (images.has(id)) return images.get(id) ?? null;
@@ -111,7 +129,7 @@ export async function exportPdf(project: Project, lib: Library, opts: PdfOptions
         case 'arc': ops.push(`q ${flip}\n${stroke(p.w, p.c, false)}${arcOps(p.cx, p.cy, p.r, p.a0, p.a1)}S\nQ\n`); break;
         case 'text': {
           const font: PDFFont = p.bold ? bold : regular;
-          const text = pdfSafeText(p.text);
+          const text = safe(p.text);
           const size = p.size * MM_TO_PT;
           const wpt = font.widthOfTextAtSize(text, size);
           const off = p.anchor === 'start' ? 0 : p.anchor === 'middle' ? wpt / 2 : wpt;

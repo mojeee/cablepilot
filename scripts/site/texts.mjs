@@ -84,6 +84,11 @@ export const TEXT = {
   'shot.theme': { en: 'Screenshot theme', it: 'Tema dello screenshot' },
   'shot.dark': { en: 'Dark', it: 'Scuro' },
   'shot.light': { en: 'Light', it: 'Chiaro' },
+  'shot.dark.alt': { en: 'CablePilot with the dark theme: the motor power page of the conveyor sample', it: 'CablePilot con il tema scuro: la pagina di potenza del motore del campione nastro trasportatore' },
+  'shot.light.alt': { en: 'CablePilot with the light theme: the motor power page of the conveyor sample', it: 'CablePilot con il tema chiaro: la pagina di potenza del motore del campione nastro trasportatore' },
+  'feat.schematic.alt': { en: 'A power page of the DC battery-charger sample: breaker, transformer and two rectifier modules with wire numbers', it: 'Una pagina di potenza del campione caricabatterie: interruttore, trasformatore e due moduli raddrizzatori con numeri filo' },
+  'feat.devices.alt': { en: 'The alarm relay page of the charger sample with contact images and cross-references', it: 'La pagina dei relè di allarme del campione caricabatterie con immagini dei contatti e riferimenti incrociati' },
+  'feat.reports.alt': { en: 'The Reports window showing the wire list generated from the schematic', it: 'La finestra Report con l’elenco fili generato dallo schema' },
   'shot.pending': {
     en: 'Screenshots from the real app arrive with the release milestone.',
     it: 'Gli screenshot dell’app reale arriveranno con la milestone di rilascio.',
@@ -91,8 +96,8 @@ export const TEXT = {
 
   'set.title': { en: 'A complete drawing set', it: 'Un set di disegni completo' },
   'set.lead': {
-    en: 'What the workshop gets, printed from the project with nothing drawn by hand afterwards. The thumbnails show the DC battery-charger sample once it exists.',
-    it: 'Ciò che riceve il laboratorio, stampato dal progetto senza nulla da disegnare a mano dopo. Le miniature mostrano il campione del caricabatterie in corrente continua quando sarà pronto.',
+    en: 'What the workshop gets, printed from the project with nothing drawn by hand afterwards. The thumbnails are pages of the DC battery-charger sample, exported from the real app.',
+    it: 'Ciò che riceve il laboratorio, stampato dal progetto senza nulla da disegnare a mano dopo. Le miniature sono pagine del campione del caricabatterie in corrente continua, create dall’app reale.',
   },
   'set.cover': { en: 'Cover with revisions', it: 'Copertina con revisioni' },
   'set.single': { en: 'Single-line', it: 'Unifilare' },

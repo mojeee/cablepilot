@@ -6,6 +6,9 @@ import { pageNets } from '@shared/connectivity';
 import { buildPage } from '@shared/draw/page';
 import { parseProject, serializeProject } from '@shared/file';
 import { buildIndex } from '@shared/geometry/spatial';
+import { renumberWires } from '@shared/wires';
+import { reportTable } from '@shared/reports';
+import { apply } from '@shared/commands';
 import { builder } from './support/builder';
 import { loadLibrary } from './support/library';
 
@@ -60,5 +63,20 @@ describe('performance budget', () => {
     const t0 = performance.now();
     for (let i = 0; i < 10000; i++) idx.at(40 + (i % 300), 40 + (i % 150), 1);
     expect(performance.now() - t0).toBeLessThan(250);
+  });
+  it('numbers the wires of 500 pages and builds the wire list within 20 s, then redoes one page edit within 2 s', () => {
+    const t0 = performance.now();
+    const numbered = renumberWires(project, lib);
+    reportTable(numbered, lib, 'wires');
+    const nums = numbered.pages.reduce((a, pg) => a + pg.elements.filter((e) => e.kind === 'wire' && e.number !== undefined).length, 0);
+    const ms = performance.now() - t0;
+    
+    expect(nums).toBeGreaterThan(20000);
+    expect(ms).toBeLessThan(20000);
+    // Incremental: after one page changes only that page's nets are recomputed.
+    const t1 = performance.now();
+    const edited = apply(numbered, { type: 'el/add', page: numbered.pages[7].id, elements: [{ id: 'x1', kind: 'wire', points: [{ x: 5, y: 5 }, { x: 5, y: 30 }] }] }, { lib });
+    reportTable(edited, lib, 'wires');
+    expect(performance.now() - t1).toBeLessThan(2000);
   });
 });

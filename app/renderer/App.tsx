@@ -10,6 +10,8 @@ import { AddPageDialog, RecoveryBanner, ShortcutsDialog } from './components/dia
 import { ProjectSettingsDialog } from './components/ProjectSettings';
 import { SymbolEditorDialog } from './components/SymbolEditor';
 import { BomDialog } from './components/BomDialog';
+import { ReportsDialog } from './components/ReportsDialog';
+import { WiresDialog } from './components/WiresDialog';
 import { useEditor } from './state/editor';
 import { useUi } from './state/ui';
 
@@ -70,6 +72,8 @@ export function App() {
       {dialog === 'addPage' && <AddPageDialog />}
       {dialog === 'shortcuts' && <ShortcutsDialog />}
       {dialog === 'bom' && <BomDialog />}
+      {dialog === 'reports' && <ReportsDialog />}
+      {dialog === 'wires' && <WiresDialog />}
     </div>
   );
 }

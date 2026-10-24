@@ -9,6 +9,8 @@ import { frameRect } from '@shared/draw/page';
 import { templateOf } from '@shared/model/queries';
 import { zoneRange } from '@shared/model/zones';
 import { sheetMm } from '@shared/sheets';
+import { reportPageCommands } from '@shared/draw/report';
+import type { ReportId } from '@shared/model/types';
 import { builder } from './builder';
 
 type B = ReturnType<typeof builder>;
@@ -29,13 +31,35 @@ function link3(b: B, pg: string, a: Placed, c: Placed, topPins = ['1', '3', '5']
   bottomPins.forEach((bp, i) => b.wire(pg, [a.pin(bp), c.pin(topPins[i])], number ? { number: number() } : {}));
 }
 const note = (b: B, pg: string, x: number, y: number, text: string) => b.text(pg, x, y, text, { size: 3 });
-const blankPages = (b: B, lang: 'en' | 'it') => {
-  const msg = lang === 'it' ? 'Questa pagina si compila dagli schemi con le funzioni dei report (milestone M3 e M6).' : 'This page is filled from the schematic by the report and layout features (milestones M3 and M6).';
-  for (const [type, en, it] of [['terminals', 'Terminals', 'Morsettiere'], ['cables', 'Cables', 'Cavi'], ['layout', 'Cabinet layout', 'Layout quadro']] as const) {
-    const id = b.addPage(type, { en, it });
-    note(b, id, 40, 40, msg);
-  }
+/** The cabinet layout page is M6: a labelled placeholder until then. */
+const layoutPage = (b: B, lang: 'en' | 'it') => {
+  const msg = lang === 'it' ? 'Questa pagina si compila con il layout del quadro (milestone M6).' : 'This page is filled by the cabinet layout feature (milestone M6).';
+  const id = b.addPage('layout', { en: 'Cabinet layout', it: 'Layout quadro' });
+  note(b, id, 40, 40, msg);
 };
+/** Routes wires from `from` pins through the terminals of a strip (15 mm apart) to the `to` pins; the outgoing wires can be cores of a cable. */
+function viaTerminals(b: B, pg: string, from: Pt[], to: Pt[], strip: string, opts: { cable?: string; cores?: string[] } = {}) {
+  const yMid = Math.round((from[0].y + to[0].y) / 5) * 2.5;
+  const cx = (from[1].x + to[1].x) / 2;
+  from.forEach((f, i) => {
+    const tx = cx + (i - 1) * 15;
+    const t = b.place(pg, 'terminal', tx, yMid, { designation: strip });
+    const ya = f.y + 5 + 3 * i, yb = to[i].y - 5 - 3 * (2 - i);
+    b.wire(pg, [f, P(f.x, ya), P(tx, ya), t.pin('1')]);
+    b.wire(pg, [t.pin('2'), P(tx, yb), P(to[i].x, yb), to[i]], { cable: opts.cable, core: opts.cores?.[i] });
+  });
+}
+/** The end of every sample: terminals and wires numbered, conductors coloured, report pages added before the layout page and at the end. */
+function finishSample(b: B, lib: Library, early: ReportId[], late: ReportId[]) {
+  let k = 0;
+  const mk = (prefix: string) => `${prefix}-rep${++k}`;
+  b.run({ type: 'terminal/renumber' });
+  b.run({ type: 'wire/renumber' });
+  b.run({ type: 'project/settings', settings: { wireColours: true } });
+  const at = b.project.pages.findIndex((p) => p.type === 'layout');
+  b.run({ type: 'batch', label: 'report pages', commands: reportPageCommands(b.project, lib, early, at, mk) });
+  b.run({ type: 'batch', label: 'report pages', commands: reportPageCommands(b.project, lib, late, undefined, mk) });
+}
 /** Wires a PLC input or output channel: the signal text on the left, the wire to the channel symbol. */
 function channel(b: B, pg: string, kind: 'plc-input' | 'plc-output', addr: string, text: string, y: number, x = 200) {
   const ch = b.place(pg, kind, x, y, { value: addr });
@@ -73,15 +97,16 @@ export function conveyorSample(lib: Library) {
   const qf = b.place(pw, 'mcb-3p', X0, 85, { designation: '-QF1', functionText: { en: 'Motor circuit breaker 32 A' } });
   const km = b.place(pw, 'contactor-3p', X0, 115, { designation: '-KM1', functionText: { en: 'Conveyor contactor' } });
   const fr = b.place(pw, 'overload-relay-3p', X0, 145, { designation: '-FR1', functionText: { en: 'Overload relay' } });
-  const mo = b.place(pw, 'motor-3ph', X0, 200, { designation: '-M1', functionText: { en: 'Conveyor motor\n5.5 kW 400 V' } });
+  const mo = b.place(pw, 'motor-3ph', X0, 230, { designation: '-M1', functionText: { en: 'Conveyor motor\n5.5 kW 400 V' } });
   let n = 0;
   const num = () => String(++n);
   [-5, 0, 5].forEach((dx, i) => b.wire(pw, [P(X0 + dx, 25), qs.pin(['1', '3', '5'][i])], { potential: L3[i] }));
   link3(b, pw, qs, qf, undefined, undefined, num);
   link3(b, pw, qf, km, undefined, undefined, num);
   link3(b, pw, km, fr, undefined, undefined, num);
-  link3(b, pw, fr, mo, ['U', 'V', 'W'], undefined, num);
-  b.rect(pw, X0 - 40, 40, 80, 150, { dashed: true, label: 'Starter' });
+  // Field wiring: the motor is connected through terminal strip -X1 with a motor cable -W1.
+  viaTerminals(b, pw, [fr.pin('2'), fr.pin('4'), fr.pin('6')], ['U', 'V', 'W'].map((p) => mo.pin(p)), '-X1', { cable: '-W1', cores: ['BN', 'BK', 'GY'] });
+  b.rect(pw, X0 - 40, 40, 80, 125, { dashed: true, label: 'Starter' });
   b.warning(pw, X0 - 100, 60, 'electric');
   note(b, pw, X0 + 60, 80, 'Motor starter, direct on line.\nProtection: motor circuit breaker\nand overload relay.');
   // Control circuit: the coil -KM1 shows its contact image (power part, self-hold, lamp) with page.column references.
@@ -123,7 +148,7 @@ export function conveyorSample(lib: Library) {
   b.place(plc, 'interruption-point', 160, 35, { value: 'PLC-24V' });
   b.text(plc, 100, 28, 'Supply of the PLC outputs', { size: 3 });
   b.run({ type: 'el/add', page: plc, elements: [{ id: b.nid(), kind: 'table', x: 260, y: 60, colWidths: [25, 70, 25], rowHeight: 8, size: 3.2, headerRow: true, cells: [['Address', 'Signal', 'Device'], ...io.map(([a, s, d]) => [a, s, d])] }] });
-  blankPages(b, 'en');
+  layoutPage(b, 'en');
   // Parts (generic): the BOM is generated from these assignments and the schematic.
   b.parts(pw, '-QS1', [['generic-switch-disconnector-3p-63a', 1]]);
   b.parts(pw, '-QF1', [['generic-mcb-3p-c32a', 1]]);
@@ -141,8 +166,13 @@ export function conveyorSample(lib: Library) {
   b.projectPart('generic-enclosure-600x800x300', 1, { make: 'Buy' });
   b.projectPart('generic-mounting-plate-600x800', 1, { make: 'Buy' });
   b.projectPart('generic-wiring-kit', 1, { make: 'Make' });
-  b.projectPart('generic-terminal-feedthrough-4mm2', 12);
+  b.projectPart('generic-terminal-feedthrough-4mm2', 9);
   b.projectPart('generic-terminal-pe-4mm2', 3);
+  b.parts(pw, '-X1', [['generic-terminal-feedthrough-4mm2', 1], ['generic-terminal-end-plate', 1], ['generic-terminal-end-stop', 2]]);
+  b.run({ type: 'part/embed', def: lib.parts.get('generic-cable-power-4x2.5mm2')! });
+  b.run({ type: 'cable/set', cable: { id: '-W1', kind: 'multicore', part: 'generic-cable-power-4x2.5mm2', length: '12 m', functionText: { en: 'Motor cable' } } });
+  b.fields(pw, '-QF1', { nameplate: 'Conveyor motor\nbreaker' });
+  finishSample(b, lib, ['terminals', 'cables'], ['wires', 'bom', 'legend', 'colours', 'suffixes', 'torque', 'nameplates']);
   return b.project;
 }
 
@@ -207,9 +237,12 @@ export function pumpSample(lib: Library) {
   b.wire(ct, [P(40, 240), P(395, 240)], { potential: '0V' });
   [50, 235].forEach((x0, i) => {
     const d = i * 3;
-    const bl = b.place(ct, 'limit-switch-no', x0, 70, { designation: `-BL${i + 1}`, functionText: { en: i === 0 ? 'Low level, start pump 1' : 'Low level, start pump 2' } });
-    const fc = b.place(ct, 'contact-nc', x0, 88, { designation: `-FR${i + 1}`, functionText: { en: 'Overload relay' } });
-    b.wire(ct, [P(x0, 50), bl.pin('3')]);
+    const bl = b.place(ct, 'limit-switch-no', x0, 80, { designation: `-BL${i + 1}`, functionText: { en: i === 0 ? 'Low level, start pump 1' : 'Low level, start pump 2' } });
+    const fc = b.place(ct, 'contact-nc', x0, 98, { designation: `-FR${i + 1}`, functionText: { en: 'Overload relay' } });
+    // Field wiring: the level switch is fed through a terminal of strip -X1.
+    const tx = b.place(ct, 'terminal', x0, 60, { designation: '-X1' });
+    b.wire(ct, [P(x0, 50), tx.pin('1')]);
+    b.wire(ct, [tx.pin('2'), bl.pin('3')]);
     b.wire(ct, [bl.pin('4'), fc.pin('1')]);
     b.wire(ct, [fc.pin('2'), P(x0, 105)]);
     b.wire(ct, [P(x0, 105), P(x0 + 135, 105)]);
@@ -236,7 +269,7 @@ export function pumpSample(lib: Library) {
   const io: [string, string][] = [['I0.0', 'Low level pump 1'], ['I0.1', 'Low level pump 2'], ['I0.2', 'Pump 1 overload'], ['Q0.0', 'Pump 1 run'], ['Q0.1', 'Pump 2 run']];
   io.forEach(([a, sig], i) => channel(b, plc, a.startsWith('I') ? 'plc-input' : 'plc-output', a, sig, 60 + i * 16));
   b.assembly(plc, '-A1', { x: 198, y: 48, w: 28, h: 90, label: 'PLC' }, []);
-  blankPages(b, 'en');
+  layoutPage(b, 'en');
   // Parts.
   b.parts(sl, '-QF0', [['generic-mcb-3p-c63a', 1]]);
   b.parts(pw, '-QF1', [['generic-mpcb-10a-16a', 1]]);
@@ -255,8 +288,10 @@ export function pumpSample(lib: Library) {
   b.projectPart('generic-mounting-plate-600x800', 1, { make: 'Buy' });
   b.projectPart('generic-wiring-kit', 1, { make: 'Make' });
   b.projectPart('generic-din-rail-35mm-1m', 2);
-  b.projectPart('generic-terminal-feedthrough-4mm2', 24);
+  b.projectPart('generic-terminal-feedthrough-4mm2', 22);
   b.projectPart('generic-terminal-pe-10mm2', 6);
+  b.parts(ct, '-X1', [['generic-terminal-feedthrough-2.5mm2', 1], ['generic-terminal-end-plate', 1]]);
+  finishSample(b, lib, ['terminals', 'cables'], ['wires', 'bom', 'legend', 'colours', 'suffixes', 'torque', 'nameplates']);
   return b.project;
 }
 
@@ -297,26 +332,29 @@ export function chargerSample(lib: Library) {
   const pw = b.addPage('power', { en: 'Input and rectifier modules', it: 'Ingresso e moduli raddrizzatori' }, { location: 'DS' });
   let n = 0;
   const num = () => String(++n).padStart(3, '0');
-  const q1 = b.place(pw, 'mcb-3p', 80, 60, { designation: '-QF1', functionText: { it: 'Interruttore di ingresso', en: 'Input breaker' } });
-  const t1 = b.place(pw, 'transformer-3ph', 80, 100, { designation: '-T1', functionText: { it: 'Trasformatore trifase', en: 'Three-phase transformer' } });
-  [75, 80, 85].forEach((x, i) => b.wire(pw, [P(x, 30), q1.pin(['1', '3', '5'][i])], { potential: L3[i] }));
+  // The page is laid out across the sheet: input breaker and transformer on the left, the two rectifier modules side by side, the DC bus to the right.
+  const XA = 100, XB = 240;
+  const q1 = b.place(pw, 'mcb-3p', XA, 55, { designation: '-QF1', functionText: { it: 'Interruttore di ingresso', en: 'Input breaker' } });
+  const t1 = b.place(pw, 'transformer-3ph', XA, 112, { designation: '-T1', functionText: { it: 'Trasformatore trifase', en: 'Three-phase transformer' } });
+  [XA - 5, XA, XA + 5].forEach((x, i) => b.wire(pw, [P(x, 25), q1.pin(['1', '3', '5'][i])], { potential: L3[i] }));
   link3(b, pw, q1, t1, ['1U', '1V', '1W'], ['2', '4', '6'], num);
-  const u1 = b.place(pw, 'rectifier-3ph', 80, 150, { designation: '-U1', functionText: { it: 'Modulo raddrizzatore 1', en: 'Rectifier module 1' } });
-  const u2 = b.place(pw, 'rectifier-3ph', 160, 150, { designation: '-U2', functionText: { it: 'Modulo raddrizzatore 2', en: 'Rectifier module 2' } });
+  const u1 = b.place(pw, 'rectifier-3ph', XA, 190, { designation: '-U1', functionText: { it: 'Modulo raddrizzatore 1', en: 'Rectifier module 1' } });
+  const u2 = b.place(pw, 'rectifier-3ph', XB, 190, { designation: '-U2', functionText: { it: 'Modulo raddrizzatore 2', en: 'Rectifier module 2' } });
   ['2U', '2V', '2W'].forEach((p, i) => b.wire(pw, [t1.pin(p), u1.pin(L3[i])], { number: `${num()}${'LMN'[i]}` }));
-  b.wire(pw, [P(75, 125), P(155, 125), u2.pin('L1')]);
-  b.wire(pw, [P(80, 121), P(160, 121), u2.pin('L2')]);
-  b.wire(pw, [P(85, 117), P(165, 117), u2.pin('L3')]);
-  b.wire(pw, [u1.pin('DC+'), P(u1.pin('DC+').x, 185), P(250, 185)], { potential: 'L+' });
-  b.wire(pw, [u2.pin('DC+'), P(u2.pin('DC+').x, 185)]);
-  b.wire(pw, [u1.pin('DC-'), P(u1.pin('DC-').x, 205), P(250, 205)], { potential: 'L-' });
-  b.wire(pw, [u2.pin('DC-'), P(u2.pin('DC-').x, 205)]);
-  b.place(pw, 'interruption-point', 250, 185, { value: 'L+' });
-  b.place(pw, 'interruption-point', 250, 205, { value: 'L-' });
-  b.rect(pw, 60, 132, 40, 36, { dashed: true });
-  b.rect(pw, 140, 132, 40, 36, { dashed: true });
-  b.warning(pw, 40, 80, 'electric');
-  note(b, pw, 230, 80, 'Uscita 110 V DC, 30 A.\nI due moduli lavorano in parallelo.');
+  // The second module takes the three phases from taps on the wires above the first one.
+  const ym = Math.round((t1.pin('2U').y + u1.pin('L1').y) / 5) * 2.5;
+  ['2U', '2V', '2W'].forEach((p, i) => b.wire(pw, [P(t1.pin(p).x, ym + 4 - 4 * i), P(u2.pin(L3[i]).x, ym + 4 - 4 * i), u2.pin(L3[i])]));
+  const yP = 222, yM = 238;
+  b.wire(pw, [u1.pin('DC+'), P(u1.pin('DC+').x, yP), P(300, yP)], { potential: 'L+' });
+  b.wire(pw, [u2.pin('DC+'), P(u2.pin('DC+').x, yP)]);
+  b.wire(pw, [u1.pin('DC-'), P(u1.pin('DC-').x, yM), P(300, yM)], { potential: 'L-' });
+  b.wire(pw, [u2.pin('DC-'), P(u2.pin('DC-').x, yM)]);
+  b.place(pw, 'interruption-point', 300, yP, { value: 'L+' });
+  b.place(pw, 'interruption-point', 300, yM, { value: 'L-' });
+  b.rect(pw, XA - 20, 168, 40, 44, { dashed: true });
+  b.rect(pw, XB - 20, 168, 40, 44, { dashed: true });
+  b.warning(pw, 45, 100, 'electric');
+  note(b, pw, 300, 90, 'Uscita 110 V DC, 30 A.\nI due moduli lavorano in parallelo.');
   // DC output and battery (page 07): the switching block -A5 holds fuse, contactor, diode and current sensor.
   const dc = b.addPage('power', { en: 'DC output and battery', it: 'Uscita DC e batteria' }, { location: 'DS' });
   b.place(dc, 'interruption-point', 40, 80, { value: 'L+', mirror: true });
@@ -340,7 +378,14 @@ export function chargerSample(lib: Library) {
   b.wire(dc, [bs.pin('OUT'), P(176, 100)]);
   b.place(dc, 'interruption-point', 176, 100, { value: 'IOUT' });
   b.assembly(dc, '-A5', { x: 65, y: 53, w: 165, h: 45, label: 'Blocco di manovra' }, ['-F1', '-KM1', '-V1', '-B1']);
-  b.warning(dc, 340, 80, 'electric');
+  // Output to the load through terminal strip -X1 (terminals 1 and 2).
+  const xo1 = b.place(dc, 'terminal', 330, 95, { designation: '-X1', functionText: { it: 'Uscita carico L+', en: 'Load output L+' } });
+  const xo2 = b.place(dc, 'terminal', 360, 95, { designation: '-X1', functionText: { it: 'Uscita carico L-', en: 'Load output L-' } });
+  b.wire(dc, [P(290, 80), P(330, 80), xo1.pin('1')]);
+  b.wire(dc, [xo1.pin('2'), P(330, 125)], { potential: 'L+' });
+  b.wire(dc, [P(290, 170), P(385, 170), P(385, 75), P(360, 75), xo2.pin('1')]);
+  b.wire(dc, [xo2.pin('2'), P(360, 125)], { potential: 'L-' });
+  b.warning(dc, 370, 30, 'electric');
   note(b, dc, 40, 215, 'Batteria: 55 elementi al piombo da 2 V in serie (110 V).\nIl sensore -B1 misura la corrente di uscita (segnale IOUT).');
   // Alarm relays and the plug to the PLC interface (page 08).
   const al = b.addPage('control', { en: 'Alarm relays', it: 'Relè di allarme' }, { location: 'DS' });
@@ -366,28 +411,33 @@ export function chargerSample(lib: Library) {
   b.wire(al, [x11.pin('4'), P(335, 135), P(335, 200)], { potential: '0V' });
   // PLC interface (page 09): the socket -X10 on the board, the PLC channels, the HMI and the switch.
   const plc = b.addPage('plc', { en: 'PLC interface', it: 'Interfaccia PLC' }, { location: 'DS' });
-  const x10 = b.box(plc, { variant: 'connector', x: 70, y: 60, w: 15, h: 20, designation: '-X10', gender: 'socket', mate: '-X11', title: { it: 'Presa', en: 'Socket' }, pins: [['1', 'right', 'K1'], ['2', 'right', 'K2'], ['3', 'left', '24V'], ['4', 'left', '0V']] });
-  const c1 = b.place(plc, 'plc-input', 210, 65, { value: 'I0.0' });
-  const c2 = b.place(plc, 'plc-input', 210, 85, { value: 'I0.1' });
-  const c3 = b.place(plc, 'plc-input', 210, 115, { value: 'AI0' });
-  b.wire(plc, [x10.pin('1'), c1.pin('1')]);
-  b.wire(plc, [x10.pin('2'), P(130, 70), P(130, 85), c2.pin('1')]);
-  b.wire(plc, [x10.pin('3'), P(50, 65)], { potential: '24VDC' });
-  b.wire(plc, [x10.pin('4'), P(55, 70), P(55, 90)], { potential: '0V' });
-  b.place(plc, 'interruption-point', 150, 115, { value: 'IOUT', mirror: true });
-  b.wire(plc, [P(150, 115), c3.pin('1')]);
-  b.text(plc, 70, 117, 'Corrente di uscita', { size: 3 });
-  b.assembly(plc, '-A1', { x: 198, y: 52, w: 30, h: 75, label: 'PLC' }, []);
+  const x10 = b.box(plc, { variant: 'connector', x: 55, y: 62, w: 15, h: 20, designation: '-X10', gender: 'socket', mate: '-X11', title: { it: 'Presa', en: 'Socket' }, pins: [['1', 'right', 'K1'], ['2', 'right', 'K2'], ['3', 'left', '24V'], ['4', 'left', '0V']] });
+  const c1 = b.place(plc, 'plc-input', 250, 72, { value: 'I0.0' });
+  const c2 = b.place(plc, 'plc-input', 250, 102, { value: 'I0.1' });
+  const c3 = b.place(plc, 'plc-input', 250, 142, { value: 'AI0' });
+  const route = (from: Pt, to: Pt, mx: number) => b.wire(plc, [from, P(mx, from.y), P(mx, to.y), to]);
+  route(x10.pin('1'), c1.pin('1'), 150);
+  route(x10.pin('2'), c2.pin('1'), 170);
+  b.wire(plc, [x10.pin('3'), P(x10.pin('3').x - 35, x10.pin('3').y)], { potential: '24VDC' });
+  b.wire(plc, [x10.pin('4'), P(x10.pin('4').x - 45, x10.pin('4').y), P(x10.pin('4').x - 45, x10.pin('4').y + 25)], { potential: '0V' });
+  b.place(plc, 'interruption-point', 170, 142, { value: 'IOUT', mirror: true });
+  b.wire(plc, [P(170, 142), c3.pin('1')]);
+  b.text(plc, 118, 132, 'Corrente di uscita', { size: 3 });
+  b.assembly(plc, '-A1', { x: 238, y: 55, w: 32, h: 105, label: 'PLC' }, []);
   const io: [string, string, string][] = [['I0.0', 'Mancanza rete', '-K1'], ['I0.1', 'Batteria scarica', '-K2'], ['AI0', 'Corrente di uscita', '-B1']];
-  b.run({ type: 'el/add', page: plc, elements: [{ id: b.nid(), kind: 'table', x: 270, y: 60, colWidths: [25, 70, 25], rowHeight: 8, size: 3.2, headerRow: true, cells: [['Indirizzo', 'Segnale', 'Dispositivo'], ...io.map(([a, s, d]) => [a, s, d])] }] });
-  const hmi = b.box(plc, { variant: 'blackbox', x: 70, y: 170, w: 50, h: 30, designation: '-A3', title: { it: 'Pannello operatore HMI', en: 'HMI operator panel' }, pins: [['ETH', 'right', 'RJ45'], ['24V', 'left'], ['0V', 'left']] });
-  const sw = b.box(plc, { variant: 'blackbox', x: 200, y: 170, w: 50, h: 30, designation: '-A4', title: { it: 'Switch di rete', en: 'Network switch' }, pins: [['P1', 'left', 'RJ45'], ['P2', 'right', 'RJ45'], ['24V', 'right']] });
+  b.run({ type: 'el/add', page: plc, elements: [{ id: b.nid(), kind: 'table', x: 285, y: 62, colWidths: [25, 70, 25], rowHeight: 8, size: 3.2, headerRow: true, cells: [['Indirizzo', 'Segnale', 'Dispositivo'], ...io.map(([a, s, d]) => [a, s, d])] }] });
+  const hmi = b.box(plc, { variant: 'blackbox', x: 55, y: 200, w: 50, h: 30, designation: '-A3', title: { it: 'Pannello operatore HMI', en: 'HMI operator panel' }, pins: [['ETH', 'right', 'RJ45'], ['24V', 'left'], ['0V', 'left']] });
+  const sw = b.box(plc, { variant: 'blackbox', x: 185, y: 200, w: 50, h: 30, designation: '-A4', title: { it: 'Switch di rete', en: 'Network switch' }, pins: [['P1', 'left', 'RJ45'], ['P2', 'right', 'RJ45'], ['24V', 'right']] });
   b.wire(plc, [hmi.pin('ETH'), sw.pin('P1')]);
-  b.text(plc, 130, 168, 'Cavo patch RJ45 Cat 5', { size: 2.5 });
-  b.wire(plc, [hmi.pin('24V'), P(50, 175)], { potential: '24VDC' });
-  b.wire(plc, [hmi.pin('0V'), P(45, 180)], { potential: '0V' });
-  b.wire(plc, [sw.pin('24V'), P(265, 180)], { potential: '24VDC' });
-  blankPages(b, 'it');
+  b.text(plc, 125, 198, 'Cavo patch RJ45 Cat 5', { size: 2.5 });
+  b.wire(plc, [hmi.pin('24V'), P(hmi.pin('24V').x - 35, hmi.pin('24V').y)], { potential: '24VDC' });
+  b.wire(plc, [hmi.pin('0V'), P(hmi.pin('0V').x - 45, hmi.pin('0V').y)], { potential: '0V' });
+  b.wire(plc, [sw.pin('24V'), P(sw.pin('24V').x + 35, sw.pin('24V').y)], { potential: '24VDC' });
+  // Flat ribbon cable between the interface board header and the PLC input header.
+  b.box(plc, { variant: 'connector', x: 300, y: 195, w: 20, h: 25, designation: '-X20', title: { it: 'Intestazione scheda interfaccia', en: 'Interface board header' }, pins: [['1', 'right', 'K1'], ['2', 'right', 'K2'], ['3', 'right', '24V'], ['4', 'right', '0V']] });
+  b.box(plc, { variant: 'connector', x: 350, y: 195, w: 20, h: 25, designation: '-X21', title: { it: 'Intestazione ingressi PLC', en: 'PLC input header' }, pins: [['1', 'left', 'I0.0'], ['2', 'left', 'I0.1'], ['3', 'left', '24V'], ['4', 'left', '0V']] });
+  b.text(plc, 322, 192, 'Cavo piatto', { size: 2.5 });
+  layoutPage(b, 'it');
   // Parts: several parts per device (a module plus its capacitors), project-level parts without designation.
   b.parts(pw, '-QF1', [['generic-mcb-3p-c32a', 1]]);
   b.parts(pw, '-T1', [['generic-transformer-3ph-dyn11-5kva', 1]]);
@@ -418,8 +468,15 @@ export function chargerSample(lib: Library) {
   b.projectPart('generic-terminal-feedthrough-4mm2', 20);
   b.projectPart('generic-terminal-pe-4mm2', 6);
   b.projectPart('generic-cable-duct-60x60-2m', 4);
-  b.projectPart('generic-cable-patch-rj45-cat5e', 1);
-  b.projectPart('generic-cable-ribbon-flat-10pole', 1);
+  b.parts(dc, '-X1', [['generic-terminal-feedthrough-6mm2', 1], ['generic-terminal-end-plate', 1], ['generic-terminal-end-stop', 2]]);
+  b.parts(plc, '-X20', [['generic-connector-header-10pin', 1]]);
+  b.parts(plc, '-X21', [['generic-connector-header-10pin', 1]]);
+  for (const id of ['generic-cable-ribbon-flat-10pole', 'generic-cable-patch-rj45-cat5e']) b.run({ type: 'part/embed', def: lib.parts.get(id)! });
+  b.run({ type: 'cable/set', cable: { id: '-W1', kind: 'ribbon', part: 'generic-cable-ribbon-flat-10pole', from: '-X20', to: '-X21', length: '0,3 m', functionText: { it: 'Cavo piatto interfaccia PLC', en: 'PLC interface ribbon cable' } } });
+  b.run({ type: 'cable/set', cable: { id: '-W2', kind: 'patch', part: 'generic-cable-patch-rj45-cat5e', from: '-A3:ETH', to: '-A4:P1', length: '2 m', functionText: { it: 'Collegamento HMI - switch', en: 'HMI to switch link' } } });
+  b.fields(pw, '-QF1', { nameplate: 'Ingresso c.a.\nalimentazione ausiliari' });
+  b.fields(dc, '-F1', { nameplate: 'Fusibile batteria\n63 A DC' });
+  finishSample(b, lib, ['terminals', 'cables'], ['wires', 'pins', 'bom', 'legend', 'colours', 'suffixes', 'torque', 'nameplates']);
   return b.project;
 }
 

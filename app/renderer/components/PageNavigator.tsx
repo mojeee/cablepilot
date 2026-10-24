@@ -20,6 +20,8 @@ export function pageTypeLabel(type: PageType): string {
     case 'layout': return t('Cabinet layout');
     case 'singleLine': return t('Single-line diagram');
     case 'data': return t('Project data');
+    case 'bom': return t('Bill of materials');
+    case 'report': return t('Lists and tables');
   }
 }
 

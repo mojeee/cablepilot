@@ -54,10 +54,11 @@ export function builder(lib: Library, projectId: string, name: string, settings:
         },
       };
     },
-    wire(page: string, points: Pt[], o: { potential?: string; conductors?: number; number?: string } = {}): string {
+    wire(page: string, points: Pt[], o: { potential?: string; conductors?: number; number?: string; cable?: string; core?: string; bundle?: boolean } = {}): string {
       const id = nid();
       run({ type: 'wire/add', page, id, points, ...(o.potential ? { potential: o.potential } : {}), ...(o.conductors ? { conductors: o.conductors } : {}) });
-      if (o.number) run({ type: 'el/update', page, id, patch: { number: o.number } });
+      const patch: Record<string, unknown> = { ...(o.number ? { number: o.number } : {}), ...(o.cable ? { cable: o.cable } : {}), ...(o.core ? { core: o.core } : {}), ...(o.bundle ? { bundle: true } : {}) };
+      if (Object.keys(patch).length) run({ type: 'el/update', page, id, patch });
       return id;
     },
     text(page: string, x: number, y: number, text: string, o: { size?: number; rot?: number; align?: 'left' | 'center' | 'right'; bold?: boolean } = {}) {

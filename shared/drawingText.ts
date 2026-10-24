@@ -42,6 +42,8 @@ export const DRAWING_TEXT = {
   'type.layout': { en: 'Cabinet layout', it: 'Layout quadro' },
   'type.singleLine': { en: 'Single-line diagram', it: 'Schema unifilare' },
   'type.data': { en: 'Project data', it: 'Dati di progetto' },
+  'type.bom': { en: 'Bill of materials', it: 'Distinta materiali' },
+  'type.report': { en: 'Lists and tables', it: 'Elenchi e tabelle' },
 } as const satisfies Record<string, { en: string; it: string }>;
 export type DrawingTextKey = keyof typeof DRAWING_TEXT;
 

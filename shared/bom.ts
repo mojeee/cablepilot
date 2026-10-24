@@ -7,7 +7,7 @@ import { dt, pick } from './drawingText';
 import { deviceIndex, type Device, type DeviceRepr } from './devices';
 import type { Lang } from './i18n';
 import type { Library } from './library/types';
-import { findPart } from './library/types';
+import { findPart, isTerminalPart, withProjectSymbols } from './library/types';
 import type { Page, Project } from './model/types';
 
 export const BOM_BASE_COLUMNS = ['designation', 'position', 'qty', 'code', 'description', 'manufacturer'] as const;
@@ -60,6 +60,7 @@ export function computeBom(project: Project, lib: Library): Bom {
   const lang = project.settings.drawingLanguage;
   const units = Math.max(1, project.settings.bom.units || 1);
   const idx = deviceIndex(project, lib);
+  const syms = withProjectSymbols(lib, project.symbols).symbols;
   const children = new Map<string, Device[]>();
   const roots: Device[] = [];
   for (const d of idx.devices) {
@@ -86,16 +87,25 @@ export function computeBom(project: Project, lib: Library): Bom {
         rows.push({ level, designation: d.key, position, qty: 0, qtyPerUnit: 0, code: '', description: describe(project, d, lang), manufacturer: '', fields, missing: true });
       }
     }
+    // On a terminal strip, terminal parts are counted once per terminal drawn; end plates and stops once.
+    const terminals = d.reps.filter((r) => r.symbolId && syms.get(r.symbolId)?.function === 'terminal').length;
     for (const u of parts) {
       const part = findPart(lib, project.parts, u.part);
+      const per = terminals && isTerminalPart(part) ? u.qty * terminals : u.qty;
       rows.push({
-        level, designation: d.key, position, qty: u.qty * units, qtyPerUnit: u.qty, part: u.part, fields,
+        level, designation: d.key, position, qty: per * units, qtyPerUnit: per, part: u.part, fields,
         code: part?.code ?? u.part, description: part ? pick(part.description, lang) : '', manufacturer: part?.manufacturer ?? '',
       });
     }
     for (const k of kids) visit(k, level + 1);
   };
   for (const d of roots) visit(d, 0);
+  // Cables with a part: one row each, after the devices.
+  for (const c of project.cables) {
+    if (!c.part) continue;
+    const part = findPart(lib, project.parts, c.part);
+    rows.push({ level: 0, designation: c.id, position: '', qty: units, qtyPerUnit: 1, part: c.part, fields: {}, code: part?.code ?? c.part, description: part ? pick(part.description, lang) : '', manufacturer: part?.manufacturer ?? '' });
+  }
   for (const pp of project.projectParts) {
     const part = findPart(lib, project.parts, pp.part);
     rows.push({ level: 0, designation: '', position: '', qty: pp.qty * units, qtyPerUnit: pp.qty, part: pp.part, fields: pp.fields, code: part?.code ?? pp.part, description: part ? pick(part.description, lang) : '', manufacturer: part?.manufacturer ?? '' });

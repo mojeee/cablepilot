@@ -10,8 +10,10 @@ import type { Library, MacroDef, PartDef } from '../library/types';
 import { withProjectSymbols } from '../library/types';
 import type { SymbolDef } from '../library/types';
 import { placeMacro } from '../macros';
-import type { BoxEl, DeviceRec, El, JunctionEl, Page, PartUse, Potential, Project, ProjectPart, ProjectSettings, Pt, RectEl, Rot, SymbolEl, Template, WireEl, Asset } from '../model/types';
+import type { BoxEl, CableRec, DeviceRec, El, JunctionEl, Page, PartUse, Potential, Project, ProjectPart, ProjectSettings, Pt, RectEl, Rot, SymbolEl, Template, WireEl, WireClass, WireType, Asset } from '../model/types';
 import { fullDesignation, nextDesignation, parseDesignation, renumber } from '../numbering';
+import { terminalStrips } from '../reports';
+import { renumberWires } from '../wires';
 
 export type Command =
   | { type: 'project/set'; name?: string; properties?: Record<string, string>; assembly?: Record<string, string> }
@@ -34,6 +36,13 @@ export type Command =
   | { type: 'symbol/place'; page: string; element: SymbolEl; autoNumber?: boolean }
   | { type: 'wire/add'; page: string; id: string; points: Pt[]; potential?: string; conductors?: number }
   | { type: 'designation/renumber'; page?: string }
+  /** Numbers the wires automatically (the whole project, or the nets that touch one page). */
+  | { type: 'wire/renumber'; page?: string }
+  /** Numbers the terminals of every strip 1, 2, 3... in reading order. */
+  | { type: 'terminal/renumber' }
+  | { type: 'project/wires'; wireClasses?: WireClass[]; wireTypes?: WireType[] }
+  | { type: 'cable/set'; cable: CableRec }
+  | { type: 'cable/remove'; id: string }
   | { type: 'box/place'; page: string; element: BoxEl; autoNumber?: boolean }
   /** Sets one element's designation without renaming the rest of its device: links it to another device. */
   | { type: 'device/relink'; page: string; id: string; designation: string }
@@ -140,6 +149,7 @@ function transform(pg: Page, ids: string[], f: PointMap, mode: 'move' | 'rotate'
         return { ...e, x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), w: Math.abs(b.x - a.x), h: Math.abs(b.y - a.y) };
       }
       case 'table':
+      case 'report':
       case 'form':
       case 'warning': { const np = f({ x: e.x, y: e.y }); return { ...e, x: np.x, y: np.y }; }
     }
@@ -218,6 +228,40 @@ function updateDevice(project: Project, key: string, patch: { parts?: PartUse[];
   const empty = next.parts.length === 0 && Object.keys(next.fields).length === 0 && !next.parent;
   const devices = empty ? others : [...others, next].sort((x, y) => x.designation.localeCompare(y.designation, 'en', { numeric: true }));
   return { ...project, devices };
+}
+
+/** A terminal placed without a strip joins the strip of the last terminal on the page (else -X1) and takes the next free number. */
+function placeTerminal(project: Project, pg: Page, el: SymbolEl, lib: Library): SymbolEl {
+  const strips = terminalStrips(project, lib);
+  let designation = el.designation;
+  if (!designation) {
+    const onPage = strips.flatMap((s) => s.terminals).filter((t) => t.page === pg).sort((a, b) => b.pageIndex - a.pageIndex);
+    designation = onPage[onPage.length - 1]?.designation ?? '-X1';
+  }
+  if (el.value) return { ...el, designation };
+  const key = keyOf(pg, designation, el.location);
+  const used = (strips.find((s) => s.key === key)?.terminals ?? []).map((t) => Number(t.no)).filter((n) => Number.isFinite(n));
+  return { ...el, designation, value: String((used.length ? Math.max(...used) : 0) + 1) };
+}
+
+function renumberTerminals(project: Project, lib: Library): Project {
+  const set = new Map<string, string>();
+  for (const s of terminalStrips(project, lib)) {
+    s.terminals.slice().sort((a, b) => a.pageIndex - b.pageIndex || a.el.x - b.el.x || a.el.y - b.el.y).forEach((t, i) => set.set(`${t.page.id}/${t.el.id}`, String(i + 1)));
+  }
+  let changed = false;
+  const pages = project.pages.map((pg) => {
+    let pc = false;
+    const elements = pg.elements.map((e) => {
+      const n = e.kind === 'symbol' ? set.get(`${pg.id}/${e.id}`) : undefined;
+      if (n === undefined || (e as SymbolEl).value === n) return e;
+      pc = true;
+      return { ...(e as SymbolEl), value: n };
+    });
+    if (pc) changed = true;
+    return pc ? { ...pg, elements } : pg;
+  });
+  return changed ? { ...project, pages } : project;
 }
 
 export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
@@ -323,6 +367,7 @@ export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
         const letters = lib.symbols.get(el.symbolId)?.designationLetter;
         const auto = lib.symbols.get(el.symbolId)?.autoNumber !== false;
         if (cmd.autoNumber && !el.designation && letters && auto) el = { ...el, designation: nextDesignation(project, pg, letters, el.location) };
+        if (cmd.autoNumber && lib.symbols.get(el.symbolId)?.function === 'terminal') el = placeTerminal(project, pg, el, lib);
         return { ...pg, elements: [...pg.elements, el] };
       });
     case 'wire/add':
@@ -334,6 +379,17 @@ export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
         return addJunctions(next, wire);
       });
     case 'designation/renumber': return renumber(project, lib, cmd.page);
+    case 'wire/renumber': return renumberWires(project, ctx.lib, cmd.page);
+    case 'terminal/renumber': return renumberTerminals(project, ctx.lib);
+    case 'project/wires': return { ...project, wireClasses: cmd.wireClasses ?? project.wireClasses, wireTypes: cmd.wireTypes ?? project.wireTypes };
+    case 'cable/set': {
+      const i = project.cables.findIndex((c) => c.id === cmd.cable.id);
+      const cables = project.cables.slice();
+      if (i >= 0) cables[i] = cmd.cable;
+      else cables.push(cmd.cable);
+      return { ...project, cables: cables.sort((a, b) => a.id.localeCompare(b.id, 'en', { numeric: true })) };
+    }
+    case 'cable/remove': return { ...project, cables: project.cables.filter((c) => c.id !== cmd.id) };
     case 'batch': return cmd.commands.reduce((p, c) => apply(p, c, ctx), project);
   }
 }

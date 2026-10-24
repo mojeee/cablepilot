@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+### M3 Wires and reports
+
+- Automatic wire numbering from the nets: by potential (one counter per potential, suffix from the wire
+  class: `020L+`, `005U`), by page and column, or sequential, with a configurable pattern (`{n:3}{suffix}`,
+  `{page:2}.{col}.{n}`), start and step. Nets joined by interruption points share one number; numbers typed
+  by hand stay; numbers are drawn along the wire, rotated on vertical wires. Renumbering is one undoable command.
+- Company wire-class table (function, colour, cross-section, type, suffix), named wire types, conductors drawn
+  in their IEC 60757 colour (option; green-and-yellow with a stripe), one label for a bundle ("10 mm² BK").
+- Terminals and terminal strips from the schematic (automatic strip and number on placement, renumber
+  command); cables with cores and core colours, flat ribbon and RJ45 patch cables between connectors; wires can
+  name a cable and a core. Cables with a part go into the BOM; terminal parts count once per terminal.
+- Live reports (cached per page, incremental): terminal diagram (destination, function, part, strip length),
+  cable list, wire list, connector pin lists, BOM, contents, symbol legend (used symbols only), conductor
+  colour and wire-suffix tables, terminal tightening-torque table (generic values flagged "to be verified"),
+  nameplates (drawn as labels and listed), wire-marker and terminal-marker lists. Report elements draw on
+  any page; new terminal, cable, BOM and "lists and tables" page types; reports continue on extra pages.
+- Exports: CSV per list, one XLSX workbook with every list (our own writer, no dependency), DXF export of a
+  page and DXF import as plain graphics (own reader and writer), the full PDF set with every page.
+- Fixed: PDF text did not render in viewers without Helvetica; the font (Roboto, SIL OFL) is now embedded.
+- Fixed: the top bar overflowed on narrower windows and hid the theme and language selectors; it wraps now.
+- Project file format version 3 (migration from 2), JSON Schema updated. Samples rebuilt with wire numbers,
+  terminal strips, cables and reports; the charger's input and PLC pages are laid out across the sheet and it
+  gets the colour and suffix tables, legend, torque table and nameplates.
+- Website: `npm run screenshots` captures the real app (dark and light) into `site/img/`; the landing page
+  shows the screenshots for the available features and the drawing-set strip.
+
 ### M2 Devices and cross-references
 
 - Devices: every symbol, box and assembly outline with the same full designation (function and location

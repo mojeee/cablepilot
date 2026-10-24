@@ -12,14 +12,14 @@ ul { list-style: none; margin: 0; padding: 0; }
 .hint { color: var(--dim); font-size: 12px; margin: 4px 0 8px; }
 
 .app { min-width: 0; overflow: hidden; display: grid; grid-template-rows: auto minmax(0, 1fr) var(--messages-h); height: 100%; }
-.topbar { display: flex; align-items: center; gap: 12px; padding: 0 12px; height: var(--topbar-h); background: var(--chrome); border-bottom: 1px solid var(--line); overflow: hidden; }
+.topbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 4px 12px; min-height: var(--topbar-h); background: var(--chrome); border-bottom: 1px solid var(--line); overflow: hidden; }
 /* The macOS traffic lights sit over the top-left corner (titleBarStyle hiddenInset). */
 :root[data-platform='darwin'] .topbar { padding-left: 84px; }
 .topbar { -webkit-app-region: drag; }
 .topbar button, .topbar select, .topbar input { -webkit-app-region: no-drag; }
 .brand { font-weight: 700; letter-spacing: 0.02em; }
 .project-name { color: var(--muted); max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 0 1 auto; }
-.actions { display: flex; gap: 6px; align-items: center; }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .spacer { flex: 1; }
 .field { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
 
@@ -129,3 +129,12 @@ table.bom td.num { text-align: right; }
 table.bom tr.missing td { color: var(--warn); }
 table.bom tr.assembly td { font-weight: 600; background: var(--raised); }
 .hint.warn { color: var(--warn); }
+
+/* Reports and wires dialogs */
+.reports { display: flex; gap: 12px; align-items: flex-start; }
+.report-list { list-style: none; margin: 0; padding: 0; min-width: 190px; display: flex; flex-direction: column; gap: 2px; }
+.report-list button { width: 100%; text-align: left; }
+.report-list button.selected, .tabs button.selected { background: var(--raised); border-color: var(--accent); }
+.report-body { flex: 1; min-width: 0; overflow-x: auto; }
+.tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+table.bom input[type='text'] { font-size: 12px; }

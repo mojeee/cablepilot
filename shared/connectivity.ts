@@ -49,7 +49,21 @@ class Dsu {
   }
 }
 
+const netCache = new WeakMap<Page, { potentials: unknown; symbols: unknown; lib: Library; nets: Net[] }>();
+/** Counts page net computations: tests use it to check that edits recompute only the pages that changed. */
+export const netStats = { pages: 0 };
+
+/** The nets of a page; cached while the page object, the potentials, the symbols and the library are unchanged. */
 export function pageNets(project: Project, page: Page, libIn: Library): Net[] {
+  const hit = netCache.get(page);
+  if (hit && hit.potentials === project.potentials && hit.symbols === project.symbols && hit.lib === libIn) return hit.nets;
+  netStats.pages++;
+  const nets = computePageNets(project, page, libIn);
+  netCache.set(page, { potentials: project.potentials, symbols: project.symbols, lib: libIn, nets });
+  return nets;
+}
+
+function computePageNets(project: Project, page: Page, libIn: Library): Net[] {
   const lib = withProjectSymbols(libIn, project.symbols);
   const dsu = new Dsu();
   const wires = page.elements.filter((e): e is WireEl => e.kind === 'wire');

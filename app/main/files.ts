@@ -68,12 +68,44 @@ export class FileService {
     if (this.e2eDir) target = join(this.e2eDir, basename(suggestedName));
     else {
       const win = this.window();
-      const opts = { title: 'Export', defaultPath: suggestedName, filters: [{ name: 'CSV', extensions: ['csv'] }] };
+      const ext = suggestedName.split('.').pop()?.toLowerCase() === 'dxf' ? 'dxf' : 'csv';
+      const opts = { title: 'Export', defaultPath: suggestedName, filters: [{ name: ext.toUpperCase(), extensions: [ext] }] };
       const r = await (win ? dialog.showSaveDialog(win, opts) : dialog.showSaveDialog(opts));
       if (r.canceled || !r.filePath) return ok(null);
       target = r.filePath;
     }
     return this.write(target, text);
+  }
+
+  async exportBinary(bytes: Uint8Array, suggestedName: string): Promise<Result<SavedFile | null>> {
+    let target: string;
+    if (this.e2eDir) target = join(this.e2eDir, basename(suggestedName));
+    else {
+      const win = this.window();
+      const opts = { title: 'Export', defaultPath: suggestedName, filters: [{ name: 'Excel workbook', extensions: ['xlsx'] }] };
+      const r = await (win ? dialog.showSaveDialog(win, opts) : dialog.showSaveDialog(opts));
+      if (r.canceled || !r.filePath) return ok(null);
+      target = r.filePath;
+    }
+    return this.write(target, bytes);
+  }
+
+  /** Reads a DXF file the user picks. With CP_E2E_DIR set it reads import.dxf from that folder, so the tests need no dialog. */
+  async importDxf(): Promise<Result<{ text: string; name: string } | null>> {
+    let path: string;
+    if (this.e2eDir) path = join(this.e2eDir, 'import.dxf');
+    else {
+      const win = this.window();
+      const opts = { title: 'Import DXF', properties: ['openFile' as const], filters: [{ name: 'DXF', extensions: ['dxf'] }] };
+      const r = await (win ? dialog.showOpenDialog(win, opts) : dialog.showOpenDialog(opts));
+      if (r.canceled || !r.filePaths[0]) return ok(null);
+      path = r.filePaths[0];
+    }
+    try {
+      return ok({ text: readFileSync(path, 'utf8'), name: basename(path) });
+    } catch (e) {
+      return fail('file.read', `The file could not be read: ${(e as Error).message}`, 'Check that the file still exists and that you may read it.');
+    }
   }
 
   async exportPdf(bytes: Uint8Array, suggestedName: string): Promise<Result<SavedFile | null>> {

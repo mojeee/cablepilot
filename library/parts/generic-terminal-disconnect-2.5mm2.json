@@ -13,7 +13,9 @@
     "it": "Morsetto sezionabile, 2,5 mm²"
   },
   "data": {
-    "Conductor cross-section": "2.5 mm²"
+    "Conductor cross-section": "2.5 mm²",
+    "Width": "5.2 mm",
+    "Tightening torque": "0.5 Nm"
   },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",

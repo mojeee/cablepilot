@@ -8,6 +8,7 @@
   "category": "terminals",
   "function": "terminal",
   "designationLetter": "X",
+  "autoNumber": false,
   "source": "IEC 60617 part 3 (conductors and connecting devices): terminal",
   "verification": "secondary",
   "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",

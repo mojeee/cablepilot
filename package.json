@@ -15,6 +15,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "node scripts/e2e.mjs",
+    "screenshots": "node scripts/e2e.mjs --screenshots",
     "check:licenses": "node scripts/check-licenses.mjs",
     "check:library": "node scripts/check-library.mjs",
     "build:site": "node scripts/build-site.mjs",
@@ -49,6 +50,7 @@
     "url": "https://github.com/mojeee/cablepilot/issues"
   },
   "dependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
     "pdf-lib": "^1.17.1"
   }
 }

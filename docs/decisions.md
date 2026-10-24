@@ -150,6 +150,55 @@ IEC 60617 symbols by default with NFPA 79 / ANSI as an option from M1; three sam
   only the pages that changed; a test counts the scans.
 - **No new dependencies.**
 
+## M3
+
+- **Wire numbers belong to net groups.** A net, and every net joined to it by an interruption point or a
+  mated connector pin, carries one number, stored on each of its wires (`number`), so it prints and exports.
+  The three schemes differ only in the counter: one per potential (default), one per page and column, or one
+  global. The pattern (`{n:3}{suffix}`, `{page:2}.{col}.{n}`...) builds the text; the suffix comes from the wire
+  class of the net's potential. Groups are taken in reading order (page, then left to right, top to bottom).
+  Wires on single-line, data and report pages and bundles are not numbered. A number typed by hand sets
+  `numberLocked`; automatic numbering keeps it and never gives a number twice.
+- **Wire classes are keyed by potential.** `project.wireClasses` has one row per potential id plus `signal` for
+  wires with no potential; `project.wireTypes` are named single-core types a wire can pick (`wireType`). The
+  defaults are placeholders listed in docs/to-verify.md. Conductor colours are a project option (`wireColours`),
+  off for new projects; the samples switch it on.
+- **Terminals are the existing `terminal` symbol.** Its designation is the strip (`-X1`), its `value` the
+  terminal number; placing one joins the strip of the last terminal on the page and takes the next number
+  (`terminal/renumber` renumbers in reading order). The strip is a device, so its parts, end plates and
+  nameplate follow the device rules; terminal parts (category terminals with a conductor cross-section) count
+  once per terminal in the BOM, other parts once. Strip length is the sum of the `Width` data of the parts.
+- **Cables are project records** (`project.cables`: designation, kind, part, ends, length). A multicore cable
+  takes its cores from the wires that name it (`cable`, `core`); the part's `Cores` and `Core colours` give the
+  spare cores. Ribbon and patch cables run pin n to pin n between two connectors, or between two named pins
+  ("-A3:ETH" to "-A4:P1") as one straight-through link. Cables with a part are BOM rows.
+- **Reports are tables computed from the schematic** (`shared/reports.ts`), cached per project, with the page
+  scans and nets cached per page object, so an edit recomputes only the page that changed (tests count it).
+  A report is drawn by a `report` element holding a window (`offset`, `rows`) of its table, so a long list
+  continues on further pages; `report/pages` commands add the pages and "Complete report pages" adds the
+  missing continuations. The CSV, XLSX and the pages show the same table. Texts follow the drawing language
+  (`shared/reportText.ts`).
+- **Torque table** shows every value with its source and the status "to be verified" until the part is
+  `primary`; values are generic data in the library and listed in docs/to-verify.md.
+- **XLSX, DXF and ZIP are written by us.** An XLSX workbook is a ZIP of a few XML parts (inline strings, one
+  bold header style); the ZIP container is stored (uncompressed) and written in 60 lines, with a reader used by
+  the tests. DXF is the documented ASCII format (AC1015: LWPOLYLINE, CIRCLE, ARC, TEXT out; those plus LINE,
+  POLYLINE and MTEXT in); the import gives plain graphics (lines and texts, circles and arcs as segments) on a
+  new page, scaled to fit, units from `$INSUNITS`. No dependency and no licence to carry.
+- **PDF text is embedded.** Poppler (and some print paths) showed no text because the standard fonts were not
+  embedded. The sans style now embeds Roboto Regular and Bold (SIL Open Font License 1.1, `shared/fonts/` with
+  its licence file; embedding in documents is allowed) through `@pdf-lib/fontkit` (MIT), loaded from the
+  renderer as data URLs. The serif and mono styles still use the standard fonts.
+- **File format version 3** (`settings.numbering`, `settings.wireColours`, `wireClasses`, `wireTypes`,
+  `cables`, the `report` element and the `bom` and `report` page types), with a migration from 2.
+- **Screenshots for the website** are captured from the real built app by `npm run screenshots`
+  (`e2e/screenshots.e2e.ts`, skipped in CI and unless asked for), committed under `site/img/`, and shown by the
+  site build only when they exist and only for features whose milestone is done.
+- **Deferred:** terminal parts cannot differ per terminal (the strip's first terminal part applies to all);
+  nameplates have no size or colour options; DXF import ignores splines, hatches, blocks and layers; the
+  wire-marker quantity is two per connection; the ERC checks for cables (cross-section against the cable, core
+  count) are M4.
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite
@@ -169,5 +218,7 @@ bundles the renderer; the main process uses only Electron and Node).
 | @types/node, @types/react, @types/react-dom | MIT | Type definitions. |
 | pdf-lib (runtime) | MIT | PDF export of pages at true scale (M1). |
 | ajv | MIT | Dev only: checks project files against the JSON Schema in tests (M1). |
+| @pdf-lib/fontkit | MIT | Embeds the TrueType font in the PDF export so text shows in every viewer (M3). |
+| Roboto Regular and Bold (font files, not a package) | SIL OFL 1.1 | Bundled in `shared/fonts/` with its licence; embedded as a subset in PDFs. Taken from the `@expo-google-fonts/roboto` package (MIT wrapper); only the two TTF files and the font licence are copied. |
 
 The full transitive list, with licences, is in `THIRD_PARTY_LICENSES.md` after `npm run build`.

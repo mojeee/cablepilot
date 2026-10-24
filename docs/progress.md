@@ -117,3 +117,43 @@ One entry per milestone: what works, what is left, and anything the owner must d
 - Look at the three samples in the app (cross-reference text and contact images are drawn on the canvas) and
   say what should change before the website demo.
 
+
+## M3 Wires and reports (done)
+
+**What works**
+
+- Wire numbering (Wires window, "Number wires" button, one undo step): by potential, by page and column or
+  sequential, with a pattern such as `{n:3}{suffix}` (`020L+`, `005U`), start and step; nets joined across pages
+  share a number; hand-typed numbers stay; numbers sit along the wire, rotated on vertical wires.
+- Wire classes (company table editable in the Wires window), wire types, conductors drawn in their IEC 60757
+  colour (option), a bundle label ("10 mm² BK"), cables with core colours, flat ribbon and RJ45 patch cables.
+- Terminals: strip and number on placement, "Number terminals now"; terminal diagram with destination, wire,
+  function, part and strip length; terminal parts count per terminal in the BOM.
+- Reports window: terminal diagram, cable list, wire list, connector pin lists, BOM, contents, symbol legend,
+  conductor colour and suffix tables, torque table (marked "to be verified"), nameplates, wire and terminal
+  markers. Add them as pages (terminal, cable, BOM and "lists and tables" page types) and complete them when
+  they grow. CSV per list, one XLSX with all lists, DXF export of a page and DXF import as plain graphics, the
+  full PDF set. PDF text is now embedded (Roboto): it renders in poppler and every viewer (checked with
+  pdffonts and pdftoppm).
+- Samples: wire numbers, terminal strips (-X1), cables (motor cable on the conveyor, ribbon and patch cables on
+  the charger) and report pages; the charger's input/rectifier and PLC pages re-spaced across the sheet, and it
+  has the colour and suffix tables, legend, torque table and nameplates (generic content only).
+- Tests: numbering schemes and patterns, wire classes and drawing, terminal and cable generation, every
+  report, incremental recomputation (counts of page scans and nets), CSV, XLSX and DXF round trips, PDF font
+  embedding, a 500-page numbering budget, file migration 2 to 3; three new end-to-end flows in one test
+  (number wires, terminal diagram, XLSX and PDF set). `npm run screenshots` captures the website images.
+
+**What is left**
+
+- Terminal parts cannot differ per terminal; nameplate size and colour are fixed; DXF import ignores splines,
+  hatches, blocks and layers; serif and mono styles still use the standard PDF fonts; the cabinet layout page is
+  still a placeholder (M6); the ERC checks for cables and wire sizes are M4.
+- The wire-class defaults, terminal widths and torques, and core colours are generic and listed in
+  `docs/to-verify.md`; none is claimed as a fact.
+
+**What the owner must do by hand**
+
+- Check the new rows of `docs/to-verify.md` (IEC 60204-1 clause 13.2, terminal torques, core colours).
+- Open the three samples and look at the numbered wires, the terminal and report pages, and an exported PDF in
+  your normal viewer; say what should change before the demo recording.
+- Set your company wire-class table (Wires window) before using the numbering on real work.

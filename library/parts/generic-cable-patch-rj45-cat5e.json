@@ -15,7 +15,8 @@
   "data": {
     "Category": "5e",
     "Length": "2 m",
-    "Connectors": "RJ45"
+    "Connectors": "RJ45",
+    "Conductors": "8"
   },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",

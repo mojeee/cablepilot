@@ -86,10 +86,23 @@ describe('project file', () => {
     expect(parseProject(JSON.stringify(old)).ok).toBe(true);
     const r = parseProject(JSON.stringify(old));
     if (r.ok) {
-      expect(r.value.version).toBe(2);
+      expect(r.value.version).toBe(CURRENT_VERSION);
       expect(r.value.devices).toEqual([]);
       expect(r.value.settings.crossRef).toEqual({ format: 'page.column', pageDigits: 0 });
       expect(r.value.settings.bom.units).toBe(1);
+      // 2 -> 3 (M3) runs as well: numbering, wire classes, cables.
+      expect(r.value.settings.numbering.scheme).toBe('potential');
+      expect(r.value.wireClasses.find((c) => c.id === 'PE')?.colour).toBe('GNYE');
+      expect(r.value.cables).toEqual([]);
     }
+  });
+  it('migrates a version 2 file (M2) and writes it back as version 3', () => {
+    const v3 = JSON.parse(serializeProject(sample())) as Record<string, unknown>;
+    const { wireClasses, wireTypes, cables, ...v2 } = v3;
+    void wireClasses; void wireTypes; void cables;
+    const { numbering, wireColours, ...settings } = v2.settings as Record<string, unknown>;
+    void numbering; void wireColours;
+    const r = parseProject(JSON.stringify({ ...v2, version: 2, settings }));
+    expect(r.ok && r.value.version).toBe(3);
   });
 });

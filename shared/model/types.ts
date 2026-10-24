@@ -45,6 +45,15 @@ export interface WireEl {
   number?: string;
   /** Conductors represented by this line on a single-line page (tick marks). */
   conductors?: number;
+  /** The number was typed by hand: automatic numbering keeps it. */
+  numberLocked?: boolean;
+  /** Wire type (project.wireTypes) that overrides the wire class of the potential. */
+  wireType?: string;
+  /** A bundle of wires drawn as one line with one label ("10 mm² BK") instead of a number. */
+  bundle?: boolean;
+  /** Cable (designation, e.g. "-W1") this wire is a core of, and the core's colour code or number. */
+  cable?: string;
+  core?: string;
 }
 export interface JunctionEl {
   id: string;
@@ -152,7 +161,22 @@ export interface FormEl {
   items: FormItem[];
 }
 
-export type El = SymbolEl | BoxEl | WireEl | JunctionEl | TextEl | LineEl | RectEl | TableEl | ImageEl | WarningEl | FormEl;
+/** The reports a page can show (shared/reports.ts); they fill live from the schematic. */
+export const REPORT_IDS = ['terminals', 'cables', 'wires', 'pins', 'bom', 'contents', 'legend', 'colours', 'suffixes', 'torque', 'nameplates', 'wireMarkers', 'terminalMarkers'] as const;
+export type ReportId = (typeof REPORT_IDS)[number];
+/** A live report drawn on a page: rows `offset` to `offset + rows` of the report's table. */
+export interface ReportEl {
+  id: string;
+  kind: 'report';
+  x: number;
+  y: number;
+  report: ReportId;
+  offset: number;
+  /** How many rows this element shows (a page holds only so many); 0: all. */
+  rows: number;
+}
+
+export type El = SymbolEl | BoxEl | WireEl | JunctionEl | TextEl | LineEl | RectEl | TableEl | ImageEl | WarningEl | FormEl | ReportEl;
 export type ElKind = El['kind'];
 
 export interface Page {
@@ -257,6 +281,52 @@ export interface BomSettings {
   userFields: { id: string; label: LText }[];
 }
 
+/** How automatic wire numbers are made (shared/wires.ts). */
+export interface NumberingSettings {
+  /** Which counter a wire uses: one per potential, one per page and column, or a single one. */
+  scheme: 'potential' | 'page-column' | 'sequential';
+  /** Tokens: {n} or {n:3} counter, {page} {page:2}, {col}, {row}, {potential}, {suffix}. */
+  pattern: string;
+  start: number;
+  step: number;
+}
+/** One row of the company wire-class table: what a wire of a function (a potential) looks like. */
+export interface WireClass {
+  /** The function: a potential id (L1, 24VDC...) or "signal" for wires with no potential. */
+  id: string;
+  /** Colour code (IEC 60757): BK, BU, GNYE... */
+  colour: string;
+  /** Cross-section in mm², as printed: "1.5". */
+  crossSection: string;
+  /** Wire type text: "single-core, flexible". */
+  type: string;
+  /** Suffix added to the wire number. */
+  suffix: string;
+}
+/** A named single-core wire type: a wire can pick one instead of the class of its potential. */
+export interface WireType {
+  id: string;
+  type: string;
+  crossSection: string;
+  colour: string;
+}
+export type CableKind = 'multicore' | 'ribbon' | 'patch';
+/**
+ * A cable. Multicore cables get their cores from the wires that name the cable; flat ribbon and
+ * patch cables run between two connectors (pin n to pin n). The part gives the core count and colours.
+ */
+export interface CableRec {
+  /** Designation, e.g. "-W1". */
+  id: string;
+  kind: CableKind;
+  part?: string;
+  /** Connector (or device) designations at the two ends: product part, e.g. "-X10". */
+  from?: string;
+  to?: string;
+  length?: string;
+  functionText?: LText;
+}
+
 export interface ProjectSettings {
   /** Language of the texts printed on drawings: separate from the UI language. */
   drawingLanguage: Lang;
@@ -267,6 +337,9 @@ export interface ProjectSettings {
   defaultTemplateId: string;
   crossRef: CrossRefSettings;
   bom: BomSettings;
+  numbering: NumberingSettings;
+  /** Draw conductors in the IEC 60757 colour of their wire class. */
+  wireColours: boolean;
 }
 
 export const PROJECT_FORMAT = 'cablepilot-project';
@@ -293,4 +366,8 @@ export interface Project {
   parts: PartDef[];
   /** Parts with no designation. */
   projectParts: ProjectPart[];
+  /** The company wire-class table and the named wire types. */
+  wireClasses: WireClass[];
+  wireTypes: WireType[];
+  cables: CableRec[];
 }

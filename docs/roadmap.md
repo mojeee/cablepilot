@@ -50,15 +50,15 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 
 ## M3 Wires and reports
 
-- [ ] Automatic wire numbering (potential-based, page-column or sequential) with a configurable pattern and suffixes
-- [ ] Wire types and a company wire-class table (function, colour, cross-section, type, suffix); conductors drawn in their colour; one label for a bundle of wires
-- [ ] Terminals and terminal strips generated from the schematic
-- [ ] Cables with cores and core colours, flat ribbon cables, patch cables (RJ45) between connectors
-- [ ] Live reports: terminal diagrams, cable list, wire list, connector pin lists, BOM, contents
-- [ ] Generated pages: symbol legend, conductor colour and wire-suffix tables, tightening-torque table (from library data, with sources)
-- [ ] Nameplates: label text per device, drawn on a page and exported as a list
-- [ ] Exports: PDF drawing set, CSV and XLSX, wire-marker, terminal-marker and nameplate lists
-- [ ] DXF import and export of pages
+- [x] Automatic wire numbering (potential-based, page-column or sequential) with a configurable pattern and suffixes
+- [x] Wire types and a company wire-class table (function, colour, cross-section, type, suffix); conductors drawn in their colour; one label for a bundle of wires
+- [x] Terminals and terminal strips generated from the schematic
+- [x] Cables with cores and core colours, flat ribbon cables, patch cables (RJ45) between connectors
+- [x] Live reports: terminal diagrams, cable list, wire list, connector pin lists, BOM, contents
+- [x] Generated pages: symbol legend, conductor colour and wire-suffix tables, tightening-torque table (from library data, with sources)
+- [x] Nameplates: label text per device, drawn on a page and exported as a list
+- [x] Exports: PDF drawing set, CSV and XLSX, wire-marker, terminal-marker and nameplate lists
+- [x] DXF import and export of pages
 
 ## M4 Checks and revisions
 

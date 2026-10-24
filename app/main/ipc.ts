@@ -35,6 +35,8 @@ export function registerIpc(deps: { settings: SettingsStore; files: FileService 
   ipcMain.handle('files:save', (_e, text: string, path: string | null, name: string) => guardAsync(() => files.save(String(text), typeof path === 'string' ? path : null, String(name))));
   ipcMain.handle('files:exportPdf', (_e, bytes: Uint8Array, name: string) => guardAsync(() => files.exportPdf(bytes, String(name))));
   ipcMain.handle('files:exportText', (_e, text: string, name: string) => guardAsync(() => files.exportText(String(text), String(name))));
+  ipcMain.handle('files:exportBinary', (_e, bytes: Uint8Array, name: string) => guardAsync(() => files.exportBinary(bytes, String(name))));
+  ipcMain.handle('files:importDxf', () => guardAsync(() => files.importDxf()));
   const safe = <T>(fn: () => Result<T>): Result<T> => {
     try {
       return fn();

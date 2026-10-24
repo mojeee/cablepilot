@@ -14,6 +14,9 @@ import { primBox, textWidth, unionBox, type Box, type Built, type Prim } from '.
 import { boxPinsWorld, boxPrims } from './box';
 import { gfxPrims, graphicsFor, pinWorld, symbolXf, usesValue, xfPoint } from './symbol';
 import { warningPrims } from './warning';
+import { reportPrims } from './report';
+import { pageNets } from '../connectivity';
+import { bundleLabel, colourHex, STRIPE_HEX, wireSpec } from '../wires';
 
 export interface FrameRect {
   fx: number;
@@ -186,16 +189,28 @@ function pinKeys(page: Page, lib: Library): Set<string> {
   return keys;
 }
 
-function wirePrims(el: WireEl, project: Project, pins: Set<string>): Prim[] {
+function wirePrims(el: WireEl, project: Project, pins: Set<string>, netPot?: string, colourOn = false): Prim[] {
   const st = project.settings.style;
   const pts = el.points.flatMap((p) => [p.x, p.y]);
-  const out: Prim[] = [{ k: 'poly', pts, w: st.weights.wire, c: st.colours.wire, id: el.id }];
+  const spec = wireSpec(project, el, netPot);
+  // Conductors in their IEC 60757 colour (option); green-and-yellow is green with a yellow dashed stripe.
+  const colour = colourOn ? colourHex(spec.colour) : st.colours.wire;
+  const out: Prim[] = [{ k: 'poly', pts, w: el.bundle ? st.weights.wire * 2.5 : st.weights.wire, c: colour, id: el.id }];
+  if (colourOn && spec.colour === 'GNYE') out.push({ k: 'poly', pts, w: st.weights.wire, c: STRIPE_HEX, dash: true, id: el.id });
   const seg = longestSegment(el.points);
   if (!seg) return out;
-  if (el.number) {
-    const horiz = Math.abs(seg.dx) > Math.abs(seg.dy);
-    const s = st.textSizes.wireNumber;
-    out.push(horiz ? { k: 'text', x: seg.mx, y: seg.my - 1.2, text: el.number, size: s, anchor: 'middle', rot: 0, c: st.colours.wireNumber, id: el.id } : { k: 'text', x: seg.mx + 1.2, y: seg.my + s * 0.36, text: el.number, size: s, anchor: 'start', rot: 0, c: st.colours.wireNumber, id: el.id });
+  // The label sits on the longest segment: above a horizontal wire, left of a vertical one (rotated to read upwards).
+  const label = (text: string, c: string, s: number): Prim => (Math.abs(seg.dx) > Math.abs(seg.dy)
+    ? { k: 'text', x: seg.mx, y: seg.my - 1.2, text, size: s, anchor: 'middle', rot: 0, c, id: el.id }
+    : { k: 'text', x: seg.mx - 1.2, y: seg.my, text, size: s, anchor: 'middle', rot: -90, c, id: el.id });
+  if (el.bundle) out.push(label(bundleLabel(spec), st.colours.wireNumber, st.textSizes.wireNumber));
+  else if (el.number) out.push(label(el.number, st.colours.wireNumber, st.textSizes.wireNumber));
+  if (el.cable) {
+    // The cable and core this wire belongs to, on the other side of the wire from its number.
+    const t = `${el.cable}${el.core ? `:${el.core}` : ''}`;
+    out.push(Math.abs(seg.dx) > Math.abs(seg.dy)
+      ? { k: 'text', x: seg.mx, y: seg.my + 3.4, text: t, size: 2.2, anchor: 'middle', rot: 0, c: st.colours.text, id: el.id }
+      : { k: 'text', x: seg.mx + 3.4, y: seg.my, text: t, size: 2.2, anchor: 'middle', rot: -90, c: st.colours.text, id: el.id });
   }
   if (el.conductors && el.conductors > 1) {
     // n-conductor tick marks (IEC 60617 conductor symbols, single-line representation): up to three
@@ -224,6 +239,8 @@ function wirePrims(el: WireEl, project: Project, pins: Set<string>): Prim[] {
 export interface XrefCtx {
   idx: DeviceIndex;
   page: string;
+  /** The library as given (without the project's embedded symbols): report caches key on it. */
+  lib: Library;
 }
 
 const refText = (reps: DeviceRepr[]): string => {
@@ -274,7 +291,7 @@ export function symbolPrims(el: SymbolEl, project: Project, lib: Library, xref?:
   let y = el.y + lp.y;
   const lx = el.x + lp.x;
   const pageLoc = el.location;
-  const des = (pageLoc ? `+${pageLoc}` : '') + el.designation;
+  const des = (pageLoc ? `+${pageLoc}` : '') + el.designation + (def.function === 'terminal' && el.value ? `:${el.value}` : '');
   const sz = st.textSizes.designation;
   if (def.function === 'interruption') {
     // The signal name is in the graphics; below it, where the same signal continues.
@@ -294,13 +311,13 @@ export function symbolPrims(el: SymbolEl, project: Project, lib: Library, xref?:
   if (ft) {
     ft.split('\n').forEach((l) => { out.push({ k: 'text', x: lx, y: y + 1, text: l, size: 2.5, anchor, rot: 0, c: st.colours.text, id: el.id }); y += 3.1; });
   }
-  if (el.value && !usesValue(gfx)) { out.push({ k: 'text', x: lx, y: y + 1, text: el.value, size: 2.5, anchor, rot: 0, c: st.colours.text, id: el.id }); y += 3.1; }
+  if (el.value && !usesValue(gfx) && def.function !== 'terminal') { out.push({ k: 'text', x: lx, y: y + 1, text: el.value, size: 2.5, anchor, rot: 0, c: st.colours.text, id: el.id }); y += 3.1; }
   const info = xref ? refsOf(xref.idx, xref.page, el.id) : undefined;
   if (info) {
     if (info.rep.role === 'coil') {
       const note = pick(el.stateNote, lang);
       if (info.contacts.length || note) out.push(...contactImage(info.contacts, note, lx, y + 0.8, anchor, st.colours.text, st.weights.symbol, el.id).prims);
-    } else {
+    } else if (def.function !== 'terminal') {
       const to = info.coils.length ? info.coils : info.others;
       if (to.length) out.push({ k: 'text', x: lx, y: y + 1, text: refText(to), size: 2.2, anchor, rot: 0, c: st.colours.text, id: el.id });
     }
@@ -308,7 +325,7 @@ export function symbolPrims(el: SymbolEl, project: Project, lib: Library, xref?:
   return out;
 }
 
-function elementPrims(el: El, project: Project, page: Page, lib: Library, pins: Set<string>, xref: XrefCtx): Prim[] {
+function elementPrims(el: El, project: Project, page: Page, lib: Library, pins: Set<string>, xref: XrefCtx, netPot: Map<string, string | undefined>): Prim[] {
   const st = project.settings.style;
   switch (el.kind) {
     case 'symbol': return symbolPrims(el, project, lib, xref);
@@ -316,7 +333,8 @@ function elementPrims(el: El, project: Project, page: Page, lib: Library, pins: 
       const info = refsOf(xref.idx, xref.page, el.id);
       return boxPrims(el, project, info?.others.length ? refText(info.others) : undefined);
     }
-    case 'wire': return wirePrims(el, project, pins);
+    case 'wire': return wirePrims(el, project, pins, netPot.get(el.id), project.settings.wireColours);
+    case 'report': return reportPrims(el, project, page, xref.lib);
     case 'junction': return [{ k: 'circle', cx: el.x, cy: el.y, r: 0.9, w: 0.2, c: st.colours.wire, fill: true, id: el.id }];
     case 'text': {
       const lines = el.text.split('\n');
@@ -389,9 +407,11 @@ export function buildPage(project: Project, page: Page, libIn: Library, index: n
   prims.push(...generatedBody(project, page));
   const items: Built['items'] = [];
   const pins = pinKeys(page, lib);
-  const xref: XrefCtx = { idx: deviceIndex(project, libIn), page: page.id };
+  const xref: XrefCtx = { idx: deviceIndex(project, libIn), page: page.id, lib: libIn };
+  const netPot = new Map<string, string | undefined>();
+  if (project.settings.wireColours) for (const n of pageNets(project, page, libIn)) for (const w of n.wires) netPot.set(w, n.potential);
   for (const el of page.elements) {
-    const ps = elementPrims(el, project, page, lib, pins, xref);
+    const ps = elementPrims(el, project, page, lib, pins, xref, netPot);
     prims.push(...ps);
     const box = unionBox(ps.map(primBox));
     if (box) items.push({ id: el.id, box: box as Box });

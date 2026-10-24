@@ -14,7 +14,9 @@
   },
   "data": {
     "Conductor cross-section": "4 mm²",
-    "Colour": "GNYE"
+    "Colour": "GNYE",
+    "Width": "6.2 mm",
+    "Tightening torque": "0.8 Nm"
   },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",

@@ -3,7 +3,7 @@
 import { test } from '@playwright/test';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { PDFDocument } from 'pdf-lib';
+import { PDFDict, PDFDocument, PDFName } from 'pdf-lib';
 import { expect, launch } from './app';
 
 interface SavedProject {
@@ -106,7 +106,7 @@ test('place a symbol, draw a wire, undo, save and export a PDF', async () => {
 test('the sample projects open', async () => {
   const { page, close } = await launch();
   try {
-    for (const [id, name, pages] of [['conveyor', 'Conveyor with direct-on-line starter', 10], ['pump-station', 'Pump station, two pumps', 10], ['dc-charger', 'Caricabatterie 110 V DC', 12]] as const) {
+    for (const [id, name, pages] of [['conveyor', 'Conveyor with direct-on-line starter', 18], ['pump-station', 'Pump station, two pumps', 19], ['dc-charger', 'Caricabatterie 110 V DC', 23]] as const) {
       await page.getByTestId('samples').selectOption(id);
       await expect(page.getByTestId('project-name')).toContainText(name);
       await expect(page.getByRole('region', { name: 'Messages' })).toContainText(`Opened ${name}.`);
@@ -230,6 +230,61 @@ test('a device with a coil and a contact shows its cross-references, takes a par
     await expect(page.getByRole('region', { name: 'Messages' })).toContainText('BOM exported');
     const csv = readdirSync(out).find((f) => f.endsWith('-bom.csv'))!;
     expect(readFileSync(join(out, csv), 'utf8')).toContain('GEN-CONTACTOR-9A');
+  } finally {
+    await close();
+  }
+});
+
+test('M3: number the wires, view the terminal diagram, export the PDF set and the XLSX lists', async () => {
+  const { page, out, close } = await launch();
+  try {
+    const messages = page.getByRole('region', { name: 'Messages' });
+    await page.getByTestId('samples').selectOption('dc-charger');
+    await expect(page.getByTestId('project-name')).toContainText('Caricabatterie');
+
+    // Number the wires: switch to the sequential scheme, number now, and see plain counters in the saved file.
+    await page.getByTestId('wires').click();
+    await page.getByTestId('num-scheme').selectOption('sequential');
+    await page.getByTestId('wires-number-now').click();
+    await expect(messages).toContainText('Wires numbered.');
+    await page.keyboard.press('Escape');
+    await page.getByTestId('save').click();
+    const saved = await expect.poll(() => readdirSync(out).find((f) => f.endsWith('.cablepilot.json'))).toBeTruthy().then(() => readdirSync(out).find((f) => f.endsWith('.cablepilot.json'))!);
+    const proj = JSON.parse(readFileSync(join(out, saved), 'utf8')) as { pages: { type: string; elements: { kind: string; number?: string }[] }[] };
+    const numbers = proj.pages.filter((p) => p.type === 'power' || p.type === 'control' || p.type === 'plc').flatMap((p) => p.elements).filter((e) => e.kind === 'wire').map((e) => e.number);
+    expect(numbers.length).toBeGreaterThan(30);
+    expect(numbers.every((n) => /^\d+$/.test(n ?? ''))).toBe(true);
+    // Renumbering is one undo step: undo restores the suffixed numbers of the sample.
+    await page.getByTestId('undo').click();
+    await page.getByTestId('save').click();
+    const again = JSON.parse(readFileSync(join(out, saved), 'utf8')) as typeof proj;
+    expect(again.pages.flatMap((p) => p.elements).some((e) => e.kind === 'wire' && /L\+$/.test(e.number ?? ''))).toBe(true);
+
+    // The terminal diagram: destination, wire, terminal, function text and part of strip -X1 (Italian, the drawing language).
+    await page.getByTestId('reports').click();
+    await page.getByTestId('report-terminals').click();
+    const table = page.getByTestId('report-table');
+    await expect(table).toContainText('-X1');
+    await expect(table).toContainText('Uscita carico L+');
+    await expect(table).toContainText('GEN-TERMINAL-FEEDTHROUGH-6MM2');
+    await expect(table).toContainText('-G1:+');
+
+    // XLSX with every list, then the PDF set.
+    await page.getByTestId('export-xlsx').click();
+    await expect(messages).toContainText('Lists exported');
+    const xlsx = readdirSync(out).find((f) => f.endsWith('.xlsx'))!;
+    const bytes = readFileSync(join(out, xlsx));
+    expect(bytes.subarray(0, 2).toString()).toBe('PK');
+    expect(bytes.toString('latin1')).toContain('Elenco fili');
+    await page.keyboard.press('Escape');
+    await page.getByTestId('export-pdf').click();
+    await expect(messages).toContainText('PDF exported');
+    const pdf = readdirSync(out).find((f) => f.endsWith('.pdf'))!;
+    const pdfBytes = readFileSync(join(out, pdf));
+    const doc = await PDFDocument.load(pdfBytes);
+    expect(doc.getPageCount()).toBe(23);
+    // The text is embedded (a font file in the PDF), so it shows in every viewer.
+    expect(doc.context.enumerateIndirectObjects().some(([, o]) => o instanceof PDFDict && o.has(PDFName.of('FontFile2')))).toBe(true);
   } finally {
     await close();
   }

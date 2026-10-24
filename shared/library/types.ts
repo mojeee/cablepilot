@@ -112,3 +112,6 @@ export function symbolRole(def: SymbolDef | undefined): Role {
   if (def.function === 'contact-no' || def.function === 'contact-nc') return 'aux';
   return 'main';
 }
+
+/** Parts that count once per terminal of a strip: terminal parts with a conductor cross-section (end plates and stops count once). */
+export const isTerminalPart = (p: PartDef | undefined): boolean => !!p && p.category === 'terminals' && 'Conductor cross-section' in p.data;

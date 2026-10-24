@@ -1,6 +1,6 @@
 {
   "format": "cablepilot-project",
-  "version": 2,
+  "version": 3,
   "id": "sample-dc-charger",
   "name": "Caricabatterie 110 V DC",
   "settings": {
@@ -26,6 +26,7 @@
     "defaultSize": "A3",
     "defaultTemplateId": "default",
     "drawingLanguage": "it",
+    "numbering": {"pattern":"{n:3}{suffix}","scheme":"potential","start":1,"step":1},
     "style": {
       "colours": {
         "annotation": "#000000",
@@ -41,7 +42,8 @@
       "textSizes": {"designation":3.5,"text":3.5,"wireNumber":2.5},
       "weights": {"annotation":0.35,"frame":0.7,"symbol":0.35,"wire":0.35}
     },
-    "symbolStandard": "iec"
+    "symbolStandard": "iec",
+    "wireColours": true
   },
   "properties": {
     "client": "Cliente di esempio S.r.l.",
@@ -479,8 +481,8 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "mcb-3p",
-          "x": 80,
-          "y": 60
+          "x": 100,
+          "y": 55
         },
         {
           "id": "e19",
@@ -490,15 +492,33 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "transformer-3ph",
-          "x": 80,
-          "y": 100
+          "x": 100,
+          "y": 112
         },
-        {"id":"e20","kind":"wire","points":[{"x":75,"y":30},{"x":75,"y":55}],"potential":"L1"},
-        {"id":"e21","kind":"wire","points":[{"x":80,"y":30},{"x":80,"y":55}],"potential":"L2"},
-        {"id":"e22","kind":"wire","points":[{"x":85,"y":30},{"x":85,"y":55}],"potential":"L3"},
-        {"id":"e23","kind":"wire","number":"001","points":[{"x":75,"y":65},{"x":75,"y":92.5}]},
-        {"id":"e24","kind":"wire","number":"002","points":[{"x":80,"y":65},{"x":80,"y":92.5}]},
-        {"id":"e25","kind":"wire","number":"003","points":[{"x":85,"y":65},{"x":85,"y":92.5}]},
+        {
+          "id": "e20",
+          "kind": "wire",
+          "number": "001L1",
+          "points": [{"x":95,"y":25},{"x":95,"y":50}],
+          "potential": "L1"
+        },
+        {
+          "id": "e21",
+          "kind": "wire",
+          "number": "001L2",
+          "points": [{"x":100,"y":25},{"x":100,"y":50}],
+          "potential": "L2"
+        },
+        {
+          "id": "e22",
+          "kind": "wire",
+          "number": "001L3",
+          "points": [{"x":105,"y":25},{"x":105,"y":50}],
+          "potential": "L3"
+        },
+        {"id":"e23","kind":"wire","number":"001","points":[{"x":95,"y":60},{"x":95,"y":104.5}]},
+        {"id":"e24","kind":"wire","number":"003","points":[{"x":100,"y":60},{"x":100,"y":104.5}]},
+        {"id":"e25","kind":"wire","number":"005","points":[{"x":105,"y":60},{"x":105,"y":104.5}]},
         {
           "id": "e26",
           "kind": "symbol",
@@ -507,8 +527,8 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "rectifier-3ph",
-          "x": 80,
-          "y": 150
+          "x": 100,
+          "y": 190
         },
         {
           "id": "e27",
@@ -518,34 +538,61 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "rectifier-3ph",
-          "x": 160,
-          "y": 150
+          "x": 240,
+          "y": 190
         },
-        {"id":"e28","kind":"wire","number":"004L","points":[{"x":75,"y":107.5},{"x":75,"y":140}]},
-        {"id":"e29","kind":"wire","number":"005M","points":[{"x":80,"y":107.5},{"x":80,"y":140}]},
-        {"id":"e30","kind":"wire","number":"006N","points":[{"x":85,"y":107.5},{"x":85,"y":140}]},
-        {"id":"e31","kind":"wire","points":[{"x":75,"y":125},{"x":155,"y":125},{"x":155,"y":140}]},
-        {"id":"e31-j1","kind":"junction","x":75,"y":125},
-        {"id":"e32","kind":"wire","points":[{"x":80,"y":121},{"x":160,"y":121},{"x":160,"y":140}]},
-        {"id":"e32-j1","kind":"junction","x":80,"y":121},
-        {"id":"e33","kind":"wire","points":[{"x":85,"y":117},{"x":165,"y":117},{"x":165,"y":140}]},
-        {"id":"e33-j1","kind":"junction","x":85,"y":117},
+        {"id":"e28","kind":"wire","number":"002","points":[{"x":95,"y":119.5},{"x":95,"y":180}]},
+        {"id":"e29","kind":"wire","number":"004","points":[{"x":100,"y":119.5},{"x":100,"y":180}]},
+        {"id":"e30","kind":"wire","number":"006","points":[{"x":105,"y":119.5},{"x":105,"y":180}]},
+        {
+          "id": "e31",
+          "kind": "wire",
+          "number": "002",
+          "points": [{"x":95,"y":154},{"x":235,"y":154},{"x":235,"y":180}]
+        },
+        {"id":"e31-j1","kind":"junction","x":95,"y":154},
+        {
+          "id": "e32",
+          "kind": "wire",
+          "number": "004",
+          "points": [{"x":100,"y":150},{"x":240,"y":150},{"x":240,"y":180}]
+        },
+        {"id":"e32-j1","kind":"junction","x":100,"y":150},
+        {
+          "id": "e33",
+          "kind": "wire",
+          "number": "006",
+          "points": [{"x":105,"y":146},{"x":245,"y":146},{"x":245,"y":180}]
+        },
+        {"id":"e33-j1","kind":"junction","x":105,"y":146},
         {
           "id": "e34",
           "kind": "wire",
-          "points": [{"x":77.5,"y":160},{"x":77.5,"y":185},{"x":250,"y":185}],
+          "number": "001L+",
+          "points": [{"x":97.5,"y":200},{"x":97.5,"y":222},{"x":300,"y":222}],
           "potential": "L+"
         },
-        {"id":"e35","kind":"wire","points":[{"x":157.5,"y":160},{"x":157.5,"y":185}]},
-        {"id":"e35-j1","kind":"junction","x":157.5,"y":185},
+        {
+          "id": "e35",
+          "kind": "wire",
+          "number": "001L+",
+          "points": [{"x":237.5,"y":200},{"x":237.5,"y":222}]
+        },
+        {"id":"e35-j1","kind":"junction","x":237.5,"y":222},
         {
           "id": "e36",
           "kind": "wire",
-          "points": [{"x":82.5,"y":160},{"x":82.5,"y":205},{"x":250,"y":205}],
+          "number": "001L-",
+          "points": [{"x":102.5,"y":200},{"x":102.5,"y":238},{"x":300,"y":238}],
           "potential": "L-"
         },
-        {"id":"e37","kind":"wire","points":[{"x":162.5,"y":160},{"x":162.5,"y":205}]},
-        {"id":"e37-j1","kind":"junction","x":162.5,"y":205},
+        {
+          "id": "e37",
+          "kind": "wire",
+          "number": "001L-",
+          "points": [{"x":242.5,"y":200},{"x":242.5,"y":238}]
+        },
+        {"id":"e37-j1","kind":"junction","x":242.5,"y":238},
         {
           "id": "e38",
           "kind": "symbol",
@@ -554,8 +601,8 @@
           "rot": 0,
           "symbolId": "interruption-point",
           "value": "L+",
-          "x": 250,
-          "y": 185
+          "x": 300,
+          "y": 222
         },
         {
           "id": "e39",
@@ -565,12 +612,12 @@
           "rot": 0,
           "symbolId": "interruption-point",
           "value": "L-",
-          "x": 250,
-          "y": 205
+          "x": 300,
+          "y": 238
         },
-        {"id":"e40","kind":"rect","dashed":true,"h":36,"w":40,"x":60,"y":132},
-        {"id":"e41","kind":"rect","dashed":true,"h":36,"w":40,"x":140,"y":132},
-        {"id":"e42","kind":"warning","sign":"electric","size":12,"x":40,"y":80},
+        {"id":"e40","kind":"rect","dashed":true,"h":44,"w":40,"x":80,"y":168},
+        {"id":"e41","kind":"rect","dashed":true,"h":44,"w":40,"x":220,"y":168},
+        {"id":"e42","kind":"warning","sign":"electric","size":12,"x":45,"y":100},
         {
           "id": "e43",
           "kind": "text",
@@ -578,8 +625,8 @@
           "rot": 0,
           "size": 3,
           "text": "Uscita 110 V DC, 30 A.\nI due moduli lavorano in parallelo.",
-          "x": 230,
-          "y": 80
+          "x": 300,
+          "y": 90
         }
       ],
       "location": "DS",
@@ -679,29 +726,48 @@
           "x": 250,
           "y": 125
         },
-        {"id":"e52","kind":"wire","points":[{"x":40,"y":80},{"x":75,"y":80}],"potential":"L+"},
-        {"id":"e53","kind":"wire","points":[{"x":85,"y":80},{"x":107,"y":80}]},
-        {"id":"e54","kind":"wire","points":[{"x":117,"y":80},{"x":139,"y":80}]},
-        {"id":"e55","kind":"wire","points":[{"x":149,"y":80},{"x":290,"y":80},{"x":290,"y":117.5}]},
-        {"id":"e56","kind":"wire","points":[{"x":40,"y":170},{"x":290,"y":170}],"potential":"L-"},
-        {"id":"e57","kind":"wire","points":[{"x":290,"y":132.5},{"x":290,"y":170}]},
-        {"id":"e58","kind":"wire","points":[{"x":250,"y":80},{"x":250,"y":120}]},
+        {
+          "id": "e52",
+          "kind": "wire",
+          "number": "001L+",
+          "points": [{"x":40,"y":80},{"x":75,"y":80}],
+          "potential": "L+"
+        },
+        {"id":"e53","kind":"wire","number":"007","points":[{"x":85,"y":80},{"x":107,"y":80}]},
+        {"id":"e54","kind":"wire","number":"008","points":[{"x":117,"y":80},{"x":139,"y":80}]},
+        {
+          "id": "e55",
+          "kind": "wire",
+          "number": "009",
+          "points": [{"x":149,"y":80},{"x":290,"y":80},{"x":290,"y":117.5}]
+        },
+        {
+          "id": "e56",
+          "kind": "wire",
+          "number": "001L-",
+          "points": [{"x":40,"y":170},{"x":290,"y":170}],
+          "potential": "L-"
+        },
+        {"id":"e57","kind":"wire","number":"001L-","points":[{"x":290,"y":132.5},{"x":290,"y":170}]},
+        {"id":"e58","kind":"wire","number":"009","points":[{"x":250,"y":80},{"x":250,"y":120}]},
         {"id":"e58-j1","kind":"junction","x":250,"y":80},
-        {"id":"e59","kind":"wire","points":[{"x":250,"y":130},{"x":250,"y":170}]},
+        {"id":"e59","kind":"wire","number":"001L-","points":[{"x":250,"y":130},{"x":250,"y":170}]},
         {"id":"e59-j1","kind":"junction","x":250,"y":170},
         {
           "id": "e60",
           "kind": "wire",
+          "number": "001P",
           "points": [{"x":173.5,"y":72.5},{"x":173.5,"y":60}],
           "potential": "24VDC"
         },
         {
           "id": "e61",
           "kind": "wire",
+          "number": "001M",
           "points": [{"x":178.5,"y":72.5},{"x":178.5,"y":67.5},{"x":186,"y":67.5}],
           "potential": "0V"
         },
-        {"id":"e62","kind":"wire","points":[{"x":176,"y":87.5},{"x":176,"y":100}]},
+        {"id":"e62","kind":"wire","number":"010","points":[{"x":176,"y":87.5},{"x":176,"y":100}]},
         {
           "id": "e63",
           "kind": "symbol",
@@ -724,9 +790,61 @@
           "x": 65,
           "y": 53
         },
-        {"id":"e65","kind":"warning","sign":"electric","size":12,"x":340,"y":80},
+        {
+          "id": "e65",
+          "kind": "symbol",
+          "designation": "-X1",
+          "functionText": {"en":"Load output L+","it":"Uscita carico L+"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "terminal",
+          "value": "1",
+          "x": 330,
+          "y": 95
+        },
         {
           "id": "e66",
+          "kind": "symbol",
+          "designation": "-X1",
+          "functionText": {"en":"Load output L-","it":"Uscita carico L-"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "terminal",
+          "value": "2",
+          "x": 360,
+          "y": 95
+        },
+        {
+          "id": "e67",
+          "kind": "wire",
+          "number": "009",
+          "points": [{"x":290,"y":80},{"x":330,"y":80},{"x":330,"y":90}]
+        },
+        {"id":"e67-j1","kind":"junction","x":290,"y":80},
+        {
+          "id": "e68",
+          "kind": "wire",
+          "number": "002L+",
+          "points": [{"x":330,"y":100},{"x":330,"y":125}],
+          "potential": "L+"
+        },
+        {
+          "id": "e69",
+          "kind": "wire",
+          "number": "001L-",
+          "points": [{"x":290,"y":170},{"x":385,"y":170},{"x":385,"y":75},{"x":360,"y":75},{"x":360,"y":90}]
+        },
+        {"id":"e69-j1","kind":"junction","x":290,"y":170},
+        {
+          "id": "e70",
+          "kind": "wire",
+          "number": "002L-",
+          "points": [{"x":360,"y":100},{"x":360,"y":125}],
+          "potential": "L-"
+        },
+        {"id":"e71","kind":"warning","sign":"electric","size":12,"x":370,"y":30},
+        {
+          "id": "e72",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -745,10 +863,22 @@
       "id": "p8",
       "type": "control",
       "elements": [
-        {"id":"e67","kind":"wire","points":[{"x":40,"y":60},{"x":395,"y":60}],"potential":"24VDC"},
-        {"id":"e68","kind":"wire","points":[{"x":40,"y":200},{"x":395,"y":200}],"potential":"0V"},
         {
-          "id": "e69",
+          "id": "e73",
+          "kind": "wire",
+          "number": "002P",
+          "points": [{"x":40,"y":60},{"x":395,"y":60}],
+          "potential": "24VDC"
+        },
+        {
+          "id": "e74",
+          "kind": "wire",
+          "number": "002M",
+          "points": [{"x":40,"y":200},{"x":395,"y":200}],
+          "potential": "0V"
+        },
+        {
+          "id": "e75",
           "kind": "symbol",
           "designation": "-K1",
           "functionText": {"en":"Phase monitoring relay","it":"Relè controllo fasi"},
@@ -762,12 +892,12 @@
           "x": 70,
           "y": 100
         },
-        {"id":"e70","kind":"wire","points":[{"x":70,"y":60},{"x":70,"y":95}]},
-        {"id":"e70-j1","kind":"junction","x":70,"y":60},
-        {"id":"e71","kind":"wire","points":[{"x":70,"y":105},{"x":70,"y":200}]},
-        {"id":"e71-j1","kind":"junction","x":70,"y":200},
+        {"id":"e76","kind":"wire","number":"002P","points":[{"x":70,"y":60},{"x":70,"y":95}]},
+        {"id":"e76-j1","kind":"junction","x":70,"y":60},
+        {"id":"e77","kind":"wire","number":"002M","points":[{"x":70,"y":105},{"x":70,"y":200}]},
+        {"id":"e77-j1","kind":"junction","x":70,"y":200},
         {
-          "id": "e72",
+          "id": "e78",
           "kind": "symbol",
           "designation": "-K1",
           "functionText": {"en":"Mains failure","it":"Mancanza rete"},
@@ -778,7 +908,7 @@
           "y": 140
         },
         {
-          "id": "e73",
+          "id": "e79",
           "kind": "symbol",
           "designation": "-H1",
           "functionText": {"en":"Mains failure indication","it":"Segnalazione mancanza rete"},
@@ -788,11 +918,11 @@
           "x": 130,
           "y": 175
         },
-        {"id":"e74","kind":"wire","points":[{"x":130,"y":60},{"x":130,"y":135}]},
-        {"id":"e74-j1","kind":"junction","x":130,"y":60},
-        {"id":"e75","kind":"wire","points":[{"x":130,"y":145},{"x":130,"y":170}]},
-        {"id":"e76","kind":"wire","points":[{"x":130,"y":180},{"x":130,"y":200}]},
-        {"id":"e76-j1","kind":"junction","x":130,"y":200},
+        {"id":"e80","kind":"wire","number":"002P","points":[{"x":130,"y":60},{"x":130,"y":135}]},
+        {"id":"e80-j1","kind":"junction","x":130,"y":60},
+        {"id":"e81","kind":"wire","number":"011","points":[{"x":130,"y":145},{"x":130,"y":170}]},
+        {"id":"e82","kind":"wire","number":"002M","points":[{"x":130,"y":180},{"x":130,"y":200}]},
+        {"id":"e82-j1","kind":"junction","x":130,"y":200},
         {
           "id": "mc1-1",
           "kind": "symbol",
@@ -826,17 +956,17 @@
           "x": 220,
           "y": 170
         },
-        {"id":"mc1-4","kind":"wire","points":[{"x":190,"y":60},{"x":190,"y":95}]},
-        {"id":"mc1-5","kind":"wire","points":[{"x":190,"y":105},{"x":190,"y":200}]},
-        {"id":"mc1-6","kind":"wire","points":[{"x":220,"y":60},{"x":220,"y":135}]},
-        {"id":"mc1-7","kind":"wire","points":[{"x":220,"y":145},{"x":220,"y":165}]},
-        {"id":"mc1-8","kind":"wire","points":[{"x":220,"y":175},{"x":220,"y":200}]},
+        {"id":"mc1-4","kind":"wire","number":"002P","points":[{"x":190,"y":60},{"x":190,"y":95}]},
+        {"id":"mc1-5","kind":"wire","number":"002M","points":[{"x":190,"y":105},{"x":190,"y":200}]},
+        {"id":"mc1-6","kind":"wire","number":"002P","points":[{"x":220,"y":60},{"x":220,"y":135}]},
+        {"id":"mc1-7","kind":"wire","number":"012","points":[{"x":220,"y":145},{"x":220,"y":165}]},
+        {"id":"mc1-8","kind":"wire","number":"002M","points":[{"x":220,"y":175},{"x":220,"y":200}]},
         {"id":"mc1-4-j1","kind":"junction","x":190,"y":60},
         {"id":"mc1-5-j1","kind":"junction","x":190,"y":200},
         {"id":"mc1-6-j1","kind":"junction","x":220,"y":60},
         {"id":"mc1-8-j1","kind":"junction","x":220,"y":200},
         {
-          "id": "e77",
+          "id": "e83",
           "kind": "symbol",
           "designation": "-KM1",
           "functionText": {"en":"Battery DC contactor","it":"Contattore DC batteria"},
@@ -846,12 +976,12 @@
           "x": 360,
           "y": 100
         },
-        {"id":"e78","kind":"wire","points":[{"x":360,"y":60},{"x":360,"y":95}]},
-        {"id":"e78-j1","kind":"junction","x":360,"y":60},
-        {"id":"e79","kind":"wire","points":[{"x":360,"y":105},{"x":360,"y":200}]},
-        {"id":"e79-j1","kind":"junction","x":360,"y":200},
+        {"id":"e84","kind":"wire","number":"002P","points":[{"x":360,"y":60},{"x":360,"y":95}]},
+        {"id":"e84-j1","kind":"junction","x":360,"y":60},
+        {"id":"e85","kind":"wire","number":"002M","points":[{"x":360,"y":105},{"x":360,"y":200}]},
+        {"id":"e85-j1","kind":"junction","x":360,"y":200},
         {
-          "id": "e80",
+          "id": "e86",
           "kind": "box",
           "designation": "-X11",
           "functionText": {"en":"Plug","it":"Spina"},
@@ -870,31 +1000,35 @@
           "y": 125
         },
         {
-          "id": "e81",
+          "id": "e87",
           "kind": "wire",
+          "number": "011",
           "points": [{"x":130,"y":152.5},{"x":270,"y":152.5},{"x":270,"y":130},{"x":300,"y":130}]
         },
-        {"id":"e81-j1","kind":"junction","x":130,"y":152.5},
+        {"id":"e87-j1","kind":"junction","x":130,"y":152.5},
         {
-          "id": "e82",
+          "id": "e88",
           "kind": "wire",
+          "number": "012",
           "points": [{"x":220,"y":157.5},{"x":280,"y":157.5},{"x":280,"y":135},{"x":300,"y":135}]
         },
-        {"id":"e82-j1","kind":"junction","x":220,"y":157.5},
+        {"id":"e88-j1","kind":"junction","x":220,"y":157.5},
         {
-          "id": "e83",
+          "id": "e89",
           "kind": "wire",
+          "number": "002P",
           "points": [{"x":320,"y":130},{"x":330,"y":130},{"x":330,"y":60}],
           "potential": "24VDC"
         },
-        {"id":"e83-j1","kind":"junction","x":330,"y":60},
+        {"id":"e89-j1","kind":"junction","x":330,"y":60},
         {
-          "id": "e84",
+          "id": "e90",
           "kind": "wire",
+          "number": "002M",
           "points": [{"x":320,"y":135},{"x":335,"y":135},{"x":335,"y":200}],
           "potential": "0V"
         },
-        {"id":"e84-j1","kind":"junction","x":335,"y":200}
+        {"id":"e90-j1","kind":"junction","x":335,"y":200}
       ],
       "location": "DS",
       "size": "A3",
@@ -906,7 +1040,7 @@
       "type": "plc",
       "elements": [
         {
-          "id": "e85",
+          "id": "e91",
           "kind": "box",
           "designation": "-X10",
           "functionText": {"en":"Socket","it":"Presa"},
@@ -921,90 +1055,103 @@
           ],
           "variant": "connector",
           "w": 15,
-          "x": 70,
-          "y": 60
+          "x": 55,
+          "y": 62
         },
         {
-          "id": "e86",
+          "id": "e92",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
           "rot": 0,
           "symbolId": "plc-input",
           "value": "I0.0",
-          "x": 210,
-          "y": 65
+          "x": 250,
+          "y": 72
         },
         {
-          "id": "e87",
+          "id": "e93",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
           "rot": 0,
           "symbolId": "plc-input",
           "value": "I0.1",
-          "x": 210,
-          "y": 85
+          "x": 250,
+          "y": 102
         },
         {
-          "id": "e88",
+          "id": "e94",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
           "rot": 0,
           "symbolId": "plc-input",
           "value": "AI0",
-          "x": 210,
-          "y": 115
+          "x": 250,
+          "y": 142
         },
-        {"id":"e89","kind":"wire","points":[{"x":85,"y":65},{"x":210,"y":65}]},
         {
-          "id": "e90",
+          "id": "e95",
           "kind": "wire",
-          "points": [{"x":85,"y":70},{"x":130,"y":70},{"x":130,"y":85},{"x":210,"y":85}]
+          "number": "011",
+          "points": [{"x":70,"y":67},{"x":150,"y":67},{"x":150,"y":72},{"x":250,"y":72}]
         },
-        {"id":"e91","kind":"wire","points":[{"x":70,"y":65},{"x":50,"y":65}],"potential":"24VDC"},
         {
-          "id": "e92",
+          "id": "e96",
           "kind": "wire",
-          "points": [{"x":70,"y":70},{"x":55,"y":70},{"x":55,"y":90}],
+          "number": "012",
+          "points": [{"x":70,"y":72},{"x":170,"y":72},{"x":170,"y":102},{"x":250,"y":102}]
+        },
+        {
+          "id": "e97",
+          "kind": "wire",
+          "number": "002P",
+          "points": [{"x":55,"y":67},{"x":20,"y":67}],
+          "potential": "24VDC"
+        },
+        {
+          "id": "e98",
+          "kind": "wire",
+          "number": "002M",
+          "points": [{"x":55,"y":72},{"x":10,"y":72},{"x":10,"y":97}],
           "potential": "0V"
         },
         {
-          "id": "e93",
+          "id": "e99",
           "kind": "symbol",
           "designation": "",
           "mirror": true,
           "rot": 0,
           "symbolId": "interruption-point",
           "value": "IOUT",
-          "x": 150,
-          "y": 115
+          "x": 170,
+          "y": 142
         },
-        {"id":"e94","kind":"wire","points":[{"x":150,"y":115},{"x":210,"y":115}]},
+        {"id":"e100","kind":"wire","number":"010","points":[{"x":170,"y":142},{"x":250,"y":142}]},
         {
-          "id": "e95",
+          "id": "e101",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 3,
           "text": "Corrente di uscita",
-          "x": 70,
-          "y": 117
+          "x": 118,
+          "y": 132
         },
         {
-          "id": "e96",
+          "id": "e102",
           "kind": "rect",
           "assembly": "-A1",
           "dashed": true,
-          "h": 75,
+          "h": 105,
           "label": "PLC",
-          "w": 30,
-          "x": 198,
-          "y": 52
+          "w": 32,
+          "x": 238,
+          "y": 55
         },
         {
-          "id": "e97",
+          "id": "e103",
           "kind": "table",
           "cells": [
             ["Indirizzo","Segnale","Dispositivo"],
@@ -1016,11 +1163,11 @@
           "headerRow": true,
           "rowHeight": 8,
           "size": 3.2,
-          "x": 270,
-          "y": 60
+          "x": 285,
+          "y": 62
         },
         {
-          "id": "e98",
+          "id": "e104",
           "kind": "box",
           "designation": "-A3",
           "functionText": {"en":"HMI operator panel","it":"Pannello operatore HMI"},
@@ -1032,11 +1179,11 @@
           ],
           "variant": "blackbox",
           "w": 50,
-          "x": 70,
-          "y": 170
+          "x": 55,
+          "y": 200
         },
         {
-          "id": "e99",
+          "id": "e105",
           "kind": "box",
           "designation": "-A4",
           "functionText": {"en":"Network switch","it":"Switch di rete"},
@@ -1048,27 +1195,84 @@
           ],
           "variant": "blackbox",
           "w": 50,
-          "x": 200,
-          "y": 170
+          "x": 185,
+          "y": 200
         },
-        {"id":"e100","kind":"wire","points":[{"x":120,"y":175},{"x":200,"y":175}]},
+        {"id":"e106","kind":"wire","number":"013","points":[{"x":105,"y":205},{"x":185,"y":205}]},
         {
-          "id": "e101",
+          "id": "e107",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 2.5,
           "text": "Cavo patch RJ45 Cat 5",
-          "x": 130,
-          "y": 168
+          "x": 125,
+          "y": 198
         },
-        {"id":"e102","kind":"wire","points":[{"x":70,"y":175},{"x":50,"y":175}],"potential":"24VDC"},
-        {"id":"e103","kind":"wire","points":[{"x":70,"y":180},{"x":45,"y":180}],"potential":"0V"},
         {
-          "id": "e104",
+          "id": "e108",
           "kind": "wire",
-          "points": [{"x":250,"y":180},{"x":265,"y":180}],
+          "number": "003P",
+          "points": [{"x":55,"y":205},{"x":20,"y":205}],
           "potential": "24VDC"
+        },
+        {
+          "id": "e109",
+          "kind": "wire",
+          "number": "003M",
+          "points": [{"x":55,"y":210},{"x":10,"y":210}],
+          "potential": "0V"
+        },
+        {
+          "id": "e110",
+          "kind": "wire",
+          "number": "004P",
+          "points": [{"x":235,"y":210},{"x":270,"y":210}],
+          "potential": "24VDC"
+        },
+        {
+          "id": "e111",
+          "kind": "box",
+          "designation": "-X20",
+          "functionText": {"en":"Interface board header","it":"Intestazione scheda interfaccia"},
+          "h": 25,
+          "pins": [
+            {"id":"1","name":"K1","offset":5,"side":"right"},
+            {"id":"2","name":"K2","offset":10,"side":"right"},
+            {"id":"3","name":"24V","offset":15,"side":"right"},
+            {"id":"4","name":"0V","offset":20,"side":"right"}
+          ],
+          "variant": "connector",
+          "w": 20,
+          "x": 300,
+          "y": 195
+        },
+        {
+          "id": "e112",
+          "kind": "box",
+          "designation": "-X21",
+          "functionText": {"en":"PLC input header","it":"Intestazione ingressi PLC"},
+          "h": 25,
+          "pins": [
+            {"id":"1","name":"I0.0","offset":5,"side":"left"},
+            {"id":"2","name":"I0.1","offset":10,"side":"left"},
+            {"id":"3","name":"24V","offset":15,"side":"left"},
+            {"id":"4","name":"0V","offset":20,"side":"left"}
+          ],
+          "variant": "connector",
+          "w": 20,
+          "x": 350,
+          "y": 195
+        },
+        {
+          "id": "e113",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 2.5,
+          "text": "Cavo piatto",
+          "x": 322,
+          "y": 192
         }
       ],
       "location": "DS",
@@ -1077,54 +1281,32 @@
       "title": {"en":"PLC interface","it":"Interfaccia PLC"}
     },
     {
-      "id": "p10",
+      "id": "pg-rep1",
       "type": "terminals",
-      "elements": [
-        {
-          "id": "e105",
-          "kind": "text",
-          "align": "left",
-          "rot": 0,
-          "size": 3,
-          "text": "Questa pagina si compila dagli schemi con le funzioni dei report (milestone M3 e M6).",
-          "x": 40,
-          "y": 40
-        }
-      ],
+      "elements": [{"id":"r-rep2","kind":"report","offset":0,"report":"terminals","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
-      "title": {"en":"Terminals","it":"Morsettiere"}
+      "title": {"it":"Schema morsettiere"}
     },
     {
-      "id": "p11",
+      "id": "pg-rep3",
       "type": "cables",
-      "elements": [
-        {
-          "id": "e106",
-          "kind": "text",
-          "align": "left",
-          "rot": 0,
-          "size": 3,
-          "text": "Questa pagina si compila dagli schemi con le funzioni dei report (milestone M3 e M6).",
-          "x": 40,
-          "y": 40
-        }
-      ],
+      "elements": [{"id":"r-rep4","kind":"report","offset":0,"report":"cables","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
-      "title": {"en":"Cables","it":"Cavi"}
+      "title": {"it":"Elenco cavi"}
     },
     {
-      "id": "p12",
+      "id": "p10",
       "type": "layout",
       "elements": [
         {
-          "id": "e107",
+          "id": "e114",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 3,
-          "text": "Questa pagina si compila dagli schemi con le funzioni dei report (milestone M3 e M6).",
+          "text": "Questa pagina si compila con il layout del quadro (milestone M6).",
           "x": 40,
           "y": 40
         }
@@ -1132,6 +1314,94 @@
       "size": "A3",
       "templateId": "",
       "title": {"en":"Cabinet layout","it":"Layout quadro"}
+    },
+    {
+      "id": "pg-rep5",
+      "type": "report",
+      "elements": [{"id":"r-rep6","kind":"report","offset":0,"report":"wires","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Elenco fili 1/2"}
+    },
+    {
+      "id": "pg-rep7",
+      "type": "report",
+      "elements": [{"id":"r-rep8","kind":"report","offset":34,"report":"wires","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Elenco fili 2/2"}
+    },
+    {
+      "id": "pg-rep9",
+      "type": "report",
+      "elements": [{"id":"r-rep10","kind":"report","offset":0,"report":"pins","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Elenchi pin dei connettori"}
+    },
+    {
+      "id": "pg-rep11",
+      "type": "bom",
+      "elements": [{"id":"r-rep12","kind":"report","offset":0,"report":"bom","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Distinta materiali 1/2"}
+    },
+    {
+      "id": "pg-rep13",
+      "type": "bom",
+      "elements": [{"id":"r-rep14","kind":"report","offset":34,"report":"bom","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Distinta materiali 2/2"}
+    },
+    {
+      "id": "pg-rep15",
+      "type": "report",
+      "elements": [{"id":"r-rep16","kind":"report","offset":0,"report":"legend","rows":14,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Legenda dei simboli 1/2"}
+    },
+    {
+      "id": "pg-rep17",
+      "type": "report",
+      "elements": [{"id":"r-rep18","kind":"report","offset":14,"report":"legend","rows":14,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Legenda dei simboli 2/2"}
+    },
+    {
+      "id": "pg-rep19",
+      "type": "report",
+      "elements": [{"id":"r-rep20","kind":"report","offset":0,"report":"colours","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Colori dei conduttori"}
+    },
+    {
+      "id": "pg-rep21",
+      "type": "report",
+      "elements": [{"id":"r-rep22","kind":"report","offset":0,"report":"suffixes","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Suffissi dei numeri filo"}
+    },
+    {
+      "id": "pg-rep23",
+      "type": "report",
+      "elements": [{"id":"r-rep24","kind":"report","offset":0,"report":"torque","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Coppie di serraggio dei morsetti"}
+    },
+    {
+      "id": "pg-rep25",
+      "type": "report",
+      "elements": [{"id":"r-rep26","kind":"report","offset":0,"report":"nameplates","rows":40,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"it":"Targhette"}
     }
   ],
   "assets": {},
@@ -1161,7 +1431,7 @@
     },
     {
       "designation": "+DS-F1",
-      "fields": {},
+      "fields": {"nameplate":"Fusibile batteria\n63 A DC"},
       "parent": "+DS-A5",
       "parts": [{"part":"generic-fuse-holder-dc-63a","qty":1},{"part":"generic-fuse-link-dc-63a","qty":1}]
     },
@@ -1193,7 +1463,11 @@
       "fields": {},
       "parts": [{"part":"generic-panel-meter-dc-voltmeter","qty":1}]
     },
-    {"designation":"+DS-QF1","fields":{},"parts":[{"part":"generic-mcb-3p-c32a","qty":1}]},
+    {
+      "designation": "+DS-QF1",
+      "fields": {"nameplate":"Ingresso c.a.\nalimentazione ausiliari"},
+      "parts": [{"part":"generic-mcb-3p-c32a","qty":1}]
+    },
     {
       "designation": "+DS-T1",
       "fields": {"make":"Acquisto","notes":"Gruppo vettoriale Dyn11"},
@@ -1222,6 +1496,15 @@
       "parts": [{"part":"generic-diode-power-50a-1600v","qty":1}]
     },
     {
+      "designation": "+DS-X1",
+      "fields": {},
+      "parts": [
+        {"part":"generic-terminal-feedthrough-6mm2","qty":1},
+        {"part":"generic-terminal-end-plate","qty":1},
+        {"part":"generic-terminal-end-stop","qty":2}
+      ]
+    },
+    {
       "designation": "+DS-X10",
       "fields": {},
       "parts": [{"part":"generic-connector-header-10pin","qty":1}]
@@ -1230,6 +1513,16 @@
       "designation": "+DS-X11",
       "fields": {},
       "parts": [{"part":"generic-connector-plug-socket-8pole","qty":1}]
+    },
+    {
+      "designation": "+DS-X20",
+      "fields": {},
+      "parts": [{"part":"generic-connector-header-10pin","qty":1}]
+    },
+    {
+      "designation": "+DS-X21",
+      "fields": {},
+      "parts": [{"part":"generic-connector-header-10pin","qty":1}]
     }
   ],
   "parts": [
@@ -1671,7 +1964,12 @@
       "kind": "part",
       "category": "terminals",
       "code": "GEN-TERMINAL-FEEDTHROUGH-4MM2",
-      "data": {"Conductor cross-section":"4 mm²","Connection":"Screw"},
+      "data": {
+        "Conductor cross-section": "4 mm²",
+        "Connection": "Screw",
+        "Tightening torque": "0.8 Nm",
+        "Width": "6.2 mm"
+      },
       "description": {
         "en": "Feed-through terminal, 4 mm², screw connection",
         "it": "Morsetto passante, 4 mm², a vite"
@@ -1690,7 +1988,12 @@
       "kind": "part",
       "category": "terminals",
       "code": "GEN-TERMINAL-PE-4MM2",
-      "data": {"Colour":"GNYE","Conductor cross-section":"4 mm²"},
+      "data": {
+        "Colour": "GNYE",
+        "Conductor cross-section": "4 mm²",
+        "Tightening torque": "0.8 Nm",
+        "Width": "6.2 mm"
+      },
       "description": {
         "en": "Protective earth terminal, 4 mm², green-yellow",
         "it": "Morsetto di terra PE, 4 mm², giallo-verde"
@@ -1718,15 +2021,52 @@
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
     },
     {
-      "id": "generic-cable-patch-rj45-cat5e",
+      "id": "generic-terminal-feedthrough-6mm2",
       "kind": "part",
-      "category": "cables",
-      "code": "GEN-CABLE-PATCH-RJ45-CAT5E",
-      "data": {"Category":"5e","Connectors":"RJ45","Length":"2 m"},
-      "description": {"en":"Patch cable RJ45, category 5e, 2 m","it":"Cavo patch RJ45, categoria 5e, 2 m"},
+      "category": "terminals",
+      "code": "GEN-TERMINAL-FEEDTHROUGH-6MM2",
+      "data": {
+        "Conductor cross-section": "6 mm²",
+        "Connection": "Screw",
+        "Tightening torque": "1.2 Nm",
+        "Width": "8.2 mm"
+      },
+      "description": {
+        "en": "Feed-through terminal, 6 mm², screw connection",
+        "it": "Morsetto passante, 6 mm², a vite"
+      },
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
-      "title": {"en":"Patch cable RJ45, category 5e, 2 m","it":"Cavo patch RJ45, categoria 5e, 2 m"},
+      "title": {
+        "en": "Feed-through terminal, 6 mm², screw connection",
+        "it": "Morsetto passante, 6 mm², a vite"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-terminal-end-plate",
+      "kind": "part",
+      "category": "terminals",
+      "code": "GEN-TERMINAL-END-PLATE",
+      "data": {"Width":"2.2 mm"},
+      "description": {"en":"End plate for terminal strip","it":"Piastra di chiusura per morsettiera"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"End plate for terminal strip","it":"Piastra di chiusura per morsettiera"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-terminal-end-stop",
+      "kind": "part",
+      "category": "terminals",
+      "code": "GEN-TERMINAL-END-STOP",
+      "data": {"Width":"9.5 mm"},
+      "description": {"en":"End stop for DIN rail terminal strip","it":"Fermo di fine morsettiera per guida DIN"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"End stop for DIN rail terminal strip","it":"Fermo di fine morsettiera per guida DIN"},
       "verification": "secondary",
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
     },
@@ -1746,6 +2086,19 @@
         "en": "Flat ribbon cable with two 10-pole IDC connectors",
         "it": "Cavo piatto con due connettori IDC a 10 poli"
       },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-cable-patch-rj45-cat5e",
+      "kind": "part",
+      "category": "cables",
+      "code": "GEN-CABLE-PATCH-RJ45-CAT5E",
+      "data": {"Category":"5e","Conductors":"8","Connectors":"RJ45","Length":"2 m"},
+      "description": {"en":"Patch cable RJ45, category 5e, 2 m","it":"Cavo patch RJ45, categoria 5e, 2 m"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"Patch cable RJ45, category 5e, 2 m","it":"Cavo patch RJ45, categoria 5e, 2 m"},
       "verification": "secondary",
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
     }
@@ -1777,18 +2130,40 @@
       "qty": 20
     },
     {"id":"pp-generic-terminal-pe-4mm2","fields":{},"part":"generic-terminal-pe-4mm2","qty":6},
-    {"id":"pp-generic-cable-duct-60x60-2m","fields":{},"part":"generic-cable-duct-60x60-2m","qty":4},
+    {"id":"pp-generic-cable-duct-60x60-2m","fields":{},"part":"generic-cable-duct-60x60-2m","qty":4}
+  ],
+  "wireClasses": [
+    {"id":"L1","type":"H07V-K","colour":"BK","crossSection":"2.5","suffix":"L1"},
+    {"id":"L2","type":"H07V-K","colour":"BK","crossSection":"2.5","suffix":"L2"},
+    {"id":"L3","type":"H07V-K","colour":"BK","crossSection":"2.5","suffix":"L3"},
+    {"id":"N","type":"H07V-K","colour":"BU","crossSection":"2.5","suffix":"N"},
+    {"id":"PE","type":"H07V-K","colour":"GNYE","crossSection":"2.5","suffix":"PE"},
+    {"id":"L+","type":"H07V-K","colour":"BK","crossSection":"2.5","suffix":"L+"},
+    {"id":"L-","type":"H07V-K","colour":"BK","crossSection":"2.5","suffix":"L-"},
+    {"id":"24VDC","type":"H07V-K","colour":"BU","crossSection":"1.5","suffix":"P"},
+    {"id":"0V","type":"H07V-K","colour":"BU","crossSection":"1.5","suffix":"M"},
+    {"id":"110VDC","type":"H07V-K","colour":"BK","crossSection":"1.5","suffix":"P"},
+    {"id":"signal","type":"H07V-K","colour":"BK","crossSection":"1.5","suffix":""}
+  ],
+  "wireTypes": [],
+  "cables": [
     {
-      "id": "pp-generic-cable-patch-rj45-cat5e",
-      "fields": {},
-      "part": "generic-cable-patch-rj45-cat5e",
-      "qty": 1
+      "id": "-W1",
+      "kind": "ribbon",
+      "from": "-X20",
+      "functionText": {"en":"PLC interface ribbon cable","it":"Cavo piatto interfaccia PLC"},
+      "length": "0,3 m",
+      "part": "generic-cable-ribbon-flat-10pole",
+      "to": "-X21"
     },
     {
-      "id": "pp-generic-cable-ribbon-flat-10pole",
-      "fields": {},
-      "part": "generic-cable-ribbon-flat-10pole",
-      "qty": 1
+      "id": "-W2",
+      "kind": "patch",
+      "from": "-A3:ETH",
+      "functionText": {"en":"HMI to switch link","it":"Collegamento HMI - switch"},
+      "length": "2 m",
+      "part": "generic-cable-patch-rj45-cat5e",
+      "to": "-A4:P1"
     }
   ]
 }

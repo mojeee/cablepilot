@@ -48,8 +48,12 @@ export interface CablePilotApi {
     save(text: string, path: string | null, suggestedName: string): Promise<Result<SavedFile | null>>;
     /** Asks where to write a PDF and writes it; null when the user cancels. */
     exportPdf(bytes: Uint8Array, suggestedName: string): Promise<Result<SavedFile | null>>;
-    /** Asks where to write a text file (the BOM as CSV) and writes it; null when the user cancels. */
+    /** Asks where to write a text file (CSV, DXF; the filter follows the file name) and writes it; null when the user cancels. */
     exportText(text: string, suggestedName: string): Promise<Result<SavedFile | null>>;
+    /** Asks where to write a binary file (XLSX) and writes it; null when the user cancels. */
+    exportBinary(bytes: Uint8Array, suggestedName: string): Promise<Result<SavedFile | null>>;
+    /** Asks for a DXF file and reads it; null when the user cancels. */
+    importDxf(): Promise<Result<{ text: string; name: string } | null>>;
   };
   samples: {
     list(): Promise<Result<SampleInfo[]>>;

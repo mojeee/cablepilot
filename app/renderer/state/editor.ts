@@ -14,7 +14,12 @@ import { computeBom, bomToCsv } from '@shared/bom';
 import { macroFromSelection } from '@shared/macros';
 import { newPage, newProject } from '@shared/model/defaults';
 import { pageById } from '@shared/model/queries';
-import type { BoxEl, El, Page, Project, WarningSign } from '@shared/model/types';
+import type { BoxEl, El, Page, Project, ReportId, WarningSign } from '@shared/model/types';
+import { reportCsv, workbookBytes } from '@shared/export/lists';
+import { dxfElements, writeDxf } from '@shared/export/dxf';
+import { buildPage } from '@shared/draw/page';
+import { reportCapacity, reportPageCommands, reportSyncCommands } from '@shared/draw/report';
+import { rt } from '@shared/reportText';
 import { FORM_PRESETS } from '@shared/forms';
 import { frameRect } from '@shared/draw/page';
 import { templateOf } from '@shared/model/queries';
@@ -22,10 +27,11 @@ import { exportPdf } from '@shared/pdf';
 import { sheetMm, type PageType, type SheetSize } from '@shared/sheets';
 import { BUILTIN_MACROS, BUILTIN_PARTS, BUILTIN_SYMBOLS } from '../library';
 import { rasterizeSvg } from '../render/svg';
+import { loadPdfFonts } from '../render/fonts';
 import { useUi } from './ui';
 
 export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'line' | 'rect' | 'dashed' | 'table' | 'image' | 'warning';
-export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom';
+export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires';
 
 export interface Recovery {
   id: string;
@@ -88,6 +94,13 @@ interface EditorState {
   placeMacro(id: string, x: number, y: number): void;
   saveMacro(name: string): Promise<void>;
   exportBom(): Promise<void>;
+  renumberWires(): void;
+  exportReportCsv(id: ReportId): Promise<void>;
+  exportXlsx(): Promise<void>;
+  exportDxf(): Promise<void>;
+  importDxf(): Promise<void>;
+  addReportPages(ids: ReportId[]): void;
+  syncReportPages(): void;
   loadCompany(): Promise<void>;
   checkRecovery(): Promise<void>;
   recover(id: string): Promise<void>;
@@ -106,6 +119,14 @@ export function makePage(project: Project, type: PageType, title: string, size: 
     const { w, h } = sheetMm(size);
     const f = frameRect(tpl, w, h);
     return { ...page, title: { [lang]: title || preset.title[lang] }, elements: [{ id: newId('f'), kind: 'form', x: f.fx + 10, y: f.fy + 8, w: 170, items: preset.items }] };
+  }
+  // Terminal, cable and BOM pages show their live report from the first row.
+  const report: ReportId | undefined = type === 'terminals' ? 'terminals' : type === 'cables' ? 'cables' : type === 'bom' ? 'bom' : undefined;
+  if (report) {
+    const { w, h } = sheetMm(size);
+    const f = frameRect(templateOf(project, page), w, h);
+    const x = f.fx + 8, y = f.fy + 8;
+    return { ...page, elements: [{ id: newId('r'), kind: 'report', x, y, report, offset: 0, rows: reportCapacity(project, page, report, y) }] };
   }
   return page;
 }
@@ -237,7 +258,13 @@ export const useEditor = create<EditorState>((set, get) => {
       const p = get().project();
       const pageIds = scope === 'page' ? [get().pageId] : undefined;
       flash('info', () => t('Exporting PDF...'));
-      const bytes = await exportPdf(p, get().lib, { pageIds, rasterizeSvg, creator: 'CablePilot' });
+      let bytes: Uint8Array;
+      try {
+        bytes = await exportPdf(p, get().lib, { pageIds, rasterizeSvg, creator: 'CablePilot', fonts: await loadPdfFonts() });
+      } catch (e) {
+        const detail = e instanceof Error ? e.message : String(e);
+        return flash('error', () => t('The PDF could not be made: {detail}', { detail }));
+      }
       const r = await window.cablepilot.files.exportPdf(bytes, projectFileName(p).replace(/\.cablepilot\.json$/, '.pdf'));
       if (!r.ok) return errMsg(r.error);
       if (r.value) {
@@ -299,6 +326,66 @@ export const useEditor = create<EditorState>((set, get) => {
         const { name } = r.value;
         flash('info', () => t('BOM exported to {name}.', { name }));
       }
+    },
+
+    renumberWires: () => {
+      const before = get().project();
+      get().exec({ type: 'wire/renumber' });
+      const changed = get().project() !== before;
+      flash(changed ? 'info' : 'warning', () => (changed ? t('Wires numbered.') : t('No wire numbers changed.')));
+    },
+    exportReportCsv: async (id) => {
+      const p = get().project();
+      const name = rt(p.settings.drawingLanguage, `report.${id}` as 'report.bom');
+      const r = await window.cablepilot.files.exportText(reportCsv(p, get().lib, id), `${projectFileName(p).replace(/\.cablepilot\.json$/, '')}-${id}.csv`);
+      if (!r.ok) return errMsg(r.error);
+      if (r.value) { const file = r.value.name; flash('info', () => t('{list} exported to {name}.', { list: name, name: file })); }
+    },
+    exportXlsx: async () => {
+      const p = get().project();
+      const r = await window.cablepilot.files.exportBinary(workbookBytes(p, get().lib), projectFileName(p).replace(/\.cablepilot\.json$/, '.xlsx'));
+      if (!r.ok) return errMsg(r.error);
+      if (r.value) { const file = r.value.name; flash('info', () => t('Lists exported to {name}.', { name: file })); }
+    },
+    exportDxf: async () => {
+      const p = get().project();
+      const i = p.pages.findIndex((x) => x.id === get().pageId);
+      if (i < 0) return;
+      const built = buildPage(p, p.pages[i], get().lib, i);
+      const r = await window.cablepilot.files.exportText(writeDxf(built.prims, built.height), `${projectFileName(p).replace(/\.cablepilot\.json$/, '')}-${String(i + 1).padStart(2, '0')}.dxf`);
+      if (!r.ok) return errMsg(r.error);
+      if (r.value) { const file = r.value.name; flash('info', () => t('Page exported to {name}.', { name: file })); }
+    },
+    importDxf: async () => {
+      const r = await window.cablepilot.files.importDxf();
+      if (!r.ok) return errMsg(r.error);
+      if (!r.value) return;
+      const p = get().project();
+      const size = p.settings.defaultSize;
+      const page = newPage(newId('pg'), 'layout', { [p.settings.drawingLanguage]: r.value.name.replace(/\.dxf$/i, '') }, size);
+      const f = frameRect(templateOf(p, page), sheetMm(size).w, sheetMm(size).h);
+      const res = dxfElements(r.value.text, () => newId('e'), { x0: f.fx + 5, y0: f.fy + 5, maxW: f.fw - 10, maxH: f.fh - 50 });
+      if (res.elements.length === 0) return flash('warning', () => t('The DXF file has no lines or texts this app can read.'));
+      const at = Math.max(0, p.pages.findIndex((x) => x.id === get().pageId)) + 1;
+      get().exec({ type: 'page/add', page: { ...page, elements: res.elements }, index: at });
+      set({ pageId: page.id, selection: [] });
+      const skipped = Object.values(res.skipped).reduce((a, b) => a + b, 0);
+      const n = res.elements.length;
+      flash(skipped ? 'warning' : 'info', () => (skipped ? t('Imported {n} graphics from the DXF; {skipped} other objects were skipped.', { n, skipped }) : t('Imported {n} graphics from the DXF.', { n })));
+    },
+    addReportPages: (ids) => {
+      const p = get().project();
+      const at = Math.max(0, p.pages.findIndex((x) => x.id === get().pageId)) + 1;
+      const cmds = reportPageCommands(p, get().lib, ids, at);
+      if (cmds.length === 0) return;
+      get().exec({ type: 'batch', label: 'add report pages', commands: cmds });
+      flash('info', () => t('Added {n} report pages.', { n: cmds.length }));
+    },
+    syncReportPages: () => {
+      const cmds = reportSyncCommands(get().project(), get().lib);
+      if (cmds.length === 0) return flash('info', () => t('All report pages are complete.'));
+      get().exec({ type: 'batch', label: 'complete report pages', commands: cmds });
+      flash('info', () => t('Added {n} report pages.', { n: cmds.length }));
     },
 
     placeSymbol: (symbolId, x, y, rot, mirror) => {

@@ -2,11 +2,12 @@
 
 import { DEFAULT_POTENTIALS } from '../potentials';
 import { zoneRange } from './zones';
+import { DEFAULT_NUMBERING, DEFAULT_WIRE_CLASSES } from './wireDefaults';
 import type { BomSettings, CrossRefSettings, DrawingStyle, Page, Project, ProjectSettings, Template, TitleCell } from './types';
 import { PROJECT_FORMAT } from './types';
 import type { SheetSize } from '../sheets';
 
-export const CURRENT_VERSION = 2;
+export const CURRENT_VERSION = 3;
 
 /** Designations and wire numbers in red, as on the reference style of production sets (brief, M1). */
 export const DEFAULT_STYLE: DrawingStyle = {
@@ -77,6 +78,8 @@ export function defaultSettings(): ProjectSettings {
     defaultTemplateId: 'default',
     crossRef: { ...DEFAULT_CROSSREF },
     bom: structuredClone(DEFAULT_BOM),
+    numbering: { ...DEFAULT_NUMBERING },
+    wireColours: false,
   };
 }
 
@@ -97,6 +100,9 @@ export function newProject(id: string, name: string, patch: Partial<ProjectSetti
     devices: [],
     parts: [],
     projectParts: [],
+    wireClasses: structuredClone(DEFAULT_WIRE_CLASSES),
+    wireTypes: [],
+    cables: [],
   };
 }
 

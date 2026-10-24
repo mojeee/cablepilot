@@ -14,7 +14,9 @@
   },
   "data": {
     "Conductor cross-section": "6 mm²",
-    "Connection": "Screw"
+    "Connection": "Screw",
+    "Width": "8.2 mm",
+    "Tightening torque": "1.2 Nm"
   },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",

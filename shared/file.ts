@@ -4,12 +4,13 @@
 import { PAGE_TYPES } from './sheets';
 import { SHEET_SIZES } from './sheets';
 import { CURRENT_VERSION, DEFAULT_BOM, DEFAULT_CROSSREF } from './model/defaults';
+import { DEFAULT_NUMBERING, DEFAULT_WIRE_CLASSES } from './model/wireDefaults';
 import { PROJECT_FORMAT, type Project } from './model/types';
 import { fail, ok, type Result } from './result';
 
 /** Key order of the written file: identity first, then the rest alphabetically; top level is fixed. */
 const FIRST = ['id', 'kind', 'type', 'name'];
-const TOP = ['format', 'version', 'id', 'name', 'settings', 'properties', 'assembly', 'templates', 'potentials', 'pages', 'assets', 'symbols', 'devices', 'parts', 'projectParts'];
+const TOP = ['format', 'version', 'id', 'name', 'settings', 'properties', 'assembly', 'templates', 'potentials', 'pages', 'assets', 'symbols', 'devices', 'parts', 'projectParts', 'wireClasses', 'wireTypes', 'cables'];
 
 function orderedKeys(o: Record<string, unknown>, top: boolean): string[] {
   const keys = Object.keys(o).filter((k) => o[k] !== undefined);
@@ -48,6 +49,11 @@ export const MIGRATIONS: Record<number, Migration> = {
     const settings = (d.settings ?? {}) as Record<string, unknown>;
     return { ...d, settings: { ...settings, crossRef: structuredClone(DEFAULT_CROSSREF), bom: structuredClone(DEFAULT_BOM) }, devices: [], parts: [], projectParts: [] };
   },
+  // 2 -> 3 (M3): numbering and wire-colour settings, the wire-class table, wire types and cables.
+  2: (d) => {
+    const settings = (d.settings ?? {}) as Record<string, unknown>;
+    return { ...d, settings: { ...settings, numbering: { ...DEFAULT_NUMBERING }, wireColours: false }, wireClasses: structuredClone(DEFAULT_WIRE_CLASSES), wireTypes: [], cables: [] };
+  },
 };
 
 export function migrate(data: Record<string, unknown>, migrations: Record<number, Migration> = MIGRATIONS, target = CURRENT_VERSION): Result<Record<string, unknown>> {
@@ -84,6 +90,7 @@ const NEEDS: Record<string, (e: Record<string, unknown>) => boolean> = {
   table: (e) => isNum(e.x) && isNum(e.y) && Array.isArray(e.colWidths) && e.colWidths.every(isNum) && isNum(e.rowHeight) && Array.isArray(e.cells) && e.cells.every((r) => Array.isArray(r) && r.every(isStr)) && isNum(e.size),
   image: (e) => isNum(e.x) && isNum(e.y) && isNum(e.w) && isNum(e.h) && isStr(e.assetId),
   warning: (e) => isNum(e.x) && isNum(e.y) && isNum(e.size) && ['general', 'electric', 'hot', 'autostart'].includes(e.sign as string),
+  report: (e) => isNum(e.x) && isNum(e.y) && isStr(e.report) && isNum(e.offset) && isNum(e.rows),
   form: (e) => isNum(e.x) && isNum(e.y) && isNum(e.w) && Array.isArray(e.items),
 };
 
@@ -119,7 +126,8 @@ export function validateProject(d: unknown): string[] {
   if (!Array.isArray(d.devices) || !d.devices.every((r) => isObj(r) && isStr(r.designation) && Array.isArray(r.parts) && isObj(r.fields))) errs.push('devices must be an array of device records');
   if (!Array.isArray(d.parts)) errs.push('parts must be an array');
   if (!Array.isArray(d.projectParts) || !d.projectParts.every((r) => isObj(r) && isStr(r.id) && isStr(r.part) && isNum(r.qty))) errs.push('projectParts must be an array of parts');
-  if (isObj(s) && (!isObj(s.crossRef) || !isObj(s.bom))) errs.push('settings.crossRef and settings.bom are required');
+  if (isObj(s) && (!isObj(s.crossRef) || !isObj(s.bom) || !isObj(s.numbering))) errs.push('settings.crossRef, settings.bom and settings.numbering are required');
+  if (!Array.isArray(d.wireClasses) || !Array.isArray(d.wireTypes) || !Array.isArray(d.cables)) errs.push('wireClasses, wireTypes and cables must be arrays');
   if (!Array.isArray(d.pages)) errs.push('pages must be an array');
   else {
     const ids = new Set<string>();

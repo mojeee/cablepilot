@@ -1,6 +1,6 @@
 {
   "format": "cablepilot-project",
-  "version": 2,
+  "version": 3,
   "id": "sample-pump-station",
   "name": "Pump station, two pumps",
   "settings": {
@@ -26,6 +26,7 @@
     "defaultSize": "A3",
     "defaultTemplateId": "default",
     "drawingLanguage": "en",
+    "numbering": {"pattern":"{n:3}{suffix}","scheme":"potential","start":1,"step":1},
     "style": {
       "colours": {
         "annotation": "#000000",
@@ -41,7 +42,8 @@
       "textSizes": {"designation":3.5,"text":3.5,"wireNumber":2.5},
       "weights": {"annotation":0.35,"frame":0.7,"symbol":0.35,"wire":0.35}
     },
-    "symbolStandard": "iec"
+    "symbolStandard": "iec",
+    "wireColours": true
   },
   "properties": {
     "client": "Example Water Utility",
@@ -475,42 +477,82 @@
           "x": 110,
           "y": 205
         },
-        {"id":"e24","kind":"wire","points":[{"x":105,"y":28},{"x":105,"y":50}],"potential":"L1"},
-        {"id":"e25","kind":"wire","points":[{"x":110,"y":28},{"x":110,"y":50}],"potential":"L2"},
-        {"id":"e26","kind":"wire","points":[{"x":115,"y":28},{"x":115,"y":50}],"potential":"L3"},
-        {"id":"e27","kind":"wire","number":"1","points":[{"x":105,"y":60},{"x":105,"y":75}]},
-        {"id":"e28","kind":"wire","number":"2","points":[{"x":110,"y":60},{"x":110,"y":75}]},
-        {"id":"e29","kind":"wire","number":"3","points":[{"x":115,"y":60},{"x":115,"y":75}]},
-        {"id":"e30","kind":"wire","number":"4","points":[{"x":105,"y":85},{"x":105,"y":100}]},
-        {"id":"e31","kind":"wire","number":"5","points":[{"x":110,"y":85},{"x":110,"y":100}]},
-        {"id":"e32","kind":"wire","number":"6","points":[{"x":115,"y":85},{"x":115,"y":100}]},
-        {"id":"e33","kind":"wire","number":"7","points":[{"x":105,"y":110},{"x":105,"y":150}]},
-        {"id":"e34","kind":"wire","number":"8","points":[{"x":110,"y":110},{"x":110,"y":150}]},
-        {"id":"e35","kind":"wire","number":"9","points":[{"x":115,"y":110},{"x":115,"y":150}]},
-        {"id":"e36","kind":"wire","points":[{"x":140,"y":165},{"x":140,"y":130},{"x":105,"y":130}]},
+        {
+          "id": "e24",
+          "kind": "wire",
+          "number": "001L1",
+          "points": [{"x":105,"y":28},{"x":105,"y":50}],
+          "potential": "L1"
+        },
+        {
+          "id": "e25",
+          "kind": "wire",
+          "number": "001L2",
+          "points": [{"x":110,"y":28},{"x":110,"y":50}],
+          "potential": "L2"
+        },
+        {
+          "id": "e26",
+          "kind": "wire",
+          "number": "001L3",
+          "points": [{"x":115,"y":28},{"x":115,"y":50}],
+          "potential": "L3"
+        },
+        {"id":"e27","kind":"wire","number":"001","points":[{"x":105,"y":60},{"x":105,"y":75}]},
+        {"id":"e28","kind":"wire","number":"006","points":[{"x":110,"y":60},{"x":110,"y":75}]},
+        {"id":"e29","kind":"wire","number":"010","points":[{"x":115,"y":60},{"x":115,"y":75}]},
+        {"id":"e30","kind":"wire","number":"002","points":[{"x":105,"y":85},{"x":105,"y":100}]},
+        {"id":"e31","kind":"wire","number":"007","points":[{"x":110,"y":85},{"x":110,"y":100}]},
+        {"id":"e32","kind":"wire","number":"011","points":[{"x":115,"y":85},{"x":115,"y":100}]},
+        {"id":"e33","kind":"wire","number":"003","points":[{"x":105,"y":110},{"x":105,"y":150}]},
+        {"id":"e34","kind":"wire","number":"008","points":[{"x":110,"y":110},{"x":110,"y":150}]},
+        {"id":"e35","kind":"wire","number":"012","points":[{"x":115,"y":110},{"x":115,"y":150}]},
+        {
+          "id": "e36",
+          "kind": "wire",
+          "number": "003",
+          "points": [{"x":140,"y":165},{"x":140,"y":130},{"x":105,"y":130}]
+        },
         {"id":"e36-j1","kind":"junction","x":105,"y":130},
         {
           "id": "e37",
           "kind": "wire",
+          "number": "008",
           "points": [{"x":145,"y":165},{"x":145,"y":127.5},{"x":110,"y":127.5}]
         },
         {"id":"e37-j1","kind":"junction","x":110,"y":127.5},
-        {"id":"e38","kind":"wire","points":[{"x":150,"y":165},{"x":150,"y":125},{"x":115,"y":125}]},
+        {
+          "id": "e38",
+          "kind": "wire",
+          "number": "012",
+          "points": [{"x":150,"y":165},{"x":150,"y":125},{"x":115,"y":125}]
+        },
         {"id":"e38-j1","kind":"junction","x":115,"y":125},
-        {"id":"e39","kind":"wire","points":[{"x":140,"y":175},{"x":140,"y":185},{"x":105,"y":185}]},
+        {
+          "id": "e39",
+          "kind": "wire",
+          "number": "004",
+          "points": [{"x":140,"y":175},{"x":140,"y":185},{"x":105,"y":185}]
+        },
         {
           "id": "e40",
           "kind": "wire",
+          "number": "009",
           "points": [{"x":145,"y":175},{"x":145,"y":182.5},{"x":110,"y":182.5}]
         },
-        {"id":"e41","kind":"wire","points":[{"x":150,"y":175},{"x":150,"y":180},{"x":115,"y":180}]},
-        {"id":"e42","kind":"wire","points":[{"x":105,"y":170},{"x":105,"y":200}]},
+        {
+          "id": "e41",
+          "kind": "wire",
+          "number": "013",
+          "points": [{"x":150,"y":175},{"x":150,"y":180},{"x":115,"y":180}]
+        },
+        {"id":"e42","kind":"wire","number":"004","points":[{"x":105,"y":170},{"x":105,"y":200}]},
         {"id":"e42-j1","kind":"junction","x":105,"y":185},
-        {"id":"e43","kind":"wire","points":[{"x":110,"y":170},{"x":110,"y":200}]},
+        {"id":"e43","kind":"wire","number":"009","points":[{"x":110,"y":170},{"x":110,"y":200}]},
         {"id":"e43-j1","kind":"junction","x":110,"y":182.5},
-        {"id":"e44","kind":"wire","points":[{"x":115,"y":170},{"x":115,"y":200}]},
+        {"id":"e44","kind":"wire","number":"013","points":[{"x":115,"y":170},{"x":115,"y":200}]},
         {"id":"e44-j1","kind":"junction","x":115,"y":180},
-        {"id":"e45","kind":"wire","points":[{"x":105,"y":210},{"x":115,"y":210}]},
+        {"id":"e45","kind":"wire","number":"005","points":[{"x":105,"y":210},{"x":115,"y":210}]},
         {
           "id": "e46",
           "kind": "rect",
@@ -587,42 +629,82 @@
           "x": 300,
           "y": 205
         },
-        {"id":"e53","kind":"wire","points":[{"x":295,"y":28},{"x":295,"y":50}],"potential":"L1"},
-        {"id":"e54","kind":"wire","points":[{"x":300,"y":28},{"x":300,"y":50}],"potential":"L2"},
-        {"id":"e55","kind":"wire","points":[{"x":305,"y":28},{"x":305,"y":50}],"potential":"L3"},
-        {"id":"e56","kind":"wire","number":"10","points":[{"x":295,"y":60},{"x":295,"y":75}]},
-        {"id":"e57","kind":"wire","number":"11","points":[{"x":300,"y":60},{"x":300,"y":75}]},
-        {"id":"e58","kind":"wire","number":"12","points":[{"x":305,"y":60},{"x":305,"y":75}]},
-        {"id":"e59","kind":"wire","number":"13","points":[{"x":295,"y":85},{"x":295,"y":100}]},
-        {"id":"e60","kind":"wire","number":"14","points":[{"x":300,"y":85},{"x":300,"y":100}]},
-        {"id":"e61","kind":"wire","number":"15","points":[{"x":305,"y":85},{"x":305,"y":100}]},
-        {"id":"e62","kind":"wire","number":"16","points":[{"x":295,"y":110},{"x":295,"y":150}]},
-        {"id":"e63","kind":"wire","number":"17","points":[{"x":300,"y":110},{"x":300,"y":150}]},
-        {"id":"e64","kind":"wire","number":"18","points":[{"x":305,"y":110},{"x":305,"y":150}]},
-        {"id":"e65","kind":"wire","points":[{"x":330,"y":165},{"x":330,"y":130},{"x":295,"y":130}]},
+        {
+          "id": "e53",
+          "kind": "wire",
+          "number": "002L1",
+          "points": [{"x":295,"y":28},{"x":295,"y":50}],
+          "potential": "L1"
+        },
+        {
+          "id": "e54",
+          "kind": "wire",
+          "number": "002L2",
+          "points": [{"x":300,"y":28},{"x":300,"y":50}],
+          "potential": "L2"
+        },
+        {
+          "id": "e55",
+          "kind": "wire",
+          "number": "002L3",
+          "points": [{"x":305,"y":28},{"x":305,"y":50}],
+          "potential": "L3"
+        },
+        {"id":"e56","kind":"wire","number":"014","points":[{"x":295,"y":60},{"x":295,"y":75}]},
+        {"id":"e57","kind":"wire","number":"019","points":[{"x":300,"y":60},{"x":300,"y":75}]},
+        {"id":"e58","kind":"wire","number":"023","points":[{"x":305,"y":60},{"x":305,"y":75}]},
+        {"id":"e59","kind":"wire","number":"015","points":[{"x":295,"y":85},{"x":295,"y":100}]},
+        {"id":"e60","kind":"wire","number":"020","points":[{"x":300,"y":85},{"x":300,"y":100}]},
+        {"id":"e61","kind":"wire","number":"024","points":[{"x":305,"y":85},{"x":305,"y":100}]},
+        {"id":"e62","kind":"wire","number":"016","points":[{"x":295,"y":110},{"x":295,"y":150}]},
+        {"id":"e63","kind":"wire","number":"021","points":[{"x":300,"y":110},{"x":300,"y":150}]},
+        {"id":"e64","kind":"wire","number":"025","points":[{"x":305,"y":110},{"x":305,"y":150}]},
+        {
+          "id": "e65",
+          "kind": "wire",
+          "number": "016",
+          "points": [{"x":330,"y":165},{"x":330,"y":130},{"x":295,"y":130}]
+        },
         {"id":"e65-j1","kind":"junction","x":295,"y":130},
         {
           "id": "e66",
           "kind": "wire",
+          "number": "021",
           "points": [{"x":335,"y":165},{"x":335,"y":127.5},{"x":300,"y":127.5}]
         },
         {"id":"e66-j1","kind":"junction","x":300,"y":127.5},
-        {"id":"e67","kind":"wire","points":[{"x":340,"y":165},{"x":340,"y":125},{"x":305,"y":125}]},
+        {
+          "id": "e67",
+          "kind": "wire",
+          "number": "025",
+          "points": [{"x":340,"y":165},{"x":340,"y":125},{"x":305,"y":125}]
+        },
         {"id":"e67-j1","kind":"junction","x":305,"y":125},
-        {"id":"e68","kind":"wire","points":[{"x":330,"y":175},{"x":330,"y":185},{"x":295,"y":185}]},
+        {
+          "id": "e68",
+          "kind": "wire",
+          "number": "017",
+          "points": [{"x":330,"y":175},{"x":330,"y":185},{"x":295,"y":185}]
+        },
         {
           "id": "e69",
           "kind": "wire",
+          "number": "022",
           "points": [{"x":335,"y":175},{"x":335,"y":182.5},{"x":300,"y":182.5}]
         },
-        {"id":"e70","kind":"wire","points":[{"x":340,"y":175},{"x":340,"y":180},{"x":305,"y":180}]},
-        {"id":"e71","kind":"wire","points":[{"x":295,"y":170},{"x":295,"y":200}]},
+        {
+          "id": "e70",
+          "kind": "wire",
+          "number": "026",
+          "points": [{"x":340,"y":175},{"x":340,"y":180},{"x":305,"y":180}]
+        },
+        {"id":"e71","kind":"wire","number":"017","points":[{"x":295,"y":170},{"x":295,"y":200}]},
         {"id":"e71-j1","kind":"junction","x":295,"y":185},
-        {"id":"e72","kind":"wire","points":[{"x":300,"y":170},{"x":300,"y":200}]},
+        {"id":"e72","kind":"wire","number":"022","points":[{"x":300,"y":170},{"x":300,"y":200}]},
         {"id":"e72-j1","kind":"junction","x":300,"y":182.5},
-        {"id":"e73","kind":"wire","points":[{"x":305,"y":170},{"x":305,"y":200}]},
+        {"id":"e73","kind":"wire","number":"026","points":[{"x":305,"y":170},{"x":305,"y":200}]},
         {"id":"e73-j1","kind":"junction","x":305,"y":180},
-        {"id":"e74","kind":"wire","points":[{"x":295,"y":210},{"x":305,"y":210}]},
+        {"id":"e74","kind":"wire","number":"018","points":[{"x":295,"y":210},{"x":305,"y":210}]},
         {
           "id": "e75",
           "kind": "rect",
@@ -653,8 +735,20 @@
       "id": "p6",
       "type": "control",
       "elements": [
-        {"id":"e77","kind":"wire","points":[{"x":40,"y":50},{"x":395,"y":50}],"potential":"24VDC"},
-        {"id":"e78","kind":"wire","points":[{"x":40,"y":240},{"x":395,"y":240}],"potential":"0V"},
+        {
+          "id": "e77",
+          "kind": "wire",
+          "number": "001P",
+          "points": [{"x":40,"y":50},{"x":395,"y":50}],
+          "potential": "24VDC"
+        },
+        {
+          "id": "e78",
+          "kind": "wire",
+          "number": "001M",
+          "points": [{"x":40,"y":240},{"x":395,"y":240}],
+          "potential": "0V"
+        },
         {
           "id": "e79",
           "kind": "symbol",
@@ -664,7 +758,7 @@
           "rot": 0,
           "symbolId": "limit-switch-no",
           "x": 50,
-          "y": 70
+          "y": 80
         },
         {
           "id": "e80",
@@ -675,15 +769,27 @@
           "rot": 0,
           "symbolId": "contact-nc",
           "x": 50,
-          "y": 88
+          "y": 98
         },
-        {"id":"e81","kind":"wire","points":[{"x":50,"y":50},{"x":50,"y":65}]},
-        {"id":"e81-j1","kind":"junction","x":50,"y":50},
-        {"id":"e82","kind":"wire","points":[{"x":50,"y":75},{"x":50,"y":83}]},
-        {"id":"e83","kind":"wire","points":[{"x":50,"y":93},{"x":50,"y":105}]},
-        {"id":"e84","kind":"wire","points":[{"x":50,"y":105},{"x":185,"y":105}]},
         {
-          "id": "e85",
+          "id": "e81",
+          "kind": "symbol",
+          "designation": "-X1",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "terminal",
+          "value": "1",
+          "x": 50,
+          "y": 60
+        },
+        {"id":"e82","kind":"wire","number":"001P","points":[{"x":50,"y":50},{"x":50,"y":55}]},
+        {"id":"e82-j1","kind":"junction","x":50,"y":50},
+        {"id":"e83","kind":"wire","number":"027","points":[{"x":50,"y":65},{"x":50,"y":75}]},
+        {"id":"e84","kind":"wire","number":"028","points":[{"x":50,"y":85},{"x":50,"y":93}]},
+        {"id":"e85","kind":"wire","number":"029","points":[{"x":50,"y":103},{"x":50,"y":105}]},
+        {"id":"e86","kind":"wire","number":"029","points":[{"x":50,"y":105},{"x":185,"y":105}]},
+        {
+          "id": "e87",
           "kind": "symbol",
           "designation": "-KM1",
           "functionText": {"en":"Main contactor"},
@@ -694,7 +800,7 @@
           "y": 170
         },
         {
-          "id": "e86",
+          "id": "e88",
           "kind": "symbol",
           "designation": "-KT1",
           "functionText": {"en":"Star-delta timer"},
@@ -705,7 +811,7 @@
           "y": 170
         },
         {
-          "id": "e87",
+          "id": "e89",
           "kind": "symbol",
           "designation": "-KT1",
           "functionText": {"en":"Star time"},
@@ -716,7 +822,7 @@
           "y": 125
         },
         {
-          "id": "e88",
+          "id": "e90",
           "kind": "symbol",
           "designation": "-KM3",
           "functionText": {"en":"Star contactor"},
@@ -727,7 +833,7 @@
           "y": 170
         },
         {
-          "id": "e89",
+          "id": "e91",
           "kind": "symbol",
           "designation": "-KT1",
           "functionText": {"en":"Delta time"},
@@ -738,7 +844,7 @@
           "y": 125
         },
         {
-          "id": "e90",
+          "id": "e92",
           "kind": "symbol",
           "designation": "-KM3",
           "functionText": {"en":"Interlock"},
@@ -749,7 +855,7 @@
           "y": 145
         },
         {
-          "id": "e91",
+          "id": "e93",
           "kind": "symbol",
           "designation": "-KM2",
           "functionText": {"en":"Delta contactor"},
@@ -759,26 +865,26 @@
           "x": 185,
           "y": 175
         },
-        {"id":"e92","kind":"wire","points":[{"x":50,"y":105},{"x":50,"y":165}]},
-        {"id":"e92-j1","kind":"junction","x":50,"y":105},
-        {"id":"e93","kind":"wire","points":[{"x":95,"y":105},{"x":95,"y":165}]},
-        {"id":"e93-j1","kind":"junction","x":95,"y":105},
-        {"id":"e94","kind":"wire","points":[{"x":140,"y":105},{"x":140,"y":120}]},
-        {"id":"e94-j1","kind":"junction","x":140,"y":105},
-        {"id":"e95","kind":"wire","points":[{"x":140,"y":130},{"x":140,"y":165}]},
-        {"id":"e96","kind":"wire","points":[{"x":185,"y":105},{"x":185,"y":120}]},
-        {"id":"e97","kind":"wire","points":[{"x":185,"y":130},{"x":185,"y":140}]},
-        {"id":"e98","kind":"wire","points":[{"x":185,"y":150},{"x":185,"y":170}]},
-        {"id":"e99","kind":"wire","points":[{"x":50,"y":175},{"x":50,"y":240}]},
-        {"id":"e99-j1","kind":"junction","x":50,"y":240},
-        {"id":"e100","kind":"wire","points":[{"x":95,"y":175},{"x":95,"y":240}]},
-        {"id":"e100-j1","kind":"junction","x":95,"y":240},
-        {"id":"e101","kind":"wire","points":[{"x":140,"y":175},{"x":140,"y":240}]},
-        {"id":"e101-j1","kind":"junction","x":140,"y":240},
-        {"id":"e102","kind":"wire","points":[{"x":185,"y":180},{"x":185,"y":240}]},
-        {"id":"e102-j1","kind":"junction","x":185,"y":240},
+        {"id":"e94","kind":"wire","number":"029","points":[{"x":50,"y":105},{"x":50,"y":165}]},
+        {"id":"e94-j1","kind":"junction","x":50,"y":105},
+        {"id":"e95","kind":"wire","number":"029","points":[{"x":95,"y":105},{"x":95,"y":165}]},
+        {"id":"e95-j1","kind":"junction","x":95,"y":105},
+        {"id":"e96","kind":"wire","number":"029","points":[{"x":140,"y":105},{"x":140,"y":120}]},
+        {"id":"e96-j1","kind":"junction","x":140,"y":105},
+        {"id":"e97","kind":"wire","number":"030","points":[{"x":140,"y":130},{"x":140,"y":165}]},
+        {"id":"e98","kind":"wire","number":"029","points":[{"x":185,"y":105},{"x":185,"y":120}]},
+        {"id":"e99","kind":"wire","number":"031","points":[{"x":185,"y":130},{"x":185,"y":140}]},
+        {"id":"e100","kind":"wire","number":"032","points":[{"x":185,"y":150},{"x":185,"y":170}]},
+        {"id":"e101","kind":"wire","number":"001M","points":[{"x":50,"y":175},{"x":50,"y":240}]},
+        {"id":"e101-j1","kind":"junction","x":50,"y":240},
+        {"id":"e102","kind":"wire","number":"001M","points":[{"x":95,"y":175},{"x":95,"y":240}]},
+        {"id":"e102-j1","kind":"junction","x":95,"y":240},
+        {"id":"e103","kind":"wire","number":"001M","points":[{"x":140,"y":175},{"x":140,"y":240}]},
+        {"id":"e103-j1","kind":"junction","x":140,"y":240},
+        {"id":"e104","kind":"wire","number":"001M","points":[{"x":185,"y":180},{"x":185,"y":240}]},
+        {"id":"e104-j1","kind":"junction","x":185,"y":240},
         {
-          "id": "e103",
+          "id": "e105",
           "kind": "symbol",
           "designation": "-BL2",
           "functionText": {"en":"Low level, start pump 2"},
@@ -786,10 +892,10 @@
           "rot": 0,
           "symbolId": "limit-switch-no",
           "x": 235,
-          "y": 70
+          "y": 80
         },
         {
-          "id": "e104",
+          "id": "e106",
           "kind": "symbol",
           "designation": "-FR2",
           "functionText": {"en":"Overload relay"},
@@ -797,15 +903,27 @@
           "rot": 0,
           "symbolId": "contact-nc",
           "x": 235,
-          "y": 88
+          "y": 98
         },
-        {"id":"e105","kind":"wire","points":[{"x":235,"y":50},{"x":235,"y":65}]},
-        {"id":"e105-j1","kind":"junction","x":235,"y":50},
-        {"id":"e106","kind":"wire","points":[{"x":235,"y":75},{"x":235,"y":83}]},
-        {"id":"e107","kind":"wire","points":[{"x":235,"y":93},{"x":235,"y":105}]},
-        {"id":"e108","kind":"wire","points":[{"x":235,"y":105},{"x":370,"y":105}]},
         {
-          "id": "e109",
+          "id": "e107",
+          "kind": "symbol",
+          "designation": "-X1",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "terminal",
+          "value": "2",
+          "x": 235,
+          "y": 60
+        },
+        {"id":"e108","kind":"wire","number":"001P","points":[{"x":235,"y":50},{"x":235,"y":55}]},
+        {"id":"e108-j1","kind":"junction","x":235,"y":50},
+        {"id":"e109","kind":"wire","number":"033","points":[{"x":235,"y":65},{"x":235,"y":75}]},
+        {"id":"e110","kind":"wire","number":"034","points":[{"x":235,"y":85},{"x":235,"y":93}]},
+        {"id":"e111","kind":"wire","number":"035","points":[{"x":235,"y":103},{"x":235,"y":105}]},
+        {"id":"e112","kind":"wire","number":"035","points":[{"x":235,"y":105},{"x":370,"y":105}]},
+        {
+          "id": "e113",
           "kind": "symbol",
           "designation": "-KM4",
           "functionText": {"en":"Main contactor"},
@@ -816,7 +934,7 @@
           "y": 170
         },
         {
-          "id": "e110",
+          "id": "e114",
           "kind": "symbol",
           "designation": "-KT2",
           "functionText": {"en":"Star-delta timer"},
@@ -827,7 +945,7 @@
           "y": 170
         },
         {
-          "id": "e111",
+          "id": "e115",
           "kind": "symbol",
           "designation": "-KT2",
           "functionText": {"en":"Star time"},
@@ -838,7 +956,7 @@
           "y": 125
         },
         {
-          "id": "e112",
+          "id": "e116",
           "kind": "symbol",
           "designation": "-KM6",
           "functionText": {"en":"Star contactor"},
@@ -849,7 +967,7 @@
           "y": 170
         },
         {
-          "id": "e113",
+          "id": "e117",
           "kind": "symbol",
           "designation": "-KT2",
           "functionText": {"en":"Delta time"},
@@ -860,7 +978,7 @@
           "y": 125
         },
         {
-          "id": "e114",
+          "id": "e118",
           "kind": "symbol",
           "designation": "-KM6",
           "functionText": {"en":"Interlock"},
@@ -871,7 +989,7 @@
           "y": 145
         },
         {
-          "id": "e115",
+          "id": "e119",
           "kind": "symbol",
           "designation": "-KM5",
           "functionText": {"en":"Delta contactor"},
@@ -881,24 +999,24 @@
           "x": 370,
           "y": 175
         },
-        {"id":"e116","kind":"wire","points":[{"x":235,"y":105},{"x":235,"y":165}]},
-        {"id":"e116-j1","kind":"junction","x":235,"y":105},
-        {"id":"e117","kind":"wire","points":[{"x":280,"y":105},{"x":280,"y":165}]},
-        {"id":"e117-j1","kind":"junction","x":280,"y":105},
-        {"id":"e118","kind":"wire","points":[{"x":325,"y":105},{"x":325,"y":120}]},
-        {"id":"e118-j1","kind":"junction","x":325,"y":105},
-        {"id":"e119","kind":"wire","points":[{"x":325,"y":130},{"x":325,"y":165}]},
-        {"id":"e120","kind":"wire","points":[{"x":370,"y":105},{"x":370,"y":120}]},
-        {"id":"e121","kind":"wire","points":[{"x":370,"y":130},{"x":370,"y":140}]},
-        {"id":"e122","kind":"wire","points":[{"x":370,"y":150},{"x":370,"y":170}]},
-        {"id":"e123","kind":"wire","points":[{"x":235,"y":175},{"x":235,"y":240}]},
-        {"id":"e123-j1","kind":"junction","x":235,"y":240},
-        {"id":"e124","kind":"wire","points":[{"x":280,"y":175},{"x":280,"y":240}]},
-        {"id":"e124-j1","kind":"junction","x":280,"y":240},
-        {"id":"e125","kind":"wire","points":[{"x":325,"y":175},{"x":325,"y":240}]},
-        {"id":"e125-j1","kind":"junction","x":325,"y":240},
-        {"id":"e126","kind":"wire","points":[{"x":370,"y":180},{"x":370,"y":240}]},
-        {"id":"e126-j1","kind":"junction","x":370,"y":240}
+        {"id":"e120","kind":"wire","number":"035","points":[{"x":235,"y":105},{"x":235,"y":165}]},
+        {"id":"e120-j1","kind":"junction","x":235,"y":105},
+        {"id":"e121","kind":"wire","number":"035","points":[{"x":280,"y":105},{"x":280,"y":165}]},
+        {"id":"e121-j1","kind":"junction","x":280,"y":105},
+        {"id":"e122","kind":"wire","number":"035","points":[{"x":325,"y":105},{"x":325,"y":120}]},
+        {"id":"e122-j1","kind":"junction","x":325,"y":105},
+        {"id":"e123","kind":"wire","number":"036","points":[{"x":325,"y":130},{"x":325,"y":165}]},
+        {"id":"e124","kind":"wire","number":"035","points":[{"x":370,"y":105},{"x":370,"y":120}]},
+        {"id":"e125","kind":"wire","number":"037","points":[{"x":370,"y":130},{"x":370,"y":140}]},
+        {"id":"e126","kind":"wire","number":"038","points":[{"x":370,"y":150},{"x":370,"y":170}]},
+        {"id":"e127","kind":"wire","number":"001M","points":[{"x":235,"y":175},{"x":235,"y":240}]},
+        {"id":"e127-j1","kind":"junction","x":235,"y":240},
+        {"id":"e128","kind":"wire","number":"001M","points":[{"x":280,"y":175},{"x":280,"y":240}]},
+        {"id":"e128-j1","kind":"junction","x":280,"y":240},
+        {"id":"e129","kind":"wire","number":"001M","points":[{"x":325,"y":175},{"x":325,"y":240}]},
+        {"id":"e129-j1","kind":"junction","x":325,"y":240},
+        {"id":"e130","kind":"wire","number":"001M","points":[{"x":370,"y":180},{"x":370,"y":240}]},
+        {"id":"e130-j1","kind":"junction","x":370,"y":240}
       ],
       "location": "PS",
       "size": "A3",
@@ -910,7 +1028,7 @@
       "type": "plc",
       "elements": [
         {
-          "id": "e127",
+          "id": "e131",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -920,9 +1038,9 @@
           "x": 200,
           "y": 60
         },
-        {"id":"e128","kind":"wire","points":[{"x":160,"y":60},{"x":200,"y":60}]},
+        {"id":"e132","kind":"wire","number":"039","points":[{"x":160,"y":60},{"x":200,"y":60}]},
         {
-          "id": "e129",
+          "id": "e133",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -932,7 +1050,7 @@
           "y": 61.5
         },
         {
-          "id": "e130",
+          "id": "e134",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -942,9 +1060,9 @@
           "x": 200,
           "y": 76
         },
-        {"id":"e131","kind":"wire","points":[{"x":160,"y":76},{"x":200,"y":76}]},
+        {"id":"e135","kind":"wire","number":"040","points":[{"x":160,"y":76},{"x":200,"y":76}]},
         {
-          "id": "e132",
+          "id": "e136",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -954,7 +1072,7 @@
           "y": 77.5
         },
         {
-          "id": "e133",
+          "id": "e137",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -964,9 +1082,9 @@
           "x": 200,
           "y": 92
         },
-        {"id":"e134","kind":"wire","points":[{"x":160,"y":92},{"x":200,"y":92}]},
+        {"id":"e138","kind":"wire","number":"041","points":[{"x":160,"y":92},{"x":200,"y":92}]},
         {
-          "id": "e135",
+          "id": "e139",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -976,7 +1094,7 @@
           "y": 93.5
         },
         {
-          "id": "e136",
+          "id": "e140",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -986,9 +1104,9 @@
           "x": 200,
           "y": 108
         },
-        {"id":"e137","kind":"wire","points":[{"x":160,"y":108},{"x":200,"y":108}]},
+        {"id":"e141","kind":"wire","number":"042","points":[{"x":160,"y":108},{"x":200,"y":108}]},
         {
-          "id": "e138",
+          "id": "e142",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -998,7 +1116,7 @@
           "y": 109.5
         },
         {
-          "id": "e139",
+          "id": "e143",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1008,9 +1126,9 @@
           "x": 200,
           "y": 124
         },
-        {"id":"e140","kind":"wire","points":[{"x":160,"y":124},{"x":200,"y":124}]},
+        {"id":"e144","kind":"wire","number":"043","points":[{"x":160,"y":124},{"x":200,"y":124}]},
         {
-          "id": "e141",
+          "id": "e145",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1020,7 +1138,7 @@
           "y": 125.5
         },
         {
-          "id": "e142",
+          "id": "e146",
           "kind": "rect",
           "assembly": "-A1",
           "dashed": true,
@@ -1037,54 +1155,32 @@
       "title": {"en":"PLC interface"}
     },
     {
-      "id": "p8",
+      "id": "pg-rep1",
       "type": "terminals",
-      "elements": [
-        {
-          "id": "e143",
-          "kind": "text",
-          "align": "left",
-          "rot": 0,
-          "size": 3,
-          "text": "This page is filled from the schematic by the report and layout features (milestones M3 and M6).",
-          "x": 40,
-          "y": 40
-        }
-      ],
+      "elements": [{"id":"r-rep2","kind":"report","offset":0,"report":"terminals","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
-      "title": {"en":"Terminals","it":"Morsettiere"}
+      "title": {"en":"Terminal diagram"}
     },
     {
-      "id": "p9",
+      "id": "pg-rep3",
       "type": "cables",
-      "elements": [
-        {
-          "id": "e144",
-          "kind": "text",
-          "align": "left",
-          "rot": 0,
-          "size": 3,
-          "text": "This page is filled from the schematic by the report and layout features (milestones M3 and M6).",
-          "x": 40,
-          "y": 40
-        }
-      ],
+      "elements": [{"id":"r-rep4","kind":"report","offset":0,"report":"cables","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
-      "title": {"en":"Cables","it":"Cavi"}
+      "title": {"en":"Cable list"}
     },
     {
-      "id": "p10",
+      "id": "p8",
       "type": "layout",
       "elements": [
         {
-          "id": "e145",
+          "id": "e147",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 3,
-          "text": "This page is filled from the schematic by the report and layout features (milestones M3 and M6).",
+          "text": "This page is filled by the cabinet layout feature (milestone M6).",
           "x": 40,
           "y": 40
         }
@@ -1092,6 +1188,78 @@
       "size": "A3",
       "templateId": "",
       "title": {"en":"Cabinet layout","it":"Layout quadro"}
+    },
+    {
+      "id": "pg-rep5",
+      "type": "report",
+      "elements": [{"id":"r-rep6","kind":"report","offset":0,"report":"wires","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Wire list 1/3"}
+    },
+    {
+      "id": "pg-rep7",
+      "type": "report",
+      "elements": [{"id":"r-rep8","kind":"report","offset":34,"report":"wires","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Wire list 2/3"}
+    },
+    {
+      "id": "pg-rep9",
+      "type": "report",
+      "elements": [{"id":"r-rep10","kind":"report","offset":68,"report":"wires","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Wire list 3/3"}
+    },
+    {
+      "id": "pg-rep11",
+      "type": "bom",
+      "elements": [{"id":"r-rep12","kind":"report","offset":0,"report":"bom","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Bill of materials"}
+    },
+    {
+      "id": "pg-rep13",
+      "type": "report",
+      "elements": [{"id":"r-rep14","kind":"report","offset":0,"report":"legend","rows":14,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Symbol legend"}
+    },
+    {
+      "id": "pg-rep15",
+      "type": "report",
+      "elements": [{"id":"r-rep16","kind":"report","offset":0,"report":"colours","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Conductor colours"}
+    },
+    {
+      "id": "pg-rep17",
+      "type": "report",
+      "elements": [{"id":"r-rep18","kind":"report","offset":0,"report":"suffixes","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Wire number suffixes"}
+    },
+    {
+      "id": "pg-rep19",
+      "type": "report",
+      "elements": [{"id":"r-rep20","kind":"report","offset":0,"report":"torque","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Terminal tightening torques"}
+    },
+    {
+      "id": "pg-rep21",
+      "type": "report",
+      "elements": [{"id":"r-rep22","kind":"report","offset":0,"report":"nameplates","rows":40,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Nameplates"}
     }
   ],
   "assets": {},
@@ -1138,7 +1306,15 @@
     {"designation":"+PS-M2","fields":{},"parts":[{"part":"generic-motor-3ph-7.5kw","qty":1}]},
     {"designation":"+PS-QF0","fields":{},"parts":[{"part":"generic-mcb-3p-c63a","qty":1}]},
     {"designation":"+PS-QF1","fields":{},"parts":[{"part":"generic-mpcb-10a-16a","qty":1}]},
-    {"designation":"+PS-QF2","fields":{},"parts":[{"part":"generic-mpcb-10a-16a","qty":1}]}
+    {"designation":"+PS-QF2","fields":{},"parts":[{"part":"generic-mpcb-10a-16a","qty":1}]},
+    {
+      "designation": "+PS-X1",
+      "fields": {},
+      "parts": [
+        {"part":"generic-terminal-feedthrough-2.5mm2","qty":1},
+        {"part":"generic-terminal-end-plate","qty":1}
+      ]
+    }
   ],
   "parts": [
     {
@@ -1426,7 +1602,12 @@
       "kind": "part",
       "category": "terminals",
       "code": "GEN-TERMINAL-FEEDTHROUGH-4MM2",
-      "data": {"Conductor cross-section":"4 mm²","Connection":"Screw"},
+      "data": {
+        "Conductor cross-section": "4 mm²",
+        "Connection": "Screw",
+        "Tightening torque": "0.8 Nm",
+        "Width": "6.2 mm"
+      },
       "description": {
         "en": "Feed-through terminal, 4 mm², screw connection",
         "it": "Morsetto passante, 4 mm², a vite"
@@ -1445,7 +1626,12 @@
       "kind": "part",
       "category": "terminals",
       "code": "GEN-TERMINAL-PE-10MM2",
-      "data": {"Colour":"GNYE","Conductor cross-section":"10 mm²"},
+      "data": {
+        "Colour": "GNYE",
+        "Conductor cross-section": "10 mm²",
+        "Tightening torque": "1.5 Nm",
+        "Width": "10.2 mm"
+      },
       "description": {
         "en": "Protective earth terminal, 10 mm², green-yellow",
         "it": "Morsetto di terra PE, 10 mm², giallo-verde"
@@ -1456,6 +1642,43 @@
         "en": "Protective earth terminal, 10 mm², green-yellow",
         "it": "Morsetto di terra PE, 10 mm², giallo-verde"
       },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-terminal-feedthrough-2.5mm2",
+      "kind": "part",
+      "category": "terminals",
+      "code": "GEN-TERMINAL-FEEDTHROUGH-2,5MM2",
+      "data": {
+        "Conductor cross-section": "2.5 mm²",
+        "Connection": "Screw",
+        "Tightening torque": "0.5 Nm",
+        "Width": "5.2 mm"
+      },
+      "description": {
+        "en": "Feed-through terminal, 2.5 mm², screw connection",
+        "it": "Morsetto passante, 2.5 mm², a vite"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Feed-through terminal, 2.5 mm², screw connection",
+        "it": "Morsetto passante, 2.5 mm², a vite"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-terminal-end-plate",
+      "kind": "part",
+      "category": "terminals",
+      "code": "GEN-TERMINAL-END-PLATE",
+      "data": {"Width":"2.2 mm"},
+      "description": {"en":"End plate for terminal strip","it":"Piastra di chiusura per morsettiera"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"End plate for terminal strip","it":"Piastra di chiusura per morsettiera"},
       "verification": "secondary",
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
     }
@@ -1479,8 +1702,23 @@
       "id": "pp-generic-terminal-feedthrough-4mm2",
       "fields": {},
       "part": "generic-terminal-feedthrough-4mm2",
-      "qty": 24
+      "qty": 22
     },
     {"id":"pp-generic-terminal-pe-10mm2","fields":{},"part":"generic-terminal-pe-10mm2","qty":6}
-  ]
+  ],
+  "wireClasses": [
+    {"id":"L1","type":"H07V-K","colour":"BK","crossSection":"2.5","suffix":"L1"},
+    {"id":"L2","type":"H07V-K","colour":"BK","crossSection":"2.5","suffix":"L2"},
+    {"id":"L3","type":"H07V-K","colour":"BK","crossSection":"2.5","suffix":"L3"},
+    {"id":"N","type":"H07V-K","colour":"BU","crossSection":"2.5","suffix":"N"},
+    {"id":"PE","type":"H07V-K","colour":"GNYE","crossSection":"2.5","suffix":"PE"},
+    {"id":"L+","type":"H07V-K","colour":"BK","crossSection":"2.5","suffix":"L+"},
+    {"id":"L-","type":"H07V-K","colour":"BK","crossSection":"2.5","suffix":"L-"},
+    {"id":"24VDC","type":"H07V-K","colour":"BU","crossSection":"1.5","suffix":"P"},
+    {"id":"0V","type":"H07V-K","colour":"BU","crossSection":"1.5","suffix":"M"},
+    {"id":"110VDC","type":"H07V-K","colour":"BK","crossSection":"1.5","suffix":"P"},
+    {"id":"signal","type":"H07V-K","colour":"BK","crossSection":"1.5","suffix":""}
+  ],
+  "wireTypes": [],
+  "cables": []
 }

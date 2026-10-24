@@ -9,3 +9,6 @@ Licensed under the Apache License, Version 2.0. See LICENSE.
 Third-party components and their licences are listed in THIRD_PARTY_LICENSES.md, generated at build
 time by scripts/check-licenses.mjs. KiCad is GPL-licensed: CablePilot may read and write KiCad's
 documented file formats (from M9) but contains no KiCad code.
+
+The Roboto font files in shared/fonts are copyright The Roboto Project Authors and licensed under the SIL
+Open Font License 1.1 (shared/fonts/LICENSE.txt); they are embedded in exported PDFs.

@@ -19,7 +19,7 @@
     <meta property="og:url" content="https://cablepilot.agentflowbind.com/" />
     <meta property="og:image" content="https://cablepilot.agentflowbind.com/og.svg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="stylesheet" href="/style.css?v=45947ee990" />
+    <link rel="stylesheet" href="/style.css?v=1097fe4e09" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -46,7 +46,7 @@
         <a class="btn primary" href="https://github.com/mojeee/cablepilot/releases/latest">Download</a>
         <a class="btn" href="#demo">Watch the demo</a>
       </p>
-      <p class="status">Version 0.1.0 · 3/10 milestones done · The first release is not out yet.</p>
+      <p class="status">Version 0.1.0 · 4/10 milestones done · The first release is not out yet.</p>
     </div>
     <div class="hero-media"><div class="video-slot"><p>The demo loop will play here once it is recorded from the real app.</p></div></div>
   </div>
@@ -57,9 +57,9 @@
     <h2>In the app today</h2>
     <p class="lead">One block per feature area. A tag says whether it is available or still planned, and in which milestone. The tags follow the roadmap in the repository.</p>
     <div class="grid features">
-      <article class="card"><h3>Schematic</h3><span class="tag available">Available</span><p>Multi-page projects with IEC symbols, single-line and multi-line pages, your own frame, title block and drawing style.</p><span class="std">IEC 60617</span><span class="std">IEC 81346</span><span class="std">IEC 61082</span><span class="std">ISO 5457</span></article>
-      <article class="card"><h3>Devices and cross-references</h3><span class="tag available">Available</span><p>One device, several representations, counted once in the BOM and cross-referenced both ways. Connectors with named pins, macros, nested assemblies.</p><span class="std">IEC 81346</span><span class="std">IEC 61439</span></article>
-      <article class="card"><h3>Wires and reports</h3><span class="tag planned">Planned (M3)</span><p>Automatic wire numbers, terminal diagrams, cable and wire lists, nameplates and exports, all generated live from the schematic.</p><span class="std">IEC 60204-1</span><span class="std">IEC 60445</span><span class="std">IEC 60757</span></article>
+      <article class="card"><img class="card-img" src="/img/feat-schematic.png" alt="A power page of the DC battery-charger sample: breaker, transformer and two rectifier modules with wire numbers" width="1200" height="700" loading="lazy" /><h3>Schematic</h3><span class="tag available">Available</span><p>Multi-page projects with IEC symbols, single-line and multi-line pages, your own frame, title block and drawing style.</p><span class="std">IEC 60617</span><span class="std">IEC 81346</span><span class="std">IEC 61082</span><span class="std">ISO 5457</span></article>
+      <article class="card"><img class="card-img" src="/img/feat-devices.png" alt="The alarm relay page of the charger sample with contact images and cross-references" width="1200" height="700" loading="lazy" /><h3>Devices and cross-references</h3><span class="tag available">Available</span><p>One device, several representations, counted once in the BOM and cross-referenced both ways. Connectors with named pins, macros, nested assemblies.</p><span class="std">IEC 81346</span><span class="std">IEC 61439</span></article>
+      <article class="card"><img class="card-img" src="/img/feat-reports.png" alt="The Reports window showing the wire list generated from the schematic" width="1200" height="700" loading="lazy" /><h3>Wires and reports</h3><span class="tag available">Available</span><p>Automatic wire numbers, terminal diagrams, cable and wire lists, nameplates and exports, all generated live from the schematic.</p><span class="std">IEC 60204-1</span><span class="std">IEC 60445</span><span class="std">IEC 60757</span></article>
       <article class="card"><h3>Checks and revisions</h3><span class="tag planned">Planned (M4)</span><p>A continuous electrical rule check with one-click fixes, issued revisions, a generated cover sheet and a comparison of two revisions.</p><span class="std">IEC 60364-5-52</span><span class="std">IEC 60204-1</span></article>
       <article class="card"><h3>PLC</h3><span class="tag planned">Planned (M5)</span><p>PLC racks and I/O cards as devices, an I/O assignment overview, and tag lists in the formats the engineering tools accept.</p></article>
       <article class="card"><h3>Cabinet layout</h3><span class="tag planned">Planned (M6)</span><p>Mounting plate to scale in 2D with dimensions and side view, a 3D view, duct fill rate and a drilling DXF.</p><span class="std">IEC 61439</span></article>
@@ -71,8 +71,8 @@
         <label for="shot-dark">Dark</label>
         <label for="shot-light">Light</label>
       </div>
-      <div class="shot shot-dark-img"><p>Screenshots from the real app arrive with the release milestone.</p></div>
-      <div class="shot shot-light-img"><p>Screenshots from the real app arrive with the release milestone.</p></div>
+      <div class="shot shot-dark-img has-img"><img src="/img/app-dark.png" alt="CablePilot with the dark theme: the motor power page of the conveyor sample" width="1440" height="900" loading="lazy" /></div>
+      <div class="shot shot-light-img has-img"><img src="/img/app-light.png" alt="CablePilot with the light theme: the motor power page of the conveyor sample" width="1440" height="900" loading="lazy" /></div>
     </div>
   </div>
 </section>
@@ -80,14 +80,14 @@
 <section class="band light" id="set">
   <div class="wrap">
     <h2>A complete drawing set</h2>
-    <p class="lead">What the workshop gets, printed from the project with nothing drawn by hand afterwards. The thumbnails show the DC battery-charger sample once it exists.</p>
+    <p class="lead">What the workshop gets, printed from the project with nothing drawn by hand afterwards. The thumbnails are pages of the DC battery-charger sample, exported from the real app.</p>
     <ul class="strip">
-      <li class="thumb">Cover with revisions</li>
-      <li class="thumb">Single-line</li>
-      <li class="thumb">Multi-line</li>
-      <li class="thumb">Terminals</li>
+      <li class="thumb has-img"><img src="/img/set-cover.png" alt="Cover with revisions" width="600" height="420" loading="lazy" /><span>Cover with revisions</span></li>
+      <li class="thumb has-img"><img src="/img/set-single.png" alt="Single-line" width="600" height="420" loading="lazy" /><span>Single-line</span></li>
+      <li class="thumb has-img"><img src="/img/set-multi.png" alt="Multi-line" width="600" height="420" loading="lazy" /><span>Multi-line</span></li>
+      <li class="thumb has-img"><img src="/img/set-terminals.png" alt="Terminals" width="600" height="420" loading="lazy" /><span>Terminals</span></li>
       <li class="thumb">Cabinet layout</li>
-      <li class="thumb">BOM</li>
+      <li class="thumb has-img"><img src="/img/set-bom.png" alt="BOM" width="600" height="420" loading="lazy" /><span>BOM</span></li>
     </ul>
   </div>
 </section>
@@ -139,7 +139,7 @@
   <div class="wrap">
     <h2>How it compares</h2>
     <p class="lead">We only make claims we can back. This table shows what CablePilot offers and when. Columns for other tools are added only after each claim is verified against the vendor’s own documentation.</p>
-    <table><thead><tr><th scope="col">Capability</th><th scope="col">CablePilot</th></tr></thead><tbody><tr><th scope="row">Open source licence (Apache-2.0)</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Runs locally, no account</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Multi-page schematics with IEC symbols</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Live terminal, cable and wire lists and BOM</th><td><span class="tag planned">Planned (M3)</span></td></tr><tr><th scope="row">Continuous electrical rule check</th><td><span class="tag planned">Planned (M4)</span></td></tr><tr><th scope="row">Cabinet layout to scale with a 3D view</th><td><span class="tag planned">Planned (M6)</span></td></tr><tr><th scope="row">Production drawing sets with revisions and cover sheet</th><td><span class="tag planned">Planned (M4)</span></td></tr><tr><th scope="row">Optional AI assistant with your own key</th><td><span class="tag planned">Planned (M7)</span></td></tr></tbody></table>
+    <table><thead><tr><th scope="col">Capability</th><th scope="col">CablePilot</th></tr></thead><tbody><tr><th scope="row">Open source licence (Apache-2.0)</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Runs locally, no account</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Multi-page schematics with IEC symbols</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Live terminal, cable and wire lists and BOM</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Continuous electrical rule check</th><td><span class="tag planned">Planned (M4)</span></td></tr><tr><th scope="row">Cabinet layout to scale with a 3D view</th><td><span class="tag planned">Planned (M6)</span></td></tr><tr><th scope="row">Production drawing sets with revisions and cover sheet</th><td><span class="tag planned">Planned (M4)</span></td></tr><tr><th scope="row">Optional AI assistant with your own key</th><td><span class="tag planned">Planned (M7)</span></td></tr></tbody></table>
   </div>
 </section>
 

@@ -82,11 +82,17 @@ function ElementProps({ el, page, project }: { el: El; page: Page; project: Proj
         <>
           <h3>{t('Wire')}</h3>
           <Select label={t('Potential')} value={el.potential ?? ''} options={[{ value: '', label: t('None') }, ...project.potentials.map((p) => ({ value: p.id, label: p.label }))]} onChange={(v) => up({ potential: v || undefined })} />
-          <TextField label={t('Wire number')} value={el.number ?? ''} onCommit={(v) => up({ number: v || undefined })} mono />
+          <TextField label={t('Wire number')} testid="prop-wire-number" value={el.number ?? ''} onCommit={(v) => up({ number: v || undefined, numberLocked: v ? true : undefined })} mono />
+          <Check label={t('Keep this number when numbering automatically')} checked={!!el.numberLocked} onChange={(v) => up({ numberLocked: v || undefined })} />
+          <Select label={t('Wire type')} value={el.wireType ?? ''} options={[{ value: '', label: t('From the potential (wire class)') }, ...project.wireTypes.map((w) => ({ value: w.id, label: `${w.id} · ${w.crossSection} mm² ${w.colour}` }))]} onChange={(v) => up({ wireType: v || undefined })} />
+          <Check label={t('Bundle of wires (one label)')} checked={!!el.bundle} onChange={(v) => up({ bundle: v || undefined })} />
+          <Select label={t('Cable')} value={el.cable ?? ''} options={[{ value: '', label: t('None') }, ...project.cables.map((c) => ({ value: c.id, label: c.id }))]} onChange={(v) => up({ cable: v || undefined })} />
+          {el.cable && <TextField label={t('Core (colour code or number)')} value={el.core ?? ''} onCommit={(v) => up({ core: v || undefined })} mono />}
           <NumField label={t('Conductors (single-line ticks)')} value={el.conductors ?? 1} min={1} max={99} step={1} onCommit={(v) => up({ conductors: v > 1 ? v : undefined })} />
         </>
       );
     case 'junction': return <h3>{t('Junction')}</h3>;
+    case 'report': return (<><h3>{t('Report')}</h3><p className="hint">{t('A live list drawn from the schematic. Add pages for long lists in the Reports window.')}</p></>);
     case 'box': return (<><BoxProps el={el} page={page} project={project} /><DeviceSection el={el} page={page} project={project} /></>);
     case 'text':
       return (

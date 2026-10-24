@@ -90,6 +90,7 @@ const aiReady = aiSection.ticked === aiSection.boxes;
 const hash = (buf) => createHash('sha1').update(buf).digest('hex').slice(0, 10);
 const css = read('scripts/site/style.css');
 const CSS_URL = `/style.css?v=${hash(css)}`;
+const imgExists = (name) => existsSync(join(siteDir, 'img', name));
 const videoExists = (name) => existsSync(join(siteDir, 'video', name));
 const heroVideo = videoExists('hero.webm') && videoExists('hero.mp4');
 const demoVideo = videoExists('demo.webm') && videoExists('demo.mp4');
@@ -222,10 +223,15 @@ const statusTag = (lang, m) =>
   done(m) ? `<span class="tag available">${esc(tx(lang, 'tag.available'))}</span>` : `<span class="tag planned">${esc(tx(lang, 'tag.planned'))} (${m})</span>`;
 
 function landingVars(lang) {
+  // Screenshots come from the real app (npm run screenshots, e2e/screenshots.e2e.ts) and show only for features that are done.
+  const featImg = (f) => (done(f.m) && imgExists(`feat-${f.key}.png`) ? `<img class="card-img" src="/img/feat-${f.key}.png" alt="${esc(tx(lang, `feat.${f.key}.alt`))}" width="1200" height="700" loading="lazy" />` : '');
   const features = FEATURES.map(
-    (f) => `<article class="card"><h3>${esc(tx(lang, `feat.${f.key}.title`))}</h3>${statusTag(lang, f.m)}<p>${esc(tx(lang, `feat.${f.key}.text`))}</p>${f.std.map((s) => `<span class="std">${esc(s)}</span>`).join('')}</article>`,
+    (f) => `<article class="card">${featImg(f)}<h3>${esc(tx(lang, `feat.${f.key}.title`))}</h3>${statusTag(lang, f.m)}<p>${esc(tx(lang, `feat.${f.key}.text`))}</p>${f.std.map((s) => `<span class="std">${esc(s)}</span>`).join('')}</article>`,
   ).join('\n      ');
-  const strip = ['cover', 'single', 'multi', 'terminals', 'layout', 'bom'].map((k) => `<li class="thumb">${esc(tx(lang, `set.${k}`))}</li>`).join('\n      ');
+  const strip = ['cover', 'single', 'multi', 'terminals', 'layout', 'bom']
+    .map((k) => (imgExists(`set-${k}.png`) ? `<li class="thumb has-img"><img src="/img/set-${k}.png" alt="${esc(tx(lang, `set.${k}`))}" width="600" height="420" loading="lazy" /><span>${esc(tx(lang, `set.${k}`))}</span></li>` : `<li class="thumb">${esc(tx(lang, `set.${k}`))}</li>`))
+    .join('\n      ');
+  const shot = (theme) => (imgExists(`app-${theme}.png`) ? `<div class="shot shot-${theme}-img has-img"><img src="/img/app-${theme}.png" alt="${esc(tx(lang, `shot.${theme}.alt`))}" width="1440" height="900" loading="lazy" /></div>` : `<div class="shot shot-${theme}-img"><p>${esc(tx(lang, 'shot.pending'))}</p></div>`);
   const rows = [
     ['open', null],
     ['local', null],
@@ -248,7 +254,7 @@ function landingVars(lang) {
   const demoMedia = demoVideo
     ? `<video controls playsinline preload="none" poster="/video/demo-poster.png"><source src="/video/demo.webm" type="video/webm" /><source src="/video/demo.mp4" type="video/mp4" /></video>`
     : `<div class="video-slot"><p>${esc(tx(lang, 'demo.pending'))}</p></div>`;
-  return { features, strip, compare, status, heroMedia, demoMedia, RELEASES, DISCUSSIONS, companiesHref: COMPANIES[lang] };
+  return { features, strip, shotDark: shot('dark'), shotLight: shot('light'), compare, status, heroMedia, demoMedia, RELEASES, DISCUSSIONS, companiesHref: COMPANIES[lang] };
 }
 
 for (const lang of ['en', 'it']) {
