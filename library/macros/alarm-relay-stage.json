@@ -1,0 +1,130 @@
+{
+  "id": "alarm-relay-stage",
+  "kind": "macro",
+  "title": {
+    "en": "Alarm relay stage (coil, contact, lamp)",
+    "it": "Stadio relè di allarme (bobina, contatto, spia)"
+  },
+  "category": "control",
+  "source": "CablePilot example macro: generic symbols only, drawn for the sample projects",
+  "verification": "secondary",
+  "verifiedFrom": "Example macro drawn by CablePilot; the symbols it uses carry their own sources (docs/to-verify.md)",
+  "size": {
+    "w": 30,
+    "h": 140
+  },
+  "elements": [
+    {
+      "id": "m1",
+      "kind": "symbol",
+      "symbolId": "coil",
+      "x": 0,
+      "y": 40,
+      "rot": 0,
+      "mirror": false,
+      "designation": "-K1",
+      "functionText": {
+        "en": "Alarm relay",
+        "it": "Relè di allarme"
+      }
+    },
+    {
+      "id": "m2",
+      "kind": "symbol",
+      "symbolId": "contact-no",
+      "x": 30,
+      "y": 80,
+      "rot": 0,
+      "mirror": false,
+      "designation": "-K1",
+      "functionText": {
+        "en": "Alarm contact",
+        "it": "Contatto di allarme"
+      }
+    },
+    {
+      "id": "m3",
+      "kind": "symbol",
+      "symbolId": "lamp",
+      "x": 30,
+      "y": 110,
+      "rot": 0,
+      "mirror": false,
+      "designation": "-H1",
+      "functionText": {
+        "en": "Alarm indication",
+        "it": "Segnalazione di allarme"
+      }
+    },
+    {
+      "id": "m4",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 35
+        }
+      ]
+    },
+    {
+      "id": "m5",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 0,
+          "y": 45
+        },
+        {
+          "x": 0,
+          "y": 140
+        }
+      ]
+    },
+    {
+      "id": "m6",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 30,
+          "y": 0
+        },
+        {
+          "x": 30,
+          "y": 75
+        }
+      ]
+    },
+    {
+      "id": "m7",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 30,
+          "y": 85
+        },
+        {
+          "x": 30,
+          "y": 105
+        }
+      ]
+    },
+    {
+      "id": "m8",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 30,
+          "y": 115
+        },
+        {
+          "x": 30,
+          "y": 140
+        }
+      ]
+    }
+  ]
+}

@@ -67,6 +67,7 @@ export function SymbolBrowser() {
   const placing = useEditor((s) => s.placing);
   const standard = useEditor((s) => s.history.present.settings.symbolStandard);
   const company = useEditor((s) => s.companySymbols);
+  const macros = useEditor((s) => s.macros);
   const [query, setQuery] = useState('');
   useUi((s) => s.language);
   const lang = getLanguage();
@@ -84,6 +85,36 @@ export function SymbolBrowser() {
       <input type="search" data-testid="symbol-search" aria-label={t('Search symbols and devices')} placeholder={t('Search symbols and devices')} value={query} onChange={(e) => setQuery(e.target.value)} />
       <button type="button" className="wide" onClick={() => useEditor.getState().setDialog('symbolEditor')}>{t('Symbol editor...')}</button>
       {groups.length === 0 && <p className="hint">{t('No symbol matches your search.')}</p>}
+      <section>
+        <h3>{t('Boxes and connectors')}</h3>
+        <ul className="symbols">
+          {([['blackbox', t('Black box'), [{ t: 'rect', x: -6, y: -4, w: 12, h: 8 }]], ['connector', t('Connector'), [{ t: 'rect', x: -3, y: -5, w: 6, h: 10 }, { t: 'circle', cx: 3, cy: -2.5, r: 0.8, fill: true }, { t: 'circle', cx: 3, cy: 0, r: 0.8, fill: true }, { t: 'circle', cx: 3, cy: 2.5, r: 0.8, fill: true }]]] as [string, string, Gfx[]][])
+            .filter(([, label]) => !query.trim() || label.toLowerCase().includes(query.trim().toLowerCase()))
+            .map(([id, label, gfx]) => (
+              <li key={id}>
+                <button type="button" data-testid={`symbol-box-${id}`} className={placing === `box:${id}` ? 'sym on' : 'sym'} title={label} onClick={() => useEditor.getState().setTool('symbol', `box:${id}`)}>
+                  <SymbolSvg gfx={gfx} />
+                  <span>{label}</span>
+                </button>
+              </li>
+            ))}
+        </ul>
+      </section>
+      {macros.length > 0 && (
+        <section>
+          <h3>{t('Macros')}</h3>
+          <ul className="symbols">
+            {macros.filter((m) => !query.trim() || m.title[lang].toLowerCase().includes(query.trim().toLowerCase())).map((m) => (
+              <li key={m.id}>
+                <button type="button" data-testid={`macro-${m.id}`} className={placing === `macro:${m.id}` ? 'sym on' : 'sym'} title={`${m.title[lang]} (${m.source})`} onClick={() => useEditor.getState().setTool('symbol', `macro:${m.id}`)}>
+                  <SymbolSvg gfx={[{ t: 'rect', x: -6, y: -4, w: 12, h: 8, fill: false }, { t: 'line', x1: -6, y1: 0, x2: 6, y2: 0, dash: true }]} />
+                  <span>{m.title[lang]}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       {groups.map((g) => (
         <section key={g.c}>
           <h3>{categoryLabel(g.c)}</h3>

@@ -1,0 +1,23 @@
+{
+  "id": "generic-sensor-proximity-inductive-m12",
+  "kind": "part",
+  "title": {
+    "en": "Inductive proximity sensor M12, 24 V DC, PNP, normally open",
+    "it": "Sensore di prossimità induttivo M12, 24 V DC, PNP, normalmente aperto"
+  },
+  "category": "sensors",
+  "code": "GEN-SENSOR-PROXIMITY-INDUCTIVE-M12",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Inductive proximity sensor M12, 24 V DC, PNP, normally open",
+    "it": "Sensore di prossimità induttivo M12, 24 V DC, PNP, normalmente aperto"
+  },
+  "data": {
+    "Thread": "M12",
+    "Supply voltage": "24 V DC",
+    "Output": "PNP, NO"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

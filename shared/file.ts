@@ -3,13 +3,13 @@
 
 import { PAGE_TYPES } from './sheets';
 import { SHEET_SIZES } from './sheets';
-import { CURRENT_VERSION } from './model/defaults';
+import { CURRENT_VERSION, DEFAULT_BOM, DEFAULT_CROSSREF } from './model/defaults';
 import { PROJECT_FORMAT, type Project } from './model/types';
 import { fail, ok, type Result } from './result';
 
 /** Key order of the written file: identity first, then the rest alphabetically; top level is fixed. */
 const FIRST = ['id', 'kind', 'type', 'name'];
-const TOP = ['format', 'version', 'id', 'name', 'settings', 'properties', 'assembly', 'templates', 'potentials', 'pages', 'assets', 'symbols'];
+const TOP = ['format', 'version', 'id', 'name', 'settings', 'properties', 'assembly', 'templates', 'potentials', 'pages', 'assets', 'symbols', 'devices', 'parts', 'projectParts'];
 
 function orderedKeys(o: Record<string, unknown>, top: boolean): string[] {
   const keys = Object.keys(o).filter((k) => o[k] !== undefined);
@@ -41,8 +41,14 @@ export function serializeProject(p: Project): string {
 }
 
 type Migration = (data: Record<string, unknown>) => Record<string, unknown>;
-/** Migrations from version n to n + 1, keyed by n. Version 1 is the first released format. */
-export const MIGRATIONS: Record<number, Migration> = {};
+/** Migrations from version n to n + 1, keyed by n. */
+export const MIGRATIONS: Record<number, Migration> = {
+  // 1 -> 2 (M2): devices, embedded parts and project parts, cross-reference and BOM settings.
+  1: (d) => {
+    const settings = (d.settings ?? {}) as Record<string, unknown>;
+    return { ...d, settings: { ...settings, crossRef: structuredClone(DEFAULT_CROSSREF), bom: structuredClone(DEFAULT_BOM) }, devices: [], parts: [], projectParts: [] };
+  },
+};
 
 export function migrate(data: Record<string, unknown>, migrations: Record<number, Migration> = MIGRATIONS, target = CURRENT_VERSION): Result<Record<string, unknown>> {
   let version = data.version;
@@ -73,7 +79,8 @@ const NEEDS: Record<string, (e: Record<string, unknown>) => boolean> = {
   junction: (e) => isNum(e.x) && isNum(e.y),
   text: (e) => isNum(e.x) && isNum(e.y) && isNum(e.rot) && isStr(e.text) && isNum(e.size) && ['left', 'center', 'right'].includes(e.align as string),
   line: (e) => isPts(e.points),
-  rect: (e) => isNum(e.x) && isNum(e.y) && isNum(e.w) && isNum(e.h),
+  rect: (e) => isNum(e.x) && isNum(e.y) && isNum(e.w) && isNum(e.h) && (e.assembly === undefined || isStr(e.assembly)),
+  box: (e) => isNum(e.x) && isNum(e.y) && isNum(e.w) && isNum(e.h) && ['blackbox', 'connector'].includes(e.variant as string) && isStr(e.designation) && Array.isArray(e.pins) && e.pins.every((p) => isObj(p) && isStr(p.id) && isNum(p.offset) && ['left', 'right', 'top', 'bottom'].includes(p.side as string)),
   table: (e) => isNum(e.x) && isNum(e.y) && Array.isArray(e.colWidths) && e.colWidths.every(isNum) && isNum(e.rowHeight) && Array.isArray(e.cells) && e.cells.every((r) => Array.isArray(r) && r.every(isStr)) && isNum(e.size),
   image: (e) => isNum(e.x) && isNum(e.y) && isNum(e.w) && isNum(e.h) && isStr(e.assetId),
   warning: (e) => isNum(e.x) && isNum(e.y) && isNum(e.size) && ['general', 'electric', 'hot', 'autostart'].includes(e.sign as string),
@@ -109,6 +116,10 @@ export function validateProject(d: unknown): string[] {
   if (!Array.isArray(d.potentials)) errs.push('potentials must be an array');
   if (!isObj(d.assets)) errs.push('assets must be an object');
   if (!Array.isArray(d.symbols)) errs.push('symbols must be an array');
+  if (!Array.isArray(d.devices) || !d.devices.every((r) => isObj(r) && isStr(r.designation) && Array.isArray(r.parts) && isObj(r.fields))) errs.push('devices must be an array of device records');
+  if (!Array.isArray(d.parts)) errs.push('parts must be an array');
+  if (!Array.isArray(d.projectParts) || !d.projectParts.every((r) => isObj(r) && isStr(r.id) && isStr(r.part) && isNum(r.qty))) errs.push('projectParts must be an array of parts');
+  if (isObj(s) && (!isObj(s.crossRef) || !isObj(s.bom))) errs.push('settings.crossRef and settings.bom are required');
   if (!Array.isArray(d.pages)) errs.push('pages must be an array');
   else {
     const ids = new Set<string>();

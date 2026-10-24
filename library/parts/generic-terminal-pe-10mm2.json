@@ -1,0 +1,22 @@
+{
+  "id": "generic-terminal-pe-10mm2",
+  "kind": "part",
+  "title": {
+    "en": "Protective earth terminal, 10 mm², green-yellow",
+    "it": "Morsetto di terra PE, 10 mm², giallo-verde"
+  },
+  "category": "terminals",
+  "code": "GEN-TERMINAL-PE-10MM2",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Protective earth terminal, 10 mm², green-yellow",
+    "it": "Morsetto di terra PE, 10 mm², giallo-verde"
+  },
+  "data": {
+    "Conductor cross-section": "10 mm²",
+    "Colour": "GNYE"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

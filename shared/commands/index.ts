@@ -4,11 +4,14 @@
 
 import { pinWorld } from '../draw/symbol';
 import { junctionCandidates, needsJunction, normalizePoints, samePt } from '../geometry/wires';
-import type { Library } from '../library/types';
+import { boxPinsWorld } from '../draw/box';
+import { keyOf } from '../devices';
+import type { Library, MacroDef, PartDef } from '../library/types';
 import { withProjectSymbols } from '../library/types';
 import type { SymbolDef } from '../library/types';
-import type { El, JunctionEl, Page, Potential, Project, ProjectSettings, Pt, Rot, SymbolEl, Template, WireEl, Asset } from '../model/types';
-import { nextDesignation, renumber } from '../numbering';
+import { placeMacro } from '../macros';
+import type { BoxEl, DeviceRec, El, JunctionEl, Page, PartUse, Potential, Project, ProjectPart, ProjectSettings, Pt, RectEl, Rot, SymbolEl, Template, WireEl, Asset } from '../model/types';
+import { fullDesignation, nextDesignation, parseDesignation, renumber } from '../numbering';
 
 export type Command =
   | { type: 'project/set'; name?: string; properties?: Record<string, string>; assembly?: Record<string, string> }
@@ -31,6 +34,17 @@ export type Command =
   | { type: 'symbol/place'; page: string; element: SymbolEl; autoNumber?: boolean }
   | { type: 'wire/add'; page: string; id: string; points: Pt[]; potential?: string; conductors?: number }
   | { type: 'designation/renumber'; page?: string }
+  | { type: 'box/place'; page: string; element: BoxEl; autoNumber?: boolean }
+  /** Sets one element's designation without renaming the rest of its device: links it to another device. */
+  | { type: 'device/relink'; page: string; id: string; designation: string }
+  /** Device data: parts, user fields (empty text removes a field), the parent assembly (null clears it). */
+  | { type: 'device/update'; key: string; patch: { parts?: PartUse[]; fields?: Record<string, string>; parent?: string | null } }
+  | { type: 'part/embed'; def: PartDef }
+  | { type: 'projectPart/set'; part: ProjectPart }
+  | { type: 'projectPart/remove'; id: string }
+  /** Draws a dashed outline for an assembly (rect.assembly is its designation) and nests the devices in it. */
+  | { type: 'assembly/create'; page: string; rect: RectEl; children: string[] }
+  | { type: 'macro/place'; page: string; macro: MacroDef; x: number; y: number; prefix: string }
   | { type: 'batch'; label: string; commands: Command[] };
 
 export interface Ctx {
@@ -108,6 +122,15 @@ function transform(pg: Page, ids: string[], f: PointMap, mode: 'move' | 'rotate'
         newAnchors.push(np);
         return { ...e, x: np.x, y: np.y };
       }
+      case 'box': {
+        // A box moves with its pins (wires follow); it has no rotation or mirror.
+        if (mode !== 'move') return e;
+        const np = f({ x: e.x, y: e.y });
+        const moved = { ...e, x: np.x, y: np.y };
+        const before = boxPinsWorld(e), after = boxPinsWorld(moved);
+        before.forEach((b, i) => { oldAnchors.push({ x: b.x, y: b.y }); newAnchors.push({ x: after[i].x, y: after[i].y }); });
+        return moved;
+      }
       case 'wire':
       case 'line': return { ...e, points: e.points.map(f) } as El;
       case 'text': { const np = f(e); return { ...e, x: np.x, y: np.y, rot: mode === 'rotate' ? (e.rot + 90) % 360 : e.rot }; }
@@ -144,10 +167,57 @@ function centre(pg: Page, ids: string[]): Pt {
   for (const e of pg.elements) {
     if (!sel.has(e.id)) continue;
     if (e.kind === 'wire' || e.kind === 'line') for (const p of e.points) { xs.push(p.x); ys.push(p.y); }
-    else if ('x' in e) { xs.push(e.x); ys.push(e.y); if (e.kind === 'rect' || e.kind === 'image') { xs.push(e.x + e.w); ys.push(e.y + e.h); } }
+    else if ('x' in e) { xs.push(e.x); ys.push(e.y); if (e.kind === 'rect' || e.kind === 'image' || e.kind === 'box') { xs.push(e.x + e.w); ys.push(e.y + e.h); } }
   }
   if (xs.length === 0) return { x: 0, y: 0 };
   return { x: round25((Math.min(...xs) + Math.max(...xs)) / 2), y: round25((Math.min(...ys) + Math.max(...ys)) / 2) };
+}
+
+/** Renames a device everywhere: its symbols and boxes, assembly outlines, mating connectors and device data. */
+function renameDevice(project: Project, oldKey: string, oldDes: string, newDes: string): Project {
+  const pages = project.pages.map((pg) => {
+    let changed = false;
+    const elements = pg.elements.map((e) => {
+      if ((e.kind === 'symbol' || e.kind === 'box') && e.designation && keyOf(pg, e.designation, e.location) === oldKey) {
+        changed = true;
+        return { ...e, designation: newDes };
+      }
+      if (e.kind === 'rect' && e.assembly && keyOf(pg, e.assembly) === oldKey) {
+        changed = true;
+        return { ...e, assembly: newDes };
+      }
+      if (e.kind === 'box' && e.mate === oldDes) {
+        changed = true;
+        return { ...e, mate: newDes };
+      }
+      return e;
+    });
+    return changed ? { ...pg, elements } : pg;
+  });
+  // The new key: the same aspects as the old one with the new product part.
+  const asp = parseDesignation(oldKey);
+  const newKey = fullDesignation(asp.function ?? '', asp.location ?? '', newDes);
+  const taken = project.devices.some((r) => r.designation === newKey);
+  const devices = project.devices
+    .filter((r) => !(taken && r.designation === oldKey))
+    .map((r) => {
+      const designation = r.designation === oldKey ? newKey : r.designation;
+      const parent = r.parent === oldKey ? newKey : r.parent;
+      return designation === r.designation && parent === r.parent ? r : { ...r, designation, ...(parent !== undefined ? { parent } : {}) };
+    });
+  return { ...project, pages, devices: devices.sort((x, y) => x.designation.localeCompare(y.designation, 'en', { numeric: true })) };
+}
+
+function updateDevice(project: Project, key: string, patch: { parts?: PartUse[]; fields?: Record<string, string>; parent?: string | null }): Project {
+  const rec: DeviceRec = project.devices.find((r) => r.designation === key) ?? { designation: key, parts: [], fields: {} };
+  const fields = { ...rec.fields, ...(patch.fields ?? {}) };
+  for (const k of Object.keys(fields)) if (fields[k] === '') delete fields[k];
+  const parent = patch.parent === undefined ? rec.parent : patch.parent === null || patch.parent === key ? undefined : patch.parent;
+  const next: DeviceRec = { designation: key, parts: patch.parts ?? rec.parts, fields, ...(parent ? { parent } : {}) };
+  const others = project.devices.filter((r) => r.designation !== key);
+  const empty = next.parts.length === 0 && Object.keys(next.fields).length === 0 && !next.parent;
+  const devices = empty ? others : [...others, next].sort((x, y) => x.designation.localeCompare(y.designation, 'en', { numeric: true }));
+  return { ...project, devices };
 }
 
 export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
@@ -189,8 +259,47 @@ export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
     }
     case 'page/update': return mapPage(project, cmd.id, (pg) => ({ ...pg, ...cmd.patch }));
     case 'el/add': return mapPage(project, cmd.page, (pg) => ({ ...pg, elements: [...pg.elements, ...cmd.elements] }));
-    case 'el/update':
-      return mapPage(project, cmd.page, (pg) => ({ ...pg, elements: pg.elements.map((e) => (e.id === cmd.id ? ({ ...e, ...cmd.patch, id: e.id, kind: e.kind } as El) : e)) }));
+    case 'el/update': {
+      const updated = mapPage(project, cmd.page, (pg) => ({ ...pg, elements: pg.elements.map((e) => (e.id === cmd.id ? ({ ...e, ...cmd.patch, id: e.id, kind: e.kind } as El) : e)) }));
+      // Changing the designation of a device's symbol renames the device: every representation follows.
+      const pg = project.pages.find((p) => p.id === cmd.page);
+      const old = pg?.elements.find((e) => e.id === cmd.id);
+      const des = cmd.patch.designation;
+      if (pg && old && (old.kind === 'symbol' || old.kind === 'box') && old.designation && typeof des === 'string' && des !== old.designation && !('location' in cmd.patch)) return renameDevice(updated, keyOf(pg, old.designation, old.location), old.designation, des);
+      return updated;
+    }
+    case 'device/relink': return mapPage(project, cmd.page, (pg) => ({ ...pg, elements: pg.elements.map((e) => ((e.kind === 'symbol' || e.kind === 'box') && e.id === cmd.id ? { ...e, designation: cmd.designation } : e)) }));
+    case 'box/place':
+      return mapPage(project, cmd.page, (pg) => {
+        let el = cmd.element;
+        if (cmd.autoNumber && !el.designation) el = { ...el, designation: nextDesignation(project, pg, el.variant === 'connector' ? 'X' : 'A', el.location) };
+        return { ...pg, elements: [...pg.elements, el] };
+      });
+    case 'device/update': return updateDevice(project, cmd.key, cmd.patch);
+    case 'part/embed': return project.parts.some((p) => p.id === cmd.def.id) ? project : { ...project, parts: [...project.parts, cmd.def] };
+    case 'projectPart/set': {
+      const i = project.projectParts.findIndex((p) => p.id === cmd.part.id);
+      const projectParts = project.projectParts.slice();
+      if (i >= 0) projectParts[i] = cmd.part;
+      else projectParts.push(cmd.part);
+      return { ...project, projectParts };
+    }
+    case 'projectPart/remove': return { ...project, projectParts: project.projectParts.filter((p) => p.id !== cmd.id) };
+    case 'assembly/create': {
+      const pg = project.pages.find((p) => p.id === cmd.page);
+      if (!pg || !cmd.rect.assembly) return project;
+      const key = keyOf(pg, cmd.rect.assembly);
+      let next = mapPage(project, cmd.page, (p) => ({ ...p, elements: [...p.elements, { ...cmd.rect, dashed: true }] }));
+      for (const child of cmd.children) if (child !== key) next = updateDevice(next, child, { parent: key });
+      return next;
+    }
+    case 'macro/place':
+      return mapPage(project, cmd.page, (pg) => {
+        const added = placeMacro(project, pg, cmd.macro, { x: cmd.x, y: cmd.y }, cmd.prefix);
+        let next: Page = { ...pg, elements: [...pg.elements, ...added] };
+        for (const w of added) if (w.kind === 'wire') next = addJunctions(next, w);
+        return next;
+      });
     case 'el/remove': {
       const rm = new Set(cmd.ids);
       return mapPage(project, cmd.page, (pg) => cleanupJunctions({ ...pg, elements: pg.elements.filter((e) => !rm.has(e.id)) }));

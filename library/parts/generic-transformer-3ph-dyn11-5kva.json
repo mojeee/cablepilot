@@ -1,0 +1,24 @@
+{
+  "id": "generic-transformer-3ph-dyn11-5kva",
+  "kind": "part",
+  "title": {
+    "en": "Three-phase transformer, vector group Dyn11, 400 V / 230 V, 5 kVA",
+    "it": "Trasformatore trifase, gruppo vettoriale Dyn11, 400 V / 230 V, 5 kVA"
+  },
+  "category": "transformers",
+  "code": "GEN-TRANSFORMER-3PH-DYN11-5KVA",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Three-phase transformer, vector group Dyn11, 400 V / 230 V, 5 kVA",
+    "it": "Trasformatore trifase, gruppo vettoriale Dyn11, 400 V / 230 V, 5 kVA"
+  },
+  "data": {
+    "Vector group": "Dyn11",
+    "Primary": "400 V",
+    "Secondary": "230 V",
+    "Rated power": "5 kVA"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

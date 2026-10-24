@@ -1,9 +1,28 @@
 {
   "format": "cablepilot-project",
-  "version": 1,
+  "version": 2,
   "id": "sample-pump-station",
   "name": "Pump station, two pumps",
   "settings": {
+    "bom": {
+      "columns": [
+        "designation",
+        "position",
+        "qty",
+        "code",
+        "description",
+        "manufacturer",
+        "field:make",
+        "field:notes"
+      ],
+      "group": "device",
+      "units": 1,
+      "userFields": [
+        {"id":"make","label":{"en":"Make or buy","it":"Produzione o acquisto"}},
+        {"id":"notes","label":{"en":"Notes","it":"Note"}}
+      ]
+    },
+    "crossRef": {"format":"page.column","pageDigits":0},
     "defaultSize": "A3",
     "defaultTemplateId": "default",
     "drawingLanguage": "en",
@@ -295,93 +314,91 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "mcb-1p",
-          "x": 100,
-          "y": 55
+          "x": 215,
+          "y": 60
         },
         {
           "id": "e3",
           "kind": "wire",
           "conductors": 3,
-          "points": [{"x":100,"y":30},{"x":100,"y":50}],
+          "points": [{"x":215,"y":30},{"x":215,"y":55}],
           "potential": "L1"
         },
-        {
-          "id": "e4",
-          "kind": "wire",
-          "conductors": 3,
-          "points": [{"x":100,"y":60},{"x":100,"y":70},{"x":160,"y":70}]
-        },
-        {
-          "id": "e5",
-          "kind": "symbol",
-          "designation": "-QF1",
-          "functionText": {"en":"Pump 1 breaker 16 A"},
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "mcb-1p",
-          "x": 100,
-          "y": 90
-        },
+        {"id":"e4","kind":"wire","conductors":3,"points":[{"x":215,"y":65},{"x":215,"y":80}]},
+        {"id":"e5","kind":"wire","conductors":3,"points":[{"x":140,"y":80},{"x":290,"y":80}]},
+        {"id":"e5-j1","kind":"junction","x":215,"y":80},
         {
           "id": "e6",
           "kind": "symbol",
-          "designation": "-KM1",
+          "designation": "-QF1",
+          "functionText": {"en":"Pump 1 motor breaker"},
           "mirror": false,
           "rot": 0,
-          "symbolId": "contact-no",
-          "x": 100,
-          "y": 115
+          "symbolId": "mcb-1p",
+          "x": 140,
+          "y": 105
         },
         {
           "id": "e7",
           "kind": "symbol",
+          "designation": "-KM1",
+          "functionText": {"en":"Main contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contactor-1p",
+          "x": 140,
+          "y": 140
+        },
+        {
+          "id": "e8",
+          "kind": "symbol",
           "designation": "-M1",
-          "functionText": {"en":"Pump 1\n7.5 kW"},
+          "functionText": {"en":"Pump 1\n7.5 kW, star-delta"},
           "mirror": false,
           "rot": 0,
           "symbolId": "motor-3ph",
-          "x": 100,
-          "y": 150
+          "x": 140,
+          "y": 190
         },
-        {"id":"e8","kind":"wire","conductors":3,"points":[{"x":100,"y":70},{"x":100,"y":85}]},
-        {"id":"e8-j1","kind":"junction","x":100,"y":70},
-        {"id":"e9","kind":"wire","conductors":3,"points":[{"x":100,"y":95},{"x":100,"y":110}]},
-        {"id":"e10","kind":"wire","conductors":3,"points":[{"x":100,"y":120},{"x":100,"y":140}]},
-        {
-          "id": "e11",
-          "kind": "symbol",
-          "designation": "-QF2",
-          "functionText": {"en":"Pump 2 breaker 16 A"},
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "mcb-1p",
-          "x": 160,
-          "y": 90
-        },
+        {"id":"e9","kind":"wire","conductors":3,"points":[{"x":140,"y":80},{"x":140,"y":100}]},
+        {"id":"e10","kind":"wire","conductors":3,"points":[{"x":140,"y":110},{"x":140,"y":135}]},
+        {"id":"e11","kind":"wire","conductors":3,"points":[{"x":140,"y":145},{"x":140,"y":180}]},
         {
           "id": "e12",
           "kind": "symbol",
-          "designation": "-KM2",
+          "designation": "-QF2",
+          "functionText": {"en":"Pump 2 motor breaker"},
           "mirror": false,
           "rot": 0,
-          "symbolId": "contact-no",
-          "x": 160,
-          "y": 115
+          "symbolId": "mcb-1p",
+          "x": 290,
+          "y": 105
         },
         {
           "id": "e13",
           "kind": "symbol",
+          "designation": "-KM4",
+          "functionText": {"en":"Main contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contactor-1p",
+          "x": 290,
+          "y": 140
+        },
+        {
+          "id": "e14",
+          "kind": "symbol",
           "designation": "-M2",
-          "functionText": {"en":"Pump 2\n7.5 kW"},
+          "functionText": {"en":"Pump 2\n7.5 kW, star-delta"},
           "mirror": false,
           "rot": 0,
           "symbolId": "motor-3ph",
-          "x": 160,
-          "y": 150
+          "x": 290,
+          "y": 190
         },
-        {"id":"e14","kind":"wire","conductors":3,"points":[{"x":160,"y":70},{"x":160,"y":85}]},
-        {"id":"e15","kind":"wire","conductors":3,"points":[{"x":160,"y":95},{"x":160,"y":110}]},
-        {"id":"e16","kind":"wire","conductors":3,"points":[{"x":160,"y":120},{"x":160,"y":140}]}
+        {"id":"e15","kind":"wire","conductors":3,"points":[{"x":290,"y":80},{"x":290,"y":100}]},
+        {"id":"e16","kind":"wire","conductors":3,"points":[{"x":290,"y":110},{"x":290,"y":135}]},
+        {"id":"e17","kind":"wire","conductors":3,"points":[{"x":290,"y":145},{"x":290,"y":180}]}
       ],
       "location": "PS",
       "size": "A3",
@@ -393,314 +410,626 @@
       "type": "power",
       "elements": [
         {
-          "id": "e17",
+          "id": "e18",
           "kind": "symbol",
           "designation": "-QF1",
-          "functionText": {"en":"Pump 1 breaker"},
+          "functionText": {"en":"Pump 1 motor breaker"},
           "mirror": false,
           "rot": 0,
           "symbolId": "mcb-3p",
-          "x": 100,
-          "y": 60
-        },
-        {
-          "id": "e18",
-          "kind": "symbol",
-          "designation": "-KM1",
-          "functionText": {"en":"Pump 1 contactor"},
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "contactor-3p",
-          "x": 100,
-          "y": 80
+          "x": 110,
+          "y": 55
         },
         {
           "id": "e19",
+          "kind": "symbol",
+          "designation": "-KM1",
+          "functionText": {"en":"Main contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contactor-3p",
+          "x": 110,
+          "y": 80
+        },
+        {
+          "id": "e20",
           "kind": "symbol",
           "designation": "-FR1",
           "functionText": {"en":"Overload relay"},
           "mirror": false,
           "rot": 0,
           "symbolId": "overload-relay-3p",
-          "x": 100,
-          "y": 100
+          "x": 110,
+          "y": 105
         },
         {
-          "id": "e20",
+          "id": "e21",
           "kind": "symbol",
           "designation": "-M1",
-          "functionText": {"en":"Pump 1\n7.5 kW"},
+          "functionText": {"en":"Pump 1\n7.5 kW, star-delta"},
           "mirror": false,
           "rot": 0,
-          "symbolId": "motor-3ph",
-          "x": 100,
-          "y": 135
-        },
-        {"id":"e21","kind":"wire","points":[{"x":95,"y":30},{"x":95,"y":55}],"potential":"L1"},
-        {"id":"e22","kind":"wire","points":[{"x":100,"y":30},{"x":100,"y":55}],"potential":"L2"},
-        {"id":"e23","kind":"wire","points":[{"x":105,"y":30},{"x":105,"y":55}],"potential":"L3"},
-        {"id":"e24","kind":"wire","number":"1","points":[{"x":95,"y":65},{"x":95,"y":75}]},
-        {"id":"e25","kind":"wire","number":"2","points":[{"x":100,"y":65},{"x":100,"y":75}]},
-        {"id":"e26","kind":"wire","number":"3","points":[{"x":105,"y":65},{"x":105,"y":75}]},
-        {"id":"e27","kind":"wire","number":"4","points":[{"x":95,"y":85},{"x":95,"y":95}]},
-        {"id":"e28","kind":"wire","number":"5","points":[{"x":100,"y":85},{"x":100,"y":95}]},
-        {"id":"e29","kind":"wire","number":"6","points":[{"x":105,"y":85},{"x":105,"y":95}]},
-        {"id":"e30","kind":"wire","number":"7","points":[{"x":95,"y":105},{"x":95,"y":125}]},
-        {"id":"e31","kind":"wire","number":"8","points":[{"x":100,"y":105},{"x":100,"y":125}]},
-        {"id":"e32","kind":"wire","number":"9","points":[{"x":105,"y":105},{"x":105,"y":125}]},
-        {
-          "id": "e33",
-          "kind": "symbol",
-          "designation": "-QF2",
-          "functionText": {"en":"Pump 2 breaker"},
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "mcb-3p",
-          "x": 190,
-          "y": 60
+          "symbolId": "motor-3ph-6",
+          "x": 110,
+          "y": 160
         },
         {
-          "id": "e34",
+          "id": "e22",
           "kind": "symbol",
           "designation": "-KM2",
-          "functionText": {"en":"Pump 2 contactor"},
+          "functionText": {"en":"Delta contactor"},
           "mirror": false,
           "rot": 0,
           "symbolId": "contactor-3p",
-          "x": 190,
+          "x": 145,
+          "y": 170
+        },
+        {
+          "id": "e23",
+          "kind": "symbol",
+          "designation": "-KM3",
+          "functionText": {"en":"Star contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contactor-3p",
+          "x": 110,
+          "y": 205
+        },
+        {"id":"e24","kind":"wire","points":[{"x":105,"y":28},{"x":105,"y":50}],"potential":"L1"},
+        {"id":"e25","kind":"wire","points":[{"x":110,"y":28},{"x":110,"y":50}],"potential":"L2"},
+        {"id":"e26","kind":"wire","points":[{"x":115,"y":28},{"x":115,"y":50}],"potential":"L3"},
+        {"id":"e27","kind":"wire","number":"1","points":[{"x":105,"y":60},{"x":105,"y":75}]},
+        {"id":"e28","kind":"wire","number":"2","points":[{"x":110,"y":60},{"x":110,"y":75}]},
+        {"id":"e29","kind":"wire","number":"3","points":[{"x":115,"y":60},{"x":115,"y":75}]},
+        {"id":"e30","kind":"wire","number":"4","points":[{"x":105,"y":85},{"x":105,"y":100}]},
+        {"id":"e31","kind":"wire","number":"5","points":[{"x":110,"y":85},{"x":110,"y":100}]},
+        {"id":"e32","kind":"wire","number":"6","points":[{"x":115,"y":85},{"x":115,"y":100}]},
+        {"id":"e33","kind":"wire","number":"7","points":[{"x":105,"y":110},{"x":105,"y":150}]},
+        {"id":"e34","kind":"wire","number":"8","points":[{"x":110,"y":110},{"x":110,"y":150}]},
+        {"id":"e35","kind":"wire","number":"9","points":[{"x":115,"y":110},{"x":115,"y":150}]},
+        {"id":"e36","kind":"wire","points":[{"x":140,"y":165},{"x":140,"y":130},{"x":105,"y":130}]},
+        {"id":"e36-j1","kind":"junction","x":105,"y":130},
+        {
+          "id": "e37",
+          "kind": "wire",
+          "points": [{"x":145,"y":165},{"x":145,"y":127.5},{"x":110,"y":127.5}]
+        },
+        {"id":"e37-j1","kind":"junction","x":110,"y":127.5},
+        {"id":"e38","kind":"wire","points":[{"x":150,"y":165},{"x":150,"y":125},{"x":115,"y":125}]},
+        {"id":"e38-j1","kind":"junction","x":115,"y":125},
+        {"id":"e39","kind":"wire","points":[{"x":140,"y":175},{"x":140,"y":185},{"x":105,"y":185}]},
+        {
+          "id": "e40",
+          "kind": "wire",
+          "points": [{"x":145,"y":175},{"x":145,"y":182.5},{"x":110,"y":182.5}]
+        },
+        {"id":"e41","kind":"wire","points":[{"x":150,"y":175},{"x":150,"y":180},{"x":115,"y":180}]},
+        {"id":"e42","kind":"wire","points":[{"x":105,"y":170},{"x":105,"y":200}]},
+        {"id":"e42-j1","kind":"junction","x":105,"y":185},
+        {"id":"e43","kind":"wire","points":[{"x":110,"y":170},{"x":110,"y":200}]},
+        {"id":"e43-j1","kind":"junction","x":110,"y":182.5},
+        {"id":"e44","kind":"wire","points":[{"x":115,"y":170},{"x":115,"y":200}]},
+        {"id":"e44-j1","kind":"junction","x":115,"y":180},
+        {"id":"e45","kind":"wire","points":[{"x":105,"y":210},{"x":115,"y":210}]},
+        {
+          "id": "e46",
+          "kind": "rect",
+          "dashed": true,
+          "h": 185,
+          "label": "Star-delta starter, pump 1",
+          "w": 95,
+          "x": 90,
+          "y": 40
+        },
+        {
+          "id": "e47",
+          "kind": "symbol",
+          "designation": "-QF2",
+          "functionText": {"en":"Pump 2 motor breaker"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "mcb-3p",
+          "x": 300,
+          "y": 55
+        },
+        {
+          "id": "e48",
+          "kind": "symbol",
+          "designation": "-KM4",
+          "functionText": {"en":"Main contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contactor-3p",
+          "x": 300,
           "y": 80
         },
         {
-          "id": "e35",
+          "id": "e49",
           "kind": "symbol",
           "designation": "-FR2",
           "functionText": {"en":"Overload relay"},
           "mirror": false,
           "rot": 0,
           "symbolId": "overload-relay-3p",
-          "x": 190,
-          "y": 100
+          "x": 300,
+          "y": 105
         },
         {
-          "id": "e36",
+          "id": "e50",
           "kind": "symbol",
           "designation": "-M2",
-          "functionText": {"en":"Pump 2\n7.5 kW"},
+          "functionText": {"en":"Pump 2\n7.5 kW, star-delta"},
           "mirror": false,
           "rot": 0,
-          "symbolId": "motor-3ph",
-          "x": 190,
-          "y": 135
+          "symbolId": "motor-3ph-6",
+          "x": 300,
+          "y": 160
         },
-        {"id":"e37","kind":"wire","points":[{"x":185,"y":30},{"x":185,"y":55}],"potential":"L1"},
-        {"id":"e38","kind":"wire","points":[{"x":190,"y":30},{"x":190,"y":55}],"potential":"L2"},
-        {"id":"e39","kind":"wire","points":[{"x":195,"y":30},{"x":195,"y":55}],"potential":"L3"},
-        {"id":"e40","kind":"wire","number":"10","points":[{"x":185,"y":65},{"x":185,"y":75}]},
-        {"id":"e41","kind":"wire","number":"11","points":[{"x":190,"y":65},{"x":190,"y":75}]},
-        {"id":"e42","kind":"wire","number":"12","points":[{"x":195,"y":65},{"x":195,"y":75}]},
-        {"id":"e43","kind":"wire","number":"13","points":[{"x":185,"y":85},{"x":185,"y":95}]},
-        {"id":"e44","kind":"wire","number":"14","points":[{"x":190,"y":85},{"x":190,"y":95}]},
-        {"id":"e45","kind":"wire","number":"15","points":[{"x":195,"y":85},{"x":195,"y":95}]},
-        {"id":"e46","kind":"wire","number":"16","points":[{"x":185,"y":105},{"x":185,"y":125}]},
-        {"id":"e47","kind":"wire","number":"17","points":[{"x":190,"y":105},{"x":190,"y":125}]},
-        {"id":"e48","kind":"wire","number":"18","points":[{"x":195,"y":105},{"x":195,"y":125}]},
         {
-          "id": "e49",
-          "kind": "text",
-          "align": "left",
+          "id": "e51",
+          "kind": "symbol",
+          "designation": "-KM5",
+          "functionText": {"en":"Delta contactor"},
+          "mirror": false,
           "rot": 0,
-          "size": 3,
-          "text": "Star-delta starters for the pumps need devices with several contact sets: they come with milestone M2.",
-          "x": 40,
-          "y": 190
-        }
-      ],
-      "location": "PS",
-      "size": "A3",
-      "templateId": "",
-      "title": {"en":"Pump power circuits"}
-    },
-    {
-      "id": "p6",
-      "type": "control",
-      "elements": [
-        {"id":"e50","kind":"wire","points":[{"x":60,"y":60},{"x":200,"y":60}],"potential":"24VDC"},
-        {"id":"e51","kind":"wire","points":[{"x":60,"y":200},{"x":200,"y":200}],"potential":"0V"},
+          "symbolId": "contactor-3p",
+          "x": 335,
+          "y": 170
+        },
         {
           "id": "e52",
           "kind": "symbol",
-          "designation": "-BL1",
-          "functionText": {"en":"Low level start"},
+          "designation": "-KM6",
+          "functionText": {"en":"Star contactor"},
           "mirror": false,
           "rot": 0,
-          "symbolId": "limit-switch-no",
-          "x": 90,
-          "y": 90
+          "symbolId": "contactor-3p",
+          "x": 300,
+          "y": 205
         },
+        {"id":"e53","kind":"wire","points":[{"x":295,"y":28},{"x":295,"y":50}],"potential":"L1"},
+        {"id":"e54","kind":"wire","points":[{"x":300,"y":28},{"x":300,"y":50}],"potential":"L2"},
+        {"id":"e55","kind":"wire","points":[{"x":305,"y":28},{"x":305,"y":50}],"potential":"L3"},
+        {"id":"e56","kind":"wire","number":"10","points":[{"x":295,"y":60},{"x":295,"y":75}]},
+        {"id":"e57","kind":"wire","number":"11","points":[{"x":300,"y":60},{"x":300,"y":75}]},
+        {"id":"e58","kind":"wire","number":"12","points":[{"x":305,"y":60},{"x":305,"y":75}]},
+        {"id":"e59","kind":"wire","number":"13","points":[{"x":295,"y":85},{"x":295,"y":100}]},
+        {"id":"e60","kind":"wire","number":"14","points":[{"x":300,"y":85},{"x":300,"y":100}]},
+        {"id":"e61","kind":"wire","number":"15","points":[{"x":305,"y":85},{"x":305,"y":100}]},
+        {"id":"e62","kind":"wire","number":"16","points":[{"x":295,"y":110},{"x":295,"y":150}]},
+        {"id":"e63","kind":"wire","number":"17","points":[{"x":300,"y":110},{"x":300,"y":150}]},
+        {"id":"e64","kind":"wire","number":"18","points":[{"x":305,"y":110},{"x":305,"y":150}]},
+        {"id":"e65","kind":"wire","points":[{"x":330,"y":165},{"x":330,"y":130},{"x":295,"y":130}]},
+        {"id":"e65-j1","kind":"junction","x":295,"y":130},
         {
-          "id": "e53",
-          "kind": "symbol",
-          "designation": "-KM1",
-          "functionText": {"en":"Pump 1 contactor"},
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "coil",
-          "x": 90,
-          "y": 140
+          "id": "e66",
+          "kind": "wire",
+          "points": [{"x":335,"y":165},{"x":335,"y":127.5},{"x":300,"y":127.5}]
         },
-        {"id":"e54","kind":"wire","points":[{"x":90,"y":60},{"x":90,"y":85}]},
-        {"id":"e54-j1","kind":"junction","x":90,"y":60},
-        {"id":"e55","kind":"wire","points":[{"x":90,"y":95},{"x":90,"y":135}]},
-        {"id":"e56","kind":"wire","points":[{"x":90,"y":145},{"x":90,"y":200}]},
-        {"id":"e56-j1","kind":"junction","x":90,"y":200},
+        {"id":"e66-j1","kind":"junction","x":300,"y":127.5},
+        {"id":"e67","kind":"wire","points":[{"x":340,"y":165},{"x":340,"y":125},{"x":305,"y":125}]},
+        {"id":"e67-j1","kind":"junction","x":305,"y":125},
+        {"id":"e68","kind":"wire","points":[{"x":330,"y":175},{"x":330,"y":185},{"x":295,"y":185}]},
         {
-          "id": "e57",
-          "kind": "symbol",
-          "designation": "-BL2",
-          "functionText": {"en":"High level stop"},
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "limit-switch-nc",
-          "x": 140,
-          "y": 90
+          "id": "e69",
+          "kind": "wire",
+          "points": [{"x":335,"y":175},{"x":335,"y":182.5},{"x":300,"y":182.5}]
         },
+        {"id":"e70","kind":"wire","points":[{"x":340,"y":175},{"x":340,"y":180},{"x":305,"y":180}]},
+        {"id":"e71","kind":"wire","points":[{"x":295,"y":170},{"x":295,"y":200}]},
+        {"id":"e71-j1","kind":"junction","x":295,"y":185},
+        {"id":"e72","kind":"wire","points":[{"x":300,"y":170},{"x":300,"y":200}]},
+        {"id":"e72-j1","kind":"junction","x":300,"y":182.5},
+        {"id":"e73","kind":"wire","points":[{"x":305,"y":170},{"x":305,"y":200}]},
+        {"id":"e73-j1","kind":"junction","x":305,"y":180},
+        {"id":"e74","kind":"wire","points":[{"x":295,"y":210},{"x":305,"y":210}]},
         {
-          "id": "e58",
-          "kind": "symbol",
-          "designation": "-KM2",
-          "functionText": {"en":"Pump 2 contactor"},
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "coil",
-          "x": 140,
-          "y": 140
+          "id": "e75",
+          "kind": "rect",
+          "dashed": true,
+          "h": 185,
+          "label": "Star-delta starter, pump 2",
+          "w": 95,
+          "x": 280,
+          "y": 40
         },
-        {"id":"e59","kind":"wire","points":[{"x":140,"y":60},{"x":140,"y":85}]},
-        {"id":"e59-j1","kind":"junction","x":140,"y":60},
-        {"id":"e60","kind":"wire","points":[{"x":140,"y":95},{"x":140,"y":135}]},
-        {"id":"e61","kind":"wire","points":[{"x":140,"y":145},{"x":140,"y":200}]},
-        {"id":"e61-j1","kind":"junction","x":140,"y":200}
-      ],
-      "location": "PS",
-      "size": "A3",
-      "templateId": "",
-      "title": {"en":"Level control"}
-    },
-    {
-      "id": "p7",
-      "type": "plc",
-      "elements": [
-        {
-          "id": "e62",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-input",
-          "value": "I0.0",
-          "x": 120,
-          "y": 50
-        },
-        {"id":"e63","kind":"wire","points":[{"x":100,"y":50},{"x":120,"y":50}]},
-        {
-          "id": "e64",
-          "kind": "text",
-          "align": "left",
-          "rot": 0,
-          "size": 3,
-          "text": "Low level",
-          "x": 40,
-          "y": 51.5
-        },
-        {
-          "id": "e65",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-input",
-          "value": "I0.1",
-          "x": 120,
-          "y": 62
-        },
-        {"id":"e66","kind":"wire","points":[{"x":100,"y":62},{"x":120,"y":62}]},
-        {
-          "id": "e67",
-          "kind": "text",
-          "align": "left",
-          "rot": 0,
-          "size": 3,
-          "text": "High level",
-          "x": 40,
-          "y": 63.5
-        },
-        {
-          "id": "e68",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-input",
-          "value": "I0.2",
-          "x": 120,
-          "y": 74
-        },
-        {"id":"e69","kind":"wire","points":[{"x":100,"y":74},{"x":120,"y":74}]},
-        {
-          "id": "e70",
-          "kind": "text",
-          "align": "left",
-          "rot": 0,
-          "size": 3,
-          "text": "Pump 1 overload",
-          "x": 40,
-          "y": 75.5
-        },
-        {
-          "id": "e71",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-output",
-          "value": "Q0.0",
-          "x": 120,
-          "y": 86
-        },
-        {"id":"e72","kind":"wire","points":[{"x":100,"y":86},{"x":120,"y":86}]},
-        {
-          "id": "e73",
-          "kind": "text",
-          "align": "left",
-          "rot": 0,
-          "size": 3,
-          "text": "Pump 1 contactor",
-          "x": 40,
-          "y": 87.5
-        },
-        {
-          "id": "e74",
-          "kind": "symbol",
-          "designation": "",
-          "mirror": false,
-          "rot": 0,
-          "symbolId": "plc-output",
-          "value": "Q0.1",
-          "x": 120,
-          "y": 98
-        },
-        {"id":"e75","kind":"wire","points":[{"x":100,"y":98},{"x":120,"y":98}]},
         {
           "id": "e76",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 3,
-          "text": "Pump 2 contactor",
-          "x": 40,
-          "y": 99.5
+          "text": "Star-delta starting: the star contactor closes with the main contactor;\nafter the timer it opens and the delta contactor closes.",
+          "x": 160,
+          "y": 240
+        }
+      ],
+      "location": "PS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Pump power circuits, star-delta"}
+    },
+    {
+      "id": "p6",
+      "type": "control",
+      "elements": [
+        {"id":"e77","kind":"wire","points":[{"x":40,"y":50},{"x":395,"y":50}],"potential":"24VDC"},
+        {"id":"e78","kind":"wire","points":[{"x":40,"y":240},{"x":395,"y":240}],"potential":"0V"},
+        {
+          "id": "e79",
+          "kind": "symbol",
+          "designation": "-BL1",
+          "functionText": {"en":"Low level, start pump 1"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "limit-switch-no",
+          "x": 50,
+          "y": 70
         },
-        {"id":"e77","kind":"rect","dashed":true,"h":66,"label":"PLC","w":25,"x":118,"y":42}
+        {
+          "id": "e80",
+          "kind": "symbol",
+          "designation": "-FR1",
+          "functionText": {"en":"Overload relay"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-nc",
+          "x": 50,
+          "y": 88
+        },
+        {"id":"e81","kind":"wire","points":[{"x":50,"y":50},{"x":50,"y":65}]},
+        {"id":"e81-j1","kind":"junction","x":50,"y":50},
+        {"id":"e82","kind":"wire","points":[{"x":50,"y":75},{"x":50,"y":83}]},
+        {"id":"e83","kind":"wire","points":[{"x":50,"y":93},{"x":50,"y":105}]},
+        {"id":"e84","kind":"wire","points":[{"x":50,"y":105},{"x":185,"y":105}]},
+        {
+          "id": "e85",
+          "kind": "symbol",
+          "designation": "-KM1",
+          "functionText": {"en":"Main contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 50,
+          "y": 170
+        },
+        {
+          "id": "e86",
+          "kind": "symbol",
+          "designation": "-KT1",
+          "functionText": {"en":"Star-delta timer"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 95,
+          "y": 170
+        },
+        {
+          "id": "e87",
+          "kind": "symbol",
+          "designation": "-KT1",
+          "functionText": {"en":"Star time"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-nc",
+          "x": 140,
+          "y": 125
+        },
+        {
+          "id": "e88",
+          "kind": "symbol",
+          "designation": "-KM3",
+          "functionText": {"en":"Star contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 140,
+          "y": 170
+        },
+        {
+          "id": "e89",
+          "kind": "symbol",
+          "designation": "-KT1",
+          "functionText": {"en":"Delta time"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-no",
+          "x": 185,
+          "y": 125
+        },
+        {
+          "id": "e90",
+          "kind": "symbol",
+          "designation": "-KM3",
+          "functionText": {"en":"Interlock"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-nc",
+          "x": 185,
+          "y": 145
+        },
+        {
+          "id": "e91",
+          "kind": "symbol",
+          "designation": "-KM2",
+          "functionText": {"en":"Delta contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 185,
+          "y": 175
+        },
+        {"id":"e92","kind":"wire","points":[{"x":50,"y":105},{"x":50,"y":165}]},
+        {"id":"e92-j1","kind":"junction","x":50,"y":105},
+        {"id":"e93","kind":"wire","points":[{"x":95,"y":105},{"x":95,"y":165}]},
+        {"id":"e93-j1","kind":"junction","x":95,"y":105},
+        {"id":"e94","kind":"wire","points":[{"x":140,"y":105},{"x":140,"y":120}]},
+        {"id":"e94-j1","kind":"junction","x":140,"y":105},
+        {"id":"e95","kind":"wire","points":[{"x":140,"y":130},{"x":140,"y":165}]},
+        {"id":"e96","kind":"wire","points":[{"x":185,"y":105},{"x":185,"y":120}]},
+        {"id":"e97","kind":"wire","points":[{"x":185,"y":130},{"x":185,"y":140}]},
+        {"id":"e98","kind":"wire","points":[{"x":185,"y":150},{"x":185,"y":170}]},
+        {"id":"e99","kind":"wire","points":[{"x":50,"y":175},{"x":50,"y":240}]},
+        {"id":"e99-j1","kind":"junction","x":50,"y":240},
+        {"id":"e100","kind":"wire","points":[{"x":95,"y":175},{"x":95,"y":240}]},
+        {"id":"e100-j1","kind":"junction","x":95,"y":240},
+        {"id":"e101","kind":"wire","points":[{"x":140,"y":175},{"x":140,"y":240}]},
+        {"id":"e101-j1","kind":"junction","x":140,"y":240},
+        {"id":"e102","kind":"wire","points":[{"x":185,"y":180},{"x":185,"y":240}]},
+        {"id":"e102-j1","kind":"junction","x":185,"y":240},
+        {
+          "id": "e103",
+          "kind": "symbol",
+          "designation": "-BL2",
+          "functionText": {"en":"Low level, start pump 2"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "limit-switch-no",
+          "x": 235,
+          "y": 70
+        },
+        {
+          "id": "e104",
+          "kind": "symbol",
+          "designation": "-FR2",
+          "functionText": {"en":"Overload relay"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-nc",
+          "x": 235,
+          "y": 88
+        },
+        {"id":"e105","kind":"wire","points":[{"x":235,"y":50},{"x":235,"y":65}]},
+        {"id":"e105-j1","kind":"junction","x":235,"y":50},
+        {"id":"e106","kind":"wire","points":[{"x":235,"y":75},{"x":235,"y":83}]},
+        {"id":"e107","kind":"wire","points":[{"x":235,"y":93},{"x":235,"y":105}]},
+        {"id":"e108","kind":"wire","points":[{"x":235,"y":105},{"x":370,"y":105}]},
+        {
+          "id": "e109",
+          "kind": "symbol",
+          "designation": "-KM4",
+          "functionText": {"en":"Main contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 235,
+          "y": 170
+        },
+        {
+          "id": "e110",
+          "kind": "symbol",
+          "designation": "-KT2",
+          "functionText": {"en":"Star-delta timer"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 280,
+          "y": 170
+        },
+        {
+          "id": "e111",
+          "kind": "symbol",
+          "designation": "-KT2",
+          "functionText": {"en":"Star time"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-nc",
+          "x": 325,
+          "y": 125
+        },
+        {
+          "id": "e112",
+          "kind": "symbol",
+          "designation": "-KM6",
+          "functionText": {"en":"Star contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 325,
+          "y": 170
+        },
+        {
+          "id": "e113",
+          "kind": "symbol",
+          "designation": "-KT2",
+          "functionText": {"en":"Delta time"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-no",
+          "x": 370,
+          "y": 125
+        },
+        {
+          "id": "e114",
+          "kind": "symbol",
+          "designation": "-KM6",
+          "functionText": {"en":"Interlock"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-nc",
+          "x": 370,
+          "y": 145
+        },
+        {
+          "id": "e115",
+          "kind": "symbol",
+          "designation": "-KM5",
+          "functionText": {"en":"Delta contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 370,
+          "y": 175
+        },
+        {"id":"e116","kind":"wire","points":[{"x":235,"y":105},{"x":235,"y":165}]},
+        {"id":"e116-j1","kind":"junction","x":235,"y":105},
+        {"id":"e117","kind":"wire","points":[{"x":280,"y":105},{"x":280,"y":165}]},
+        {"id":"e117-j1","kind":"junction","x":280,"y":105},
+        {"id":"e118","kind":"wire","points":[{"x":325,"y":105},{"x":325,"y":120}]},
+        {"id":"e118-j1","kind":"junction","x":325,"y":105},
+        {"id":"e119","kind":"wire","points":[{"x":325,"y":130},{"x":325,"y":165}]},
+        {"id":"e120","kind":"wire","points":[{"x":370,"y":105},{"x":370,"y":120}]},
+        {"id":"e121","kind":"wire","points":[{"x":370,"y":130},{"x":370,"y":140}]},
+        {"id":"e122","kind":"wire","points":[{"x":370,"y":150},{"x":370,"y":170}]},
+        {"id":"e123","kind":"wire","points":[{"x":235,"y":175},{"x":235,"y":240}]},
+        {"id":"e123-j1","kind":"junction","x":235,"y":240},
+        {"id":"e124","kind":"wire","points":[{"x":280,"y":175},{"x":280,"y":240}]},
+        {"id":"e124-j1","kind":"junction","x":280,"y":240},
+        {"id":"e125","kind":"wire","points":[{"x":325,"y":175},{"x":325,"y":240}]},
+        {"id":"e125-j1","kind":"junction","x":325,"y":240},
+        {"id":"e126","kind":"wire","points":[{"x":370,"y":180},{"x":370,"y":240}]},
+        {"id":"e126-j1","kind":"junction","x":370,"y":240}
+      ],
+      "location": "PS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Pump control, star-delta"}
+    },
+    {
+      "id": "p7",
+      "type": "plc",
+      "elements": [
+        {
+          "id": "e127",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.0",
+          "x": 200,
+          "y": 60
+        },
+        {"id":"e128","kind":"wire","points":[{"x":160,"y":60},{"x":200,"y":60}]},
+        {
+          "id": "e129",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Low level pump 1",
+          "x": 70,
+          "y": 61.5
+        },
+        {
+          "id": "e130",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.1",
+          "x": 200,
+          "y": 76
+        },
+        {"id":"e131","kind":"wire","points":[{"x":160,"y":76},{"x":200,"y":76}]},
+        {
+          "id": "e132",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Low level pump 2",
+          "x": 70,
+          "y": 77.5
+        },
+        {
+          "id": "e133",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.2",
+          "x": 200,
+          "y": 92
+        },
+        {"id":"e134","kind":"wire","points":[{"x":160,"y":92},{"x":200,"y":92}]},
+        {
+          "id": "e135",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Pump 1 overload",
+          "x": 70,
+          "y": 93.5
+        },
+        {
+          "id": "e136",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-output",
+          "value": "Q0.0",
+          "x": 200,
+          "y": 108
+        },
+        {"id":"e137","kind":"wire","points":[{"x":160,"y":108},{"x":200,"y":108}]},
+        {
+          "id": "e138",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Pump 1 run",
+          "x": 70,
+          "y": 109.5
+        },
+        {
+          "id": "e139",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-output",
+          "value": "Q0.1",
+          "x": 200,
+          "y": 124
+        },
+        {"id":"e140","kind":"wire","points":[{"x":160,"y":124},{"x":200,"y":124}]},
+        {
+          "id": "e141",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Pump 2 run",
+          "x": 70,
+          "y": 125.5
+        },
+        {
+          "id": "e142",
+          "kind": "rect",
+          "assembly": "-A1",
+          "dashed": true,
+          "h": 90,
+          "label": "PLC",
+          "w": 28,
+          "x": 198,
+          "y": 48
+        }
       ],
       "location": "PS",
       "size": "A3",
@@ -712,7 +1041,7 @@
       "type": "terminals",
       "elements": [
         {
-          "id": "e78",
+          "id": "e143",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -731,7 +1060,7 @@
       "type": "cables",
       "elements": [
         {
-          "id": "e79",
+          "id": "e144",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -750,7 +1079,7 @@
       "type": "layout",
       "elements": [
         {
-          "id": "e80",
+          "id": "e145",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -766,5 +1095,392 @@
     }
   ],
   "assets": {},
-  "symbols": []
+  "symbols": [],
+  "devices": [
+    {
+      "designation": "+PS-A1",
+      "fields": {},
+      "parts": [
+        {"part":"generic-plc-cpu-compact","qty":1},
+        {"part":"generic-plc-di-16-24vdc","qty":1},
+        {"part":"generic-plc-do-16-24vdc","qty":1}
+      ]
+    },
+    {"designation":"+PS-BL1","fields":{},"parts":[{"part":"generic-limit-switch-1no","qty":1}]},
+    {"designation":"+PS-BL2","fields":{},"parts":[{"part":"generic-limit-switch-1no","qty":1}]},
+    {"designation":"+PS-FR1","fields":{},"parts":[{"part":"generic-overload-relay-9a-13a","qty":1}]},
+    {"designation":"+PS-FR2","fields":{},"parts":[{"part":"generic-overload-relay-9a-13a","qty":1}]},
+    {
+      "designation": "+PS-KM1",
+      "fields": {},
+      "parts": [{"part":"generic-contactor-18a","qty":1},{"part":"generic-aux-block-1no1nc","qty":1}]
+    },
+    {"designation":"+PS-KM2","fields":{},"parts":[{"part":"generic-contactor-18a","qty":1}]},
+    {"designation":"+PS-KM3","fields":{},"parts":[{"part":"generic-contactor-12a","qty":1}]},
+    {
+      "designation": "+PS-KM4",
+      "fields": {},
+      "parts": [{"part":"generic-contactor-18a","qty":1},{"part":"generic-aux-block-1no1nc","qty":1}]
+    },
+    {"designation":"+PS-KM5","fields":{},"parts":[{"part":"generic-contactor-18a","qty":1}]},
+    {"designation":"+PS-KM6","fields":{},"parts":[{"part":"generic-contactor-12a","qty":1}]},
+    {
+      "designation": "+PS-KT1",
+      "fields": {},
+      "parts": [{"part":"generic-timer-relay-star-delta","qty":1}]
+    },
+    {
+      "designation": "+PS-KT2",
+      "fields": {},
+      "parts": [{"part":"generic-timer-relay-star-delta","qty":1}]
+    },
+    {"designation":"+PS-M1","fields":{},"parts":[{"part":"generic-motor-3ph-7.5kw","qty":1}]},
+    {"designation":"+PS-M2","fields":{},"parts":[{"part":"generic-motor-3ph-7.5kw","qty":1}]},
+    {"designation":"+PS-QF0","fields":{},"parts":[{"part":"generic-mcb-3p-c63a","qty":1}]},
+    {"designation":"+PS-QF1","fields":{},"parts":[{"part":"generic-mpcb-10a-16a","qty":1}]},
+    {"designation":"+PS-QF2","fields":{},"parts":[{"part":"generic-mpcb-10a-16a","qty":1}]}
+  ],
+  "parts": [
+    {
+      "id": "generic-mcb-3p-c63a",
+      "kind": "part",
+      "category": "breakers",
+      "code": "GEN-MCB-3P-C63A",
+      "data": {"Poles":"3","Rated current":"63 A","Tripping characteristic":"C"},
+      "description": {
+        "en": "Miniature circuit breaker 3 poles, curve C, 63 A",
+        "it": "Interruttore magnetotermico 3 poli, curva C, 63 A"
+      },
+      "dimensions": {"d":70,"h":90,"w":52.5},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Miniature circuit breaker 3 poles, curve C, 63 A",
+        "it": "Interruttore magnetotermico 3 poli, curva C, 63 A"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-mpcb-10a-16a",
+      "kind": "part",
+      "category": "motor-protection",
+      "code": "GEN-MPCB-10A-16A",
+      "data": {"Poles":"3","Setting range":"10 - 16 A"},
+      "description": {
+        "en": "Motor protective circuit breaker, 3 poles, setting range 10 to 16 A",
+        "it": "Salvamotore, 3 poli, campo di regolazione da 10 a 16 A"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Motor protective circuit breaker, 3 poles, setting range 10 to 16 A",
+        "it": "Salvamotore, 3 poli, campo di regolazione da 10 a 16 A"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-contactor-18a",
+      "kind": "part",
+      "category": "contactors",
+      "code": "GEN-CONTACTOR-18A",
+      "data": {
+        "Auxiliary contacts": "1 NO",
+        "Coil voltage": "24 V DC",
+        "Poles": "3",
+        "Rated operational current AC-3": "18 A"
+      },
+      "description": {
+        "en": "Contactor 3 poles, 18 A AC-3, coil 24 V DC",
+        "it": "Contattore 3 poli, 18 A AC-3, bobina 24 V DC"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Contactor 3 poles, 18 A AC-3, coil 24 V DC",
+        "it": "Contattore 3 poli, 18 A AC-3, bobina 24 V DC"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-aux-block-1no1nc",
+      "kind": "part",
+      "category": "contactors",
+      "code": "GEN-AUX-BLOCK-1NO1NC",
+      "data": {"Contacts":"1 NO + 1 NC"},
+      "description": {"en":"Auxiliary contact block, 1 NO + 1 NC","it":"Blocco di contatti ausiliari, 1 NA + 1 NC"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"Auxiliary contact block, 1 NO + 1 NC","it":"Blocco di contatti ausiliari, 1 NA + 1 NC"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-contactor-12a",
+      "kind": "part",
+      "category": "contactors",
+      "code": "GEN-CONTACTOR-12A",
+      "data": {
+        "Auxiliary contacts": "1 NO",
+        "Coil voltage": "24 V DC",
+        "Poles": "3",
+        "Rated operational current AC-3": "12 A"
+      },
+      "description": {
+        "en": "Contactor 3 poles, 12 A AC-3, coil 24 V DC",
+        "it": "Contattore 3 poli, 12 A AC-3, bobina 24 V DC"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Contactor 3 poles, 12 A AC-3, coil 24 V DC",
+        "it": "Contattore 3 poli, 12 A AC-3, bobina 24 V DC"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-overload-relay-9a-13a",
+      "kind": "part",
+      "category": "motor-protection",
+      "code": "GEN-OVERLOAD-RELAY-9A-13A",
+      "data": {"Setting range":"9 - 13 A"},
+      "description": {
+        "en": "Thermal overload relay, setting range 9 to 13 A",
+        "it": "Relè termico, campo di regolazione da 9 a 13 A"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Thermal overload relay, setting range 9 to 13 A",
+        "it": "Relè termico, campo di regolazione da 9 a 13 A"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-motor-3ph-7.5kw",
+      "kind": "part",
+      "category": "machines",
+      "code": "GEN-MOTOR-3PH-7,5KW",
+      "data": {"Poles":"4","Rated power":"7.5 kW","Voltage":"400 V"},
+      "description": {"en":"Three-phase motor 7.5 kW, 4 poles, 400 V","it":"Motore trifase 7,5 kW, 4 poli, 400 V"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"Three-phase motor 7.5 kW, 4 poles, 400 V","it":"Motore trifase 7,5 kW, 4 poli, 400 V"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-timer-relay-star-delta",
+      "kind": "part",
+      "category": "relays",
+      "code": "GEN-TIMER-RELAY-STAR-DELTA",
+      "data": {"Contacts":"2 NO","Function":"Star-delta changeover","Supply voltage":"24 V DC"},
+      "description": {"en":"Star-delta timer relay, 24 V DC","it":"Relè temporizzatore stella-triangolo, 24 V DC"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"Star-delta timer relay, 24 V DC","it":"Relè temporizzatore stella-triangolo, 24 V DC"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-limit-switch-1no",
+      "kind": "part",
+      "category": "operator-devices",
+      "code": "GEN-LIMIT-SWITCH-1NO",
+      "data": {"Contacts":"1 NO"},
+      "description": {"en":"Limit switch, 1 normally open contact","it":"Finecorsa, 1 contatto normalmente aperto"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"Limit switch, 1 normally open contact","it":"Finecorsa, 1 contatto normalmente aperto"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-plc-cpu-compact",
+      "kind": "part",
+      "category": "plc",
+      "code": "GEN-PLC-CPU-COMPACT",
+      "data": {"Interface":"Ethernet","Supply voltage":"24 V DC"},
+      "description": {"en":"PLC CPU, compact, Ethernet, 24 V DC","it":"CPU PLC compatta, Ethernet, 24 V DC"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"PLC CPU, compact, Ethernet, 24 V DC","it":"CPU PLC compatta, Ethernet, 24 V DC"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-plc-di-16-24vdc",
+      "kind": "part",
+      "category": "plc",
+      "code": "GEN-PLC-DI-16-24VDC",
+      "data": {"Channels":"16","Signal":"24 V DC"},
+      "description": {
+        "en": "PLC input card, 16 digital inputs 24 V DC",
+        "it": "Scheda PLC, 16 ingressi digitali 24 V DC"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "PLC input card, 16 digital inputs 24 V DC",
+        "it": "Scheda PLC, 16 ingressi digitali 24 V DC"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-plc-do-16-24vdc",
+      "kind": "part",
+      "category": "plc",
+      "code": "GEN-PLC-DO-16-24VDC",
+      "data": {"Channels":"16","Signal":"24 V DC"},
+      "description": {
+        "en": "PLC output card, 16 digital outputs 24 V DC",
+        "it": "Scheda PLC, 16 uscite digitali 24 V DC"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "PLC output card, 16 digital outputs 24 V DC",
+        "it": "Scheda PLC, 16 uscite digitali 24 V DC"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-enclosure-800x1000x300",
+      "kind": "part",
+      "category": "enclosures",
+      "code": "GEN-ENCLOSURE-800X1000X300",
+      "data": {"Depth":"300 mm","Height":"1000 mm","Width":"800 mm"},
+      "description": {
+        "en": "Wall enclosure 800 x 1000 x 300 mm (W x H x D), sheet steel",
+        "it": "Armadio a parete 800 x 1000 x 300 mm (L x A x P), lamiera di acciaio"
+      },
+      "dimensions": {"d":300,"h":1000,"w":800},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Wall enclosure 800 x 1000 x 300 mm (W x H x D), sheet steel",
+        "it": "Armadio a parete 800 x 1000 x 300 mm (L x A x P), lamiera di acciaio"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-mounting-plate-600x800",
+      "kind": "part",
+      "category": "enclosures",
+      "code": "GEN-MOUNTING-PLATE-600X800",
+      "data": {"Height":"800 mm","Width":"600 mm"},
+      "description": {
+        "en": "Mounting plate 600 x 800 mm for enclosure 800 x 1000",
+        "it": "Piastra di montaggio 600 x 800 mm per armadio 800 x 1000"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Mounting plate 600 x 800 mm for enclosure 800 x 1000",
+        "it": "Piastra di montaggio 600 x 800 mm per armadio 800 x 1000"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-wiring-kit",
+      "kind": "part",
+      "category": "accessories",
+      "code": "GEN-WIRING-KIT",
+      "data": {},
+      "description": {
+        "en": "Wiring kit (ferrules, cable ties, labels), per assembly",
+        "it": "Kit di cablaggio (puntalini, fascette, etichette), per quadro"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Wiring kit (ferrules, cable ties, labels), per assembly",
+        "it": "Kit di cablaggio (puntalini, fascette, etichette), per quadro"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-din-rail-35mm-1m",
+      "kind": "part",
+      "category": "accessories",
+      "code": "GEN-DIN-RAIL-35MM-1M",
+      "data": {"Length":"1 m","Width":"35 mm"},
+      "description": {"en":"DIN rail 35 mm, 1 m","it":"Guida DIN 35 mm, 1 m"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"DIN rail 35 mm, 1 m","it":"Guida DIN 35 mm, 1 m"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-terminal-feedthrough-4mm2",
+      "kind": "part",
+      "category": "terminals",
+      "code": "GEN-TERMINAL-FEEDTHROUGH-4MM2",
+      "data": {"Conductor cross-section":"4 mm²","Connection":"Screw"},
+      "description": {
+        "en": "Feed-through terminal, 4 mm², screw connection",
+        "it": "Morsetto passante, 4 mm², a vite"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Feed-through terminal, 4 mm², screw connection",
+        "it": "Morsetto passante, 4 mm², a vite"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-terminal-pe-10mm2",
+      "kind": "part",
+      "category": "terminals",
+      "code": "GEN-TERMINAL-PE-10MM2",
+      "data": {"Colour":"GNYE","Conductor cross-section":"10 mm²"},
+      "description": {
+        "en": "Protective earth terminal, 10 mm², green-yellow",
+        "it": "Morsetto di terra PE, 10 mm², giallo-verde"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Protective earth terminal, 10 mm², green-yellow",
+        "it": "Morsetto di terra PE, 10 mm², giallo-verde"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    }
+  ],
+  "projectParts": [
+    {
+      "id": "pp-generic-enclosure-800x1000x300",
+      "fields": {"make":"Buy"},
+      "part": "generic-enclosure-800x1000x300",
+      "qty": 1
+    },
+    {
+      "id": "pp-generic-mounting-plate-600x800",
+      "fields": {"make":"Buy"},
+      "part": "generic-mounting-plate-600x800",
+      "qty": 1
+    },
+    {"id":"pp-generic-wiring-kit","fields":{"make":"Make"},"part":"generic-wiring-kit","qty":1},
+    {"id":"pp-generic-din-rail-35mm-1m","fields":{},"part":"generic-din-rail-35mm-1m","qty":2},
+    {
+      "id": "pp-generic-terminal-feedthrough-4mm2",
+      "fields": {},
+      "part": "generic-terminal-feedthrough-4mm2",
+      "qty": 24
+    },
+    {"id":"pp-generic-terminal-pe-10mm2","fields":{},"part":"generic-terminal-pe-10mm2","qty":6}
+  ]
 }

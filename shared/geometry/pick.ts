@@ -1,5 +1,6 @@
 // Picking and snapping on a page: which element is under the cursor, and where a point snaps to
 // (pins, wire ends and junctions first, then the grid).
+import { boxPinsWorld } from '../draw/box';
 import { pinWorld } from '../draw/symbol';
 import type { Box } from '../draw/primitives';
 import { inBox } from '../draw/primitives';
@@ -68,6 +69,8 @@ export function snapPoint(page: Page, lib: Library, x: number, y: number, radius
     if (e.kind === 'symbol') {
       const def = lib.symbols.get(e.symbolId);
       if (def) for (const p of pinWorld(def, e)) consider(p, 'pin');
+    } else if (e.kind === 'box') {
+      for (const p of boxPinsWorld(e)) consider(p, 'pin');
     } else if (e.kind === 'wire') {
       consider(e.points[0], 'wire-end');
       consider(e.points[e.points.length - 1], 'wire-end');

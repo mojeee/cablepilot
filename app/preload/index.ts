@@ -12,7 +12,7 @@ const call =
 const api: CablePilotApi = {
   app: { info: call('app:info') },
   settings: { get: call('settings:get'), set: call('settings:set') },
-  files: { open: call('files:open'), save: call('files:save'), exportPdf: call('files:exportPdf') },
+  files: { open: call('files:open'), save: call('files:save'), exportPdf: call('files:exportPdf'), exportText: call('files:exportText') },
   samples: { list: call('samples:list'), read: call('samples:read') },
   autosave: { write: call('autosave:write'), list: call('autosave:list'), read: call('autosave:read'), clear: call('autosave:clear') },
   company: { list: call('company:list'), save: call('company:save'), folder: call('company:folder') },

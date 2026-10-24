@@ -1,0 +1,22 @@
+{
+  "id": "generic-diode-power-50a-1600v",
+  "kind": "part",
+  "title": {
+    "en": "Power diode, 50 A, 1600 V",
+    "it": "Diodo di potenza, 50 A, 1600 V"
+  },
+  "category": "power-electronics",
+  "code": "GEN-DIODE-POWER-50A-1600V",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Power diode, 50 A, 1600 V",
+    "it": "Diodo di potenza, 50 A, 1600 V"
+  },
+  "data": {
+    "Forward current": "50 A",
+    "Reverse voltage": "1600 V"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

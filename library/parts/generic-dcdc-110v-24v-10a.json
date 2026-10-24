@@ -1,0 +1,22 @@
+{
+  "id": "generic-dcdc-110v-24v-10a",
+  "kind": "part",
+  "title": {
+    "en": "DC/DC converter 110 V DC to 24 V DC, 10 A",
+    "it": "Convertitore DC/DC da 110 V DC a 24 V DC, 10 A"
+  },
+  "category": "power-electronics",
+  "code": "GEN-DCDC-110V-24V-10A",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "DC/DC converter 110 V DC to 24 V DC, 10 A",
+    "it": "Convertitore DC/DC da 110 V DC a 24 V DC, 10 A"
+  },
+  "data": {
+    "Input": "110 V DC",
+    "Output": "24 V DC, 10 A"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

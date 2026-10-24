@@ -1,0 +1,63 @@
+{
+  "id": "contactor-1p",
+  "kind": "symbol",
+  "title": {
+    "en": "Contactor, one pole (single-line)",
+    "it": "Contattore, un polo (unifilare)"
+  },
+  "category": "switching",
+  "function": "contactor",
+  "designationLetter": "K",
+  "source": "IEC 60617 part 7: contactor, make contact, mechanical link",
+  "verification": "secondary",
+  "verifiedFrom": "Symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": 0,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "2",
+      "x": 0,
+      "y": 5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    {
+      "t": "line",
+      "x1": 0,
+      "y1": -5,
+      "x2": 0,
+      "y2": -2.5
+    },
+    {
+      "t": "line",
+      "x1": 0,
+      "y1": 5,
+      "x2": 0,
+      "y2": 2.5
+    },
+    {
+      "t": "line",
+      "x1": 0,
+      "y1": 2.5,
+      "x2": -2.5,
+      "y2": -1.8
+    },
+    {
+      "t": "arc",
+      "cx": -1.25,
+      "cy": 0,
+      "r": 1.2,
+      "a0": 90,
+      "a1": 270
+    }
+  ],
+  "label": {
+    "x": 5,
+    "y": 0
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "generic-contactor-9a",
+  "kind": "part",
+  "title": {
+    "en": "Contactor 3 poles, 9 A AC-3, coil 24 V DC",
+    "it": "Contattore 3 poli, 9 A AC-3, bobina 24 V DC"
+  },
+  "category": "contactors",
+  "code": "GEN-CONTACTOR-9A",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Contactor 3 poles, 9 A AC-3, coil 24 V DC",
+    "it": "Contattore 3 poli, 9 A AC-3, bobina 24 V DC"
+  },
+  "data": {
+    "Poles": "3",
+    "Rated operational current AC-3": "9 A",
+    "Coil voltage": "24 V DC",
+    "Auxiliary contacts": "1 NO"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

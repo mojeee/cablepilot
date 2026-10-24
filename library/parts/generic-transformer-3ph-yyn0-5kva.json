@@ -1,0 +1,24 @@
+{
+  "id": "generic-transformer-3ph-yyn0-5kva",
+  "kind": "part",
+  "title": {
+    "en": "Three-phase transformer, vector group Yyn0, 400 V / 230 V, 5 kVA",
+    "it": "Trasformatore trifase, gruppo vettoriale Yyn0, 400 V / 230 V, 5 kVA"
+  },
+  "category": "transformers",
+  "code": "GEN-TRANSFORMER-3PH-YYN0-5KVA",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Three-phase transformer, vector group Yyn0, 400 V / 230 V, 5 kVA",
+    "it": "Trasformatore trifase, gruppo vettoriale Yyn0, 400 V / 230 V, 5 kVA"
+  },
+  "data": {
+    "Vector group": "Yyn0",
+    "Primary": "400 V",
+    "Secondary": "230 V",
+    "Rated power": "5 kVA"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

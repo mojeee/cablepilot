@@ -1,0 +1,23 @@
+{
+  "id": "generic-cable-patch-rj45-cat5e",
+  "kind": "part",
+  "title": {
+    "en": "Patch cable RJ45, category 5e, 2 m",
+    "it": "Cavo patch RJ45, categoria 5e, 2 m"
+  },
+  "category": "cables",
+  "code": "GEN-CABLE-PATCH-RJ45-CAT5E",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Patch cable RJ45, category 5e, 2 m",
+    "it": "Cavo patch RJ45, categoria 5e, 2 m"
+  },
+  "data": {
+    "Category": "5e",
+    "Length": "2 m",
+    "Connectors": "RJ45"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

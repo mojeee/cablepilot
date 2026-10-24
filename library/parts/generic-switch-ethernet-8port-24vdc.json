@@ -1,0 +1,22 @@
+{
+  "id": "generic-switch-ethernet-8port-24vdc",
+  "kind": "part",
+  "title": {
+    "en": "Ethernet switch, 8 ports, unmanaged, DIN rail, 24 V DC",
+    "it": "Switch Ethernet, 8 porte, non gestito, guida DIN, 24 V DC"
+  },
+  "category": "hmi-network",
+  "code": "GEN-SWITCH-ETHERNET-8PORT-24VDC",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Ethernet switch, 8 ports, unmanaged, DIN rail, 24 V DC",
+    "it": "Switch Ethernet, 8 porte, non gestito, guida DIN, 24 V DC"
+  },
+  "data": {
+    "Ports": "8 x RJ45",
+    "Supply voltage": "24 V DC"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

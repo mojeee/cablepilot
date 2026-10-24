@@ -2,11 +2,11 @@
 
 import { DEFAULT_POTENTIALS } from '../potentials';
 import { zoneRange } from './zones';
-import type { DrawingStyle, Page, Project, ProjectSettings, Template, TitleCell } from './types';
+import type { BomSettings, CrossRefSettings, DrawingStyle, Page, Project, ProjectSettings, Template, TitleCell } from './types';
 import { PROJECT_FORMAT } from './types';
 import type { SheetSize } from '../sheets';
 
-export const CURRENT_VERSION = 1;
+export const CURRENT_VERSION = 2;
 
 /** Designations and wire numbers in red, as on the reference style of production sets (brief, M1). */
 export const DEFAULT_STYLE: DrawingStyle = {
@@ -57,6 +57,17 @@ export function defaultTemplate(): Template {
   };
 }
 
+export const DEFAULT_CROSSREF: CrossRefSettings = { format: 'page.column', pageDigits: 0 };
+export const DEFAULT_BOM: BomSettings = {
+  columns: ['designation', 'position', 'qty', 'code', 'description', 'manufacturer', 'field:make', 'field:notes'],
+  units: 1,
+  group: 'device',
+  userFields: [
+    { id: 'make', label: { en: 'Make or buy', it: 'Produzione o acquisto' } },
+    { id: 'notes', label: { en: 'Notes', it: 'Note' } },
+  ],
+};
+
 export function defaultSettings(): ProjectSettings {
   return {
     drawingLanguage: 'en',
@@ -64,6 +75,8 @@ export function defaultSettings(): ProjectSettings {
     style: structuredClone(DEFAULT_STYLE),
     defaultSize: 'A3',
     defaultTemplateId: 'default',
+    crossRef: { ...DEFAULT_CROSSREF },
+    bom: structuredClone(DEFAULT_BOM),
   };
 }
 
@@ -81,6 +94,9 @@ export function newProject(id: string, name: string, patch: Partial<ProjectSetti
     pages: [],
     assets: {},
     symbols: [],
+    devices: [],
+    parts: [],
+    projectParts: [],
   };
 }
 

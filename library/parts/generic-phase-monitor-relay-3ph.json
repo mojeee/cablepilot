@@ -1,0 +1,23 @@
+{
+  "id": "generic-phase-monitor-relay-3ph",
+  "kind": "part",
+  "title": {
+    "en": "Phase-monitoring relay, 3-phase 400 V, phase sequence and failure, 1 changeover contact",
+    "it": "Relè controllo fasi, trifase 400 V, sequenza e mancanza fase, 1 scambio"
+  },
+  "category": "relays",
+  "code": "GEN-PHASE-MONITOR-RELAY-3PH",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Phase-monitoring relay, 3-phase 400 V, phase sequence and failure, 1 changeover contact",
+    "it": "Relè controllo fasi, trifase 400 V, sequenza e mancanza fase, 1 scambio"
+  },
+  "data": {
+    "Monitored voltage": "3 x 400 V AC",
+    "Monitors": "Phase sequence, phase failure",
+    "Contacts": "1 CO"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

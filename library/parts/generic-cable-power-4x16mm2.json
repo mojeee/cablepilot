@@ -1,0 +1,22 @@
+{
+  "id": "generic-cable-power-4x16mm2",
+  "kind": "part",
+  "title": {
+    "en": "Power cable 4 x 16 mm²",
+    "it": "Cavo di potenza 4 x 16 mm²"
+  },
+  "category": "cables",
+  "code": "GEN-CABLE-POWER-4X16MM2",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Power cable 4 x 16 mm²",
+    "it": "Cavo di potenza 4 x 16 mm²"
+  },
+  "data": {
+    "Cores": "4",
+    "Conductor cross-section": "16 mm²"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

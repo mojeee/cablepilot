@@ -1,0 +1,23 @@
+{
+  "id": "generic-cable-sensor-4x0.34mm2",
+  "kind": "part",
+  "title": {
+    "en": "Sensor cable 4 x 0.34 mm², cores WH YE GN BN",
+    "it": "Cavo sensore 4 x 0,34 mm², anime WH YE GN BN"
+  },
+  "category": "cables",
+  "code": "GEN-CABLE-SENSOR-4X0,34MM2",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Sensor cable 4 x 0.34 mm², cores WH YE GN BN",
+    "it": "Cavo sensore 4 x 0,34 mm², anime WH YE GN BN"
+  },
+  "data": {
+    "Cores": "4",
+    "Conductor cross-section": "0.34 mm²",
+    "Core colours": "WH, YE, GN, BN"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

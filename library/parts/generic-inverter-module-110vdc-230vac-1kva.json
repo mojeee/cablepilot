@@ -1,0 +1,22 @@
+{
+  "id": "generic-inverter-module-110vdc-230vac-1kva",
+  "kind": "part",
+  "title": {
+    "en": "Inverter module, 110 V DC input, 230 V AC output, 1 kVA",
+    "it": "Modulo inverter, ingresso 110 V DC, uscita 230 V AC, 1 kVA"
+  },
+  "category": "power-electronics",
+  "code": "GEN-INVERTER-MODULE-110VDC-230VAC-1KVA",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Inverter module, 110 V DC input, 230 V AC output, 1 kVA",
+    "it": "Modulo inverter, ingresso 110 V DC, uscita 230 V AC, 1 kVA"
+  },
+  "data": {
+    "Input": "110 V DC",
+    "Output": "230 V AC, 1 kVA"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

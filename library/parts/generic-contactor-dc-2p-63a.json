@@ -1,0 +1,23 @@
+{
+  "id": "generic-contactor-dc-2p-63a",
+  "kind": "part",
+  "title": {
+    "en": "DC contactor 2 poles, 63 A DC-1, coil 24 V DC",
+    "it": "Contattore DC 2 poli, 63 A DC-1, bobina 24 V DC"
+  },
+  "category": "contactors",
+  "code": "GEN-CONTACTOR-DC-2P-63A",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "DC contactor 2 poles, 63 A DC-1, coil 24 V DC",
+    "it": "Contattore DC 2 poli, 63 A DC-1, bobina 24 V DC"
+  },
+  "data": {
+    "Poles": "2",
+    "Rated operational current DC-1": "63 A",
+    "Coil voltage": "24 V DC"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

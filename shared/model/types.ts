@@ -3,7 +3,7 @@
 
 import type { Lang } from '../i18n';
 import type { PageType, SheetSize } from '../sheets';
-import type { SymbolDef } from '../library/types';
+import type { PartDef, SymbolDef } from '../library/types';
 
 export interface Pt {
   x: number;
@@ -31,8 +31,10 @@ export interface SymbolEl {
   /** Location aspect (+DS...) when it differs from the page's. */
   location?: string;
   functionText?: LText;
-  /** Free value: the potential name of a potential tag, a PLC address, a rating. */
+  /** Free value: the potential name of a potential tag, the signal of an interruption point, a PLC address, a rating. */
   value?: string;
+  /** On a coil: a note under its contact image on the state the contacts are shown in. */
+  stateNote?: LText;
 }
 export interface WireEl {
   id: string;
@@ -77,6 +79,8 @@ export interface RectEl {
   /** A dashed outline groups parts (a module, an assembly). */
   dashed?: boolean;
   label?: string;
+  /** Designation of the assembly device this dashed outline draws (nested assemblies). */
+  assembly?: string;
 }
 export interface TableEl {
   id: string;
@@ -106,6 +110,33 @@ export interface WarningEl {
   size: number;
   sign: WarningSign;
 }
+/** A numbered, named pin of a black box or connector: a pin-level connection point on the box border. */
+export interface BoxPin {
+  /** The pin number as printed (also the id used by connectivity): "1", "A3". */
+  id: string;
+  name?: string;
+  side: 'left' | 'right' | 'top' | 'bottom';
+  /** Millimetres along the side from the top-left corner. */
+  offset: number;
+}
+/** A black box (a board, a module drawn by its pins) or a connector (header, plug, socket) with pins. */
+export interface BoxEl {
+  id: string;
+  kind: 'box';
+  variant: 'blackbox' | 'connector';
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  designation: string;
+  location?: string;
+  functionText?: LText;
+  pins: BoxPin[];
+  /** Connectors: which half this is. */
+  gender?: 'plug' | 'socket';
+  /** Connectors: the designation of the mating connector; pins with the same number join. */
+  mate?: string;
+}
 /** A form on a project data page; its values come from project and assembly properties. */
 export type FormItem =
   | { type: 'heading'; label: LText }
@@ -121,7 +152,7 @@ export interface FormEl {
   items: FormItem[];
 }
 
-export type El = SymbolEl | WireEl | JunctionEl | TextEl | LineEl | RectEl | TableEl | ImageEl | WarningEl | FormEl;
+export type El = SymbolEl | BoxEl | WireEl | JunctionEl | TextEl | LineEl | RectEl | TableEl | ImageEl | WarningEl | FormEl;
 export type ElKind = El['kind'];
 
 export interface Page {
@@ -185,6 +216,47 @@ export interface Potential {
   kind: 'ac' | 'neutral' | 'pe' | 'dc-plus' | 'dc-minus' | 'dc' | 'other';
 }
 
+/** A part of a device: a library part (or an embedded one) and how many per device. */
+export interface PartUse {
+  part: string;
+  qty: number;
+}
+/**
+ * Device data kept beside the drawing. A device is every symbol and box that carries the same full
+ * designation (aspects and product): the coil and its contacts, the single-line and the multi-line
+ * representation of a breaker. The record holds what is not drawn: parts, user fields, the assembly
+ * it sits in. `designation` is the full designation (the device's identity).
+ */
+export interface DeviceRec {
+  designation: string;
+  parts: PartUse[];
+  fields: Record<string, string>;
+  /** Full designation of the assembly this device is mounted on or in (nested assemblies). */
+  parent?: string;
+}
+/** A part with no designation (mounting plate, wiring kit): in the BOM only. */
+export interface ProjectPart {
+  id: string;
+  part: string;
+  qty: number;
+  fields: Record<string, string>;
+}
+export type CrossRefFormat = 'page.column' | 'page-column-row';
+export interface CrossRefSettings {
+  format: CrossRefFormat;
+  /** Page numbers padded to this many digits ("08" for 2). */
+  pageDigits: number;
+}
+export interface BomSettings {
+  /** Column ids: designation, position, qty, code, description, manufacturer, or field:<id> for a user field. */
+  columns: string[];
+  /** Number of units to build: quantities are multiplied by it. */
+  units: number;
+  /** One row per device part, or rows merged by part. */
+  group: 'device' | 'part';
+  userFields: { id: string; label: LText }[];
+}
+
 export interface ProjectSettings {
   /** Language of the texts printed on drawings: separate from the UI language. */
   drawingLanguage: Lang;
@@ -193,6 +265,8 @@ export interface ProjectSettings {
   style: DrawingStyle;
   defaultSize: SheetSize;
   defaultTemplateId: string;
+  crossRef: CrossRefSettings;
+  bom: BomSettings;
 }
 
 export const PROJECT_FORMAT = 'cablepilot-project';
@@ -213,4 +287,10 @@ export interface Project {
   assets: Record<string, Asset>;
   /** Company symbols used by this project, embedded so the project opens anywhere. */
   symbols: SymbolDef[];
+  /** Device data (parts, user fields, parent assembly), see DeviceRec. */
+  devices: DeviceRec[];
+  /** Parts used by this project, embedded copies of library parts so the project opens anywhere. */
+  parts: PartDef[];
+  /** Parts with no designation. */
+  projectParts: ProjectPart[];
 }

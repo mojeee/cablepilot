@@ -1,0 +1,23 @@
+{
+  "id": "generic-hmi-7in-touch-24vdc",
+  "kind": "part",
+  "title": {
+    "en": "HMI operator panel 7 inch, touch, Ethernet, 24 V DC",
+    "it": "Pannello operatore HMI 7 pollici, touch, Ethernet, 24 V DC"
+  },
+  "category": "hmi-network",
+  "code": "GEN-HMI-7IN-TOUCH-24VDC",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "HMI operator panel 7 inch, touch, Ethernet, 24 V DC",
+    "it": "Pannello operatore HMI 7 pollici, touch, Ethernet, 24 V DC"
+  },
+  "data": {
+    "Display": "7 inch, touch",
+    "Interface": "Ethernet",
+    "Supply voltage": "24 V DC"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

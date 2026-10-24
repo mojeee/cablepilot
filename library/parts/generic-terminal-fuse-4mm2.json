@@ -1,0 +1,22 @@
+{
+  "id": "generic-terminal-fuse-4mm2",
+  "kind": "part",
+  "title": {
+    "en": "Fuse terminal, 4 mm², for 5 x 20 mm fuse",
+    "it": "Morsetto portafusibile, 4 mm², per fusibile 5 x 20 mm"
+  },
+  "category": "terminals",
+  "code": "GEN-TERMINAL-FUSE-4MM2",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Fuse terminal, 4 mm², for 5 x 20 mm fuse",
+    "it": "Morsetto portafusibile, 4 mm², per fusibile 5 x 20 mm"
+  },
+  "data": {
+    "Conductor cross-section": "4 mm²",
+    "Fuse size": "5 x 20 mm"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

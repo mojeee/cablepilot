@@ -74,3 +74,37 @@ describe('forms and drawing texts', () => {
     for (const [k, v] of Object.entries(DRAWING_TEXT)) expect(v.en && v.it, k).toBeTruthy();
   });
 });
+
+describe('part and macro library', () => {
+  const parts = readdirSync(join(__dirname, '..', 'library/parts')).filter((f) => f.endsWith('.json'));
+  const read = (dir: string, f: string) => JSON.parse(readFileSync(join(__dirname, '..', 'library', dir, f), 'utf8')) as Record<string, unknown>;
+  it('ships generic parts for every family rule 9 names, each with its source', () => {
+    expect(parts.length).toBeGreaterThanOrEqual(60);
+    const cats = new Set(parts.map((f) => read('parts', f).category));
+    for (const c of ['contactors', 'relays', 'breakers', 'motor-protection', 'terminals', 'plc', 'cables', 'enclosures', 'power-electronics', 'transformers', 'sensors', 'hmi-network']) expect(cats.has(c), c).toBe(true);
+    const ids = parts.join(' ');
+    for (const k of ['battery', 'diode', 'rectifier-module', 'inverter-module', 'dcdc', 'hall-sensor', 'emi-filter', 'dyn11', 'phase-monitor', 'hmi', 'switch-ethernet', 'rj45']) expect(ids, k).toContain(k);
+  });
+  it('passes the library validation; every part is generic, with a unique code and a source', () => {
+    const codes = new Set<string>();
+    for (const f of parts) {
+      const d = read('parts', f);
+      expect(validateLibraryFile(d, f.replace('.json', '')), f).toEqual([]);
+      expect(d.manufacturer, f).toBe('Generic');
+      expect(String(d.source)).toContain('generic');
+      expect(codes.has(d.code as string), `${f} code`).toBe(false);
+      codes.add(d.code as string);
+    }
+  });
+  it('rejects a broken part and a broken macro with plain problems', () => {
+    const base = { id: 'x', kind: 'part', source: 's', verification: 'primary', title: { en: 'a', it: 'b' }, description: { en: 'a', it: 'b' }, category: 'c', code: 'C', manufacturer: 'Generic', data: { A: '1 A' } };
+    expect(validateLibraryFile(base, 'x')).toEqual([]);
+    expect(validateLibraryFile({ ...base, code: '', data: { A: 1 }, dimensions: { w: 1 } }, 'x')).toHaveLength(3);
+    expect(validateLibraryFile({ id: 'm', kind: 'macro', source: 's', verification: 'primary', title: { en: 'a', it: 'b' }, category: 'c', size: { w: 1, h: 1 }, elements: [{ id: 'a', kind: 'form' }] }, 'm')).toHaveLength(1);
+  });
+  it('the shipped macro is valid and placeable', () => {
+    for (const f of readdirSync(join(__dirname, '..', 'library/macros')).filter((x) => x.endsWith('.json'))) {
+      expect(validateLibraryFile(read('macros', f), f.replace('.json', '')), f).toEqual([]);
+    }
+  });
+});

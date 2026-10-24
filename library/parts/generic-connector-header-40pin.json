@@ -1,0 +1,22 @@
+{
+  "id": "generic-connector-header-40pin",
+  "kind": "part",
+  "title": {
+    "en": "Board header, 40 pins, 2 rows, for flat ribbon cable",
+    "it": "Connettore da scheda, 40 poli, 2 file, per cavo piatto"
+  },
+  "category": "connectors",
+  "code": "GEN-CONNECTOR-HEADER-40PIN",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Board header, 40 pins, 2 rows, for flat ribbon cable",
+    "it": "Connettore da scheda, 40 poli, 2 file, per cavo piatto"
+  },
+  "data": {
+    "Pins": "40",
+    "Rows": "2"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "generic-mcb-3p-c16a",
+  "kind": "part",
+  "title": {
+    "en": "Miniature circuit breaker 3 poles, curve C, 16 A",
+    "it": "Interruttore magnetotermico 3 poli, curva C, 16 A"
+  },
+  "category": "breakers",
+  "code": "GEN-MCB-3P-C16A",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Miniature circuit breaker 3 poles, curve C, 16 A",
+    "it": "Interruttore magnetotermico 3 poli, curva C, 16 A"
+  },
+  "data": {
+    "Poles": "3",
+    "Tripping characteristic": "C",
+    "Rated current": "16 A"
+  },
+  "dimensions": {
+    "w": 52.5,
+    "h": 90,
+    "d": 70
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

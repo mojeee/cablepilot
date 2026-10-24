@@ -29,7 +29,7 @@ export class FileService {
     private readonly samplesDir: string,
     private readonly window: () => BrowserWindow | null,
   ) {
-    for (const d of ['autosave', 'company-library/symbols', 'company-library/templates']) mkdirSync(join(dataDir, d), { recursive: true });
+    for (const d of ['autosave', 'company-library/symbols', 'company-library/templates', 'company-library/macros', 'company-library/parts']) mkdirSync(join(dataDir, d), { recursive: true });
   }
 
   async open(): Promise<Result<OpenedFile | null>> {
@@ -56,6 +56,19 @@ export class FileService {
     else if (!target) {
       const win = this.window();
       const opts = { title: 'Save project', defaultPath: suggestedName, filters: [{ name: 'CablePilot project', extensions: ['json'] }] };
+      const r = await (win ? dialog.showSaveDialog(win, opts) : dialog.showSaveDialog(opts));
+      if (r.canceled || !r.filePath) return ok(null);
+      target = r.filePath;
+    }
+    return this.write(target, text);
+  }
+
+  async exportText(text: string, suggestedName: string): Promise<Result<SavedFile | null>> {
+    let target: string;
+    if (this.e2eDir) target = join(this.e2eDir, basename(suggestedName));
+    else {
+      const win = this.window();
+      const opts = { title: 'Export', defaultPath: suggestedName, filters: [{ name: 'CSV', extensions: ['csv'] }] };
       const r = await (win ? dialog.showSaveDialog(win, opts) : dialog.showSaveDialog(opts));
       if (r.canceled || !r.filePath) return ok(null);
       target = r.filePath;

@@ -1,0 +1,22 @@
+{
+  "id": "generic-emergency-stop-22mm",
+  "kind": "part",
+  "title": {
+    "en": "Emergency stop pushbutton 22 mm, mushroom head, 1 normally closed contact",
+    "it": "Pulsante di emergenza 22 mm, a fungo, 1 contatto normalmente chiuso"
+  },
+  "category": "operator-devices",
+  "code": "GEN-EMERGENCY-STOP-22MM",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Emergency stop pushbutton 22 mm, mushroom head, 1 normally closed contact",
+    "it": "Pulsante di emergenza 22 mm, a fungo, 1 contatto normalmente chiuso"
+  },
+  "data": {
+    "Mounting": "22 mm",
+    "Contacts": "1 NC"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

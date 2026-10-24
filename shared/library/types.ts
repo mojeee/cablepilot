@@ -1,7 +1,7 @@
 // Library data types. Symbols are data files under /library/symbols (graphics, connection points,
 // function type); company symbols drawn in the in-app editor use the same format.
 
-import type { LText } from '../model/types';
+import type { El, LText } from '../model/types';
 
 /** Symbol graphics in symbol-local millimetres, y down, origin at the symbol's anchor point. */
 export type Gfx =
@@ -47,16 +47,68 @@ export interface SymbolDef {
 export const SYMBOL_CATEGORIES = ['power', 'switching', 'protection', 'contacts', 'coils', 'machines', 'signalling', 'sources', 'electronics', 'terminals', 'plc', 'potentials'] as const;
 export type SymbolCategory = (typeof SYMBOL_CATEGORIES)[number];
 
+/**
+ * A generic part (rule 9): what a device is made of in the BOM. Data under /library/parts, same
+ * source rules as symbols. Never manufacturer catalogue data unless licensed.
+ */
+export interface PartDef {
+  id: string;
+  kind: 'part';
+  title: LText & { en: string; it: string };
+  category: string;
+  /** Part code shown in the BOM (a generic code for built-in parts). */
+  code: string;
+  manufacturer: string;
+  description: LText & { en: string; it: string };
+  /** Electrical and other data as name and value, with the unit in the value ("16 A"). */
+  data: Record<string, string>;
+  /** Body size in millimetres, for the cabinet layout (M6). */
+  dimensions?: { w: number; h: number; d: number };
+  source: string;
+  verification: 'primary' | 'secondary';
+  verifiedFrom?: string;
+}
+export const PART_CATEGORIES = ['contactors', 'relays', 'breakers', 'motor-protection', 'terminals', 'plc', 'cables', 'enclosures', 'power-electronics', 'transformers', 'sensors', 'operator-devices', 'machines', 'connectors', 'hmi-network', 'accessories'] as const;
+
+/** A macro: a group of symbols, boxes and wires saved to the (company) library and placed again. */
+export interface MacroDef {
+  id: string;
+  kind: 'macro';
+  title: LText & { en: string; it: string };
+  category: string;
+  source: string;
+  verification: 'primary' | 'secondary';
+  verifiedFrom?: string;
+  /** Size of the group in millimetres. */
+  size: { w: number; h: number };
+  /** The elements, with coordinates relative to the group's top-left corner. */
+  elements: El[];
+}
+
 export interface Library {
   symbols: Map<string, SymbolDef>;
+  parts: Map<string, PartDef>;
 }
-export function makeLibrary(symbols: SymbolDef[]): Library {
-  return { symbols: new Map(symbols.map((s) => [s.id, s])) };
+export function makeLibrary(symbols: SymbolDef[], parts: PartDef[] = []): Library {
+  return { symbols: new Map(symbols.map((s) => [s.id, s])), parts: new Map(parts.map((p) => [p.id, p])) };
 }
 /** The library plus the company symbols a project embeds (project symbols win). */
 export function withProjectSymbols(lib: Library, embedded: SymbolDef[]): Library {
   if (embedded.length === 0) return lib;
   const m = new Map(lib.symbols);
   for (const s of embedded) m.set(s.id, s);
-  return { symbols: m };
+  return { ...lib, symbols: m };
+}
+/** A part by id: the project's embedded copy first, then the library. */
+export function findPart(lib: Library, embedded: PartDef[], id: string): PartDef | undefined {
+  return embedded.find((p) => p.id === id) ?? lib.parts.get(id);
+}
+
+/** What a symbol is within its device: the coil, a main contact or power part, or an auxiliary contact. */
+export type Role = 'coil' | 'main' | 'aux';
+export function symbolRole(def: SymbolDef | undefined): Role {
+  if (!def) return 'main';
+  if (def.function === 'coil') return 'coil';
+  if (def.function === 'contact-no' || def.function === 'contact-nc') return 'aux';
+  return 'main';
 }

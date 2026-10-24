@@ -1,0 +1,23 @@
+{
+  "id": "generic-relay-module-8ch-24vdc",
+  "kind": "part",
+  "title": {
+    "en": "Relay module 8 channels, 1 changeover contact each, 24 V DC",
+    "it": "Modulo relè 8 canali, 1 scambio ciascuno, 24 V DC"
+  },
+  "category": "relays",
+  "code": "GEN-RELAY-MODULE-8CH-24VDC",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Relay module 8 channels, 1 changeover contact each, 24 V DC",
+    "it": "Modulo relè 8 canali, 1 scambio ciascuno, 24 V DC"
+  },
+  "data": {
+    "Channels": "8",
+    "Contacts per channel": "1 CO",
+    "Coil voltage": "24 V DC"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

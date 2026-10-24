@@ -77,3 +77,43 @@ One entry per milestone: what works, what is left, and anything the owner must d
 - Run `npm run test:e2e` locally and in CI once (it passed locally on macOS; the Linux xvfb job has not run).
 - Look at the three samples in the app and say what should change before they are used for the website demo.
 
+## M2 Devices and cross-references (done)
+
+**What works**
+
+- Devices with several representations (coil and contacts, single-line and multi-line symbols) linked by
+  their designation, with main and auxiliary function counts; rename a device from any symbol, link one
+  symbol to another device, renumber without breaking links. Properties panel: representations with their
+  positions, parts (several per device), user fields, parent assembly, state note for coils.
+- Cross-references in `page.column` or `page-column-row` format (Project settings), contact images under coils,
+  references at contacts, interruption points with partner positions, joined nets across pages.
+- Black boxes and connectors with numbered, named pins (place from the browser, edit pins in the panel); mated
+  plug and socket pairs; boxes move with their wires. Nested assemblies (select devices, "Group as assembly").
+  Macros: select, "Save as macro" (company library), place from the browser.
+- 98 generic parts in the library (picker with search, custom parts typed in), project-level parts, BOM dialog
+  (BOM button): columns and user fields, units to build, merge by part, CSV export.
+- Samples rebuilt: conveyor and pump station (star-delta starters, timers, interlocks) in `page.column`; the
+  110 V DC charger in Italian with the A-H, M-U / 0-9 frame, `08-E3` references, interruption points (L+, L-,
+  IOUT), plug -X11 and socket -X10, black boxes (HMI, switch), the switching block -A5, a macro-placed alarm
+  stage, and a BOM without missing parts.
+- Tests: device linking, cross-reference formats and zones, contact images, interruption points and netGroups,
+  connector pins and mates, nested assemblies, BOM (units, merge, CSV, incremental scans), macros, undo, part and
+  macro validation, migration 1 to 2, sample checks (star-delta connectivity). One new end-to-end test.
+
+**What is left**
+
+- Deferred by design: connector pin lists and cable cores (M3), XLSX and PDF output of the BOM page and a BOM
+  report page type (M3), nameplates (M3), the electrical rule check for coils without contacts, contacts used
+  against contacts available, missing parts and duplicate designations (M4), cabinet layout from part dimensions
+  (M6). The BOM columns cannot be reordered (only switched on and off).
+- Boxes cannot be rotated or mirrored; macros reference library symbols by id only; the contact image can run
+  into neighbouring objects when many contacts are used (move the coil or its neighbours).
+- All parts are generic definitions marked `secondary` (docs/to-verify.md). When the sample PDFs were rendered with poppler here the text did not show (probably no fonts in that
+  environment); please check an exported PDF in a normal viewer.
+
+**What the owner must do by hand**
+
+- Check the new rows of `docs/to-verify.md` (part rating classes, dimensions, symbol letters, terminal marks).
+- Look at the three samples in the app (cross-reference text and contact images are drawn on the canvas) and
+  say what should change before the website demo.
+

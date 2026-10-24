@@ -31,7 +31,7 @@ export interface AutosaveInfo {
   path: string | null;
   savedAt: string;
 }
-export type CompanyKind = 'symbols' | 'templates';
+export type CompanyKind = 'symbols' | 'templates' | 'macros' | 'parts';
 
 export interface CablePilotApi {
   app: {
@@ -48,6 +48,8 @@ export interface CablePilotApi {
     save(text: string, path: string | null, suggestedName: string): Promise<Result<SavedFile | null>>;
     /** Asks where to write a PDF and writes it; null when the user cancels. */
     exportPdf(bytes: Uint8Array, suggestedName: string): Promise<Result<SavedFile | null>>;
+    /** Asks where to write a text file (the BOM as CSV) and writes it; null when the user cancels. */
+    exportText(text: string, suggestedName: string): Promise<Result<SavedFile | null>>;
   };
   samples: {
     list(): Promise<Result<SampleInfo[]>>;

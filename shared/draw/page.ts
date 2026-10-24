@@ -3,6 +3,7 @@
 // PDF export, the tests and the performance budget.
 
 import { dt, pick } from '../drawingText';
+import { deviceIndex, interruptionPartners, refsOf, type DeviceIndex, type DeviceRepr } from '../devices';
 import { bindValue } from '../forms';
 import { withProjectSymbols, type Library } from '../library/types';
 import type { El, FormEl, Page, Project, SymbolEl, TableEl, Template, WireEl } from '../model/types';
@@ -10,6 +11,7 @@ import { templateOf } from '../model/queries';
 import { sheetMm } from '../sheets';
 import { pageNumber, titleLabel, titleValue } from '../titleblock';
 import { primBox, textWidth, unionBox, type Box, type Built, type Prim } from './primitives';
+import { boxPinsWorld, boxPrims } from './box';
 import { gfxPrims, graphicsFor, pinWorld, symbolXf, usesValue, xfPoint } from './symbol';
 import { warningPrims } from './warning';
 
@@ -180,6 +182,7 @@ function pinKeys(page: Page, lib: Library): Set<string> {
     const def = lib.symbols.get(e.symbolId);
     if (def) for (const p of pinWorld(def, e)) keys.add(`${p.x},${p.y}`);
   }
+  for (const e of page.elements) if (e.kind === 'box') for (const p of boxPinsWorld(e)) keys.add(`${p.x},${p.y}`);
   return keys;
 }
 
@@ -217,7 +220,45 @@ function wirePrims(el: WireEl, project: Project, pins: Set<string>): Prim[] {
   return out;
 }
 
-export function symbolPrims(el: SymbolEl, project: Project, lib: Library): Prim[] {
+/** Where the cross-reference data comes from while drawing a page. */
+export interface XrefCtx {
+  idx: DeviceIndex;
+  page: string;
+}
+
+const refText = (reps: DeviceRepr[]): string => {
+  const pos = [...new Set(reps.map((r) => r.position))];
+  return `[${pos.slice(0, 6).join(', ')}${pos.length > 6 ? ', ...' : ''}]`;
+};
+
+/**
+ * The contact image under a coil: one row per contact or power part of the device, a small contact
+ * symbol (make, break or main) and where it is drawn, then the optional note on the state shown.
+ * Returns the primitives and the y after the image.
+ */
+function contactImage(contacts: DeviceRepr[], note: string, lx: number, y0: number, anchor: 'start' | 'end', colour: string, w: number, id: string): { prims: Prim[]; y: number } {
+  const sign = anchor === 'end' ? -1 : 1;
+  const out: Prim[] = [];
+  let y = y0;
+  const line = (x1: number, y1: number, x2: number, y2: number): Prim => ({ k: 'poly', pts: [x1, y1, x2, y2], w: w * 0.8, c: colour, id });
+  const glyph = (gx: number, gy: number, nc: boolean) => {
+    out.push(line(gx, gy, gx, gy + 1), line(gx, gy + 3.6, gx, gy + 4.6), line(gx, gy + 3.6, gx - 1.1, gy + 1.2));
+    if (nc) out.push(line(gx - 1.4, gy + 1.5, gx + 0.5, gy + 1.5));
+  };
+  const sorted = contacts.slice().sort((a, b) => a.pageIndex - b.pageIndex || a.y - b.y || a.x - b.x).slice(0, 12);
+  for (const c of sorted) {
+    const gx = lx + sign * 3;
+    if (c.contact === 'main') { glyph(gx - 1.6, y, false); glyph(gx, y, false); glyph(gx + 1.6, y, false); }
+    else glyph(gx, y, c.contact === 'nc');
+    out.push({ k: 'text', x: lx + sign * 7, y: y + 2.9, text: c.position, size: 2.2, anchor, rot: 0, c: colour, id });
+    y += 5;
+  }
+  if (contacts.length > 12) { out.push({ k: 'text', x: lx, y: y + 1, text: '...', size: 2.2, anchor, rot: 0, c: colour, id }); y += 3; }
+  for (const l of note.split('\n').filter(Boolean)) { out.push({ k: 'text', x: lx, y: y + 1.6, text: l, size: 2.2, anchor, rot: 0, c: colour, id }); y += 3; }
+  return { prims: out, y };
+}
+
+export function symbolPrims(el: SymbolEl, project: Project, lib: Library, xref?: XrefCtx): Prim[] {
   const def = lib.symbols.get(el.symbolId);
   const st = project.settings.style;
   const lang = project.settings.drawingLanguage;
@@ -235,6 +276,15 @@ export function symbolPrims(el: SymbolEl, project: Project, lib: Library): Prim[
   const pageLoc = el.location;
   const des = (pageLoc ? `+${pageLoc}` : '') + el.designation;
   const sz = st.textSizes.designation;
+  if (def.function === 'interruption') {
+    // The signal name is in the graphics; below it, where the same signal continues.
+    if (xref && el.value) {
+      const partners = interruptionPartners(xref.idx, el.value, xref.page, el.id);
+      const tp = xfPoint({ ...xf, x: 0, y: 0 }, 4, 6);
+      if (partners.length) out.push({ k: 'text', x: el.x + tp.x, y: el.y + tp.y + 0.8, text: refText(partners), size: 2.2, anchor: 'middle', rot: 0, c: st.colours.text, id: el.id });
+    }
+    return out;
+  }
   if (def.function === 'potential-tag') {
     if (el.value) out.push({ k: 'text', x: lx, y: y + 1, text: project.potentials.find((p) => p.id === el.value)?.label ?? el.value, size: 2.8, anchor: 'middle', rot: 0, c: st.colours.text, id: el.id });
     return out;
@@ -244,14 +294,28 @@ export function symbolPrims(el: SymbolEl, project: Project, lib: Library): Prim[
   if (ft) {
     ft.split('\n').forEach((l) => { out.push({ k: 'text', x: lx, y: y + 1, text: l, size: 2.5, anchor, rot: 0, c: st.colours.text, id: el.id }); y += 3.1; });
   }
-  if (el.value && !usesValue(gfx)) out.push({ k: 'text', x: lx, y: y + 1, text: el.value, size: 2.5, anchor, rot: 0, c: st.colours.text, id: el.id });
+  if (el.value && !usesValue(gfx)) { out.push({ k: 'text', x: lx, y: y + 1, text: el.value, size: 2.5, anchor, rot: 0, c: st.colours.text, id: el.id }); y += 3.1; }
+  const info = xref ? refsOf(xref.idx, xref.page, el.id) : undefined;
+  if (info) {
+    if (info.rep.role === 'coil') {
+      const note = pick(el.stateNote, lang);
+      if (info.contacts.length || note) out.push(...contactImage(info.contacts, note, lx, y + 0.8, anchor, st.colours.text, st.weights.symbol, el.id).prims);
+    } else {
+      const to = info.coils.length ? info.coils : info.others;
+      if (to.length) out.push({ k: 'text', x: lx, y: y + 1, text: refText(to), size: 2.2, anchor, rot: 0, c: st.colours.text, id: el.id });
+    }
+  }
   return out;
 }
 
-function elementPrims(el: El, project: Project, page: Page, lib: Library, pins: Set<string>): Prim[] {
+function elementPrims(el: El, project: Project, page: Page, lib: Library, pins: Set<string>, xref: XrefCtx): Prim[] {
   const st = project.settings.style;
   switch (el.kind) {
-    case 'symbol': return symbolPrims(el, project, lib);
+    case 'symbol': return symbolPrims(el, project, lib, xref);
+    case 'box': {
+      const info = refsOf(xref.idx, xref.page, el.id);
+      return boxPrims(el, project, info?.others.length ? refText(info.others) : undefined);
+    }
     case 'wire': return wirePrims(el, project, pins);
     case 'junction': return [{ k: 'circle', cx: el.x, cy: el.y, r: 0.9, w: 0.2, c: st.colours.wire, fill: true, id: el.id }];
     case 'text': {
@@ -265,7 +329,9 @@ function elementPrims(el: El, project: Project, page: Page, lib: Library, pins: 
     case 'line': return [{ k: 'poly', pts: el.points.flatMap((p) => [p.x, p.y]), w: st.weights.annotation, c: st.colours.annotation, dash: el.dashed, id: el.id }];
     case 'rect': {
       const out: Prim[] = [{ k: 'poly', pts: [el.x, el.y, el.x + el.w, el.y, el.x + el.w, el.y + el.h, el.x, el.y + el.h], closed: true, w: st.weights.annotation, c: st.colours.annotation, dash: el.dashed, id: el.id }];
-      if (el.label) out.push({ k: 'text', x: el.x + 1.5, y: el.y + 3.4, text: el.label, size: 2.8, anchor: 'start', rot: 0, c: st.colours.text, id: el.id });
+      let ty = el.y + 3.4;
+      if (el.assembly) { out.push({ k: 'text', x: el.x + 1.5, y: ty, text: el.assembly, size: st.textSizes.designation, anchor: 'start', rot: 0, c: st.colours.designation, id: el.id }); ty += st.textSizes.designation * 1.1; }
+      if (el.label) out.push({ k: 'text', x: el.x + 1.5, y: ty, text: el.label, size: 2.8, anchor: 'start', rot: 0, c: st.colours.text, id: el.id });
       return out;
     }
     case 'table': return tablePrims(el, st.colours.annotation, st.weights.annotation, el.id);
@@ -323,8 +389,9 @@ export function buildPage(project: Project, page: Page, libIn: Library, index: n
   prims.push(...generatedBody(project, page));
   const items: Built['items'] = [];
   const pins = pinKeys(page, lib);
+  const xref: XrefCtx = { idx: deviceIndex(project, libIn), page: page.id };
   for (const el of page.elements) {
-    const ps = elementPrims(el, project, page, lib, pins);
+    const ps = elementPrims(el, project, page, lib, pins, xref);
     prims.push(...ps);
     const box = unionBox(ps.map(primBox));
     if (box) items.push({ id: el.id, box: box as Box });

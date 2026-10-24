@@ -9,6 +9,7 @@ import { MessageList } from './components/MessageList';
 import { AddPageDialog, RecoveryBanner, ShortcutsDialog } from './components/dialogs';
 import { ProjectSettingsDialog } from './components/ProjectSettings';
 import { SymbolEditorDialog } from './components/SymbolEditor';
+import { BomDialog } from './components/BomDialog';
 import { useEditor } from './state/editor';
 import { useUi } from './state/ui';
 
@@ -68,6 +69,7 @@ export function App() {
       {dialog === 'symbolEditor' && <SymbolEditorDialog />}
       {dialog === 'addPage' && <AddPageDialog />}
       {dialog === 'shortcuts' && <ShortcutsDialog />}
+      {dialog === 'bom' && <BomDialog />}
     </div>
   );
 }

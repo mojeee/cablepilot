@@ -1,0 +1,23 @@
+{
+  "id": "generic-timer-relay-star-delta",
+  "kind": "part",
+  "title": {
+    "en": "Star-delta timer relay, 24 V DC",
+    "it": "Relè temporizzatore stella-triangolo, 24 V DC"
+  },
+  "category": "relays",
+  "code": "GEN-TIMER-RELAY-STAR-DELTA",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Star-delta timer relay, 24 V DC",
+    "it": "Relè temporizzatore stella-triangolo, 24 V DC"
+  },
+  "data": {
+    "Supply voltage": "24 V DC",
+    "Function": "Star-delta changeover",
+    "Contacts": "2 NO"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

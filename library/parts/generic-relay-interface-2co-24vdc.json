@@ -1,0 +1,22 @@
+{
+  "id": "generic-relay-interface-2co-24vdc",
+  "kind": "part",
+  "title": {
+    "en": "Interface relay 2 changeover contacts, coil 24 V DC, with socket",
+    "it": "Relè interfaccia 2 scambi, bobina 24 V DC, con zoccolo"
+  },
+  "category": "relays",
+  "code": "GEN-RELAY-INTERFACE-2CO-24VDC",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Interface relay 2 changeover contacts, coil 24 V DC, with socket",
+    "it": "Relè interfaccia 2 scambi, bobina 24 V DC, con zoccolo"
+  },
+  "data": {
+    "Contacts": "2 CO",
+    "Coil voltage": "24 V DC"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

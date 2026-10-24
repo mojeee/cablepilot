@@ -1,0 +1,22 @@
+{
+  "id": "generic-plc-cpu-compact",
+  "kind": "part",
+  "title": {
+    "en": "PLC CPU, compact, Ethernet, 24 V DC",
+    "it": "CPU PLC compatta, Ethernet, 24 V DC"
+  },
+  "category": "plc",
+  "code": "GEN-PLC-CPU-COMPACT",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "PLC CPU, compact, Ethernet, 24 V DC",
+    "it": "CPU PLC compatta, Ethernet, 24 V DC"
+  },
+  "data": {
+    "Supply voltage": "24 V DC",
+    "Interface": "Ethernet"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

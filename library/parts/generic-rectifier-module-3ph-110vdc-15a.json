@@ -1,0 +1,22 @@
+{
+  "id": "generic-rectifier-module-3ph-110vdc-15a",
+  "kind": "part",
+  "title": {
+    "en": "Rectifier module, 3-phase 400 V AC input, 110 V DC output, 15 A",
+    "it": "Modulo raddrizzatore, ingresso trifase 400 V AC, uscita 110 V DC, 15 A"
+  },
+  "category": "power-electronics",
+  "code": "GEN-RECTIFIER-MODULE-3PH-110VDC-15A",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Rectifier module, 3-phase 400 V AC input, 110 V DC output, 15 A",
+    "it": "Modulo raddrizzatore, ingresso trifase 400 V AC, uscita 110 V DC, 15 A"
+  },
+  "data": {
+    "Input": "3 x 400 V AC",
+    "Output": "110 V DC, 15 A"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

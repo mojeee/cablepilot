@@ -36,17 +36,17 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 
 ## M2 Devices and cross-references
 
-- [ ] A device is one or more symbols (coil and contacts, multi-pole breakers), with main and auxiliary functions
-- [ ] One device, several representations (single-line and multi-line), counted once in the BOM and cross-referenced both ways
-- [ ] Contact images under coils, with an optional note on the shown state
-- [ ] Cross-references with a configurable format: page.column, or page-column-row like `08-E3`
-- [ ] Interruption points between pages, carrying a signal or potential name
-- [ ] Black boxes, connectors and plugs with numbered, named pins
-- [ ] Nested assemblies (a device on or inside another), dashed outline, grouped in the BOM
-- [ ] Macros: groups of symbols, black boxes and wires saved to the company library and placed again
-- [ ] Parts assigned from the library; several parts per device; project-level parts with no designation
-- [ ] BOM with configurable columns and user fields; quantity multiplied by the number of units to build
-- [ ] Generic device library including DC and power-electronics parts (rule 9)
+- [x] A device is one or more symbols (coil and contacts, multi-pole breakers), with main and auxiliary functions
+- [x] One device, several representations (single-line and multi-line), counted once in the BOM and cross-referenced both ways
+- [x] Contact images under coils, with an optional note on the shown state
+- [x] Cross-references with a configurable format: page.column, or page-column-row like `08-E3`
+- [x] Interruption points between pages, carrying a signal or potential name
+- [x] Black boxes, connectors and plugs with numbered, named pins
+- [x] Nested assemblies (a device on or inside another), dashed outline, grouped in the BOM
+- [x] Macros: groups of symbols, black boxes and wires saved to the company library and placed again
+- [x] Parts assigned from the library; several parts per device; project-level parts with no designation
+- [x] BOM with configurable columns and user fields; quantity multiplied by the number of units to build
+- [x] Generic device library including DC and power-electronics parts (rule 9)
 
 ## M3 Wires and reports
 

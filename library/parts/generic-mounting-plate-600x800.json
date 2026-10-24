@@ -1,0 +1,22 @@
+{
+  "id": "generic-mounting-plate-600x800",
+  "kind": "part",
+  "title": {
+    "en": "Mounting plate 600 x 800 mm for enclosure 800 x 1000",
+    "it": "Piastra di montaggio 600 x 800 mm per armadio 800 x 1000"
+  },
+  "category": "enclosures",
+  "code": "GEN-MOUNTING-PLATE-600X800",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Mounting plate 600 x 800 mm for enclosure 800 x 1000",
+    "it": "Piastra di montaggio 600 x 800 mm per armadio 800 x 1000"
+  },
+  "data": {
+    "Width": "600 mm",
+    "Height": "800 mm"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

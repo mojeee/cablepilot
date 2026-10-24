@@ -106,9 +106,10 @@ test('place a symbol, draw a wire, undo, save and export a PDF', async () => {
 test('the sample projects open', async () => {
   const { page, close } = await launch();
   try {
-    for (const [id, name, pages] of [['conveyor', 'Conveyor with direct-on-line starter', 10], ['pump-station', 'Pump station, two pumps', 10], ['dc-charger', 'Caricabatterie 110 V DC', 11]] as const) {
+    for (const [id, name, pages] of [['conveyor', 'Conveyor with direct-on-line starter', 10], ['pump-station', 'Pump station, two pumps', 10], ['dc-charger', 'Caricabatterie 110 V DC', 12]] as const) {
       await page.getByTestId('samples').selectOption(id);
       await expect(page.getByTestId('project-name')).toContainText(name);
+      await expect(page.getByRole('region', { name: 'Messages' })).toContainText(`Opened ${name}.`);
       await expect(page.getByTestId(`page-${pages}`)).toBeVisible();
       await expect(page.getByTestId(`page-${pages + 1}`)).toHaveCount(0);
     }
@@ -188,5 +189,48 @@ test('crash recovery: an unsaved project comes back after the app closes without
     expect(count(readProject(join(second.out, file)), 'symbol')).toBe(1);
   } finally {
     await second.close();
+  }
+});
+
+test('a device with a coil and a contact shows its cross-references, takes a part, and appears in the BOM', async () => {
+  const { page, out, close } = await launch();
+  try {
+    const box = (await page.getByTestId('page-canvas').boundingBox())!;
+    const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
+    // Coil -K1, then a contact that takes the coil's designation: one device, two representations.
+    await page.getByTestId('symbol-coil').click();
+    await page.mouse.click(cx - 100, cy);
+    await page.keyboard.press('Escape');
+    await page.getByTestId('symbol-contact-no').click();
+    await page.mouse.click(cx + 100, cy - 60);
+    await page.keyboard.press('Escape');
+    await page.mouse.click(cx + 100, cy - 60);
+    await page.getByTestId('prop-designation').fill('-K1');
+    await page.getByTestId('prop-designation').blur();
+    const reps = page.getByTestId('device-reps');
+    await expect(reps).toContainText('Coil');
+    await expect(reps).toContainText('Auxiliary contact (NO)');
+    // Cross-reference text in the default format page.column (the starter project's power page is page 3).
+    await expect(reps).toContainText(/Coil: 3\.[0-9]/);
+    await expect(reps).toContainText(/Auxiliary contact \(NO\): 3\.[0-9]/);
+    // Assign a generic part from the library.
+    await page.getByTestId('part-select').selectOption('generic-contactor-9a');
+    await page.getByTestId('part-add').click();
+    await expect(page.getByTestId('device-parts')).toContainText('GEN-CONTACTOR-9A');
+    // The BOM lists the device once, with the part code and the quantity.
+    await page.getByTestId('bom').click();
+    const table = page.getByTestId('bom-table');
+    await expect(table).toContainText('-K1');
+    await expect(table).toContainText('GEN-CONTACTOR-9A');
+    await expect(table.locator('tbody tr')).toHaveCount(1);
+    await page.getByTestId('bom-units').fill('3');
+    await page.getByTestId('bom-units').blur();
+    await expect(table.locator('tbody tr td').nth(2)).toHaveText('3');
+    await page.getByTestId('bom-export').click();
+    await expect(page.getByRole('region', { name: 'Messages' })).toContainText('BOM exported');
+    const csv = readdirSync(out).find((f) => f.endsWith('-bom.csv'))!;
+    expect(readFileSync(join(out, csv), 'utf8')).toContain('GEN-CONTACTOR-9A');
+  } finally {
+    await close();
   }
 });

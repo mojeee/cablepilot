@@ -61,6 +61,9 @@ function General() {
       <Select label={t('Drawing language (texts printed on the drawings)')} testid="drawing-language" value={s.drawingLanguage} options={[{ value: 'en', label: 'English' }, { value: 'it', label: 'Italiano' }]} onChange={(v) => exec({ type: 'project/settings', settings: { drawingLanguage: v } })} />
       <Select label={t('Symbol standard')} value={s.symbolStandard} options={[{ value: 'iec', label: t('IEC 60617') }, { value: 'nfpa', label: t('NFPA 79 / ANSI (where a symbol has an alternative)') }]} onChange={(v) => exec({ type: 'project/settings', settings: { symbolStandard: v } })} />
       <Select<SheetSize> label={t('Default sheet size')} value={s.defaultSize} options={SHEET_SIZES.map((x) => ({ value: x, label: x }))} onChange={(v) => exec({ type: 'project/settings', settings: { defaultSize: v } })} />
+      <h3>{t('Cross-references')}</h3>
+      <Select<'page.column' | 'page-column-row'> label={t('Cross-reference format')} testid="crossref-format" value={s.crossRef.format} options={[{ value: 'page.column', label: t('Page.column (8.3)') }, { value: 'page-column-row', label: t('Page-column-row (08-E3)') }]} onChange={(v) => exec({ type: 'project/settings', settings: { crossRef: { ...s.crossRef, format: v } } })} />
+      <NumField label={t('Page number digits')} value={s.crossRef.pageDigits} min={0} max={4} step={1} onCommit={(v) => exec({ type: 'project/settings', settings: { crossRef: { ...s.crossRef, pageDigits: Math.round(v) } } })} />
       <h3>{t('Potentials')}</h3>
       <ul className="chips">
         {p.potentials.map((x) => (

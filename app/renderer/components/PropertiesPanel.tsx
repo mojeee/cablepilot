@@ -6,6 +6,7 @@ import type { El, Page, Project, SymbolEl, TableEl, WarningSign } from '@shared/
 import { useEditor } from '../state/editor';
 import { useUi } from '../state/ui';
 import { Check, NumField, Select, TextField } from './fields';
+import { BoxProps, DeviceSection, SelectionTools } from './DevicePanel';
 import { pageTypeLabel } from './PageNavigator';
 
 const patchEl = (page: string, id: string, patch: Record<string, unknown>) => useEditor.getState().exec({ type: 'el/update', page, id, patch });
@@ -15,6 +16,7 @@ function SymbolProps({ el, page, project }: { el: SymbolEl; page: Page; project:
   const def = lib.symbols.get(el.symbolId) ?? project.symbols.find((s) => s.id === el.symbolId);
   const valueInside = def ? usesValue(def.graphics) : false;
   const isPotentialTag = def?.function === 'potential-tag';
+  const isInterruption = def?.function === 'interruption';
   const up = (patch: Record<string, unknown>) => patchEl(page.id, el.id, patch);
   const lang = getLanguage();
   return (
@@ -27,10 +29,11 @@ function SymbolProps({ el, page, project }: { el: SymbolEl; page: Page; project:
       {isPotentialTag ? (
         <Select label={t('Potential')} value={el.value ?? ''} options={[{ value: '', label: t('None') }, ...project.potentials.map((p) => ({ value: p.id, label: p.label }))]} onChange={(v) => up({ value: v || undefined })} />
       ) : (
-        <TextField label={valueInside ? t('Address') : t('Value')} value={el.value ?? ''} onCommit={(v) => up({ value: v || undefined })} mono />
+        <TextField label={isInterruption ? t('Signal or potential name') : valueInside ? t('Address') : t('Value')} testid={isInterruption ? 'prop-signal' : undefined} value={el.value ?? ''} onCommit={(v) => up({ value: v || undefined })} mono />
       )}
       <Select label={t('Rotation')} value={String(el.rot)} options={['0', '90', '180', '270'].map((r) => ({ value: r, label: `${r}°` }))} onChange={(v) => up({ rot: Number(v) })} />
       <Check label={t('Mirrored')} checked={el.mirror} onChange={(v) => up({ mirror: v })} />
+      {def && !isPotentialTag && !isInterruption && <DeviceSection el={el} page={page} project={project} />}
     </>
   );
 }
@@ -84,6 +87,7 @@ function ElementProps({ el, page, project }: { el: El; page: Page; project: Proj
         </>
       );
     case 'junction': return <h3>{t('Junction')}</h3>;
+    case 'box': return (<><BoxProps el={el} page={page} project={project} /><DeviceSection el={el} page={page} project={project} /></>);
     case 'text':
       return (
         <>
@@ -108,6 +112,7 @@ function ElementProps({ el, page, project }: { el: El; page: Page; project: Proj
           <h3>{el.dashed ? t('Dashed outline') : t('Rectangle')}</h3>
           <Check label={t('Dashed')} checked={!!el.dashed} onChange={(v) => up({ dashed: v })} />
           <TextField label={t('Label')} value={el.label ?? ''} onCommit={(v) => up({ label: v || undefined })} />
+          <TextField label={t('Assembly designation')} value={el.assembly ?? ''} onCommit={(v) => up({ assembly: v || undefined })} mono />
           <NumField label={t('Width (mm)')} value={el.w} min={1} onCommit={(v) => up({ w: v })} />
           <NumField label={t('Height (mm)')} value={el.h} min={1} onCommit={(v) => up({ h: v })} />
         </>
@@ -159,6 +164,7 @@ export function PropertiesPanel() {
         <>
           <h3>{t('{n} objects selected', { n: selection.length })}</h3>
           <p className="hint">{t('R rotates, M mirrors, Delete removes, arrow keys move.')}</p>
+          <SelectionTools page={page} selection={selection} />
         </>
       )}
       {page && selection.length === 0 && (

@@ -1,0 +1,22 @@
+{
+  "id": "generic-dcdc-24v-12v-5a",
+  "kind": "part",
+  "title": {
+    "en": "DC/DC converter 24 V DC to 12 V DC, 5 A",
+    "it": "Convertitore DC/DC da 24 V DC a 12 V DC, 5 A"
+  },
+  "category": "power-electronics",
+  "code": "GEN-DCDC-24V-12V-5A",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "DC/DC converter 24 V DC to 12 V DC, 5 A",
+    "it": "Convertitore DC/DC da 24 V DC a 12 V DC, 5 A"
+  },
+  "data": {
+    "Input": "24 V DC",
+    "Output": "12 V DC, 5 A"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

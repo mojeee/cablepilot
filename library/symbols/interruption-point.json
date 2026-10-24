@@ -1,0 +1,47 @@
+{
+  "id": "interruption-point",
+  "kind": "symbol",
+  "title": {
+    "en": "Interruption point (to another page)",
+    "it": "Punto di interruzione (verso un'altra pagina)"
+  },
+  "category": "potentials",
+  "function": "interruption",
+  "source": "IEC 61082-1 (documents: continuation of a line to another sheet); the arrow graphic is our own drawing",
+  "verification": "secondary",
+  "verifiedFrom": "Symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": 0,
+      "y": 0,
+      "dir": "left"
+    }
+  ],
+  "graphics": [
+    {
+      "t": "poly",
+      "pts": [
+        0,
+        -2.5,
+        6,
+        -2.5,
+        8.5,
+        0,
+        6,
+        2.5,
+        0,
+        2.5
+      ],
+      "closed": true
+    },
+    {
+      "t": "text",
+      "x": 4,
+      "y": -4.6,
+      "text": "{value}",
+      "size": 2.4,
+      "anchor": "middle"
+    }
+  ]
+}

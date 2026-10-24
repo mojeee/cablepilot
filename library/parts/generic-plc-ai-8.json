@@ -1,0 +1,22 @@
+{
+  "id": "generic-plc-ai-8",
+  "kind": "part",
+  "title": {
+    "en": "PLC analogue input card, 8 channels, 0-10 V / 4-20 mA",
+    "it": "Scheda PLC ingressi analogici, 8 canali, 0-10 V / 4-20 mA"
+  },
+  "category": "plc",
+  "code": "GEN-PLC-AI-8",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "PLC analogue input card, 8 channels, 0-10 V / 4-20 mA",
+    "it": "Scheda PLC ingressi analogici, 8 canali, 0-10 V / 4-20 mA"
+  },
+  "data": {
+    "Channels": "8",
+    "Signal": "0-10 V / 4-20 mA"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

@@ -1,0 +1,76 @@
+{
+  "id": "hall-sensor",
+  "kind": "symbol",
+  "title": {
+    "en": "Hall-effect current sensor",
+    "it": "Sensore di corrente ad effetto Hall"
+  },
+  "category": "signalling",
+  "function": "sensor",
+  "designationLetter": "B",
+  "source": "IEC 60617 part 6: Hall element (family); IEC 81346-2 class B (transducers)",
+  "verification": "secondary",
+  "verifiedFrom": "Symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "+",
+      "x": -2.5,
+      "y": -7.5,
+      "dir": "up"
+    },
+    {
+      "id": "-",
+      "x": 2.5,
+      "y": -7.5,
+      "dir": "up"
+    },
+    {
+      "id": "OUT",
+      "x": 0,
+      "y": 7.5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    {
+      "t": "line",
+      "x1": -2.5,
+      "y1": -7.5,
+      "x2": -2.5,
+      "y2": -5
+    },
+    {
+      "t": "line",
+      "x1": 2.5,
+      "y1": -7.5,
+      "x2": 2.5,
+      "y2": -5
+    },
+    {
+      "t": "line",
+      "x1": 0,
+      "y1": 5,
+      "x2": 0,
+      "y2": 7.5
+    },
+    {
+      "t": "rect",
+      "x": -5,
+      "y": -5,
+      "w": 10,
+      "h": 10
+    },
+    {
+      "t": "text",
+      "x": 0,
+      "y": 1.2,
+      "text": "H",
+      "size": 4,
+      "anchor": "middle"
+    }
+  ],
+  "label": {
+    "x": 8,
+    "y": 0
+  }
+}

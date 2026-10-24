@@ -109,3 +109,23 @@ label.file { background: var(--raised); border: 1px solid var(--line); border-ra
 .topbar .field select { max-width: 110px; }
 .page-item { align-items: center; }
 .navigator .row-buttons button { padding: 2px 6px; }
+
+/* M2: devices, parts, boxes, BOM */
+.device { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 4px; }
+.device h4, .selection-tools h4, .properties h4 { margin: 10px 0 4px; font-size: 12px; color: var(--muted); }
+.reps, .parts, .pins { list-style: none; margin: 4px 0 8px; padding: 0; }
+.reps li button { width: 100%; text-align: left; padding: 2px 6px; margin-bottom: 2px; font-size: 12px; }
+.reps li.self button { border-color: var(--accent); }
+.parts li, .pins li { display: grid; grid-template-columns: 1fr auto; gap: 2px 6px; align-items: end; border-bottom: 1px solid var(--line); padding: 4px 0; font-size: 12px; }
+.parts li > span { grid-column: 1 / -1; overflow: hidden; text-overflow: ellipsis; }
+.pins li { grid-template-columns: 1fr 1fr; }
+.part-picker { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
+.part-picker select, .part-picker input[type='search'] { background: var(--raised); border: 1px solid var(--line); border-radius: 4px; color: var(--text); padding: 3px 6px; font: inherit; width: 100%; }
+.bom-controls { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
+.bom-columns { border: 1px solid var(--line); border-radius: 4px; margin: 8px 0; display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: end; }
+table.bom { width: 100%; border-collapse: collapse; font-size: 12px; margin: 8px 0; }
+table.bom th, table.bom td { border: 1px solid var(--line); padding: 3px 6px; text-align: left; vertical-align: top; }
+table.bom td.num { text-align: right; }
+table.bom tr.missing td { color: var(--warn); }
+table.bom tr.assembly td { font-weight: 600; background: var(--raised); }
+.hint.warn { color: var(--warn); }

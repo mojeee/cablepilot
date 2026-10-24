@@ -1,0 +1,23 @@
+{
+  "id": "generic-transformer-1ph-400v-24v-250va",
+  "kind": "part",
+  "title": {
+    "en": "Single-phase control transformer, 400 V / 24 V, 250 VA",
+    "it": "Trasformatore di comando monofase, 400 V / 24 V, 250 VA"
+  },
+  "category": "transformers",
+  "code": "GEN-TRANSFORMER-1PH-400V-24V-250VA",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Single-phase control transformer, 400 V / 24 V, 250 VA",
+    "it": "Trasformatore di comando monofase, 400 V / 24 V, 250 VA"
+  },
+  "data": {
+    "Primary": "400 V",
+    "Secondary": "24 V",
+    "Rated power": "250 VA"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

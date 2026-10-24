@@ -1,9 +1,28 @@
 {
   "format": "cablepilot-project",
-  "version": 1,
+  "version": 2,
   "id": "sample-conveyor",
   "name": "Conveyor with direct-on-line starter",
   "settings": {
+    "bom": {
+      "columns": [
+        "designation",
+        "position",
+        "qty",
+        "code",
+        "description",
+        "manufacturer",
+        "field:make",
+        "field:notes"
+      ],
+      "group": "device",
+      "units": 1,
+      "userFields": [
+        {"id":"make","label":{"en":"Make or buy","it":"Produzione o acquisto"}},
+        {"id":"notes","label":{"en":"Notes","it":"Note"}}
+      ]
+    },
+    "crossRef": {"format":"page.column","pageDigits":0},
     "defaultSize": "A3",
     "defaultTemplateId": "default",
     "drawingLanguage": "en",
@@ -293,23 +312,23 @@
           "id": "e2",
           "kind": "symbol",
           "designation": "-QF1",
-          "functionText": {"en":"Main breaker 32 A"},
+          "functionText": {"en":"Motor circuit breaker 32 A"},
           "mirror": false,
           "rot": 0,
           "symbolId": "mcb-1p",
-          "x": 100,
-          "y": 60
+          "x": 210,
+          "y": 75
         },
         {
           "id": "e3",
           "kind": "symbol",
           "designation": "-KM1",
-          "functionText": {"en":"Contactor"},
+          "functionText": {"en":"Conveyor contactor"},
           "mirror": false,
           "rot": 0,
-          "symbolId": "contact-no",
-          "x": 100,
-          "y": 90
+          "symbolId": "contactor-1p",
+          "x": 210,
+          "y": 115
         },
         {
           "id": "e4",
@@ -319,18 +338,18 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "motor-3ph",
-          "x": 100,
-          "y": 130
+          "x": 210,
+          "y": 165
         },
         {
           "id": "e5",
           "kind": "wire",
           "conductors": 3,
-          "points": [{"x":100,"y":30},{"x":100,"y":55}],
+          "points": [{"x":210,"y":35},{"x":210,"y":70}],
           "potential": "L1"
         },
-        {"id":"e6","kind":"wire","conductors":3,"points":[{"x":100,"y":65},{"x":100,"y":85}]},
-        {"id":"e7","kind":"wire","conductors":3,"points":[{"x":100,"y":95},{"x":100,"y":120}]},
+        {"id":"e6","kind":"wire","conductors":3,"points":[{"x":210,"y":80},{"x":210,"y":110}]},
+        {"id":"e7","kind":"wire","conductors":3,"points":[{"x":210,"y":120},{"x":210,"y":155}]},
         {
           "id": "e8",
           "kind": "text",
@@ -338,20 +357,20 @@
           "rot": 0,
           "size": 3.5,
           "text": "Mains 400 V 3~ 50 Hz",
-          "x": 40,
-          "y": 30
+          "x": 60,
+          "y": 40
         },
         {
           "id": "e9",
           "kind": "rect",
           "dashed": true,
-          "h": 110,
+          "h": 150,
           "label": "Conveyor starter",
-          "w": 70,
-          "x": 70,
-          "y": 45
+          "w": 90,
+          "x": 165,
+          "y": 50
         },
-        {"id":"e10","kind":"warning","sign":"electric","size":12,"x":170,"y":60}
+        {"id":"e10","kind":"warning","sign":"electric","size":12,"x":290,"y":70}
       ],
       "location": "DS",
       "size": "A3",
@@ -370,19 +389,19 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "switch-disconnector-3p",
-          "x": 100,
-          "y": 50
+          "x": 210,
+          "y": 55
         },
         {
           "id": "e12",
           "kind": "symbol",
           "designation": "-QF1",
-          "functionText": {"en":"Motor circuit breaker"},
+          "functionText": {"en":"Motor circuit breaker 32 A"},
           "mirror": false,
           "rot": 0,
           "symbolId": "mcb-3p",
-          "x": 100,
-          "y": 70
+          "x": 210,
+          "y": 85
         },
         {
           "id": "e13",
@@ -392,8 +411,8 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "contactor-3p",
-          "x": 100,
-          "y": 90
+          "x": 210,
+          "y": 115
         },
         {
           "id": "e14",
@@ -403,8 +422,8 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "overload-relay-3p",
-          "x": 100,
-          "y": 110
+          "x": 210,
+          "y": 145
         },
         {
           "id": "e15",
@@ -414,26 +433,26 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "motor-3ph",
-          "x": 100,
-          "y": 145
+          "x": 210,
+          "y": 200
         },
-        {"id":"e16","kind":"wire","points":[{"x":95,"y":25},{"x":95,"y":45}],"potential":"L1"},
-        {"id":"e17","kind":"wire","points":[{"x":100,"y":25},{"x":100,"y":45}],"potential":"L2"},
-        {"id":"e18","kind":"wire","points":[{"x":105,"y":25},{"x":105,"y":45}],"potential":"L3"},
-        {"id":"e19","kind":"wire","number":"1","points":[{"x":95,"y":55},{"x":95,"y":65}]},
-        {"id":"e20","kind":"wire","number":"2","points":[{"x":100,"y":55},{"x":100,"y":65}]},
-        {"id":"e21","kind":"wire","number":"3","points":[{"x":105,"y":55},{"x":105,"y":65}]},
-        {"id":"e22","kind":"wire","number":"4","points":[{"x":95,"y":75},{"x":95,"y":85}]},
-        {"id":"e23","kind":"wire","number":"5","points":[{"x":100,"y":75},{"x":100,"y":85}]},
-        {"id":"e24","kind":"wire","number":"6","points":[{"x":105,"y":75},{"x":105,"y":85}]},
-        {"id":"e25","kind":"wire","number":"7","points":[{"x":95,"y":95},{"x":95,"y":105}]},
-        {"id":"e26","kind":"wire","number":"8","points":[{"x":100,"y":95},{"x":100,"y":105}]},
-        {"id":"e27","kind":"wire","number":"9","points":[{"x":105,"y":95},{"x":105,"y":105}]},
-        {"id":"e28","kind":"wire","number":"10","points":[{"x":95,"y":115},{"x":95,"y":135}]},
-        {"id":"e29","kind":"wire","number":"11","points":[{"x":100,"y":115},{"x":100,"y":135}]},
-        {"id":"e30","kind":"wire","number":"12","points":[{"x":105,"y":115},{"x":105,"y":135}]},
-        {"id":"e31","kind":"rect","dashed":true,"h":90,"label":"Starter","w":60,"x":80,"y":40},
-        {"id":"e32","kind":"warning","sign":"electric","size":12,"x":60,"y":50},
+        {"id":"e16","kind":"wire","points":[{"x":205,"y":25},{"x":205,"y":50}],"potential":"L1"},
+        {"id":"e17","kind":"wire","points":[{"x":210,"y":25},{"x":210,"y":50}],"potential":"L2"},
+        {"id":"e18","kind":"wire","points":[{"x":215,"y":25},{"x":215,"y":50}],"potential":"L3"},
+        {"id":"e19","kind":"wire","number":"1","points":[{"x":205,"y":60},{"x":205,"y":80}]},
+        {"id":"e20","kind":"wire","number":"2","points":[{"x":210,"y":60},{"x":210,"y":80}]},
+        {"id":"e21","kind":"wire","number":"3","points":[{"x":215,"y":60},{"x":215,"y":80}]},
+        {"id":"e22","kind":"wire","number":"4","points":[{"x":205,"y":90},{"x":205,"y":110}]},
+        {"id":"e23","kind":"wire","number":"5","points":[{"x":210,"y":90},{"x":210,"y":110}]},
+        {"id":"e24","kind":"wire","number":"6","points":[{"x":215,"y":90},{"x":215,"y":110}]},
+        {"id":"e25","kind":"wire","number":"7","points":[{"x":205,"y":120},{"x":205,"y":140}]},
+        {"id":"e26","kind":"wire","number":"8","points":[{"x":210,"y":120},{"x":210,"y":140}]},
+        {"id":"e27","kind":"wire","number":"9","points":[{"x":215,"y":120},{"x":215,"y":140}]},
+        {"id":"e28","kind":"wire","number":"10","points":[{"x":205,"y":150},{"x":205,"y":190}]},
+        {"id":"e29","kind":"wire","number":"11","points":[{"x":210,"y":150},{"x":210,"y":190}]},
+        {"id":"e30","kind":"wire","number":"12","points":[{"x":215,"y":150},{"x":215,"y":190}]},
+        {"id":"e31","kind":"rect","dashed":true,"h":150,"label":"Starter","w":80,"x":170,"y":40},
+        {"id":"e32","kind":"warning","sign":"electric","size":12,"x":110,"y":60},
         {
           "id": "e33",
           "kind": "text",
@@ -441,8 +460,8 @@
           "rot": 0,
           "size": 3,
           "text": "Motor starter, direct on line.\nProtection: motor circuit breaker\nand overload relay.",
-          "x": 160,
-          "y": 60
+          "x": 270,
+          "y": 80
         }
       ],
       "location": "DS",
@@ -462,21 +481,21 @@
           "mirror": true,
           "rot": 0,
           "symbolId": "power-supply",
-          "x": 50,
+          "x": 60,
           "y": 50
         },
-        {"id":"e35","kind":"wire","points":[{"x":47.5,"y":25},{"x":47.5,"y":40}],"potential":"N"},
-        {"id":"e36","kind":"wire","points":[{"x":52.5,"y":25},{"x":52.5,"y":40}],"potential":"L1"},
+        {"id":"e35","kind":"wire","points":[{"x":57.5,"y":25},{"x":57.5,"y":40}],"potential":"N"},
+        {"id":"e36","kind":"wire","points":[{"x":62.5,"y":25},{"x":62.5,"y":40}],"potential":"L1"},
         {
           "id": "e37",
           "kind": "wire",
-          "points": [{"x":52.5,"y":60},{"x":52.5,"y":70},{"x":190,"y":70}],
+          "points": [{"x":62.5,"y":60},{"x":62.5,"y":70},{"x":320,"y":70}],
           "potential": "24VDC"
         },
         {
           "id": "e38",
           "kind": "wire",
-          "points": [{"x":47.5,"y":60},{"x":47.5,"y":240},{"x":190,"y":240}],
+          "points": [{"x":57.5,"y":60},{"x":57.5,"y":240},{"x":320,"y":240}],
           "potential": "0V"
         },
         {
@@ -487,8 +506,8 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "emergency-stop",
-          "x": 100,
-          "y": 90
+          "x": 140,
+          "y": 95
         },
         {
           "id": "e40",
@@ -498,8 +517,8 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "pushbutton-nc",
-          "x": 100,
-          "y": 110
+          "x": 140,
+          "y": 117
         },
         {
           "id": "e41",
@@ -509,8 +528,8 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "pushbutton-no",
-          "x": 100,
-          "y": 130
+          "x": 140,
+          "y": 139
         },
         {
           "id": "e42",
@@ -520,8 +539,8 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "contact-nc",
-          "x": 100,
-          "y": 150
+          "x": 140,
+          "y": 161
         },
         {
           "id": "e43",
@@ -531,17 +550,17 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "coil",
-          "x": 100,
-          "y": 175
+          "x": 140,
+          "y": 195
         },
-        {"id":"e44","kind":"wire","points":[{"x":100,"y":70},{"x":100,"y":85}]},
-        {"id":"e44-j1","kind":"junction","x":100,"y":70},
-        {"id":"e45","kind":"wire","points":[{"x":100,"y":95},{"x":100,"y":105}]},
-        {"id":"e46","kind":"wire","points":[{"x":100,"y":115},{"x":100,"y":125}]},
-        {"id":"e47","kind":"wire","points":[{"x":100,"y":135},{"x":100,"y":145}]},
-        {"id":"e48","kind":"wire","points":[{"x":100,"y":155},{"x":100,"y":170}]},
-        {"id":"e49","kind":"wire","points":[{"x":100,"y":180},{"x":100,"y":240}]},
-        {"id":"e49-j1","kind":"junction","x":100,"y":240},
+        {"id":"e44","kind":"wire","points":[{"x":140,"y":70},{"x":140,"y":90}]},
+        {"id":"e44-j1","kind":"junction","x":140,"y":70},
+        {"id":"e45","kind":"wire","points":[{"x":140,"y":100},{"x":140,"y":112}]},
+        {"id":"e46","kind":"wire","points":[{"x":140,"y":122},{"x":140,"y":134}]},
+        {"id":"e47","kind":"wire","points":[{"x":140,"y":144},{"x":140,"y":156}]},
+        {"id":"e48","kind":"wire","points":[{"x":140,"y":166},{"x":140,"y":190}]},
+        {"id":"e49","kind":"wire","points":[{"x":140,"y":200},{"x":140,"y":240}]},
+        {"id":"e49-j1","kind":"junction","x":140,"y":240},
         {
           "id": "e50",
           "kind": "symbol",
@@ -550,13 +569,13 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "contact-no",
-          "x": 115,
-          "y": 130
+          "x": 190,
+          "y": 139
         },
-        {"id":"e51","kind":"wire","points":[{"x":100,"y":120},{"x":115,"y":120},{"x":115,"y":125}]},
-        {"id":"e51-j1","kind":"junction","x":100,"y":120},
-        {"id":"e52","kind":"wire","points":[{"x":115,"y":135},{"x":115,"y":140},{"x":100,"y":140}]},
-        {"id":"e52-j1","kind":"junction","x":100,"y":140},
+        {"id":"e51","kind":"wire","points":[{"x":140,"y":128},{"x":190,"y":128},{"x":190,"y":134}]},
+        {"id":"e51-j1","kind":"junction","x":140,"y":128},
+        {"id":"e52","kind":"wire","points":[{"x":190,"y":144},{"x":190,"y":150},{"x":140,"y":150}]},
+        {"id":"e52-j1","kind":"junction","x":140,"y":150},
         {
           "id": "e53",
           "kind": "symbol",
@@ -565,8 +584,8 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "contact-no",
-          "x": 145,
-          "y": 150
+          "x": 250,
+          "y": 160
         },
         {
           "id": "e54",
@@ -576,14 +595,14 @@
           "mirror": false,
           "rot": 0,
           "symbolId": "lamp",
-          "x": 145,
-          "y": 180
+          "x": 250,
+          "y": 195
         },
-        {"id":"e55","kind":"wire","points":[{"x":145,"y":70},{"x":145,"y":145}]},
-        {"id":"e55-j1","kind":"junction","x":145,"y":70},
-        {"id":"e56","kind":"wire","points":[{"x":145,"y":155},{"x":145,"y":175}]},
-        {"id":"e57","kind":"wire","points":[{"x":145,"y":185},{"x":145,"y":240}]},
-        {"id":"e57-j1","kind":"junction","x":145,"y":240},
+        {"id":"e55","kind":"wire","points":[{"x":250,"y":70},{"x":250,"y":155}]},
+        {"id":"e55-j1","kind":"junction","x":250,"y":70},
+        {"id":"e56","kind":"wire","points":[{"x":250,"y":165},{"x":250,"y":190}]},
+        {"id":"e57","kind":"wire","points":[{"x":250,"y":200},{"x":250,"y":240}]},
+        {"id":"e57-j1","kind":"junction","x":250,"y":240},
         {
           "id": "e58",
           "kind": "text",
@@ -591,8 +610,19 @@
           "rot": 0,
           "size": 3,
           "text": "Start and stop with the pushbuttons.\nThe emergency stop opens the\ncontrol circuit.",
-          "x": 170,
-          "y": 100
+          "x": 275,
+          "y": 110
+        },
+        {
+          "id": "e59",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "interruption-point",
+          "value": "PLC-24V",
+          "x": 320,
+          "y": 70
         }
       ],
       "location": "DS",
@@ -605,100 +635,132 @@
       "type": "plc",
       "elements": [
         {
-          "id": "e59",
+          "id": "e60",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
           "rot": 0,
           "symbolId": "plc-input",
           "value": "I0.0",
-          "x": 120,
-          "y": 50
+          "x": 200,
+          "y": 60
         },
-        {"id":"e60","kind":"wire","points":[{"x":100,"y":50},{"x":120,"y":50}]},
+        {"id":"e61","kind":"wire","points":[{"x":160,"y":60},{"x":200,"y":60}]},
         {
-          "id": "e61",
+          "id": "e62",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 3,
           "text": "Emergency stop healthy",
-          "x": 40,
-          "y": 51.5
+          "x": 70,
+          "y": 61.5
         },
         {
-          "id": "e62",
+          "id": "e63",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
           "rot": 0,
           "symbolId": "plc-input",
           "value": "I0.1",
-          "x": 120,
-          "y": 62
+          "x": 200,
+          "y": 76
         },
-        {"id":"e63","kind":"wire","points":[{"x":100,"y":62},{"x":120,"y":62}]},
-        {"id":"e64","kind":"text","align":"left","rot":0,"size":3,"text":"Start","x":40,"y":63.5},
+        {"id":"e64","kind":"wire","points":[{"x":160,"y":76},{"x":200,"y":76}]},
+        {"id":"e65","kind":"text","align":"left","rot":0,"size":3,"text":"Start","x":70,"y":77.5},
         {
-          "id": "e65",
+          "id": "e66",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
           "rot": 0,
           "symbolId": "plc-input",
           "value": "I0.2",
-          "x": 120,
-          "y": 74
+          "x": 200,
+          "y": 92
         },
-        {"id":"e66","kind":"wire","points":[{"x":100,"y":74},{"x":120,"y":74}]},
-        {"id":"e67","kind":"text","align":"left","rot":0,"size":3,"text":"Stop","x":40,"y":75.5},
+        {"id":"e67","kind":"wire","points":[{"x":160,"y":92},{"x":200,"y":92}]},
+        {"id":"e68","kind":"text","align":"left","rot":0,"size":3,"text":"Stop","x":70,"y":93.5},
         {
-          "id": "e68",
+          "id": "e69",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
           "rot": 0,
           "symbolId": "plc-output",
           "value": "Q0.0",
-          "x": 120,
-          "y": 86
+          "x": 200,
+          "y": 108
         },
-        {"id":"e69","kind":"wire","points":[{"x":100,"y":86},{"x":120,"y":86}]},
+        {"id":"e70","kind":"wire","points":[{"x":160,"y":108},{"x":200,"y":108}]},
         {
-          "id": "e70",
+          "id": "e71",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 3,
           "text": "Conveyor contactor",
-          "x": 40,
-          "y": 87.5
+          "x": 70,
+          "y": 109.5
         },
         {
-          "id": "e71",
+          "id": "e72",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
           "rot": 0,
           "symbolId": "plc-output",
           "value": "Q0.1",
-          "x": 120,
-          "y": 98
+          "x": 200,
+          "y": 124
         },
-        {"id":"e72","kind":"wire","points":[{"x":100,"y":98},{"x":120,"y":98}]},
+        {"id":"e73","kind":"wire","points":[{"x":160,"y":124},{"x":200,"y":124}]},
         {
-          "id": "e73",
+          "id": "e74",
           "kind": "text",
           "align": "left",
           "rot": 0,
           "size": 3,
           "text": "Running lamp",
-          "x": 40,
-          "y": 99.5
+          "x": 70,
+          "y": 125.5
         },
-        {"id":"e74","kind":"rect","dashed":true,"h":66,"label":"PLC","w":25,"x":118,"y":42},
         {
           "id": "e75",
+          "kind": "rect",
+          "assembly": "-A1",
+          "dashed": true,
+          "h": 90,
+          "label": "PLC",
+          "w": 28,
+          "x": 198,
+          "y": 48
+        },
+        {"id":"e76","kind":"wire","points":[{"x":100,"y":35},{"x":160,"y":35}],"potential":"24VDC"},
+        {
+          "id": "e77",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "interruption-point",
+          "value": "PLC-24V",
+          "x": 160,
+          "y": 35
+        },
+        {
+          "id": "e78",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Supply of the PLC outputs",
+          "x": 100,
+          "y": 28
+        },
+        {
+          "id": "e79",
           "kind": "table",
           "cells": [
             ["Address","Signal","Device"],
@@ -708,12 +770,12 @@
             ["Q0.0","Conveyor contactor","-KM1"],
             ["Q0.1","Running lamp","-H1"]
           ],
-          "colWidths": [20,55,20],
+          "colWidths": [25,70,25],
           "headerRow": true,
-          "rowHeight": 7,
-          "size": 3,
-          "x": 170,
-          "y": 50
+          "rowHeight": 8,
+          "size": 3.2,
+          "x": 260,
+          "y": 60
         }
       ],
       "location": "DS",
@@ -726,7 +788,7 @@
       "type": "terminals",
       "elements": [
         {
-          "id": "e76",
+          "id": "e80",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -745,7 +807,7 @@
       "type": "cables",
       "elements": [
         {
-          "id": "e77",
+          "id": "e81",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -764,7 +826,7 @@
       "type": "layout",
       "elements": [
         {
-          "id": "e78",
+          "id": "e82",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -780,5 +842,400 @@
     }
   ],
   "assets": {},
-  "symbols": []
+  "symbols": [],
+  "devices": [
+    {
+      "designation": "+DS-A1",
+      "fields": {},
+      "parts": [
+        {"part":"generic-plc-cpu-compact","qty":1},
+        {"part":"generic-plc-di-16-24vdc","qty":1},
+        {"part":"generic-plc-do-16-24vdc","qty":1}
+      ]
+    },
+    {"designation":"+DS-FR1","fields":{},"parts":[{"part":"generic-overload-relay-9a-13a","qty":1}]},
+    {"designation":"+DS-G1","fields":{},"parts":[{"part":"generic-psu-24vdc-10a","qty":1}]},
+    {"designation":"+DS-H1","fields":{},"parts":[{"part":"generic-pilot-lamp-22mm-24vdc","qty":1}]},
+    {
+      "designation": "+DS-KM1",
+      "fields": {},
+      "parts": [{"part":"generic-contactor-12a","qty":1},{"part":"generic-aux-block-1no1nc","qty":1}]
+    },
+    {
+      "designation": "+DS-M1",
+      "fields": {"make":"Buy","notes":"Supplied by the customer"},
+      "parts": [{"part":"generic-motor-3ph-5.5kw","qty":1}]
+    },
+    {"designation":"+DS-QF1","fields":{},"parts":[{"part":"generic-mcb-3p-c32a","qty":1}]},
+    {
+      "designation": "+DS-QS1",
+      "fields": {"make":"Buy"},
+      "parts": [{"part":"generic-switch-disconnector-3p-63a","qty":1}]
+    },
+    {"designation":"+DS-S0","fields":{},"parts":[{"part":"generic-emergency-stop-22mm","qty":1}]},
+    {"designation":"+DS-S1","fields":{},"parts":[{"part":"generic-pushbutton-22mm-no","qty":1}]},
+    {"designation":"+DS-S2","fields":{},"parts":[{"part":"generic-pushbutton-22mm-nc","qty":1}]}
+  ],
+  "parts": [
+    {
+      "id": "generic-switch-disconnector-3p-63a",
+      "kind": "part",
+      "category": "breakers",
+      "code": "GEN-SWITCH-DISCONNECTOR-3P-63A",
+      "data": {"Poles":"3","Rated current":"63 A"},
+      "description": {"en":"Switch-disconnector 3 poles, 63 A","it":"Sezionatore sotto carico 3 poli, 63 A"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"Switch-disconnector 3 poles, 63 A","it":"Sezionatore sotto carico 3 poli, 63 A"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-mcb-3p-c32a",
+      "kind": "part",
+      "category": "breakers",
+      "code": "GEN-MCB-3P-C32A",
+      "data": {"Poles":"3","Rated current":"32 A","Tripping characteristic":"C"},
+      "description": {
+        "en": "Miniature circuit breaker 3 poles, curve C, 32 A",
+        "it": "Interruttore magnetotermico 3 poli, curva C, 32 A"
+      },
+      "dimensions": {"d":70,"h":90,"w":52.5},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Miniature circuit breaker 3 poles, curve C, 32 A",
+        "it": "Interruttore magnetotermico 3 poli, curva C, 32 A"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-contactor-12a",
+      "kind": "part",
+      "category": "contactors",
+      "code": "GEN-CONTACTOR-12A",
+      "data": {
+        "Auxiliary contacts": "1 NO",
+        "Coil voltage": "24 V DC",
+        "Poles": "3",
+        "Rated operational current AC-3": "12 A"
+      },
+      "description": {
+        "en": "Contactor 3 poles, 12 A AC-3, coil 24 V DC",
+        "it": "Contattore 3 poli, 12 A AC-3, bobina 24 V DC"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Contactor 3 poles, 12 A AC-3, coil 24 V DC",
+        "it": "Contattore 3 poli, 12 A AC-3, bobina 24 V DC"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-aux-block-1no1nc",
+      "kind": "part",
+      "category": "contactors",
+      "code": "GEN-AUX-BLOCK-1NO1NC",
+      "data": {"Contacts":"1 NO + 1 NC"},
+      "description": {"en":"Auxiliary contact block, 1 NO + 1 NC","it":"Blocco di contatti ausiliari, 1 NA + 1 NC"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"Auxiliary contact block, 1 NO + 1 NC","it":"Blocco di contatti ausiliari, 1 NA + 1 NC"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-overload-relay-9a-13a",
+      "kind": "part",
+      "category": "motor-protection",
+      "code": "GEN-OVERLOAD-RELAY-9A-13A",
+      "data": {"Setting range":"9 - 13 A"},
+      "description": {
+        "en": "Thermal overload relay, setting range 9 to 13 A",
+        "it": "Relè termico, campo di regolazione da 9 a 13 A"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Thermal overload relay, setting range 9 to 13 A",
+        "it": "Relè termico, campo di regolazione da 9 a 13 A"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-motor-3ph-5.5kw",
+      "kind": "part",
+      "category": "machines",
+      "code": "GEN-MOTOR-3PH-5,5KW",
+      "data": {"Poles":"4","Rated power":"5.5 kW","Voltage":"400 V"},
+      "description": {"en":"Three-phase motor 5.5 kW, 4 poles, 400 V","it":"Motore trifase 5,5 kW, 4 poli, 400 V"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"Three-phase motor 5.5 kW, 4 poles, 400 V","it":"Motore trifase 5,5 kW, 4 poli, 400 V"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-psu-24vdc-10a",
+      "kind": "part",
+      "category": "power-electronics",
+      "code": "GEN-PSU-24VDC-10A",
+      "data": {"Input":"230 V AC","Output":"24 V DC, 10 A"},
+      "description": {
+        "en": "Power supply 230 V AC to 24 V DC, 10 A",
+        "it": "Alimentatore da 230 V AC a 24 V DC, 10 A"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Power supply 230 V AC to 24 V DC, 10 A",
+        "it": "Alimentatore da 230 V AC a 24 V DC, 10 A"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-emergency-stop-22mm",
+      "kind": "part",
+      "category": "operator-devices",
+      "code": "GEN-EMERGENCY-STOP-22MM",
+      "data": {"Contacts":"1 NC","Mounting":"22 mm"},
+      "description": {
+        "en": "Emergency stop pushbutton 22 mm, mushroom head, 1 normally closed contact",
+        "it": "Pulsante di emergenza 22 mm, a fungo, 1 contatto normalmente chiuso"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Emergency stop pushbutton 22 mm, mushroom head, 1 normally closed contact",
+        "it": "Pulsante di emergenza 22 mm, a fungo, 1 contatto normalmente chiuso"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-pushbutton-22mm-no",
+      "kind": "part",
+      "category": "operator-devices",
+      "code": "GEN-PUSHBUTTON-22MM-NO",
+      "data": {"Contacts":"1 NO","Mounting":"22 mm"},
+      "description": {
+        "en": "Pushbutton 22 mm, 1 normally open contact",
+        "it": "Pulsante 22 mm, 1 contatto normalmente aperto"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Pushbutton 22 mm, 1 normally open contact",
+        "it": "Pulsante 22 mm, 1 contatto normalmente aperto"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-pushbutton-22mm-nc",
+      "kind": "part",
+      "category": "operator-devices",
+      "code": "GEN-PUSHBUTTON-22MM-NC",
+      "data": {"Contacts":"1 NC","Mounting":"22 mm"},
+      "description": {
+        "en": "Pushbutton 22 mm, 1 normally closed contact",
+        "it": "Pulsante 22 mm, 1 contatto normalmente chiuso"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Pushbutton 22 mm, 1 normally closed contact",
+        "it": "Pulsante 22 mm, 1 contatto normalmente chiuso"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-pilot-lamp-22mm-24vdc",
+      "kind": "part",
+      "category": "operator-devices",
+      "code": "GEN-PILOT-LAMP-22MM-24VDC",
+      "data": {"Mounting":"22 mm","Supply voltage":"24 V DC"},
+      "description": {"en":"Pilot lamp 22 mm, LED, 24 V DC","it":"Spia luminosa 22 mm, LED, 24 V DC"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"Pilot lamp 22 mm, LED, 24 V DC","it":"Spia luminosa 22 mm, LED, 24 V DC"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-plc-cpu-compact",
+      "kind": "part",
+      "category": "plc",
+      "code": "GEN-PLC-CPU-COMPACT",
+      "data": {"Interface":"Ethernet","Supply voltage":"24 V DC"},
+      "description": {"en":"PLC CPU, compact, Ethernet, 24 V DC","it":"CPU PLC compatta, Ethernet, 24 V DC"},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {"en":"PLC CPU, compact, Ethernet, 24 V DC","it":"CPU PLC compatta, Ethernet, 24 V DC"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-plc-di-16-24vdc",
+      "kind": "part",
+      "category": "plc",
+      "code": "GEN-PLC-DI-16-24VDC",
+      "data": {"Channels":"16","Signal":"24 V DC"},
+      "description": {
+        "en": "PLC input card, 16 digital inputs 24 V DC",
+        "it": "Scheda PLC, 16 ingressi digitali 24 V DC"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "PLC input card, 16 digital inputs 24 V DC",
+        "it": "Scheda PLC, 16 ingressi digitali 24 V DC"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-plc-do-16-24vdc",
+      "kind": "part",
+      "category": "plc",
+      "code": "GEN-PLC-DO-16-24VDC",
+      "data": {"Channels":"16","Signal":"24 V DC"},
+      "description": {
+        "en": "PLC output card, 16 digital outputs 24 V DC",
+        "it": "Scheda PLC, 16 uscite digitali 24 V DC"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "PLC output card, 16 digital outputs 24 V DC",
+        "it": "Scheda PLC, 16 uscite digitali 24 V DC"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-enclosure-600x800x300",
+      "kind": "part",
+      "category": "enclosures",
+      "code": "GEN-ENCLOSURE-600X800X300",
+      "data": {"Depth":"300 mm","Height":"800 mm","Width":"600 mm"},
+      "description": {
+        "en": "Wall enclosure 600 x 800 x 300 mm (W x H x D), sheet steel",
+        "it": "Armadio a parete 600 x 800 x 300 mm (L x A x P), lamiera di acciaio"
+      },
+      "dimensions": {"d":300,"h":800,"w":600},
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Wall enclosure 600 x 800 x 300 mm (W x H x D), sheet steel",
+        "it": "Armadio a parete 600 x 800 x 300 mm (L x A x P), lamiera di acciaio"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-mounting-plate-600x800",
+      "kind": "part",
+      "category": "enclosures",
+      "code": "GEN-MOUNTING-PLATE-600X800",
+      "data": {"Height":"800 mm","Width":"600 mm"},
+      "description": {
+        "en": "Mounting plate 600 x 800 mm for enclosure 800 x 1000",
+        "it": "Piastra di montaggio 600 x 800 mm per armadio 800 x 1000"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Mounting plate 600 x 800 mm for enclosure 800 x 1000",
+        "it": "Piastra di montaggio 600 x 800 mm per armadio 800 x 1000"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-wiring-kit",
+      "kind": "part",
+      "category": "accessories",
+      "code": "GEN-WIRING-KIT",
+      "data": {},
+      "description": {
+        "en": "Wiring kit (ferrules, cable ties, labels), per assembly",
+        "it": "Kit di cablaggio (puntalini, fascette, etichette), per quadro"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Wiring kit (ferrules, cable ties, labels), per assembly",
+        "it": "Kit di cablaggio (puntalini, fascette, etichette), per quadro"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-terminal-feedthrough-4mm2",
+      "kind": "part",
+      "category": "terminals",
+      "code": "GEN-TERMINAL-FEEDTHROUGH-4MM2",
+      "data": {"Conductor cross-section":"4 mm²","Connection":"Screw"},
+      "description": {
+        "en": "Feed-through terminal, 4 mm², screw connection",
+        "it": "Morsetto passante, 4 mm², a vite"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Feed-through terminal, 4 mm², screw connection",
+        "it": "Morsetto passante, 4 mm², a vite"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-terminal-pe-4mm2",
+      "kind": "part",
+      "category": "terminals",
+      "code": "GEN-TERMINAL-PE-4MM2",
+      "data": {"Colour":"GNYE","Conductor cross-section":"4 mm²"},
+      "description": {
+        "en": "Protective earth terminal, 4 mm², green-yellow",
+        "it": "Morsetto di terra PE, 4 mm², giallo-verde"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Protective earth terminal, 4 mm², green-yellow",
+        "it": "Morsetto di terra PE, 4 mm², giallo-verde"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    }
+  ],
+  "projectParts": [
+    {
+      "id": "pp-generic-enclosure-600x800x300",
+      "fields": {"make":"Buy"},
+      "part": "generic-enclosure-600x800x300",
+      "qty": 1
+    },
+    {
+      "id": "pp-generic-mounting-plate-600x800",
+      "fields": {"make":"Buy"},
+      "part": "generic-mounting-plate-600x800",
+      "qty": 1
+    },
+    {"id":"pp-generic-wiring-kit","fields":{"make":"Make"},"part":"generic-wiring-kit","qty":1},
+    {
+      "id": "pp-generic-terminal-feedthrough-4mm2",
+      "fields": {},
+      "part": "generic-terminal-feedthrough-4mm2",
+      "qty": 12
+    },
+    {"id":"pp-generic-terminal-pe-4mm2","fields":{},"part":"generic-terminal-pe-4mm2","qty":3}
+  ]
 }

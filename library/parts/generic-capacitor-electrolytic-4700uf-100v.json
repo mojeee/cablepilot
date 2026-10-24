@@ -1,0 +1,22 @@
+{
+  "id": "generic-capacitor-electrolytic-4700uf-100v",
+  "kind": "part",
+  "title": {
+    "en": "Electrolytic capacitor 4700 µF, 100 V DC",
+    "it": "Condensatore elettrolitico 4700 µF, 100 V DC"
+  },
+  "category": "power-electronics",
+  "code": "GEN-CAPACITOR-ELECTROLYTIC-4700UF-100V",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Electrolytic capacitor 4700 µF, 100 V DC",
+    "it": "Condensatore elettrolitico 4700 µF, 100 V DC"
+  },
+  "data": {
+    "Capacitance": "4700 µF",
+    "Rated voltage": "100 V DC"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

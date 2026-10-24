@@ -1,0 +1,23 @@
+{
+  "id": "generic-battery-cell-2v-100ah",
+  "kind": "part",
+  "title": {
+    "en": "Lead-acid battery cell 2 V, 100 Ah, sealed",
+    "it": "Elemento batteria piombo-acido 2 V, 100 Ah, ermetico"
+  },
+  "category": "power-electronics",
+  "code": "GEN-BATTERY-CELL-2V-100AH",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Lead-acid battery cell 2 V, 100 Ah, sealed",
+    "it": "Elemento batteria piombo-acido 2 V, 100 Ah, ermetico"
+  },
+  "data": {
+    "Nominal voltage": "2 V",
+    "Capacity": "100 Ah",
+    "Chemistry": "Lead-acid, sealed"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

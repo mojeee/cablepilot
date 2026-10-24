@@ -1,0 +1,23 @@
+{
+  "id": "generic-fuse-holder-dc-63a",
+  "kind": "part",
+  "title": {
+    "en": "Fuse holder for DC, 1 pole, 63 A",
+    "it": "Portafusibile per DC, 1 polo, 63 A"
+  },
+  "category": "breakers",
+  "code": "GEN-FUSE-HOLDER-DC-63A",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Fuse holder for DC, 1 pole, 63 A",
+    "it": "Portafusibile per DC, 1 polo, 63 A"
+  },
+  "data": {
+    "Poles": "1",
+    "Rated current": "63 A",
+    "Current type": "DC"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

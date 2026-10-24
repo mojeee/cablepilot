@@ -1,0 +1,22 @@
+{
+  "id": "generic-fuse-link-dc-63a",
+  "kind": "part",
+  "title": {
+    "en": "Fuse link for DC, 63 A",
+    "it": "Fusibile per DC, 63 A"
+  },
+  "category": "breakers",
+  "code": "GEN-FUSE-LINK-DC-63A",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Fuse link for DC, 63 A",
+    "it": "Fusibile per DC, 63 A"
+  },
+  "data": {
+    "Rated current": "63 A",
+    "Current type": "DC"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

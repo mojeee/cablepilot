@@ -1,0 +1,21 @@
+{
+  "id": "generic-connector-plug-socket-8pole",
+  "kind": "part",
+  "title": {
+    "en": "Plug and socket pair, 8 poles",
+    "it": "Coppia spina e presa, 8 poli"
+  },
+  "category": "connectors",
+  "code": "GEN-CONNECTOR-PLUG-SOCKET-8POLE",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Plug and socket pair, 8 poles",
+    "it": "Coppia spina e presa, 8 poli"
+  },
+  "data": {
+    "Poles": "8"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

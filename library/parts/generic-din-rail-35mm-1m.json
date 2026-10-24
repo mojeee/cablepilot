@@ -1,0 +1,22 @@
+{
+  "id": "generic-din-rail-35mm-1m",
+  "kind": "part",
+  "title": {
+    "en": "DIN rail 35 mm, 1 m",
+    "it": "Guida DIN 35 mm, 1 m"
+  },
+  "category": "accessories",
+  "code": "GEN-DIN-RAIL-35MM-1M",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "DIN rail 35 mm, 1 m",
+    "it": "Guida DIN 35 mm, 1 m"
+  },
+  "data": {
+    "Width": "35 mm",
+    "Length": "1 m"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

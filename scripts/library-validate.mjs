@@ -5,6 +5,9 @@ const isStr = (v) => typeof v === 'string' && v.trim().length > 0;
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
 const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 
+// Element kinds a macro may hold: drawing content only (no generated pages).
+const ELEMENT_KINDS = ['symbol', 'box', 'wire', 'junction', 'text', 'line', 'rect', 'warning'];
+
 const GFX = {
   line: (g) => ['x1', 'y1', 'x2', 'y2'].every((k) => isNum(g[k])),
   poly: (g) => Array.isArray(g.pts) && g.pts.length >= 4 && g.pts.length % 2 === 0 && g.pts.every(isNum),
@@ -52,6 +55,29 @@ export const KINDS = {
     if (d.nfpa !== undefined) {
       if (!isObj(d.nfpa) || !isStr(d.nfpa.source)) err('nfpa needs a source');
       else checkGraphics(d.nfpa.graphics, 'nfpa.graphics', err);
+    }
+  },
+  part: (d, err) => {
+    if (!isObj(d.title) || !isStr(d.title.en) || !isStr(d.title.it)) err('title needs en and it');
+    if (!isObj(d.description) || !isStr(d.description.en) || !isStr(d.description.it)) err('description needs en and it');
+    if (!isStr(d.category)) err('category is required');
+    if (!isStr(d.code)) err('code (the part code shown in the BOM) is required');
+    if (!isStr(d.manufacturer)) err('manufacturer is required ("Generic" for built-in parts)');
+    if (!isObj(d.data) || !Object.values(d.data).every(isStr)) err('data must be an object of text values (unit included, e.g. "16 A")');
+    if (d.dimensions !== undefined && !(isObj(d.dimensions) && ['w', 'h', 'd'].every((k) => isNum(d.dimensions[k]) && d.dimensions[k] > 0))) err('dimensions needs positive w, h and d in millimetres');
+  },
+  macro: (d, err) => {
+    if (!isObj(d.title) || !isStr(d.title.en) || !isStr(d.title.it)) err('title needs en and it');
+    if (!isStr(d.category)) err('category is required');
+    if (!isObj(d.size) || !isNum(d.size.w) || !isNum(d.size.h)) err('size needs w and h');
+    if (!Array.isArray(d.elements) || d.elements.length === 0) err('elements must be a non-empty array');
+    else {
+      const ids = new Set();
+      d.elements.forEach((e, i) => {
+        if (!isObj(e) || !isStr(e.id) || !isStr(e.kind) || !ELEMENT_KINDS.includes(e.kind)) err(`elements[${i}] needs an id and a known kind`);
+        else if (ids.has(e.id)) err(`duplicate element id ${e.id}`);
+        else ids.add(e.id);
+      });
     }
   },
   template: (d, err) => {

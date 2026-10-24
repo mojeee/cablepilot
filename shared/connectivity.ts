@@ -1,13 +1,15 @@
 // Connectivity: nets and potentials computed from the model (rule 1: the schematic is the source
 // of truth). Within a page, wires connect where one wire's end meets another wire (a T), where a
 // junction sits, and to a symbol pin that lies on the wire. Wires that merely cross are not
-// connected. Nets are computed per page; interruption points that join pages arrive in M2.
+// connected. Nets are computed per page; interruption points (same signal name) and mated
+// connectors (same pin number) join nets across pages in netGroups.
 
 import { branchesAt, pointOnPolyline, samePt } from './geometry/wires';
 import type { Library } from './library/types';
 import { withProjectSymbols } from './library/types';
+import { boxPinsWorld } from './draw/box';
 import { pinWorld } from './draw/symbol';
-import type { JunctionEl, Page, Project, SymbolEl, WireEl } from './model/types';
+import type { JunctionEl, Page, Project, WireEl } from './model/types';
 
 export interface NetPin {
   element: string;
@@ -19,8 +21,10 @@ export interface Net {
   page: string;
   wires: string[];
   pins: NetPin[];
-  /** Distinct potentials set on wires or by potential tags in this net. */
+  /** Distinct potentials set on wires, by potential tags or by interruption points in this net. */
   potentials: string[];
+  /** Signal names of interruption points in this net: they join the net to nets on other pages. */
+  signals: string[];
   /** The net's potential when exactly one is set. */
   potential?: string;
   /** True when two or more different potentials are tied together (rule 5, checked in M4). */
@@ -74,18 +78,21 @@ export function pageNets(project: Project, page: Page, libIn: Library): Net[] {
     });
   }
   // Pins: a pin on a wire joins it; pins at the same point join each other.
-  const pinNodes: { el: SymbolEl; pin: string; x: number; y: number; node: number }[] = [];
-  for (const el of page.elements) {
-    if (el.kind !== 'symbol') continue;
-    const def = lib.symbols.get(el.symbolId);
-    if (!def) continue;
-    for (const pw of pinWorld(def, el)) {
+  const pinNodes: { el: string; fn: string; value?: string; pin: string; x: number; y: number; node: number }[] = [];
+  const addPins = (el: string, fn: string, value: string | undefined, pins: { id: string; x: number; y: number }[]) => {
+    for (const pw of pins) {
       const node = dsu.add();
-      pinNodes.push({ el, pin: pw.id, x: pw.x, y: pw.y, node });
+      pinNodes.push({ el, fn, value, pin: pw.id, x: pw.x, y: pw.y, node });
       wires.forEach((w, i) => {
         if (pointOnPolyline(pw, w.points)) dsu.union(node, wireNode[i]);
       });
     }
+  };
+  for (const el of page.elements) {
+    if (el.kind === 'symbol') {
+      const def = lib.symbols.get(el.symbolId);
+      if (def) addPins(el.id, def.function, el.value, pinWorld(def, el));
+    } else if (el.kind === 'box') addPins(el.id, el.variant, undefined, boxPinsWorld(el));
   }
   for (let i = 0; i < pinNodes.length; i++) for (let j = i + 1; j < pinNodes.length; j++) if (samePt(pinNodes[i], pinNodes[j])) dsu.union(pinNodes[i].node, pinNodes[j].node);
 
@@ -96,7 +103,7 @@ export function pageNets(project: Project, page: Page, libIn: Library): Net[] {
     const r = dsu.find(node);
     let n = nets.get(r);
     if (!n) {
-      n = { id: '', page: page.id, wires: [], pins: [], potentials: [], conflict: false };
+      n = { id: '', page: page.id, wires: [], pins: [], potentials: [], signals: [], conflict: false };
       nets.set(r, n);
       order.push(r);
     }
@@ -109,8 +116,13 @@ export function pageNets(project: Project, page: Page, libIn: Library): Net[] {
   });
   for (const pn of pinNodes) {
     const n = get(pn.node);
-    n.pins.push({ element: pn.el.id, pin: pn.pin });
-    if (lib.symbols.get(pn.el.symbolId)?.function === 'potential-tag' && pn.el.value && !n.potentials.includes(pn.el.value)) n.potentials.push(pn.el.value);
+    n.pins.push({ element: pn.el, pin: pn.pin });
+    if (pn.fn === 'potential-tag' && pn.value && !n.potentials.includes(pn.value)) n.potentials.push(pn.value);
+    if (pn.fn === 'interruption' && pn.value) {
+      if (!n.signals.includes(pn.value)) n.signals.push(pn.value);
+      // A signal named like a project potential carries that potential.
+      if (project.potentials.some((p) => p.id === pn.value) && !n.potentials.includes(pn.value)) n.potentials.push(pn.value);
+    }
   }
   // A pin alone (no wire, no other pin) is not a net.
   const result: Net[] = [];
@@ -127,4 +139,52 @@ export function pageNets(project: Project, page: Page, libIn: Library): Net[] {
 
 export function projectNets(project: Project, lib: Library): Net[] {
   return project.pages.flatMap((pg) => pageNets(project, pg, lib));
+}
+
+/** Nets joined across pages: by interruption points of the same signal, and by mated connector pins. */
+export interface NetGroup {
+  id: string;
+  nets: string[];
+  pages: string[];
+  signals: string[];
+  potentials: string[];
+  conflict: boolean;
+}
+
+export function netGroups(project: Project, libIn: Library, nets: Net[] = projectNets(project, libIn)): NetGroup[] {
+  const dsu = new Dsu();
+  const node = new Map<string, number>(nets.map((n) => [n.id, dsu.add()]));
+  const bySignal = new Map<string, string>();
+  for (const n of nets) {
+    for (const sg of n.signals) {
+      const first = bySignal.get(sg);
+      if (first) dsu.union(node.get(first) as number, node.get(n.id) as number);
+      else bySignal.set(sg, n.id);
+    }
+  }
+  // Mated connectors: boxes whose `mate` names another box's designation join pins with the same number.
+  const boxes = project.pages.flatMap((pg) => pg.elements.filter((e) => e.kind === 'box').map((e) => ({ pg, e })));
+  const pinNet = new Map<string, string>();
+  for (const n of nets) for (const p of n.pins) pinNet.set(`${n.page}/${p.element}/${p.pin}`, n.id);
+  for (const { pg, e } of boxes) {
+    if (e.kind !== 'box' || !e.mate) continue;
+    const other = boxes.find((o) => o.e.kind === 'box' && o.e.designation === e.mate && o.e !== e);
+    if (!other || other.e.kind !== 'box') continue;
+    for (const p of e.pins) {
+      const a = pinNet.get(`${pg.id}/${e.id}/${p.id}`), b = pinNet.get(`${other.pg.id}/${other.e.id}/${p.id}`);
+      if (a && b) dsu.union(node.get(a) as number, node.get(b) as number);
+    }
+  }
+  const groups = new Map<number, NetGroup>();
+  for (const n of nets) {
+    const r = dsu.find(node.get(n.id) as number);
+    let g = groups.get(r);
+    if (!g) groups.set(r, (g = { id: n.id, nets: [], pages: [], signals: [], potentials: [], conflict: false }));
+    g.nets.push(n.id);
+    if (!g.pages.includes(n.page)) g.pages.push(n.page);
+    for (const s of n.signals) if (!g.signals.includes(s)) g.signals.push(s);
+    for (const p of n.potentials) if (!g.potentials.includes(p)) g.potentials.push(p);
+  }
+  for (const g of groups.values()) g.conflict = g.potentials.length > 1;
+  return [...groups.values()];
 }

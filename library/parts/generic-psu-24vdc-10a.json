@@ -1,0 +1,22 @@
+{
+  "id": "generic-psu-24vdc-10a",
+  "kind": "part",
+  "title": {
+    "en": "Power supply 230 V AC to 24 V DC, 10 A",
+    "it": "Alimentatore da 230 V AC a 24 V DC, 10 A"
+  },
+  "category": "power-electronics",
+  "code": "GEN-PSU-24VDC-10A",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Power supply 230 V AC to 24 V DC, 10 A",
+    "it": "Alimentatore da 230 V AC a 24 V DC, 10 A"
+  },
+  "data": {
+    "Input": "230 V AC",
+    "Output": "24 V DC, 10 A"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

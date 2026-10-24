@@ -1,0 +1,22 @@
+{
+  "id": "generic-connector-header-10pin",
+  "kind": "part",
+  "title": {
+    "en": "Board header, 10 pins, 2 rows",
+    "it": "Connettore da scheda, 10 poli, 2 file"
+  },
+  "category": "connectors",
+  "code": "GEN-CONNECTOR-HEADER-10PIN",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Board header, 10 pins, 2 rows",
+    "it": "Connettore da scheda, 10 poli, 2 file"
+  },
+  "data": {
+    "Pins": "10",
+    "Rows": "2"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

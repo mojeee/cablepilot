@@ -1,0 +1,24 @@
+{
+  "id": "generic-contactor-18a",
+  "kind": "part",
+  "title": {
+    "en": "Contactor 3 poles, 18 A AC-3, coil 24 V DC",
+    "it": "Contattore 3 poli, 18 A AC-3, bobina 24 V DC"
+  },
+  "category": "contactors",
+  "code": "GEN-CONTACTOR-18A",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Contactor 3 poles, 18 A AC-3, coil 24 V DC",
+    "it": "Contattore 3 poli, 18 A AC-3, bobina 24 V DC"
+  },
+  "data": {
+    "Poles": "3",
+    "Rated operational current AC-3": "18 A",
+    "Coil voltage": "24 V DC",
+    "Auxiliary contacts": "1 NO"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

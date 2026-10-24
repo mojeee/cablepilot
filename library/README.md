@@ -10,8 +10,9 @@ files. Rules (CLAUDE.md, rules 2 and 9):
 - `npm run check:library` validates every file; CI runs it. Company libraries made with the symbol
   editor (M1) use the same format and the same check.
 
-Kinds known so far: `colour-codes`, `symbol` (`library/symbols/`) and `template` (company title-block
-templates). The rules live in `scripts/library-validate.mjs`; new kinds are added there together with their
+Kinds known so far: `colour-codes`, `symbol` (`library/symbols/`), `part` (`library/parts/`, generic parts with code,
+manufacturer "Generic", data and optional dimensions), `macro` (`library/macros/`, a group of elements saved from a
+project) and `template` (company title-block templates). The rules live in `scripts/library-validate.mjs`; new kinds are added there together with their
 first data file. `npm run check:library -- <folder>` checks any folder, for example a company library.
 
 A symbol file has `title` (en, it), `category`, `function`, an optional IEC 81346 `designationLetter`,

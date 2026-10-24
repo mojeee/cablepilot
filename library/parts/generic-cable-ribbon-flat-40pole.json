@@ -1,0 +1,21 @@
+{
+  "id": "generic-cable-ribbon-flat-40pole",
+  "kind": "part",
+  "title": {
+    "en": "Flat ribbon cable with two 40-pole IDC connectors",
+    "it": "Cavo piatto con due connettori IDC a 40 poli"
+  },
+  "category": "cables",
+  "code": "GEN-CABLE-RIBBON-FLAT-40POLE",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Flat ribbon cable with two 40-pole IDC connectors",
+    "it": "Cavo piatto con due connettori IDC a 40 poli"
+  },
+  "data": {
+    "Conductors": "40"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

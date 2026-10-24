@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cablepilot.agentflowbind.com/schema/project.schema.json",
-  "title": "CablePilot project, file format version 1",
+  "title": "CablePilot project, file format version 2",
   "description": "A CablePilot project file (.cablepilot.json). Lengths are millimetres on the page; the origin is the top-left corner of the sheet, y down. Written with a stable key order so it diffs well in Git.",
   "type": "object",
-  "required": ["format", "version", "id", "name", "settings", "properties", "assembly", "templates", "potentials", "pages", "assets", "symbols"],
+  "required": ["format", "version", "id", "name", "settings", "properties", "assembly", "templates", "potentials", "pages", "assets", "symbols", "devices", "parts", "projectParts"],
   "properties": {
     "format": { "const": "cablepilot-project" },
     "version": { "type": "integer", "minimum": 1 },
@@ -12,12 +12,14 @@
     "name": { "type": "string" },
     "settings": {
       "type": "object",
-      "required": ["drawingLanguage", "symbolStandard", "style", "defaultSize", "defaultTemplateId"],
+      "required": ["drawingLanguage", "symbolStandard", "style", "defaultSize", "defaultTemplateId", "crossRef", "bom"],
       "properties": {
         "drawingLanguage": { "enum": ["en", "it"] },
         "symbolStandard": { "enum": ["iec", "nfpa"] },
         "defaultSize": { "$ref": "#/$defs/size" },
         "defaultTemplateId": { "type": "string" },
+        "crossRef": { "type": "object", "required": ["format", "pageDigits"], "properties": { "format": { "enum": ["page.column", "page-column-row"] }, "pageDigits": { "type": "integer", "minimum": 0 } } },
+        "bom": { "type": "object", "required": ["columns", "units", "group", "userFields"], "properties": { "columns": { "type": "array", "items": { "type": "string" } }, "units": { "type": "number", "minimum": 1 }, "group": { "enum": ["device", "part"] }, "userFields": { "type": "array", "items": { "type": "object", "required": ["id", "label"], "properties": { "id": { "type": "string" }, "label": { "$ref": "#/$defs/ltext" } } } } } },
         "style": {
           "type": "object",
           "required": ["colours", "weights", "font", "textSizes"],
@@ -36,6 +38,9 @@
     "potentials": { "type": "array", "items": { "type": "object", "required": ["id", "label", "kind"], "properties": { "id": { "type": "string" }, "label": { "type": "string" }, "kind": { "type": "string" } } } },
     "pages": { "type": "array", "items": { "$ref": "#/$defs/page" } },
     "assets": { "type": "object", "additionalProperties": { "type": "object", "required": ["name", "mime", "data", "w", "h"], "properties": { "name": { "type": "string" }, "mime": { "enum": ["image/png", "image/jpeg", "image/svg+xml"] }, "data": { "type": "string", "description": "Base64 of the file" }, "w": { "type": "number" }, "h": { "type": "number" } } } },
+    "devices": { "type": "array", "description": "Device data beside the drawing: a device is every symbol and box with the same full designation", "items": { "type": "object", "required": ["designation", "parts", "fields"], "properties": { "designation": { "type": "string" }, "parts": { "type": "array", "items": { "type": "object", "required": ["part", "qty"], "properties": { "part": { "type": "string" }, "qty": { "type": "number" } } } }, "fields": { "type": "object", "additionalProperties": { "type": "string" } }, "parent": { "type": "string" } } } },
+    "parts": { "type": "array", "description": "Embedded copies of the library parts the project uses (same format as library/parts)", "items": { "type": "object", "required": ["id", "kind"], "properties": { "id": { "type": "string" }, "kind": { "const": "part" } } } },
+    "projectParts": { "type": "array", "description": "Parts with no designation (mounting plate, wiring kit)", "items": { "type": "object", "required": ["id", "part", "qty", "fields"], "properties": { "id": { "type": "string" }, "part": { "type": "string" }, "qty": { "type": "number" }, "fields": { "type": "object", "additionalProperties": { "type": "string" } } } } },
     "symbols": { "type": "array", "description": "Company symbols the project uses, embedded (same format as library/symbols)", "items": { "type": "object", "required": ["id", "kind", "pins", "graphics"], "properties": { "id": { "type": "string" }, "kind": { "const": "symbol" }, "pins": { "type": "array" }, "graphics": { "type": "array" } } } }
   },
   "$defs": {
@@ -88,12 +93,13 @@
       "type": "object",
       "required": ["id", "kind"],
       "oneOf": [
-        { "properties": { "kind": { "const": "symbol" }, "symbolId": { "type": "string" }, "x": { "type": "number" }, "y": { "type": "number" }, "rot": { "enum": [0, 90, 180, 270] }, "mirror": { "type": "boolean" }, "designation": { "type": "string" }, "location": { "type": "string" }, "functionText": { "$ref": "#/$defs/ltext" }, "value": { "type": "string" } }, "required": ["symbolId", "x", "y", "rot", "mirror", "designation"] },
+        { "properties": { "kind": { "const": "symbol" }, "symbolId": { "type": "string" }, "x": { "type": "number" }, "y": { "type": "number" }, "rot": { "enum": [0, 90, 180, 270] }, "mirror": { "type": "boolean" }, "designation": { "type": "string" }, "location": { "type": "string" }, "functionText": { "$ref": "#/$defs/ltext" }, "value": { "type": "string" }, "stateNote": { "$ref": "#/$defs/ltext" } }, "required": ["symbolId", "x", "y", "rot", "mirror", "designation"] },
         { "properties": { "kind": { "const": "wire" }, "points": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/pt" } }, "potential": { "type": "string" }, "number": { "type": "string" }, "conductors": { "type": "integer", "minimum": 1 } }, "required": ["points"] },
         { "properties": { "kind": { "const": "junction" }, "x": { "type": "number" }, "y": { "type": "number" } }, "required": ["x", "y"] },
         { "properties": { "kind": { "const": "text" }, "x": { "type": "number" }, "y": { "type": "number" }, "rot": { "type": "number" }, "text": { "type": "string" }, "size": { "type": "number" }, "align": { "enum": ["left", "center", "right"] }, "bold": { "type": "boolean" } }, "required": ["x", "y", "rot", "text", "size", "align"] },
         { "properties": { "kind": { "const": "line" }, "points": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/pt" } }, "dashed": { "type": "boolean" } }, "required": ["points"] },
-        { "properties": { "kind": { "const": "rect" }, "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "h": { "type": "number" }, "dashed": { "type": "boolean" }, "label": { "type": "string" } }, "required": ["x", "y", "w", "h"] },
+        { "properties": { "kind": { "const": "rect" }, "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "h": { "type": "number" }, "dashed": { "type": "boolean" }, "label": { "type": "string" }, "assembly": { "type": "string" } }, "required": ["x", "y", "w", "h"] },
+        { "properties": { "kind": { "const": "box" }, "variant": { "enum": ["blackbox", "connector"] }, "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "h": { "type": "number" }, "designation": { "type": "string" }, "location": { "type": "string" }, "functionText": { "$ref": "#/$defs/ltext" }, "gender": { "enum": ["plug", "socket"] }, "mate": { "type": "string" }, "pins": { "type": "array", "items": { "type": "object", "required": ["id", "side", "offset"], "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "side": { "enum": ["left", "right", "top", "bottom"] }, "offset": { "type": "number" } } } } }, "required": ["variant", "x", "y", "w", "h", "designation", "pins"] },
         { "properties": { "kind": { "const": "table" }, "x": { "type": "number" }, "y": { "type": "number" }, "colWidths": { "type": "array", "items": { "type": "number" } }, "rowHeight": { "type": "number" }, "cells": { "type": "array", "items": { "type": "array", "items": { "type": "string" } } }, "size": { "type": "number" }, "headerRow": { "type": "boolean" } }, "required": ["x", "y", "colWidths", "rowHeight", "cells", "size"] },
         { "properties": { "kind": { "const": "image" }, "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "h": { "type": "number" }, "assetId": { "type": "string" } }, "required": ["x", "y", "w", "h", "assetId"] },
         { "properties": { "kind": { "const": "warning" }, "x": { "type": "number" }, "y": { "type": "number" }, "size": { "type": "number" }, "sign": { "enum": ["general", "electric", "hot", "autostart"] } }, "required": ["x", "y", "size", "sign"] },

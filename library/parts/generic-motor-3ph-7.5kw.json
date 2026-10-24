@@ -1,0 +1,23 @@
+{
+  "id": "generic-motor-3ph-7.5kw",
+  "kind": "part",
+  "title": {
+    "en": "Three-phase motor 7.5 kW, 4 poles, 400 V",
+    "it": "Motore trifase 7,5 kW, 4 poli, 400 V"
+  },
+  "category": "machines",
+  "code": "GEN-MOTOR-3PH-7,5KW",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Three-phase motor 7.5 kW, 4 poles, 400 V",
+    "it": "Motore trifase 7,5 kW, 4 poli, 400 V"
+  },
+  "data": {
+    "Rated power": "7.5 kW",
+    "Poles": "4",
+    "Voltage": "400 V"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

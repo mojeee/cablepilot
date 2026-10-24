@@ -1,0 +1,22 @@
+{
+  "id": "generic-pilot-lamp-22mm-24vdc",
+  "kind": "part",
+  "title": {
+    "en": "Pilot lamp 22 mm, LED, 24 V DC",
+    "it": "Spia luminosa 22 mm, LED, 24 V DC"
+  },
+  "category": "operator-devices",
+  "code": "GEN-PILOT-LAMP-22MM-24VDC",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Pilot lamp 22 mm, LED, 24 V DC",
+    "it": "Spia luminosa 22 mm, LED, 24 V DC"
+  },
+  "data": {
+    "Mounting": "22 mm",
+    "Supply voltage": "24 V DC"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

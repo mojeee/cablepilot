@@ -8,21 +8,24 @@ import type { Command } from '@shared/commands';
 import { createHistory, exec as execHistory, redo as redoHistory, undo as undoHistory, type History } from '@shared/commands/history';
 import { MIGRATIONS, parseProject, projectFileName, serializeProject } from '@shared/file';
 import { newId } from '@shared/ids';
-import { makeLibrary, type Library, type SymbolDef } from '@shared/library/types';
+import { makeLibrary, type Library, type MacroDef, type PartDef, type SymbolDef } from '@shared/library/types';
+import { withPin } from '@shared/draw/box';
+import { computeBom, bomToCsv } from '@shared/bom';
+import { macroFromSelection } from '@shared/macros';
 import { newPage, newProject } from '@shared/model/defaults';
 import { pageById } from '@shared/model/queries';
-import type { El, Page, Project, WarningSign } from '@shared/model/types';
+import type { BoxEl, El, Page, Project, WarningSign } from '@shared/model/types';
 import { FORM_PRESETS } from '@shared/forms';
 import { frameRect } from '@shared/draw/page';
 import { templateOf } from '@shared/model/queries';
 import { exportPdf } from '@shared/pdf';
 import { sheetMm, type PageType, type SheetSize } from '@shared/sheets';
-import { BUILTIN_SYMBOLS } from '../library';
+import { BUILTIN_MACROS, BUILTIN_PARTS, BUILTIN_SYMBOLS } from '../library';
 import { rasterizeSvg } from '../render/svg';
 import { useUi } from './ui';
 
 export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'line' | 'rect' | 'dashed' | 'table' | 'image' | 'warning';
-export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts';
+export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom';
 
 export interface Recovery {
   id: string;
@@ -47,6 +50,9 @@ interface EditorState {
   printPreview: boolean;
   clipboard: El[];
   companySymbols: SymbolDef[];
+  companyParts: PartDef[];
+  /** Built-in and company macros. */
+  macros: MacroDef[];
   lib: Library;
   dialog: Dialog;
   recovery: Recovery[];
@@ -78,6 +84,10 @@ interface EditorState {
   deleteSelection(): void;
   copy(): void;
   paste(): void;
+  placeBox(variant: 'blackbox' | 'connector', x: number, y: number): void;
+  placeMacro(id: string, x: number, y: number): void;
+  saveMacro(name: string): Promise<void>;
+  exportBom(): Promise<void>;
   loadCompany(): Promise<void>;
   checkRecovery(): Promise<void>;
   recover(id: string): Promise<void>;
@@ -140,7 +150,9 @@ export const useEditor = create<EditorState>((set, get) => {
     printPreview: false,
     clipboard: [],
     companySymbols: [],
-    lib: makeLibrary(BUILTIN_SYMBOLS),
+    companyParts: [],
+    macros: BUILTIN_MACROS,
+    lib: makeLibrary(BUILTIN_SYMBOLS, BUILTIN_PARTS),
     dialog: null,
     recovery: [],
     focusText: false,
@@ -195,7 +207,9 @@ export const useEditor = create<EditorState>((set, get) => {
         return false;
       }
       withLoaded(r.value, path);
-      flash('info', () => t('Opened {name}.', { name }));
+      // A sample has no file: name it by the project it holds, so the message always matches what opened.
+      const shown = path ? name : r.value.name;
+      flash('info', () => t('Opened {name}.', { name: shown }));
       return true;
     },
     openFile: async () => {
@@ -240,7 +254,56 @@ export const useEditor = create<EditorState>((set, get) => {
       set({ pageId: page.id, selection: [] });
     },
 
+    placeBox: (variant, x, y) => {
+      const pg = get().page();
+      if (!pg) return;
+      const id = newId('b');
+      // A black box starts empty; a connector starts with four numbered pins on its right side.
+      let el: BoxEl = { id, kind: 'box', variant, x, y, w: variant === 'connector' ? 15 : 40, h: variant === 'connector' ? 25 : 30, designation: '', pins: [], functionText: {} };
+      if (variant === 'connector') for (let i = 1; i <= 4; i++) el = withPin(el, 'right', String(i));
+      get().exec({ type: 'box/place', page: pg.id, autoNumber: true, element: el });
+      const placed = get().page()?.elements.find((e) => e.id === id);
+      const des = placed && placed.kind === 'box' ? placed.designation : '';
+      const title = variant === 'connector' ? t('Connector') : t('Black box');
+      flash('info', () => t('Placed {designation} ({symbol}).', { designation: des, symbol: title }));
+      set({ selection: [id], tool: 'select', placing: null });
+    },
+    placeMacro: (macroId, x, y) => {
+      const m = get().macros.find((q) => q.id === macroId);
+      const pg = get().page();
+      if (!m || !pg) return;
+      const prefix = newId('mc');
+      get().exec({ type: 'macro/place', page: pg.id, macro: m, x, y, prefix });
+      const title = m.title[getLanguage()];
+      flash('info', () => t('Placed macro {name}.', { name: title }));
+      set({ selection: m.elements.map((_, i) => `${prefix}-${i + 1}`), tool: 'select', placing: null });
+    },
+    saveMacro: async (name) => {
+      const pg = get().page();
+      const clean = name.trim();
+      if (!pg || !clean) return;
+      const slug = clean.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'macro';
+      const macro = macroFromSelection(pg, get().selection, { id: `company-${slug}`, title: { en: clean, it: clean } });
+      if (!macro) return flash('warning', () => t('Select symbols, boxes or wires to save as a macro.'));
+      const r = await window.cablepilot.company.save('macros', macro.id, JSON.stringify(macro, null, 2));
+      if (!r.ok) return errMsg(r.error);
+      await get().loadCompany();
+      flash('info', () => t('Saved macro {name} to the company library.', { name: clean }));
+    },
+    exportBom: async () => {
+      const p = get().project();
+      const csv = bomToCsv(p, computeBom(p, get().lib));
+      const r = await window.cablepilot.files.exportText(csv, projectFileName(p).replace(/\.cablepilot\.json$/, '-bom.csv'));
+      if (!r.ok) return errMsg(r.error);
+      if (r.value) {
+        const { name } = r.value;
+        flash('info', () => t('BOM exported to {name}.', { name }));
+      }
+    },
+
     placeSymbol: (symbolId, x, y, rot, mirror) => {
+      if (symbolId.startsWith('box:')) return get().placeBox(symbolId.slice(4) === 'connector' ? 'connector' : 'blackbox', x, y);
+      if (symbolId.startsWith('macro:')) return get().placeMacro(symbolId.slice(6), x, y);
       const { lib } = get();
       const def = lib.symbols.get(symbolId);
       if (!def) return;
@@ -277,27 +340,31 @@ export const useEditor = create<EditorState>((set, get) => {
       const els = clipboard.map((e): El => {
         const id = newId('e');
         if (e.kind === 'wire' || e.kind === 'line') return { ...e, id, points: e.points.map((q) => ({ x: q.x + dx, y: q.y + dy })) };
-        if (e.kind === 'symbol') return { ...e, id, x: e.x + dx, y: e.y + dy, designation: '' };
+        if (e.kind === 'symbol' || e.kind === 'box') return { ...e, id, x: e.x + dx, y: e.y + dy, designation: '' };
         return { ...e, id, x: (e as { x: number }).x + dx, y: (e as { y: number }).y + dy } as El;
       });
       // Pasted symbols are numbered automatically, one by one, so designations stay unique.
-      const cmds: Command[] = els.map((e) => (e.kind === 'symbol' ? { type: 'symbol/place' as const, page: pageId, element: e, autoNumber: true } : { type: 'el/add' as const, page: pageId, elements: [e] }));
+      const cmds: Command[] = els.map((e) => (e.kind === 'symbol' ? { type: 'symbol/place' as const, page: pageId, element: e, autoNumber: true } : e.kind === 'box' ? { type: 'box/place' as const, page: pageId, element: e, autoNumber: true } : { type: 'el/add' as const, page: pageId, elements: [e] }));
       get().exec({ type: 'batch', label: 'paste', commands: cmds });
       set({ selection: els.map((e) => e.id) });
     },
 
     loadCompany: async () => {
-      const r = await window.cablepilot.company.list('symbols');
-      if (!r.ok) return;
-      const defs: SymbolDef[] = [];
-      for (const f of r.value) {
-        try {
-          defs.push(JSON.parse(f.text) as SymbolDef);
-        } catch {
-          // A damaged company file is skipped; the library check reports it.
+      const load = async <T,>(kind: 'symbols' | 'parts' | 'macros'): Promise<T[]> => {
+        const r = await window.cablepilot.company.list(kind);
+        const out: T[] = [];
+        if (!r.ok) return out;
+        for (const f of r.value) {
+          try {
+            out.push(JSON.parse(f.text) as T);
+          } catch {
+            // A damaged company file is skipped; the library check reports it.
+          }
         }
-      }
-      set({ companySymbols: defs, lib: makeLibrary([...BUILTIN_SYMBOLS, ...defs]) });
+        return out;
+      };
+      const [defs, parts, macros] = await Promise.all([load<SymbolDef>('symbols'), load<PartDef>('parts'), load<MacroDef>('macros')]);
+      set({ companySymbols: defs, companyParts: parts, macros: [...BUILTIN_MACROS, ...macros], lib: makeLibrary([...BUILTIN_SYMBOLS, ...defs], [...BUILTIN_PARTS, ...parts]) });
     },
 
     checkRecovery: async () => {

@@ -109,6 +109,47 @@ IEC 60617 symbols by default with NFPA 79 / ANSI as an option from M1; three sam
   M6); the star-delta starter of the pump sample needs M2 devices; a PDF page title block cannot yet be
   moved cell by cell in the UI (cells are data in the template).
 
+## M2
+
+- **A device is identified by its full designation, not by an id.** Every symbol, box and assembly outline
+  carrying the same `=function+location-product` is one device. This is how EPLAN-style tools behave and
+  keeps the file simple (no device table to keep in step with the drawing). Device data that is not drawn
+  (parts, user fields, parent assembly) lives in `project.devices`, keyed by the full designation; renaming a
+  symbol renames the whole device and moves its record (command `el/update`), `device/relink` changes one
+  symbol only, renumbering keeps representations together.
+- **File format version 2** (`devices`, `parts`, `projectParts`, `settings.crossRef`, `settings.bom`), with a
+  migration from 1. Parts used by a project are embedded as copies (like company symbols), so a project opens
+  anywhere without the library.
+- **Cross-reference text** is `page.column` (default) or `page-column-row` with the page number padded to a
+  configurable number of digits; the column and row labels come from the template, so a company that labels
+  columns with letters and rows with digits gets `08-E3`. The page number is the page's position in the set.
+- **Contact image** is drawn at the coil's label side, one row per contact or power part with a small glyph
+  (make, break, main) and its position; the state note is a free text (`stateNote`) on the coil.
+- **Interruption points are symbols** (`interruption-point`, value = signal name), so placing, snapping and
+  connectivity reuse the symbol path. A signal named like a project potential also carries that potential.
+- **Black boxes and connectors are one element kind (`box`)** with pins on its border; pins are numbered and
+  named, spaced 5 mm apart (grid-aligned). A connector's `mate` names the mating connector; pins with the same
+  number are joined in `netGroups`. Boxes have no rotation or mirror in M2.
+- **Nested assemblies** use `rect.assembly` (a dashed outline carrying a designation) and `DeviceRec.parent`;
+  the BOM nests children under their parent and guards against cycles. Outlines are drawn by the command
+  `assembly/create` from a selection.
+- **Macros** are `library/macros/*.json` (kind `macro`): elements with coordinates relative to the group.
+  Placing renumbers each distinct designation to the next free number, contacts following their coil. Macros
+  reference library symbols by id (company symbols need to exist in the target library). Company macros are
+  saved to `company-library/macros`.
+- **Generic parts** (`library/parts`, kind `part`): manufacturer is always "Generic", the title names the
+  nominal rating class, the source says it is a CablePilot generic definition, and every part is `secondary`
+  with its classes and dimensions listed in `docs/to-verify.md`. No manufacturer catalogue data.
+- **BOM rows** are one per device part (designation, position of the main representation, quantity times units
+  to build, code, description in the drawing language, manufacturer, user fields); a device with no part is
+  listed and counted as missing; an option merges rows by part. CSV uses `;` and Italian headers for an Italian
+  drawing language, `,` otherwise, UTF-8 with a byte order mark so spreadsheets open it correctly. XLSX is M3.
+- **Duplicate designations** (rule 5, checked in M4) now mean two coils, two power parts or two boxes with the
+  same full designation on pages of the same kind; contacts and single-line/multi-line pairs are not duplicates.
+- **Page scans are cached per page object** (`shared/devices.ts`), so reports and cross-references recompute
+  only the pages that changed; a test counts the scans.
+- **No new dependencies.**
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite

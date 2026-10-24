@@ -1,0 +1,28 @@
+{
+  "id": "generic-enclosure-800x1000x300",
+  "kind": "part",
+  "title": {
+    "en": "Wall enclosure 800 x 1000 x 300 mm (W x H x D), sheet steel",
+    "it": "Armadio a parete 800 x 1000 x 300 mm (L x A x P), lamiera di acciaio"
+  },
+  "category": "enclosures",
+  "code": "GEN-ENCLOSURE-800X1000X300",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Wall enclosure 800 x 1000 x 300 mm (W x H x D), sheet steel",
+    "it": "Armadio a parete 800 x 1000 x 300 mm (L x A x P), lamiera di acciaio"
+  },
+  "data": {
+    "Width": "800 mm",
+    "Height": "1000 mm",
+    "Depth": "300 mm"
+  },
+  "dimensions": {
+    "w": 800,
+    "h": 1000,
+    "d": 300
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

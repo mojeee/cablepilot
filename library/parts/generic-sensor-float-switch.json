@@ -1,0 +1,21 @@
+{
+  "id": "generic-sensor-float-switch",
+  "kind": "part",
+  "title": {
+    "en": "Float level switch with cable, 1 changeover contact",
+    "it": "Interruttore di livello a galleggiante con cavo, 1 scambio"
+  },
+  "category": "sensors",
+  "code": "GEN-SENSOR-FLOAT-SWITCH",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Float level switch with cable, 1 changeover contact",
+    "it": "Interruttore di livello a galleggiante con cavo, 1 scambio"
+  },
+  "data": {
+    "Contacts": "1 CO"
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

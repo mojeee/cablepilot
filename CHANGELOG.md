@@ -2,6 +2,33 @@
 
 ## Unreleased
 
+### M2 Devices and cross-references
+
+- Devices: every symbol, box and assembly outline with the same full designation (function and location
+  aspects plus product part) is one device. A coil and its contacts, or a breaker drawn on a single-line and
+  on a multi-line page, are representations of one device: counted once in the BOM and cross-referenced both
+  ways. Main and auxiliary functions are counted per device.
+- Cross-references with a configurable format (page.column such as `8.3`, or page-column-row such as `08-E3`)
+  from the frame zones of the page; contact images under coils (make, break and power contacts with their
+  positions) with an optional note on the shown state; references at contacts and representations.
+- Interruption points carrying a signal or potential name, joining nets across pages (`netGroups`).
+- Black boxes and connectors with numbered, named pins as pin-level connection points; mated plug and socket
+  pairs join pins of the same number; boxes move with their wires.
+- Nested assemblies: a dashed outline carrying the assembly designation, devices mounted on it, grouped in
+  the BOM. Macros: groups of symbols, boxes and wires saved to the company library and placed again with
+  fresh designations (one ships: an alarm relay stage).
+- Parts: 98 generic parts in `library/parts` (contactors, relays, breakers, motor protection, terminals, PLC
+  cards, cables, enclosures, batteries, diodes, rectifier and inverter modules, DC/DC converters, hall
+  sensors, EMI filters, transformers with vector group, phase-monitoring relays, HMI, switches, RJ45),
+  assigned to devices (several per device) and as project parts with no designation.
+- BOM generated live with configurable columns and user fields, units to build, CSV export; incremental page
+  scans. Project file format version 2 (migration from 1 included), JSON Schema updated.
+- New symbols: interruption point, one-pole contactor, six-terminal motor, Hall sensor, EMI filter.
+- Samples rebuilt with devices, parts and cross-references and laid out across the sheet: the pump station
+  has star-delta starters, the charger has a nested switching block, connectors with pins, black boxes, a
+  macro, interruption points, the A-H, M-U frame with rows 0-9 and a full BOM.
+- Fixed: opening a sample named the wrong project in the message list.
+
 ### M1 Schematic editor
 
 - Project model as pure data in `shared/`, saved as versioned JSON (`*.cablepilot.json`) with a JSON Schema,

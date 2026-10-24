@@ -78,4 +78,18 @@ describe('project file', () => {
   it('makes safe file names', () => {
     expect(projectFileName(sample())).toBe('Conveyor-1.cablepilot.json');
   });
+  it('migrates a version 1 file (M1) to devices, parts and cross-reference settings', () => {
+    const v2 = JSON.parse(serializeProject(sample())) as Record<string, unknown>;
+    const { devices, parts, projectParts, ...v1 } = v2;
+    void devices; void parts; void projectParts;
+    const old = { ...v1, version: 1, settings: { ...(v1.settings as object), crossRef: undefined, bom: undefined } };
+    expect(parseProject(JSON.stringify(old)).ok).toBe(true);
+    const r = parseProject(JSON.stringify(old));
+    if (r.ok) {
+      expect(r.value.version).toBe(2);
+      expect(r.value.devices).toEqual([]);
+      expect(r.value.settings.crossRef).toEqual({ format: 'page.column', pageDigits: 0 });
+      expect(r.value.settings.bom.units).toBe(1);
+    }
+  });
 });
