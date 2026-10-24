@@ -55,6 +55,60 @@ IEC 60617 symbols by default with NFPA 79 / ANSI as an option from M1; three sam
 - **`dev` has no sample project yet**: the navigator shows eight placeholder pages (one per page
   type of M1) so the layout can be seen and tested.
 
+## M1
+
+- **pdf-lib for the PDF export** (MIT, pure JavaScript; brings pako, @pdf-lib/standard-fonts, @pdf-lib/upng,
+  tslib, all MIT or Apache-2.0). Content streams are written as plain PDF operators in millimetres under a
+  scale-and-flip matrix, so 1 mm on the sheet is 1 mm in the PDF (72 / 25.4 pt per mm, not rounded), with
+  fixed font resource names (deterministic output in tests). Standard fonts, not embedded; text outside
+  WinAnsi becomes `?` (a few substitutions). Content streams are not compressed yet (size, not
+  correctness). The export runs in the renderer because SVG images need a canvas to be rasterised.
+- **ajv (MIT) as a dev dependency**, only to check files against `shared/schema/project.schema.json` in tests.
+- **One drawing-primitive vocabulary** (`shared/draw/primitives.ts`): the page builder turns elements,
+  symbols and sheet furniture into polylines, circles, arcs, text and images once; the Canvas 2D renderer,
+  the PDF writer and the tests all use them, so screen and paper agree.
+- **History keeps snapshots, not inverse commands.** Commands are plain data applied by `apply(project,
+  command)`; the project is immutable with structural sharing, so an undo entry is the previous project
+  (cheap even for 500 pages). A test applies, undoes and redoes every command type.
+- **Project file format v1**: stable key order (identity keys first, rest alphabetical, fixed top level),
+  short arrays and points on one line, elements in drawing order. A hand-written validator reports damaged
+  files in plain language; a JSON Schema describes the format for other tools. Version 1 is the first
+  released format, so `MIGRATIONS` is empty and the migration runner is tested with injected migrations.
+- **Company symbols are embedded in the project** that uses them, so a project opens on any machine; the
+  company library itself is a folder of data files in the app's data folder (`company-library/symbols`,
+  `templates`). Templates are stored in the project and can be saved to and loaded from the company library.
+- **Library validation rules live in `scripts/library-validate.mjs`**, shared by `check-library`, the tests
+  and the app (the main process validates a company symbol before writing it).
+- **Symbols are drawn by us** on a 2.5 mm grid with pins on the grid. Standard parts and letters are cited
+  at part level and marked `secondary` (docs/to-verify.md); nothing claims a symbol number we have not seen.
+  NFPA 79 / ANSI alternative graphics exist for ten symbols; the others show the IEC graphics under NFPA.
+- **Designations**: the product part (`-K1`) is stored on the element; function (`=`) and location (`+`)
+  default from the page. Auto-numbering takes the smallest free number per function, location and letter
+  code. Contacts do not number automatically (they take their coil's designation, by hand in M1; devices
+  with several symbols arrive in M2, so the samples repeat a designation on purpose).
+- **Connectivity**: wires join where an end meets another wire, at a junction, or at a pin lying on the wire;
+  crossings do not connect. Nets are per page in M1 (interruption points join pages in M2). Two different
+  potentials in one net set `conflict` (reported by the checker in M4).
+- **Wires keep their segments orthogonal**: moving, rotating or mirroring symbols drags attached wire ends
+  and inserts a corner; junction dots are added when three branches meet and removed when they no longer do.
+- **Zone labels are plain lists** in the template (any scheme works); the UI generates them from a range
+  with letters to skip. Frame margins, the 180 x 36 mm title block and the zone band are placeholders until
+  ISO 5457 and ISO 7200 are checked (docs/to-verify.md).
+- **Drawing language** is `settings.drawingLanguage`; text printed on paper comes from
+  `shared/drawingText.ts` and from per-language texts stored in the project (`LText`), never from `t()`.
+- **Dark canvas** lightens near-black and grey drawing colours only; the print preview and the PDF always
+  use the style colours on white.
+- **Samples are generated** from `tests/support/samples.ts` by the same commands the app uses; a test fails
+  if the committed JSON is stale. The main process reads them from `<app path>/samples` (packaging in M8).
+- **Autosave** writes a recovery copy 4 s after the last change and on window hide; saving clears it; the next
+  start offers to recover. `CP_E2E_DIR` makes Save and Export PDF write into a folder without dialogs, for
+  the end-to-end tests only.
+- **Performance budget test** (`tests/perf.test.ts`): a 500-page, 50,000-element project serialises and parses
+  within 8 s, a 200-object page renders within 250 ms, nets of a page within 250 ms.
+- **Not done in M1 (by design)**: terminal, cable and layout pages are page types only (content from M3 and
+  M6); the star-delta starter of the pump sample needs M2 devices; a PDF page title block cannot yet be
+  moved cell by cell in the UI (cells are data in the template).
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite
@@ -72,5 +126,7 @@ bundles the renderer; the main process uses only Electron and Node).
 | vitest | MIT | Unit tests (brief). |
 | @playwright/test | Apache-2.0 | End-to-end tests of the built app (brief). |
 | @types/node, @types/react, @types/react-dom | MIT | Type definitions. |
+| pdf-lib (runtime) | MIT | PDF export of pages at true scale (M1). |
+| ajv | MIT | Dev only: checks project files against the JSON Schema in tests (M1). |
 
 The full transitive list, with licences, is in `THIRD_PARTY_LICENSES.md` after `npm run build`.

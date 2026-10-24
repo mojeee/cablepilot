@@ -1,0 +1,39 @@
+{
+  "id": "mcb-1p",
+  "kind": "symbol",
+  "title": {
+    "en": "Circuit breaker, 1 pole",
+    "it": "Interruttore automatico, 1 polo"
+  },
+  "category": "protection",
+  "function": "breaker",
+  "designationLetter": "Q",
+  "source": "IEC 60617 part 7: circuit breaker",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": 0,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "2",
+      "x": 0,
+      "y": 5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -2.5 },
+    { "t": "line", "x1": 0, "y1": 5, "x2": 0, "y2": 2.5 },
+    { "t": "line", "x1": 0, "y1": 2.5, "x2": -2.5, "y2": -1.8 },
+    { "t": "line", "x1": -1.2, "y1": -3.7, "x2": 1.2, "y2": -1.3 },
+    { "t": "line", "x1": -1.2, "y1": -1.3, "x2": 1.2, "y2": -3.7 }
+  ],
+  "label": {
+    "x": 5,
+    "y": 0
+  }
+}

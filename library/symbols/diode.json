@@ -1,0 +1,38 @@
+{
+  "id": "diode",
+  "kind": "symbol",
+  "title": {
+    "en": "Diode",
+    "it": "Diodo"
+  },
+  "category": "electronics",
+  "function": "diode",
+  "designationLetter": "V",
+  "source": "IEC 60617 part 5 (semiconductors and electron tubes): semiconductor diode",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "A",
+      "x": 0,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "K",
+      "x": 0,
+      "y": 5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -2.5 },
+    { "t": "line", "x1": 0, "y1": 1.25, "x2": 0, "y2": 5 },
+    { "t": "poly", "pts": [ -2.5, -2.5, 2.5, -2.5, 0, 1.25 ], "closed": true },
+    { "t": "line", "x1": -2.5, "y1": 1.25, "x2": 2.5, "y2": 1.25 }
+  ],
+  "label": {
+    "x": 5,
+    "y": 0
+  }
+}

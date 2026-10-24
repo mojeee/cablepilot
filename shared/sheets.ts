@@ -23,6 +23,9 @@ export function sheetMm(size: SheetSize, landscape = true): { w: number; h: numb
   return landscape ? { w: h, h: w } : { w, h };
 }
 
-/** The page types of a project (brief, M1). Pages of these types arrive with the schematic editor. */
-export const PAGE_TYPES = ['cover', 'contents', 'power', 'control', 'plc', 'terminals', 'cables', 'layout'] as const;
+/**
+ * The page types of a project (brief, M1): the eight of the schematic set, plus single-line
+ * (overview) pages and project data pages (forms).
+ */
+export const PAGE_TYPES = ['cover', 'contents', 'power', 'control', 'plc', 'terminals', 'cables', 'layout', 'singleLine', 'data'] as const;
 export type PageType = (typeof PAGE_TYPES)[number];

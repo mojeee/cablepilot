@@ -1,0 +1,770 @@
+{
+  "format": "cablepilot-project",
+  "version": 1,
+  "id": "sample-pump-station",
+  "name": "Pump station, two pumps",
+  "settings": {
+    "defaultSize": "A3",
+    "defaultTemplateId": "default",
+    "drawingLanguage": "en",
+    "style": {
+      "colours": {
+        "annotation": "#000000",
+        "designation": "#d40000",
+        "frame": "#000000",
+        "symbol": "#000000",
+        "text": "#000000",
+        "titleBlock": "#000000",
+        "wire": "#000000",
+        "wireNumber": "#d40000"
+      },
+      "font": "sans",
+      "textSizes": {"designation":3.5,"text":3.5,"wireNumber":2.5},
+      "weights": {"annotation":0.35,"frame":0.7,"symbol":0.35,"wire":0.35}
+    },
+    "symbolStandard": "iec"
+  },
+  "properties": {
+    "client": "Example Water Utility",
+    "copyright": "Sample project of CablePilot (Apache-2.0). Example data only.",
+    "drawingNo": "SMP-PMP-001",
+    "drawn": "CablePilot",
+    "issueDate": "2026-10-24",
+    "orderNo": "SAMPLE-0002",
+    "product": "Pump station PS1, 2 x 7.5 kW",
+    "revision": "A"
+  },
+  "assembly": {
+    "earthingSystem": "TT",
+    "enclosureMaterial": "Stainless steel",
+    "formOfSeparation": "2b",
+    "installation": "outdoor",
+    "ipDegree": "IP55",
+    "mobility": "fixed",
+    "ratedCurrent": "63",
+    "ratedDiversityFactor": "0.8",
+    "ratedFrequency": "50",
+    "ratedImpulseVoltage": "6",
+    "ratedInsulationVoltage": "690",
+    "ratedOperationalVoltage": "400",
+    "ratedShortTimeCurrent": "10"
+  },
+  "templates": [
+    {
+      "id": "default",
+      "name": "Default",
+      "frame": {
+        "columns": ["1","2","3","4","5","6","7","8"],
+        "margins": {"b":10,"l":20,"r":10,"t":10},
+        "rows": ["A","B","C","D","E","F"]
+      },
+      "titleBlock": {
+        "cells": [
+          {"h":36,"key":"logo","w":40,"x":0,"y":0},
+          {"h":9,"key":"client","w":70,"x":40,"y":0},
+          {"h":9,"key":"product","w":70,"x":110,"y":0},
+          {"h":9,"key":"sheetTitle","w":140,"x":40,"y":9},
+          {"h":9,"key":"drawingNo","w":50,"x":40,"y":18},
+          {"h":9,"key":"orderNo","w":30,"x":90,"y":18},
+          {"h":9,"key":"issueDate","w":30,"x":120,"y":18},
+          {"h":9,"key":"revision","w":30,"x":150,"y":18},
+          {"h":9,"key":"drawn","w":30,"x":40,"y":27},
+          {"h":9,"key":"checked","w":30,"x":70,"y":27},
+          {"h":9,"key":"approved","w":30,"x":100,"y":27},
+          {"h":9,"key":"sheet","w":17.5,"x":130,"y":27},
+          {"h":9,"key":"nextSheet","w":17.5,"x":147.5,"y":27},
+          {"h":9,"key":"totalSheets","w":15,"x":165,"y":27}
+        ],
+        "h": 36,
+        "w": 180
+      }
+    }
+  ],
+  "potentials": [
+    {"id":"L1","kind":"ac","label":"L1"},
+    {"id":"L2","kind":"ac","label":"L2"},
+    {"id":"L3","kind":"ac","label":"L3"},
+    {"id":"N","kind":"neutral","label":"N"},
+    {"id":"PE","kind":"pe","label":"PE"},
+    {"id":"L+","kind":"dc-plus","label":"L+"},
+    {"id":"L-","kind":"dc-minus","label":"L−"},
+    {"id":"24VDC","kind":"dc-plus","label":"24 V DC"},
+    {"id":"0V","kind":"dc-minus","label":"0 V"},
+    {"id":"110VDC","kind":"dc-plus","label":"110 V DC"}
+  ],
+  "pages": [
+    {
+      "id": "p1",
+      "type": "cover",
+      "elements": [],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Cover sheet"}
+    },
+    {
+      "id": "p2",
+      "type": "contents",
+      "elements": [],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Contents"}
+    },
+    {
+      "id": "p3",
+      "type": "data",
+      "elements": [
+        {
+          "id": "e1",
+          "kind": "form",
+          "items": [
+            {"type":"heading","label":{"en":"Electrical data","it":"Dati elettrici"}},
+            {
+              "type": "table",
+              "label": {"en":"Rated data","it":"Dati nominali"},
+              "rows": [
+                {
+                  "bind": "assembly.ratedOperationalVoltage",
+                  "label": {"en":"Rated operational voltage Ue","it":"Tensione nominale di impiego Ue"}
+                },
+                {
+                  "bind": "assembly.ratedInsulationVoltage",
+                  "label": {"en":"Rated insulation voltage Ui","it":"Tensione nominale di isolamento Ui"}
+                },
+                {
+                  "bind": "assembly.ratedImpulseVoltage",
+                  "label": {
+                    "en": "Rated impulse withstand voltage Uimp",
+                    "it": "Tensione nominale di tenuta a impulso Uimp"
+                  }
+                },
+                {
+                  "bind": "assembly.ratedCurrent",
+                  "label": {
+                    "en": "Rated current of the assembly InA",
+                    "it": "Corrente nominale dell'assieme InA"
+                  }
+                },
+                {
+                  "bind": "assembly.ratedShortTimeCurrent",
+                  "label": {
+                    "en": "Rated short-time withstand current Icw",
+                    "it": "Corrente nominale di breve durata Icw"
+                  }
+                },
+                {
+                  "bind": "assembly.ratedFrequency",
+                  "label": {"en":"Rated frequency","it":"Frequenza nominale"}
+                },
+                {
+                  "bind": "assembly.ratedDiversityFactor",
+                  "label": {"en":"Rated diversity factor RDF","it":"Fattore di contemporaneità nominale RDF"}
+                }
+              ]
+            },
+            {"type":"heading","label":{"en":"Earthing system","it":"Sistema di distribuzione"}},
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TN-S","it":"TN-S"},
+              "value": "TN-S"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TN-C","it":"TN-C"},
+              "value": "TN-C"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TN-C-S","it":"TN-C-S"},
+              "value": "TN-C-S"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TT","it":"TT"},
+              "value": "TT"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"IT","it":"IT"},
+              "value": "IT"
+            },
+            {"type":"heading","label":{"en":"Mechanical data","it":"Dati meccanici"}},
+            {
+              "type": "text",
+              "bind": "assembly.ipDegree",
+              "label": {"en":"Degree of protection (IP)","it":"Grado di protezione (IP)"}
+            },
+            {
+              "type": "text",
+              "bind": "assembly.enclosureMaterial",
+              "label": {"en":"Enclosure material","it":"Materiale del contenitore"}
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.installation",
+              "label": {"en":"Indoor","it":"Interno"},
+              "value": "indoor"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.installation",
+              "label": {"en":"Outdoor","it":"Esterno"},
+              "value": "outdoor"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.mobility",
+              "label": {"en":"Fixed assembly","it":"Assieme fisso"},
+              "value": "fixed"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.mobility",
+              "label": {"en":"Movable assembly","it":"Assieme mobile"},
+              "value": "movable"
+            },
+            {
+              "type": "heading",
+              "label": {"en":"Form of internal separation","it":"Forma di segregazione interna"}
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 1","it":"Forma 1"},
+              "value": "1"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 2a","it":"Forma 2a"},
+              "value": "2a"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 2b","it":"Forma 2b"},
+              "value": "2b"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 3a","it":"Forma 3a"},
+              "value": "3a"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 3b","it":"Forma 3b"},
+              "value": "3b"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 4a","it":"Forma 4a"},
+              "value": "4a"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 4b","it":"Forma 4b"},
+              "value": "4b"
+            }
+          ],
+          "w": 170,
+          "x": 30,
+          "y": 18
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"General data of the assembly","it":"Dati generali dell'assieme"}
+    },
+    {
+      "id": "p4",
+      "type": "singleLine",
+      "elements": [
+        {
+          "id": "e2",
+          "kind": "symbol",
+          "designation": "-QF0",
+          "functionText": {"en":"Incomer 63 A"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "mcb-1p",
+          "x": 100,
+          "y": 55
+        },
+        {
+          "id": "e3",
+          "kind": "wire",
+          "conductors": 3,
+          "points": [{"x":100,"y":30},{"x":100,"y":50}],
+          "potential": "L1"
+        },
+        {
+          "id": "e4",
+          "kind": "wire",
+          "conductors": 3,
+          "points": [{"x":100,"y":60},{"x":100,"y":70},{"x":160,"y":70}]
+        },
+        {
+          "id": "e5",
+          "kind": "symbol",
+          "designation": "-QF1",
+          "functionText": {"en":"Pump 1 breaker 16 A"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "mcb-1p",
+          "x": 100,
+          "y": 90
+        },
+        {
+          "id": "e6",
+          "kind": "symbol",
+          "designation": "-KM1",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-no",
+          "x": 100,
+          "y": 115
+        },
+        {
+          "id": "e7",
+          "kind": "symbol",
+          "designation": "-M1",
+          "functionText": {"en":"Pump 1\n7.5 kW"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "motor-3ph",
+          "x": 100,
+          "y": 150
+        },
+        {"id":"e8","kind":"wire","conductors":3,"points":[{"x":100,"y":70},{"x":100,"y":85}]},
+        {"id":"e8-j1","kind":"junction","x":100,"y":70},
+        {"id":"e9","kind":"wire","conductors":3,"points":[{"x":100,"y":95},{"x":100,"y":110}]},
+        {"id":"e10","kind":"wire","conductors":3,"points":[{"x":100,"y":120},{"x":100,"y":140}]},
+        {
+          "id": "e11",
+          "kind": "symbol",
+          "designation": "-QF2",
+          "functionText": {"en":"Pump 2 breaker 16 A"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "mcb-1p",
+          "x": 160,
+          "y": 90
+        },
+        {
+          "id": "e12",
+          "kind": "symbol",
+          "designation": "-KM2",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-no",
+          "x": 160,
+          "y": 115
+        },
+        {
+          "id": "e13",
+          "kind": "symbol",
+          "designation": "-M2",
+          "functionText": {"en":"Pump 2\n7.5 kW"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "motor-3ph",
+          "x": 160,
+          "y": 150
+        },
+        {"id":"e14","kind":"wire","conductors":3,"points":[{"x":160,"y":70},{"x":160,"y":85}]},
+        {"id":"e15","kind":"wire","conductors":3,"points":[{"x":160,"y":95},{"x":160,"y":110}]},
+        {"id":"e16","kind":"wire","conductors":3,"points":[{"x":160,"y":120},{"x":160,"y":140}]}
+      ],
+      "location": "PS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Single-line diagram"}
+    },
+    {
+      "id": "p5",
+      "type": "power",
+      "elements": [
+        {
+          "id": "e17",
+          "kind": "symbol",
+          "designation": "-QF1",
+          "functionText": {"en":"Pump 1 breaker"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "mcb-3p",
+          "x": 100,
+          "y": 60
+        },
+        {
+          "id": "e18",
+          "kind": "symbol",
+          "designation": "-KM1",
+          "functionText": {"en":"Pump 1 contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contactor-3p",
+          "x": 100,
+          "y": 80
+        },
+        {
+          "id": "e19",
+          "kind": "symbol",
+          "designation": "-FR1",
+          "functionText": {"en":"Overload relay"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "overload-relay-3p",
+          "x": 100,
+          "y": 100
+        },
+        {
+          "id": "e20",
+          "kind": "symbol",
+          "designation": "-M1",
+          "functionText": {"en":"Pump 1\n7.5 kW"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "motor-3ph",
+          "x": 100,
+          "y": 135
+        },
+        {"id":"e21","kind":"wire","points":[{"x":95,"y":30},{"x":95,"y":55}],"potential":"L1"},
+        {"id":"e22","kind":"wire","points":[{"x":100,"y":30},{"x":100,"y":55}],"potential":"L2"},
+        {"id":"e23","kind":"wire","points":[{"x":105,"y":30},{"x":105,"y":55}],"potential":"L3"},
+        {"id":"e24","kind":"wire","number":"1","points":[{"x":95,"y":65},{"x":95,"y":75}]},
+        {"id":"e25","kind":"wire","number":"2","points":[{"x":100,"y":65},{"x":100,"y":75}]},
+        {"id":"e26","kind":"wire","number":"3","points":[{"x":105,"y":65},{"x":105,"y":75}]},
+        {"id":"e27","kind":"wire","number":"4","points":[{"x":95,"y":85},{"x":95,"y":95}]},
+        {"id":"e28","kind":"wire","number":"5","points":[{"x":100,"y":85},{"x":100,"y":95}]},
+        {"id":"e29","kind":"wire","number":"6","points":[{"x":105,"y":85},{"x":105,"y":95}]},
+        {"id":"e30","kind":"wire","number":"7","points":[{"x":95,"y":105},{"x":95,"y":125}]},
+        {"id":"e31","kind":"wire","number":"8","points":[{"x":100,"y":105},{"x":100,"y":125}]},
+        {"id":"e32","kind":"wire","number":"9","points":[{"x":105,"y":105},{"x":105,"y":125}]},
+        {
+          "id": "e33",
+          "kind": "symbol",
+          "designation": "-QF2",
+          "functionText": {"en":"Pump 2 breaker"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "mcb-3p",
+          "x": 190,
+          "y": 60
+        },
+        {
+          "id": "e34",
+          "kind": "symbol",
+          "designation": "-KM2",
+          "functionText": {"en":"Pump 2 contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contactor-3p",
+          "x": 190,
+          "y": 80
+        },
+        {
+          "id": "e35",
+          "kind": "symbol",
+          "designation": "-FR2",
+          "functionText": {"en":"Overload relay"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "overload-relay-3p",
+          "x": 190,
+          "y": 100
+        },
+        {
+          "id": "e36",
+          "kind": "symbol",
+          "designation": "-M2",
+          "functionText": {"en":"Pump 2\n7.5 kW"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "motor-3ph",
+          "x": 190,
+          "y": 135
+        },
+        {"id":"e37","kind":"wire","points":[{"x":185,"y":30},{"x":185,"y":55}],"potential":"L1"},
+        {"id":"e38","kind":"wire","points":[{"x":190,"y":30},{"x":190,"y":55}],"potential":"L2"},
+        {"id":"e39","kind":"wire","points":[{"x":195,"y":30},{"x":195,"y":55}],"potential":"L3"},
+        {"id":"e40","kind":"wire","number":"10","points":[{"x":185,"y":65},{"x":185,"y":75}]},
+        {"id":"e41","kind":"wire","number":"11","points":[{"x":190,"y":65},{"x":190,"y":75}]},
+        {"id":"e42","kind":"wire","number":"12","points":[{"x":195,"y":65},{"x":195,"y":75}]},
+        {"id":"e43","kind":"wire","number":"13","points":[{"x":185,"y":85},{"x":185,"y":95}]},
+        {"id":"e44","kind":"wire","number":"14","points":[{"x":190,"y":85},{"x":190,"y":95}]},
+        {"id":"e45","kind":"wire","number":"15","points":[{"x":195,"y":85},{"x":195,"y":95}]},
+        {"id":"e46","kind":"wire","number":"16","points":[{"x":185,"y":105},{"x":185,"y":125}]},
+        {"id":"e47","kind":"wire","number":"17","points":[{"x":190,"y":105},{"x":190,"y":125}]},
+        {"id":"e48","kind":"wire","number":"18","points":[{"x":195,"y":105},{"x":195,"y":125}]},
+        {
+          "id": "e49",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Star-delta starters for the pumps need devices with several contact sets: they come with milestone M2.",
+          "x": 40,
+          "y": 190
+        }
+      ],
+      "location": "PS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Pump power circuits"}
+    },
+    {
+      "id": "p6",
+      "type": "control",
+      "elements": [
+        {"id":"e50","kind":"wire","points":[{"x":60,"y":60},{"x":200,"y":60}],"potential":"24VDC"},
+        {"id":"e51","kind":"wire","points":[{"x":60,"y":200},{"x":200,"y":200}],"potential":"0V"},
+        {
+          "id": "e52",
+          "kind": "symbol",
+          "designation": "-BL1",
+          "functionText": {"en":"Low level start"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "limit-switch-no",
+          "x": 90,
+          "y": 90
+        },
+        {
+          "id": "e53",
+          "kind": "symbol",
+          "designation": "-KM1",
+          "functionText": {"en":"Pump 1 contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 90,
+          "y": 140
+        },
+        {"id":"e54","kind":"wire","points":[{"x":90,"y":60},{"x":90,"y":85}]},
+        {"id":"e54-j1","kind":"junction","x":90,"y":60},
+        {"id":"e55","kind":"wire","points":[{"x":90,"y":95},{"x":90,"y":135}]},
+        {"id":"e56","kind":"wire","points":[{"x":90,"y":145},{"x":90,"y":200}]},
+        {"id":"e56-j1","kind":"junction","x":90,"y":200},
+        {
+          "id": "e57",
+          "kind": "symbol",
+          "designation": "-BL2",
+          "functionText": {"en":"High level stop"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "limit-switch-nc",
+          "x": 140,
+          "y": 90
+        },
+        {
+          "id": "e58",
+          "kind": "symbol",
+          "designation": "-KM2",
+          "functionText": {"en":"Pump 2 contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 140,
+          "y": 140
+        },
+        {"id":"e59","kind":"wire","points":[{"x":140,"y":60},{"x":140,"y":85}]},
+        {"id":"e59-j1","kind":"junction","x":140,"y":60},
+        {"id":"e60","kind":"wire","points":[{"x":140,"y":95},{"x":140,"y":135}]},
+        {"id":"e61","kind":"wire","points":[{"x":140,"y":145},{"x":140,"y":200}]},
+        {"id":"e61-j1","kind":"junction","x":140,"y":200}
+      ],
+      "location": "PS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Level control"}
+    },
+    {
+      "id": "p7",
+      "type": "plc",
+      "elements": [
+        {
+          "id": "e62",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.0",
+          "x": 120,
+          "y": 50
+        },
+        {"id":"e63","kind":"wire","points":[{"x":100,"y":50},{"x":120,"y":50}]},
+        {
+          "id": "e64",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Low level",
+          "x": 40,
+          "y": 51.5
+        },
+        {
+          "id": "e65",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.1",
+          "x": 120,
+          "y": 62
+        },
+        {"id":"e66","kind":"wire","points":[{"x":100,"y":62},{"x":120,"y":62}]},
+        {
+          "id": "e67",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "High level",
+          "x": 40,
+          "y": 63.5
+        },
+        {
+          "id": "e68",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.2",
+          "x": 120,
+          "y": 74
+        },
+        {"id":"e69","kind":"wire","points":[{"x":100,"y":74},{"x":120,"y":74}]},
+        {
+          "id": "e70",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Pump 1 overload",
+          "x": 40,
+          "y": 75.5
+        },
+        {
+          "id": "e71",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-output",
+          "value": "Q0.0",
+          "x": 120,
+          "y": 86
+        },
+        {"id":"e72","kind":"wire","points":[{"x":100,"y":86},{"x":120,"y":86}]},
+        {
+          "id": "e73",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Pump 1 contactor",
+          "x": 40,
+          "y": 87.5
+        },
+        {
+          "id": "e74",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-output",
+          "value": "Q0.1",
+          "x": 120,
+          "y": 98
+        },
+        {"id":"e75","kind":"wire","points":[{"x":100,"y":98},{"x":120,"y":98}]},
+        {
+          "id": "e76",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Pump 2 contactor",
+          "x": 40,
+          "y": 99.5
+        },
+        {"id":"e77","kind":"rect","dashed":true,"h":66,"label":"PLC","w":25,"x":118,"y":42}
+      ],
+      "location": "PS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"PLC interface"}
+    },
+    {
+      "id": "p8",
+      "type": "terminals",
+      "elements": [
+        {
+          "id": "e78",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "This page is filled from the schematic by the report and layout features (milestones M3 and M6).",
+          "x": 40,
+          "y": 40
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Terminals","it":"Morsettiere"}
+    },
+    {
+      "id": "p9",
+      "type": "cables",
+      "elements": [
+        {
+          "id": "e79",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "This page is filled from the schematic by the report and layout features (milestones M3 and M6).",
+          "x": 40,
+          "y": 40
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Cables","it":"Cavi"}
+    },
+    {
+      "id": "p10",
+      "type": "layout",
+      "elements": [
+        {
+          "id": "e80",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "This page is filled from the schematic by the report and layout features (milestones M3 and M6).",
+          "x": 40,
+          "y": 40
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Cabinet layout","it":"Layout quadro"}
+    }
+  ],
+  "assets": {},
+  "symbols": []
+}

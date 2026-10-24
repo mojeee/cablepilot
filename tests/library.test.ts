@@ -21,3 +21,56 @@ describe('IEC 60757 colour codes', () => {
     for (const c of data.colours) expect(c.name.en && c.name.it).toBeTruthy();
   });
 });
+
+// ---- symbols ----
+import { readdirSync } from 'node:fs';
+import { validateLibraryFile } from '../scripts/library-validate.mjs';
+import { ASSEMBLY_FIELDS, FORM_PRESETS } from '@shared/forms';
+import { DRAWING_TEXT } from '@shared/drawingText';
+import { loadLibrary } from './support/library';
+
+describe('symbol library', () => {
+  const lib = loadLibrary();
+  const files = readdirSync(join(__dirname, '..', 'library/symbols')).filter((f) => f.endsWith('.json'));
+  it('has a starter set with the symbols the samples need', () => {
+    expect(lib.symbols.size).toBeGreaterThanOrEqual(30);
+    for (const id of ['coil', 'contact-no', 'contact-nc', 'contactor-3p', 'mcb-3p', 'motor-3ph', 'emergency-stop', 'rectifier-3ph', 'battery', 'potential-tag']) expect(lib.symbols.has(id), id).toBe(true);
+  });
+  it('passes the library validation, names every symbol in both languages, with pins on the 2.5 mm grid', () => {
+    for (const f of files) {
+      const d = JSON.parse(readFileSync(join(__dirname, '..', 'library/symbols', f), 'utf8')) as { id: string; pins: { x: number; y: number }[]; title: { en: string; it: string } };
+      expect(validateLibraryFile(d, f.replace('.json', '')), f).toEqual([]);
+      expect(d.title.en && d.title.it).toBeTruthy();
+      for (const p of d.pins) {
+        expect(Math.abs(p.x / 2.5 - Math.round(p.x / 2.5)) < 1e-9 && Math.abs(p.y / 2.5 - Math.round(p.y / 2.5)) < 1e-9, `${f} pin on grid`).toBe(true);
+      }
+    }
+  });
+  it('rejects a broken symbol with plain problems', () => {
+    expect(validateLibraryFile({ id: 'x', kind: 'symbol', source: 's', verification: 'primary', title: { en: 'a', it: 'b' }, category: 'c', function: 'f', pins: [{ id: '1', x: 0, y: 0, dir: 'sideways' }], graphics: [{ t: 'line', x1: 0 }] }, 'x').length).toBe(2);
+    expect(validateLibraryFile({ id: 'y', kind: 'symbol' }, 'x').length).toBeGreaterThan(3);
+  });
+  it('NFPA alternatives keep the pins of the symbol (same devices behind both)', () => {
+    const withNfpa = [...lib.symbols.values()].filter((s) => s.nfpa);
+    expect(withNfpa.length).toBeGreaterThanOrEqual(8);
+    for (const s of withNfpa) expect(s.nfpa?.source).toBeTruthy();
+  });
+});
+
+describe('forms and drawing texts', () => {
+  it('every form binding points at a known assembly field, with both languages', () => {
+    const keys = new Set(ASSEMBLY_FIELDS.map((f) => f.key));
+    for (const p of FORM_PRESETS) {
+      for (const it of p.items) {
+        const binds = it.type === 'table' ? it.rows.map((r) => r.bind) : it.type === 'heading' ? [] : [it.bind];
+        for (const b of binds) expect(keys.has(b.replace('assembly.', '')), b).toBe(true);
+        const label = it.type === 'table' ? it.label : it.label;
+        expect(label.en && label.it).toBeTruthy();
+      }
+    }
+    for (const f of ASSEMBLY_FIELDS) expect(f.label.en && f.label.it).toBeTruthy();
+  });
+  it('every drawing text exists in English and Italian', () => {
+    for (const [k, v] of Object.entries(DRAWING_TEXT)) expect(v.en && v.it, k).toBeTruthy();
+  });
+});

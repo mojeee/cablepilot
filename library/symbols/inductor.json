@@ -1,0 +1,39 @@
+{
+  "id": "inductor",
+  "kind": "symbol",
+  "title": {
+    "en": "Inductor",
+    "it": "Induttore"
+  },
+  "category": "electronics",
+  "function": "inductor",
+  "designationLetter": "L",
+  "source": "IEC 60617 part 4: inductor, winding",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": 0,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "2",
+      "x": 0,
+      "y": 5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -3.75 },
+    { "t": "line", "x1": 0, "y1": 3.75, "x2": 0, "y2": 5 },
+    { "t": "arc", "cx": 0, "cy": -2.5, "r": 1.25, "a0": 270, "a1": 90 },
+    { "t": "arc", "cx": 0, "cy": 0, "r": 1.25, "a0": 270, "a1": 90 },
+    { "t": "arc", "cx": 0, "cy": 2.5, "r": 1.25, "a0": 270, "a1": 90 }
+  ],
+  "label": {
+    "x": 4,
+    "y": 0
+  }
+}

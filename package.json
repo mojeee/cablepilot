@@ -26,6 +26,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "ajv": "^8.20.0",
     "electron": "^45.0.0",
     "electron-vite": "^6.0.0",
     "react": "^19.3.1",
@@ -46,5 +47,8 @@
   },
   "bugs": {
     "url": "https://github.com/mojeee/cablepilot/issues"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
   }
 }

@@ -1,0 +1,39 @@
+{
+  "id": "motor-dc",
+  "kind": "symbol",
+  "title": {
+    "en": "Motor, DC",
+    "it": "Motore in corrente continua"
+  },
+  "category": "machines",
+  "function": "motor",
+  "designationLetter": "M",
+  "source": "IEC 60617 part 6: motor, direct current",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "+",
+      "x": -2.5,
+      "y": -10,
+      "dir": "up"
+    },
+    {
+      "id": "-",
+      "x": 2.5,
+      "y": -10,
+      "dir": "up"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": -2.5, "y1": -10, "x2": -2.5, "y2": -7.07 },
+    { "t": "line", "x1": 2.5, "y1": -10, "x2": 2.5, "y2": -7.07 },
+    { "t": "circle", "cx": 0, "cy": 0, "r": 7.5 },
+    { "t": "text", "x": 0, "y": -0.5, "text": "M", "size": 5, "anchor": "middle" },
+    { "t": "text", "x": 0, "y": 3.8, "text": "=", "size": 3, "anchor": "middle" }
+  ],
+  "label": {
+    "x": 9,
+    "y": 0
+  }
+}

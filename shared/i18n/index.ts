@@ -4,6 +4,7 @@
 // Italian entry with the same placeholders.
 
 import app from './it/app';
+import editor from './it/editor';
 
 export type Lang = 'en' | 'it';
 export const LANGS: { id: Lang; label: string }[] = [
@@ -11,7 +12,7 @@ export const LANGS: { id: Lang; label: string }[] = [
   { id: 'it', label: 'Italiano' },
 ];
 
-export const IT: Record<string, string> = { ...app };
+export const IT: Record<string, string> = { ...app, ...editor };
 
 let current: Lang = 'en';
 const listeners = new Set<(l: Lang) => void>();

@@ -1,0 +1,325 @@
+// The editor state (Zustand): the open project and its undo history, the selection, the active
+// tool, files, autosave and PDF export. The project itself is pure data from /shared and changes
+// only through commands (CLAUDE.md, Architecture): `exec` is the single door.
+
+import { create } from 'zustand';
+import { t, getLanguage } from '@shared/i18n';
+import type { Command } from '@shared/commands';
+import { createHistory, exec as execHistory, redo as redoHistory, undo as undoHistory, type History } from '@shared/commands/history';
+import { MIGRATIONS, parseProject, projectFileName, serializeProject } from '@shared/file';
+import { newId } from '@shared/ids';
+import { makeLibrary, type Library, type SymbolDef } from '@shared/library/types';
+import { newPage, newProject } from '@shared/model/defaults';
+import { pageById } from '@shared/model/queries';
+import type { El, Page, Project, WarningSign } from '@shared/model/types';
+import { FORM_PRESETS } from '@shared/forms';
+import { frameRect } from '@shared/draw/page';
+import { templateOf } from '@shared/model/queries';
+import { exportPdf } from '@shared/pdf';
+import { sheetMm, type PageType, type SheetSize } from '@shared/sheets';
+import { BUILTIN_SYMBOLS } from '../library';
+import { rasterizeSvg } from '../render/svg';
+import { useUi } from './ui';
+
+export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'line' | 'rect' | 'dashed' | 'table' | 'image' | 'warning';
+export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts';
+
+export interface Recovery {
+  id: string;
+  name: string;
+  savedAt: string;
+}
+
+interface EditorState {
+  history: History;
+  /** The project as last saved or opened: `dirty` is "present differs from this". */
+  saved: Project | null;
+  filePath: string | null;
+  pageId: string;
+  selection: string[];
+  tool: Tool;
+  placing: string | null;
+  warningSign: WarningSign;
+  /** Potential and conductor count applied to new wires. */
+  wirePotential: string;
+  wireConductors: number;
+  pendingImage: { assetId: string; w: number; h: number } | null;
+  printPreview: boolean;
+  clipboard: El[];
+  companySymbols: SymbolDef[];
+  lib: Library;
+  dialog: Dialog;
+  recovery: Recovery[];
+  /** Asks the properties panel to focus its text field (after placing a text). */
+  focusText: boolean;
+  /** A hint for the status bar: what the active tool expects next. */
+  hint: string;
+
+  project(): Project;
+  page(): Page | undefined;
+  dirty(): boolean;
+  exec(cmd: Command): void;
+  undo(): void;
+  redo(): void;
+  select(ids: string[]): void;
+  setPage(id: string): void;
+  setTool(tool: Tool, placing?: string | null): void;
+  setDialog(d: Dialog): void;
+  setHint(h: string): void;
+  patch(p: Partial<EditorState>): void;
+  newProject(): void;
+  openText(text: string, path: string | null, name: string): boolean;
+  openFile(): Promise<void>;
+  openSample(id: string): Promise<void>;
+  save(saveAs?: boolean): Promise<void>;
+  exportPdf(scope: 'all' | 'page'): Promise<void>;
+  addPage(type: PageType, title: string, size: SheetSize, preset?: string): void;
+  placeSymbol(symbolId: string, x: number, y: number, rot: 0 | 90 | 180 | 270, mirror: boolean): void;
+  deleteSelection(): void;
+  copy(): void;
+  paste(): void;
+  loadCompany(): Promise<void>;
+  checkRecovery(): Promise<void>;
+  recover(id: string): Promise<void>;
+  discardRecovery(id: string): Promise<void>;
+  autosaveNow(): Promise<void>;
+}
+
+const msg = useUi.getState;
+
+export function makePage(project: Project, type: PageType, title: string, size: SheetSize, presetId?: string): Page {
+  const lang = project.settings.drawingLanguage;
+  const page = newPage(newId('pg'), type, { [lang]: title }, size);
+  if (type === 'data') {
+    const preset = FORM_PRESETS.find((p) => p.id === presetId) ?? FORM_PRESETS[0];
+    const tpl = templateOf(project, page);
+    const { w, h } = sheetMm(size);
+    const f = frameRect(tpl, w, h);
+    return { ...page, title: { [lang]: title || preset.title[lang] }, elements: [{ id: newId('f'), kind: 'form', x: f.fx + 10, y: f.fy + 8, w: 170, items: preset.items }] };
+  }
+  return page;
+}
+
+function starterProject(): Project {
+  const lang = getLanguage();
+  const p = newProject(newId('prj'), t('Untitled project'), { drawingLanguage: lang });
+  const tl = (s: string) => ({ [lang]: s });
+  p.pages = [
+    makePage(p, 'cover', tl(t('Cover sheet'))[lang], 'A3'),
+    makePage(p, 'contents', tl(t('Contents'))[lang], 'A3'),
+    makePage(p, 'power', tl(t('Power'))[lang], 'A3'),
+  ];
+  return p;
+}
+
+const freshHistory = (p: Project) => createHistory(p);
+
+export const useEditor = create<EditorState>((set, get) => {
+  const initial = starterProject();
+  const ctx = () => ({ lib: get().lib });
+  const flash = (severity: 'info' | 'warning' | 'error', text: () => string) => msg().addMessage(severity, text);
+  const errMsg = (e: { message: string; hint: string }) => flash('error', () => `${e.message} ${e.hint}`);
+
+  const withLoaded = (p: Project, path: string | null) => {
+    void window.cablepilot.autosave.clear(get().project().id);
+    set({ history: freshHistory(p), saved: p, filePath: path, pageId: p.pages[0]?.id ?? '', selection: [], tool: 'select', placing: null });
+  };
+
+  return {
+    history: freshHistory(initial),
+    saved: initial,
+    filePath: null,
+    pageId: initial.pages[2].id,
+    selection: [],
+    tool: 'select',
+    placing: null,
+    warningSign: 'general',
+    wirePotential: '',
+    wireConductors: 1,
+    pendingImage: null,
+    printPreview: false,
+    clipboard: [],
+    companySymbols: [],
+    lib: makeLibrary(BUILTIN_SYMBOLS),
+    dialog: null,
+    recovery: [],
+    focusText: false,
+    hint: '',
+
+    project: () => get().history.present,
+    page: () => pageById(get().history.present, get().pageId),
+    dirty: () => get().history.present !== get().saved,
+
+    exec: (cmd) => {
+      const h = execHistory(get().history, cmd, ctx());
+      if (h === get().history) return;
+      const p = h.present;
+      // Keep the selection to elements that still exist; keep the page if it still exists.
+      const pg = pageById(p, get().pageId) ?? p.pages[0];
+      const ids = new Set(pg?.elements.map((e) => e.id));
+      set({ history: h, pageId: pg?.id ?? '', selection: get().selection.filter((id) => ids.has(id)) });
+    },
+    undo: () => {
+      const h = undoHistory(get().history);
+      if (h === get().history) return;
+      const p = h.present;
+      const pg = pageById(p, get().pageId) ?? p.pages[0];
+      const ids = new Set(pg?.elements.map((e) => e.id));
+      set({ history: h, pageId: pg?.id ?? '', selection: get().selection.filter((id) => ids.has(id)) });
+    },
+    redo: () => {
+      const h = redoHistory(get().history);
+      if (h === get().history) return;
+      const p = h.present;
+      const pg = pageById(p, get().pageId) ?? p.pages[0];
+      const ids = new Set(pg?.elements.map((e) => e.id));
+      set({ history: h, pageId: pg?.id ?? '', selection: get().selection.filter((id) => ids.has(id)) });
+    },
+    select: (selection) => set({ selection }),
+    setPage: (pageId) => set({ pageId, selection: [] }),
+    setTool: (tool, placing = null) => set({ tool, placing, selection: tool === 'select' ? get().selection : [], hint: '' }),
+    setDialog: (dialog) => set({ dialog }),
+    setHint: (hint) => set({ hint }),
+    patch: (p) => set(p),
+
+    newProject: () => {
+      const p = starterProject();
+      withLoaded(p, null);
+      flash('info', () => t('New project created.'));
+    },
+
+    openText: (text, path, name) => {
+      const r = parseProject(text, MIGRATIONS);
+      if (!r.ok) {
+        errMsg(r.error);
+        return false;
+      }
+      withLoaded(r.value, path);
+      flash('info', () => t('Opened {name}.', { name }));
+      return true;
+    },
+    openFile: async () => {
+      const r = await window.cablepilot.files.open();
+      if (!r.ok) return errMsg(r.error);
+      if (r.value) get().openText(r.value.text, r.value.path, r.value.name);
+    },
+    openSample: async (id) => {
+      const r = await window.cablepilot.samples.read(id);
+      if (!r.ok) return errMsg(r.error);
+      // A sample opens as an unsaved copy: Save asks where to put it.
+      get().openText(r.value, null, id);
+    },
+    save: async (saveAs = false) => {
+      const p = get().project();
+      const r = await window.cablepilot.files.save(serializeProject(p), saveAs ? null : get().filePath, projectFileName(p));
+      if (!r.ok) return errMsg(r.error);
+      if (!r.value) return;
+      const { path, name } = r.value;
+      set({ saved: p, filePath: path });
+      void window.cablepilot.autosave.clear(p.id);
+      flash('info', () => t('Saved {name}.', { name }));
+    },
+    exportPdf: async (scope) => {
+      const p = get().project();
+      const pageIds = scope === 'page' ? [get().pageId] : undefined;
+      flash('info', () => t('Exporting PDF...'));
+      const bytes = await exportPdf(p, get().lib, { pageIds, rasterizeSvg, creator: 'CablePilot' });
+      const r = await window.cablepilot.files.exportPdf(bytes, projectFileName(p).replace(/\.cablepilot\.json$/, '.pdf'));
+      if (!r.ok) return errMsg(r.error);
+      if (r.value) {
+        const { name } = r.value;
+        flash('info', () => t('PDF exported to {name}.', { name }));
+      }
+    },
+
+    addPage: (type, title, size, preset) => {
+      const p = get().project();
+      const page = makePage(p, type, title, size, preset);
+      const at = Math.max(0, p.pages.findIndex((x) => x.id === get().pageId)) + 1;
+      get().exec({ type: 'page/add', page, index: at });
+      set({ pageId: page.id, selection: [] });
+    },
+
+    placeSymbol: (symbolId, x, y, rot, mirror) => {
+      const { lib } = get();
+      const def = lib.symbols.get(symbolId);
+      if (!def) return;
+      const pg = get().page();
+      if (!pg) return;
+      const id = newId('s');
+      const cmds: Command[] = [];
+      if (!BUILTIN_SYMBOLS.some((s) => s.id === symbolId)) cmds.push({ type: 'symbol/embed', def });
+      cmds.push({ type: 'symbol/place', page: pg.id, autoNumber: true, element: { id, kind: 'symbol', symbolId, x, y, rot, mirror, designation: ''} });
+      get().exec(cmds.length === 1 ? cmds[0] : { type: 'batch', label: 'place', commands: cmds });
+      const placed = get().page()?.elements.find((e) => e.id === id);
+      const des = placed && placed.kind === 'symbol' ? placed.designation : '';
+      const title = def.title[getLanguage()];
+      flash('info', () => (des ? t('Placed {designation} ({symbol}).', { designation: des, symbol: title }) : t('Placed {symbol}.', { symbol: title })));
+      set({ selection: [id] });
+    },
+
+    deleteSelection: () => {
+      const { selection, pageId } = get();
+      if (!selection.length) return;
+      get().exec({ type: 'el/remove', page: pageId, ids: selection });
+      set({ selection: [] });
+    },
+    copy: () => {
+      const pg = get().page();
+      if (!pg) return;
+      const sel = new Set(get().selection);
+      set({ clipboard: pg.elements.filter((e) => sel.has(e.id)) });
+    },
+    paste: () => {
+      const { clipboard, pageId } = get();
+      if (!clipboard.length) return;
+      const dx = 5, dy = 5;
+      const els = clipboard.map((e): El => {
+        const id = newId('e');
+        if (e.kind === 'wire' || e.kind === 'line') return { ...e, id, points: e.points.map((q) => ({ x: q.x + dx, y: q.y + dy })) };
+        if (e.kind === 'symbol') return { ...e, id, x: e.x + dx, y: e.y + dy, designation: '' };
+        return { ...e, id, x: (e as { x: number }).x + dx, y: (e as { y: number }).y + dy } as El;
+      });
+      // Pasted symbols are numbered automatically, one by one, so designations stay unique.
+      const cmds: Command[] = els.map((e) => (e.kind === 'symbol' ? { type: 'symbol/place' as const, page: pageId, element: e, autoNumber: true } : { type: 'el/add' as const, page: pageId, elements: [e] }));
+      get().exec({ type: 'batch', label: 'paste', commands: cmds });
+      set({ selection: els.map((e) => e.id) });
+    },
+
+    loadCompany: async () => {
+      const r = await window.cablepilot.company.list('symbols');
+      if (!r.ok) return;
+      const defs: SymbolDef[] = [];
+      for (const f of r.value) {
+        try {
+          defs.push(JSON.parse(f.text) as SymbolDef);
+        } catch {
+          // A damaged company file is skipped; the library check reports it.
+        }
+      }
+      set({ companySymbols: defs, lib: makeLibrary([...BUILTIN_SYMBOLS, ...defs]) });
+    },
+
+    checkRecovery: async () => {
+      const r = await window.cablepilot.autosave.list();
+      if (r.ok) set({ recovery: r.value.map((a) => ({ id: a.id, name: a.name, savedAt: a.savedAt })) });
+    },
+    recover: async (id) => {
+      const r = await window.cablepilot.autosave.read(id);
+      if (!r.ok) return errMsg(r.error);
+      if (get().openText(r.value, null, id)) {
+        set({ recovery: get().recovery.filter((x) => x.id !== id), saved: null });
+        flash('warning', () => t('Recovered an autosaved copy. Save it to keep it.'));
+      }
+    },
+    discardRecovery: async (id) => {
+      await window.cablepilot.autosave.clear(id);
+      set({ recovery: get().recovery.filter((x) => x.id !== id) });
+    },
+    autosaveNow: async () => {
+      if (!get().dirty()) return;
+      const p = get().project();
+      await window.cablepilot.autosave.write(p.id, p.name, get().filePath, serializeProject(p));
+    },
+  };
+});

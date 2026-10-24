@@ -1,0 +1,38 @@
+{
+  "id": "ammeter",
+  "kind": "symbol",
+  "title": {
+    "en": "Ammeter",
+    "it": "Amperometro"
+  },
+  "category": "signalling",
+  "function": "ammeter",
+  "designationLetter": "P",
+  "source": "IEC 60617 part 8: measuring instrument, indicating, with the unit letter A",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": 0,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "2",
+      "x": 0,
+      "y": 5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -3.75 },
+    { "t": "line", "x1": 0, "y1": 3.75, "x2": 0, "y2": 5 },
+    { "t": "circle", "cx": 0, "cy": 0, "r": 3.75 },
+    { "t": "text", "x": 0, "y": 0, "text": "A", "size": 3.5, "anchor": "middle" }
+  ],
+  "label": {
+    "x": 6,
+    "y": 0
+  }
+}

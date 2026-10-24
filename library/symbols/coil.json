@@ -1,0 +1,47 @@
+{
+  "id": "coil",
+  "kind": "symbol",
+  "title": {
+    "en": "Coil (relay, contactor)",
+    "it": "Bobina (relè, contattore)"
+  },
+  "category": "coils",
+  "function": "coil",
+  "designationLetter": "K",
+  "nfpa": {
+    "source": "NFPA 79 (electrical equipment of industrial machinery) and ANSI/IEEE 315 symbol conventions, from secondary sources; graphics are our own drawing. Listed in docs/to-verify.md.",
+    "graphics": [
+      { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -3.75 },
+      { "t": "line", "x1": 0, "y1": 3.75, "x2": 0, "y2": 5 },
+      { "t": "circle", "cx": 0, "cy": 0, "r": 3.75 }
+    ]
+  },
+  "source": "IEC 60617 part 7 (switchgear and controlgear): operating device, general",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "A1",
+      "x": 0,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "A2",
+      "x": 0,
+      "y": 5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -2.5 },
+    { "t": "line", "x1": 0, "y1": 2.5, "x2": 0, "y2": 5 },
+    { "t": "rect", "x": -3.75, "y": -2.5, "w": 7.5, "h": 5 },
+    { "t": "text", "x": 5, "y": -3.7, "text": "A1", "size": 1.8, "anchor": "start" },
+    { "t": "text", "x": 5, "y": 3.7, "text": "A2", "size": 1.8, "anchor": "start" }
+  ],
+  "label": {
+    "x": 8,
+    "y": 0
+  }
+}

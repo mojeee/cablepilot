@@ -3,6 +3,7 @@
 
 import { app, BrowserWindow, shell } from 'electron';
 import { join } from 'node:path';
+import { FileService } from './files';
 import { registerIpc } from './ipc';
 import { SettingsStore } from './settings';
 
@@ -10,6 +11,9 @@ import { SettingsStore } from './settings';
 // so nothing remembered by an earlier run changes what they see.
 if (process.env.CP_PROFILE) app.setPath('userData', process.env.CP_PROFILE);
 const settings = new SettingsStore(join(app.getPath('userData'), 'settings.json'));
+let mainWindow: BrowserWindow | null = null;
+// Sample projects ship in /samples next to the app (packaging copies them in M8).
+const files = new FileService(app.getPath('userData'), join(app.getAppPath(), 'samples'), () => mainWindow);
 
 function createWindow(): void {
   const dark = settings.get().theme !== 'light';
@@ -30,6 +34,10 @@ function createWindow(): void {
     },
   });
 
+  mainWindow = win;
+  win.on('closed', () => {
+    mainWindow = null;
+  });
   win.once('ready-to-show', () => win.show());
   // Links open in the system browser, https only; the app never opens a second window.
   win.webContents.setWindowOpenHandler(({ url }) => {
@@ -42,7 +50,7 @@ function createWindow(): void {
 }
 
 void app.whenReady().then(() => {
-  registerIpc({ settings });
+  registerIpc({ settings, files });
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

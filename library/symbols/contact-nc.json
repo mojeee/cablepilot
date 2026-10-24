@@ -1,0 +1,49 @@
+{
+  "id": "contact-nc",
+  "kind": "symbol",
+  "title": {
+    "en": "Contact, normally closed",
+    "it": "Contatto normalmente chiuso"
+  },
+  "category": "contacts",
+  "function": "contact-nc",
+  "designationLetter": "K",
+  "autoNumber": false,
+  "nfpa": {
+    "source": "NFPA 79 (electrical equipment of industrial machinery) and ANSI/IEEE 315 symbol conventions, from secondary sources; graphics are our own drawing. Listed in docs/to-verify.md.",
+    "graphics": [
+      { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -1.25 },
+      { "t": "line", "x1": -2.5, "y1": -1.25, "x2": 2.5, "y2": -1.25 },
+      { "t": "line", "x1": -2.5, "y1": 1.25, "x2": 2.5, "y2": 1.25 },
+      { "t": "line", "x1": 0, "y1": 1.25, "x2": 0, "y2": 5 },
+      { "t": "line", "x1": -3.5, "y1": 2.5, "x2": 3.5, "y2": -2.5 }
+    ]
+  },
+  "source": "IEC 60617 part 7: break contact",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": 0,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "2",
+      "x": 0,
+      "y": 5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -2.5 },
+    { "t": "line", "x1": 0, "y1": 5, "x2": 0, "y2": 2.5 },
+    { "t": "line", "x1": 0, "y1": 2.5, "x2": -1.9, "y2": -2.5 },
+    { "t": "line", "x1": -2.5, "y1": -2.5, "x2": 0, "y2": -2.5 }
+  ],
+  "label": {
+    "x": 5,
+    "y": 0
+  }
+}

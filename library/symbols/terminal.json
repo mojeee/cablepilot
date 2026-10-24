@@ -1,0 +1,37 @@
+{
+  "id": "terminal",
+  "kind": "symbol",
+  "title": {
+    "en": "Terminal",
+    "it": "Morsetto"
+  },
+  "category": "terminals",
+  "function": "terminal",
+  "designationLetter": "X",
+  "source": "IEC 60617 part 3 (conductors and connecting devices): terminal",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": 0,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "2",
+      "x": 0,
+      "y": 5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -1.5 },
+    { "t": "line", "x1": 0, "y1": 1.5, "x2": 0, "y2": 5 },
+    { "t": "circle", "cx": 0, "cy": 0, "r": 1.5 }
+  ],
+  "label": {
+    "x": 4,
+    "y": 0
+  }
+}

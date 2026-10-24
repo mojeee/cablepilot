@@ -1,0 +1,89 @@
+{
+  "id": "overload-relay-3p",
+  "kind": "symbol",
+  "title": {
+    "en": "Thermal overload relay, 3 poles",
+    "it": "Relè termico, 3 poli"
+  },
+  "category": "protection",
+  "function": "overload",
+  "designationLetter": "F",
+  "nfpa": {
+    "source": "NFPA 79 (electrical equipment of industrial machinery) and ANSI/IEEE 315 symbol conventions, from secondary sources; graphics are our own drawing. Listed in docs/to-verify.md.",
+    "graphics": [
+      { "t": "line", "x1": -5, "y1": -5, "x2": -5, "y2": -3 },
+      { "t": "line", "x1": -5, "y1": 3, "x2": -5, "y2": 5 },
+      { "t": "arc", "cx": -5, "cy": -1.5, "r": 1.5, "a0": 90, "a1": 270 },
+      { "t": "arc", "cx": -5, "cy": 1.5, "r": 1.5, "a0": 270, "a1": 90 },
+      { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -3 },
+      { "t": "line", "x1": 0, "y1": 3, "x2": 0, "y2": 5 },
+      { "t": "arc", "cx": 0, "cy": -1.5, "r": 1.5, "a0": 90, "a1": 270 },
+      { "t": "arc", "cx": 0, "cy": 1.5, "r": 1.5, "a0": 270, "a1": 90 },
+      { "t": "line", "x1": 5, "y1": -5, "x2": 5, "y2": -3 },
+      { "t": "line", "x1": 5, "y1": 3, "x2": 5, "y2": 5 },
+      { "t": "arc", "cx": 5, "cy": -1.5, "r": 1.5, "a0": 90, "a1": 270 },
+      { "t": "arc", "cx": 5, "cy": 1.5, "r": 1.5, "a0": 270, "a1": 90 },
+      { "t": "line", "x1": -5, "y1": 0, "x2": 5, "y2": 0, "dash": true }
+    ]
+  },
+  "source": "IEC 60617 part 7: thermal overload relay",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": -5,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "3",
+      "x": 0,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "5",
+      "x": 5,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "2",
+      "x": -5,
+      "y": 5,
+      "dir": "down"
+    },
+    {
+      "id": "4",
+      "x": 0,
+      "y": 5,
+      "dir": "down"
+    },
+    {
+      "id": "6",
+      "x": 5,
+      "y": 5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": -5, "y1": -5, "x2": -5, "y2": -3.75 },
+    { "t": "line", "x1": -5, "y1": 3.75, "x2": -5, "y2": 5 },
+    { "t": "rect", "x": -6.75, "y": -3.75, "w": 3.5, "h": 7.5 },
+    { "t": "poly", "pts": [ -6.1, 2, -6.1, 0, -5, -2, -3.9, 0, -3.9, -2 ] },
+    { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -3.75 },
+    { "t": "line", "x1": 0, "y1": 3.75, "x2": 0, "y2": 5 },
+    { "t": "rect", "x": -1.75, "y": -3.75, "w": 3.5, "h": 7.5 },
+    { "t": "poly", "pts": [ -1.1, 2, -1.1, 0, 0, -2, 1.1, 0, 1.1, -2 ] },
+    { "t": "line", "x1": 5, "y1": -5, "x2": 5, "y2": -3.75 },
+    { "t": "line", "x1": 5, "y1": 3.75, "x2": 5, "y2": 5 },
+    { "t": "rect", "x": 3.25, "y": -3.75, "w": 3.5, "h": 7.5 },
+    { "t": "poly", "pts": [ 3.9, 2, 3.9, 0, 5, -2, 6.1, 0, 6.1, -2 ] },
+    { "t": "line", "x1": -5, "y1": 0, "x2": 5, "y2": 0, "dash": true }
+  ],
+  "label": {
+    "x": 9,
+    "y": 0
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cablepilot.agentflowbind.com/schema/project.schema.json",
+  "title": "CablePilot project, file format version 1",
+  "description": "A CablePilot project file (.cablepilot.json). Lengths are millimetres on the page; the origin is the top-left corner of the sheet, y down. Written with a stable key order so it diffs well in Git.",
+  "type": "object",
+  "required": ["format", "version", "id", "name", "settings", "properties", "assembly", "templates", "potentials", "pages", "assets", "symbols"],
+  "properties": {
+    "format": { "const": "cablepilot-project" },
+    "version": { "type": "integer", "minimum": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string" },
+    "settings": {
+      "type": "object",
+      "required": ["drawingLanguage", "symbolStandard", "style", "defaultSize", "defaultTemplateId"],
+      "properties": {
+        "drawingLanguage": { "enum": ["en", "it"] },
+        "symbolStandard": { "enum": ["iec", "nfpa"] },
+        "defaultSize": { "$ref": "#/$defs/size" },
+        "defaultTemplateId": { "type": "string" },
+        "style": {
+          "type": "object",
+          "required": ["colours", "weights", "font", "textSizes"],
+          "properties": {
+            "colours": { "type": "object", "additionalProperties": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" } },
+            "weights": { "type": "object", "additionalProperties": { "type": "number", "exclusiveMinimum": 0 } },
+            "font": { "enum": ["sans", "serif", "mono"] },
+            "textSizes": { "type": "object", "additionalProperties": { "type": "number", "exclusiveMinimum": 0 } }
+          }
+        }
+      }
+    },
+    "properties": { "type": "object", "additionalProperties": { "type": "string" } },
+    "assembly": { "type": "object", "additionalProperties": { "type": "string" } },
+    "templates": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/template" } },
+    "potentials": { "type": "array", "items": { "type": "object", "required": ["id", "label", "kind"], "properties": { "id": { "type": "string" }, "label": { "type": "string" }, "kind": { "type": "string" } } } },
+    "pages": { "type": "array", "items": { "$ref": "#/$defs/page" } },
+    "assets": { "type": "object", "additionalProperties": { "type": "object", "required": ["name", "mime", "data", "w", "h"], "properties": { "name": { "type": "string" }, "mime": { "enum": ["image/png", "image/jpeg", "image/svg+xml"] }, "data": { "type": "string", "description": "Base64 of the file" }, "w": { "type": "number" }, "h": { "type": "number" } } } },
+    "symbols": { "type": "array", "description": "Company symbols the project uses, embedded (same format as library/symbols)", "items": { "type": "object", "required": ["id", "kind", "pins", "graphics"], "properties": { "id": { "type": "string" }, "kind": { "const": "symbol" }, "pins": { "type": "array" }, "graphics": { "type": "array" } } } }
+  },
+  "$defs": {
+    "size": { "enum": ["A4", "A3", "A2", "A1", "A0"] },
+    "pt": { "type": "object", "required": ["x", "y"], "properties": { "x": { "type": "number" }, "y": { "type": "number" } } },
+    "ltext": { "type": "object", "properties": { "en": { "type": "string" }, "it": { "type": "string" } } },
+    "template": {
+      "type": "object",
+      "required": ["id", "name", "frame", "titleBlock"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "marginText": { "type": "string" },
+        "frame": {
+          "type": "object",
+          "required": ["margins", "columns", "rows"],
+          "properties": {
+            "margins": { "type": "object", "required": ["l", "t", "r", "b"], "additionalProperties": { "type": "number", "minimum": 0 } },
+            "columns": { "type": "array", "items": { "type": "string" } },
+            "rows": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "titleBlock": {
+          "type": "object",
+          "required": ["w", "h", "cells"],
+          "properties": {
+            "w": { "type": "number" },
+            "h": { "type": "number" },
+            "logoAssetId": { "type": "string" },
+            "cells": { "type": "array", "items": { "type": "object", "required": ["key", "x", "y", "w", "h"], "properties": { "key": { "type": "string" }, "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "h": { "type": "number" } } } }
+          }
+        }
+      }
+    },
+    "page": {
+      "type": "object",
+      "required": ["id", "type", "title", "size", "templateId", "elements"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["cover", "contents", "power", "control", "plc", "terminals", "cables", "layout", "singleLine", "data"] },
+        "title": { "$ref": "#/$defs/ltext" },
+        "size": { "$ref": "#/$defs/size" },
+        "templateId": { "type": "string" },
+        "function": { "type": "string" },
+        "location": { "type": "string" },
+        "elements": { "type": "array", "items": { "$ref": "#/$defs/element" } }
+      }
+    },
+    "element": {
+      "type": "object",
+      "required": ["id", "kind"],
+      "oneOf": [
+        { "properties": { "kind": { "const": "symbol" }, "symbolId": { "type": "string" }, "x": { "type": "number" }, "y": { "type": "number" }, "rot": { "enum": [0, 90, 180, 270] }, "mirror": { "type": "boolean" }, "designation": { "type": "string" }, "location": { "type": "string" }, "functionText": { "$ref": "#/$defs/ltext" }, "value": { "type": "string" } }, "required": ["symbolId", "x", "y", "rot", "mirror", "designation"] },
+        { "properties": { "kind": { "const": "wire" }, "points": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/pt" } }, "potential": { "type": "string" }, "number": { "type": "string" }, "conductors": { "type": "integer", "minimum": 1 } }, "required": ["points"] },
+        { "properties": { "kind": { "const": "junction" }, "x": { "type": "number" }, "y": { "type": "number" } }, "required": ["x", "y"] },
+        { "properties": { "kind": { "const": "text" }, "x": { "type": "number" }, "y": { "type": "number" }, "rot": { "type": "number" }, "text": { "type": "string" }, "size": { "type": "number" }, "align": { "enum": ["left", "center", "right"] }, "bold": { "type": "boolean" } }, "required": ["x", "y", "rot", "text", "size", "align"] },
+        { "properties": { "kind": { "const": "line" }, "points": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/pt" } }, "dashed": { "type": "boolean" } }, "required": ["points"] },
+        { "properties": { "kind": { "const": "rect" }, "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "h": { "type": "number" }, "dashed": { "type": "boolean" }, "label": { "type": "string" } }, "required": ["x", "y", "w", "h"] },
+        { "properties": { "kind": { "const": "table" }, "x": { "type": "number" }, "y": { "type": "number" }, "colWidths": { "type": "array", "items": { "type": "number" } }, "rowHeight": { "type": "number" }, "cells": { "type": "array", "items": { "type": "array", "items": { "type": "string" } } }, "size": { "type": "number" }, "headerRow": { "type": "boolean" } }, "required": ["x", "y", "colWidths", "rowHeight", "cells", "size"] },
+        { "properties": { "kind": { "const": "image" }, "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "h": { "type": "number" }, "assetId": { "type": "string" } }, "required": ["x", "y", "w", "h", "assetId"] },
+        { "properties": { "kind": { "const": "warning" }, "x": { "type": "number" }, "y": { "type": "number" }, "size": { "type": "number" }, "sign": { "enum": ["general", "electric", "hot", "autostart"] } }, "required": ["x", "y", "size", "sign"] },
+        { "properties": { "kind": { "const": "form" }, "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "items": { "type": "array" } }, "required": ["x", "y", "w", "items"] }
+      ]
+    }
+  }
+}

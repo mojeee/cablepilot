@@ -1,0 +1,70 @@
+{
+  "id": "transformer-3ph",
+  "kind": "symbol",
+  "title": {
+    "en": "Transformer, three-phase",
+    "it": "Trasformatore trifase"
+  },
+  "category": "sources",
+  "function": "transformer",
+  "designationLetter": "T",
+  "source": "IEC 60617 part 6: transformer, three-phase, windings shown as circles; vector group in the value",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1U",
+      "x": -5,
+      "y": -7.5,
+      "dir": "up"
+    },
+    {
+      "id": "1V",
+      "x": 0,
+      "y": -7.5,
+      "dir": "up"
+    },
+    {
+      "id": "1W",
+      "x": 5,
+      "y": -7.5,
+      "dir": "up"
+    },
+    {
+      "id": "2U",
+      "x": -5,
+      "y": 7.5,
+      "dir": "down"
+    },
+    {
+      "id": "2V",
+      "x": 0,
+      "y": 7.5,
+      "dir": "down"
+    },
+    {
+      "id": "2W",
+      "x": 5,
+      "y": 7.5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": -5, "y1": -7.5, "x2": -5, "y2": -4 },
+    { "t": "line", "x1": -5, "y1": 7.5, "x2": -5, "y2": 4 },
+    { "t": "circle", "cx": -5, "cy": -1.5, "r": 2.5 },
+    { "t": "circle", "cx": -5, "cy": 1.5, "r": 2.5 },
+    { "t": "line", "x1": 0, "y1": -7.5, "x2": 0, "y2": -4 },
+    { "t": "line", "x1": 0, "y1": 7.5, "x2": 0, "y2": 4 },
+    { "t": "circle", "cx": 0, "cy": -1.5, "r": 2.5 },
+    { "t": "circle", "cx": 0, "cy": 1.5, "r": 2.5 },
+    { "t": "line", "x1": 5, "y1": -7.5, "x2": 5, "y2": -4 },
+    { "t": "line", "x1": 5, "y1": 7.5, "x2": 5, "y2": 4 },
+    { "t": "circle", "cx": 5, "cy": -1.5, "r": 2.5 },
+    { "t": "circle", "cx": 5, "cy": 1.5, "r": 2.5 }
+  ],
+  "label": {
+    "x": 9,
+    "y": 0
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "potential-tag",
+  "kind": "symbol",
+  "title": {
+    "en": "Potential tag",
+    "it": "Etichetta di potenziale"
+  },
+  "category": "potentials",
+  "function": "potential-tag",
+  "verification": "secondary",
+  "source": "CablePilot potential marker (not a standard symbol): names the potential of the net it is attached to",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": 0,
+      "y": 0,
+      "dir": "left"
+    }
+  ],
+  "graphics": [
+    { "t": "poly", "pts": [ 0, 0, 2.5, -2.5, 11.25, -2.5, 11.25, 2.5, 2.5, 2.5 ], "closed": true }
+  ],
+  "label": {
+    "x": 6.9,
+    "y": -1.2
+  }
+}

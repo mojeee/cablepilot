@@ -1,0 +1,32 @@
+{
+  "id": "earth-pe",
+  "kind": "symbol",
+  "title": {
+    "en": "Protective earth (PE)",
+    "it": "Terra di protezione (PE)"
+  },
+  "category": "potentials",
+  "function": "earth-pe",
+  "source": "IEC 60617 part 3: protective earth, marked PE",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": 0,
+      "y": -5,
+      "dir": "up"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": 0 },
+    { "t": "line", "x1": -4, "y1": 0, "x2": 4, "y2": 0 },
+    { "t": "line", "x1": -2.5, "y1": 1.6, "x2": 2.5, "y2": 1.6 },
+    { "t": "line", "x1": -1, "y1": 3.2, "x2": 1, "y2": 3.2 },
+    { "t": "text", "x": 7, "y": 1, "text": "PE", "size": 2.8, "anchor": "start" }
+  ],
+  "label": {
+    "x": 6,
+    "y": -3
+  }
+}

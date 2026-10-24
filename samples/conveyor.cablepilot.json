@@ -1,0 +1,784 @@
+{
+  "format": "cablepilot-project",
+  "version": 1,
+  "id": "sample-conveyor",
+  "name": "Conveyor with direct-on-line starter",
+  "settings": {
+    "defaultSize": "A3",
+    "defaultTemplateId": "default",
+    "drawingLanguage": "en",
+    "style": {
+      "colours": {
+        "annotation": "#000000",
+        "designation": "#d40000",
+        "frame": "#000000",
+        "symbol": "#000000",
+        "text": "#000000",
+        "titleBlock": "#000000",
+        "wire": "#000000",
+        "wireNumber": "#d40000"
+      },
+      "font": "sans",
+      "textSizes": {"designation":3.5,"text":3.5,"wireNumber":2.5},
+      "weights": {"annotation":0.35,"frame":0.7,"symbol":0.35,"wire":0.35}
+    },
+    "symbolStandard": "iec"
+  },
+  "properties": {
+    "approved": "",
+    "checked": "",
+    "client": "Example Conveyors Ltd",
+    "copyright": "Sample project of CablePilot (Apache-2.0). Example data only.",
+    "drawingNo": "SMP-CNV-001",
+    "drawn": "CablePilot",
+    "issueDate": "2026-10-24",
+    "orderNo": "SAMPLE-0001",
+    "product": "Belt conveyor C1, 5.5 kW",
+    "revision": "A"
+  },
+  "assembly": {
+    "earthingSystem": "TN-S",
+    "enclosureMaterial": "Sheet steel, powder coated",
+    "formOfSeparation": "1",
+    "installation": "indoor",
+    "ipDegree": "IP54",
+    "mobility": "fixed",
+    "ratedCurrent": "32",
+    "ratedDiversityFactor": "1",
+    "ratedFrequency": "50",
+    "ratedImpulseVoltage": "6",
+    "ratedInsulationVoltage": "690",
+    "ratedOperationalVoltage": "400",
+    "ratedShortTimeCurrent": "10"
+  },
+  "templates": [
+    {
+      "id": "default",
+      "name": "Default",
+      "frame": {
+        "columns": ["1","2","3","4","5","6","7","8"],
+        "margins": {"b":10,"l":20,"r":10,"t":10},
+        "rows": ["A","B","C","D","E","F"]
+      },
+      "titleBlock": {
+        "cells": [
+          {"h":36,"key":"logo","w":40,"x":0,"y":0},
+          {"h":9,"key":"client","w":70,"x":40,"y":0},
+          {"h":9,"key":"product","w":70,"x":110,"y":0},
+          {"h":9,"key":"sheetTitle","w":140,"x":40,"y":9},
+          {"h":9,"key":"drawingNo","w":50,"x":40,"y":18},
+          {"h":9,"key":"orderNo","w":30,"x":90,"y":18},
+          {"h":9,"key":"issueDate","w":30,"x":120,"y":18},
+          {"h":9,"key":"revision","w":30,"x":150,"y":18},
+          {"h":9,"key":"drawn","w":30,"x":40,"y":27},
+          {"h":9,"key":"checked","w":30,"x":70,"y":27},
+          {"h":9,"key":"approved","w":30,"x":100,"y":27},
+          {"h":9,"key":"sheet","w":17.5,"x":130,"y":27},
+          {"h":9,"key":"nextSheet","w":17.5,"x":147.5,"y":27},
+          {"h":9,"key":"totalSheets","w":15,"x":165,"y":27}
+        ],
+        "h": 36,
+        "w": 180
+      }
+    }
+  ],
+  "potentials": [
+    {"id":"L1","kind":"ac","label":"L1"},
+    {"id":"L2","kind":"ac","label":"L2"},
+    {"id":"L3","kind":"ac","label":"L3"},
+    {"id":"N","kind":"neutral","label":"N"},
+    {"id":"PE","kind":"pe","label":"PE"},
+    {"id":"L+","kind":"dc-plus","label":"L+"},
+    {"id":"L-","kind":"dc-minus","label":"L−"},
+    {"id":"24VDC","kind":"dc-plus","label":"24 V DC"},
+    {"id":"0V","kind":"dc-minus","label":"0 V"},
+    {"id":"110VDC","kind":"dc-plus","label":"110 V DC"}
+  ],
+  "pages": [
+    {
+      "id": "p1",
+      "type": "cover",
+      "elements": [],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Cover sheet"}
+    },
+    {
+      "id": "p2",
+      "type": "contents",
+      "elements": [],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Contents"}
+    },
+    {
+      "id": "p3",
+      "type": "data",
+      "elements": [
+        {
+          "id": "e1",
+          "kind": "form",
+          "items": [
+            {"type":"heading","label":{"en":"Electrical data","it":"Dati elettrici"}},
+            {
+              "type": "table",
+              "label": {"en":"Rated data","it":"Dati nominali"},
+              "rows": [
+                {
+                  "bind": "assembly.ratedOperationalVoltage",
+                  "label": {"en":"Rated operational voltage Ue","it":"Tensione nominale di impiego Ue"}
+                },
+                {
+                  "bind": "assembly.ratedInsulationVoltage",
+                  "label": {"en":"Rated insulation voltage Ui","it":"Tensione nominale di isolamento Ui"}
+                },
+                {
+                  "bind": "assembly.ratedImpulseVoltage",
+                  "label": {
+                    "en": "Rated impulse withstand voltage Uimp",
+                    "it": "Tensione nominale di tenuta a impulso Uimp"
+                  }
+                },
+                {
+                  "bind": "assembly.ratedCurrent",
+                  "label": {
+                    "en": "Rated current of the assembly InA",
+                    "it": "Corrente nominale dell'assieme InA"
+                  }
+                },
+                {
+                  "bind": "assembly.ratedShortTimeCurrent",
+                  "label": {
+                    "en": "Rated short-time withstand current Icw",
+                    "it": "Corrente nominale di breve durata Icw"
+                  }
+                },
+                {
+                  "bind": "assembly.ratedFrequency",
+                  "label": {"en":"Rated frequency","it":"Frequenza nominale"}
+                },
+                {
+                  "bind": "assembly.ratedDiversityFactor",
+                  "label": {"en":"Rated diversity factor RDF","it":"Fattore di contemporaneità nominale RDF"}
+                }
+              ]
+            },
+            {"type":"heading","label":{"en":"Earthing system","it":"Sistema di distribuzione"}},
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TN-S","it":"TN-S"},
+              "value": "TN-S"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TN-C","it":"TN-C"},
+              "value": "TN-C"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TN-C-S","it":"TN-C-S"},
+              "value": "TN-C-S"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TT","it":"TT"},
+              "value": "TT"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"IT","it":"IT"},
+              "value": "IT"
+            },
+            {"type":"heading","label":{"en":"Mechanical data","it":"Dati meccanici"}},
+            {
+              "type": "text",
+              "bind": "assembly.ipDegree",
+              "label": {"en":"Degree of protection (IP)","it":"Grado di protezione (IP)"}
+            },
+            {
+              "type": "text",
+              "bind": "assembly.enclosureMaterial",
+              "label": {"en":"Enclosure material","it":"Materiale del contenitore"}
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.installation",
+              "label": {"en":"Indoor","it":"Interno"},
+              "value": "indoor"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.installation",
+              "label": {"en":"Outdoor","it":"Esterno"},
+              "value": "outdoor"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.mobility",
+              "label": {"en":"Fixed assembly","it":"Assieme fisso"},
+              "value": "fixed"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.mobility",
+              "label": {"en":"Movable assembly","it":"Assieme mobile"},
+              "value": "movable"
+            },
+            {
+              "type": "heading",
+              "label": {"en":"Form of internal separation","it":"Forma di segregazione interna"}
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 1","it":"Forma 1"},
+              "value": "1"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 2a","it":"Forma 2a"},
+              "value": "2a"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 2b","it":"Forma 2b"},
+              "value": "2b"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 3a","it":"Forma 3a"},
+              "value": "3a"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 3b","it":"Forma 3b"},
+              "value": "3b"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 4a","it":"Forma 4a"},
+              "value": "4a"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 4b","it":"Forma 4b"},
+              "value": "4b"
+            }
+          ],
+          "w": 170,
+          "x": 30,
+          "y": 18
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"General data of the assembly","it":"Dati generali dell'assieme"}
+    },
+    {
+      "id": "p4",
+      "type": "singleLine",
+      "elements": [
+        {
+          "id": "e2",
+          "kind": "symbol",
+          "designation": "-QF1",
+          "functionText": {"en":"Main breaker 32 A"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "mcb-1p",
+          "x": 100,
+          "y": 60
+        },
+        {
+          "id": "e3",
+          "kind": "symbol",
+          "designation": "-KM1",
+          "functionText": {"en":"Contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-no",
+          "x": 100,
+          "y": 90
+        },
+        {
+          "id": "e4",
+          "kind": "symbol",
+          "designation": "-M1",
+          "functionText": {"en":"Conveyor motor\n5.5 kW"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "motor-3ph",
+          "x": 100,
+          "y": 130
+        },
+        {
+          "id": "e5",
+          "kind": "wire",
+          "conductors": 3,
+          "points": [{"x":100,"y":30},{"x":100,"y":55}],
+          "potential": "L1"
+        },
+        {"id":"e6","kind":"wire","conductors":3,"points":[{"x":100,"y":65},{"x":100,"y":85}]},
+        {"id":"e7","kind":"wire","conductors":3,"points":[{"x":100,"y":95},{"x":100,"y":120}]},
+        {
+          "id": "e8",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3.5,
+          "text": "Mains 400 V 3~ 50 Hz",
+          "x": 40,
+          "y": 30
+        },
+        {
+          "id": "e9",
+          "kind": "rect",
+          "dashed": true,
+          "h": 110,
+          "label": "Conveyor starter",
+          "w": 70,
+          "x": 70,
+          "y": 45
+        },
+        {"id":"e10","kind":"warning","sign":"electric","size":12,"x":170,"y":60}
+      ],
+      "location": "DS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Single-line diagram"}
+    },
+    {
+      "id": "p5",
+      "type": "power",
+      "elements": [
+        {
+          "id": "e11",
+          "kind": "symbol",
+          "designation": "-QS1",
+          "functionText": {"en":"Main isolator"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "switch-disconnector-3p",
+          "x": 100,
+          "y": 50
+        },
+        {
+          "id": "e12",
+          "kind": "symbol",
+          "designation": "-QF1",
+          "functionText": {"en":"Motor circuit breaker"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "mcb-3p",
+          "x": 100,
+          "y": 70
+        },
+        {
+          "id": "e13",
+          "kind": "symbol",
+          "designation": "-KM1",
+          "functionText": {"en":"Conveyor contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contactor-3p",
+          "x": 100,
+          "y": 90
+        },
+        {
+          "id": "e14",
+          "kind": "symbol",
+          "designation": "-FR1",
+          "functionText": {"en":"Overload relay"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "overload-relay-3p",
+          "x": 100,
+          "y": 110
+        },
+        {
+          "id": "e15",
+          "kind": "symbol",
+          "designation": "-M1",
+          "functionText": {"en":"Conveyor motor\n5.5 kW 400 V"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "motor-3ph",
+          "x": 100,
+          "y": 145
+        },
+        {"id":"e16","kind":"wire","points":[{"x":95,"y":25},{"x":95,"y":45}],"potential":"L1"},
+        {"id":"e17","kind":"wire","points":[{"x":100,"y":25},{"x":100,"y":45}],"potential":"L2"},
+        {"id":"e18","kind":"wire","points":[{"x":105,"y":25},{"x":105,"y":45}],"potential":"L3"},
+        {"id":"e19","kind":"wire","number":"1","points":[{"x":95,"y":55},{"x":95,"y":65}]},
+        {"id":"e20","kind":"wire","number":"2","points":[{"x":100,"y":55},{"x":100,"y":65}]},
+        {"id":"e21","kind":"wire","number":"3","points":[{"x":105,"y":55},{"x":105,"y":65}]},
+        {"id":"e22","kind":"wire","number":"4","points":[{"x":95,"y":75},{"x":95,"y":85}]},
+        {"id":"e23","kind":"wire","number":"5","points":[{"x":100,"y":75},{"x":100,"y":85}]},
+        {"id":"e24","kind":"wire","number":"6","points":[{"x":105,"y":75},{"x":105,"y":85}]},
+        {"id":"e25","kind":"wire","number":"7","points":[{"x":95,"y":95},{"x":95,"y":105}]},
+        {"id":"e26","kind":"wire","number":"8","points":[{"x":100,"y":95},{"x":100,"y":105}]},
+        {"id":"e27","kind":"wire","number":"9","points":[{"x":105,"y":95},{"x":105,"y":105}]},
+        {"id":"e28","kind":"wire","number":"10","points":[{"x":95,"y":115},{"x":95,"y":135}]},
+        {"id":"e29","kind":"wire","number":"11","points":[{"x":100,"y":115},{"x":100,"y":135}]},
+        {"id":"e30","kind":"wire","number":"12","points":[{"x":105,"y":115},{"x":105,"y":135}]},
+        {"id":"e31","kind":"rect","dashed":true,"h":90,"label":"Starter","w":60,"x":80,"y":40},
+        {"id":"e32","kind":"warning","sign":"electric","size":12,"x":60,"y":50},
+        {
+          "id": "e33",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Motor starter, direct on line.\nProtection: motor circuit breaker\nand overload relay.",
+          "x": 160,
+          "y": 60
+        }
+      ],
+      "location": "DS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Motor power circuit"}
+    },
+    {
+      "id": "p6",
+      "type": "control",
+      "elements": [
+        {
+          "id": "e34",
+          "kind": "symbol",
+          "designation": "-G1",
+          "functionText": {"en":"Power supply 24 V"},
+          "mirror": true,
+          "rot": 0,
+          "symbolId": "power-supply",
+          "x": 50,
+          "y": 50
+        },
+        {"id":"e35","kind":"wire","points":[{"x":47.5,"y":25},{"x":47.5,"y":40}],"potential":"N"},
+        {"id":"e36","kind":"wire","points":[{"x":52.5,"y":25},{"x":52.5,"y":40}],"potential":"L1"},
+        {
+          "id": "e37",
+          "kind": "wire",
+          "points": [{"x":52.5,"y":60},{"x":52.5,"y":70},{"x":190,"y":70}],
+          "potential": "24VDC"
+        },
+        {
+          "id": "e38",
+          "kind": "wire",
+          "points": [{"x":47.5,"y":60},{"x":47.5,"y":240},{"x":190,"y":240}],
+          "potential": "0V"
+        },
+        {
+          "id": "e39",
+          "kind": "symbol",
+          "designation": "-S0",
+          "functionText": {"en":"Emergency stop"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "emergency-stop",
+          "x": 100,
+          "y": 90
+        },
+        {
+          "id": "e40",
+          "kind": "symbol",
+          "designation": "-S2",
+          "functionText": {"en":"Stop"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "pushbutton-nc",
+          "x": 100,
+          "y": 110
+        },
+        {
+          "id": "e41",
+          "kind": "symbol",
+          "designation": "-S1",
+          "functionText": {"en":"Start"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "pushbutton-no",
+          "x": 100,
+          "y": 130
+        },
+        {
+          "id": "e42",
+          "kind": "symbol",
+          "designation": "-FR1",
+          "functionText": {"en":"Overload relay"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-nc",
+          "x": 100,
+          "y": 150
+        },
+        {
+          "id": "e43",
+          "kind": "symbol",
+          "designation": "-KM1",
+          "functionText": {"en":"Conveyor contactor"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 100,
+          "y": 175
+        },
+        {"id":"e44","kind":"wire","points":[{"x":100,"y":70},{"x":100,"y":85}]},
+        {"id":"e44-j1","kind":"junction","x":100,"y":70},
+        {"id":"e45","kind":"wire","points":[{"x":100,"y":95},{"x":100,"y":105}]},
+        {"id":"e46","kind":"wire","points":[{"x":100,"y":115},{"x":100,"y":125}]},
+        {"id":"e47","kind":"wire","points":[{"x":100,"y":135},{"x":100,"y":145}]},
+        {"id":"e48","kind":"wire","points":[{"x":100,"y":155},{"x":100,"y":170}]},
+        {"id":"e49","kind":"wire","points":[{"x":100,"y":180},{"x":100,"y":240}]},
+        {"id":"e49-j1","kind":"junction","x":100,"y":240},
+        {
+          "id": "e50",
+          "kind": "symbol",
+          "designation": "-KM1",
+          "functionText": {"en":"Self-hold"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-no",
+          "x": 115,
+          "y": 130
+        },
+        {"id":"e51","kind":"wire","points":[{"x":100,"y":120},{"x":115,"y":120},{"x":115,"y":125}]},
+        {"id":"e51-j1","kind":"junction","x":100,"y":120},
+        {"id":"e52","kind":"wire","points":[{"x":115,"y":135},{"x":115,"y":140},{"x":100,"y":140}]},
+        {"id":"e52-j1","kind":"junction","x":100,"y":140},
+        {
+          "id": "e53",
+          "kind": "symbol",
+          "designation": "-KM1",
+          "functionText": {"en":"Run"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-no",
+          "x": 145,
+          "y": 150
+        },
+        {
+          "id": "e54",
+          "kind": "symbol",
+          "designation": "-H1",
+          "functionText": {"en":"Conveyor running"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "lamp",
+          "x": 145,
+          "y": 180
+        },
+        {"id":"e55","kind":"wire","points":[{"x":145,"y":70},{"x":145,"y":145}]},
+        {"id":"e55-j1","kind":"junction","x":145,"y":70},
+        {"id":"e56","kind":"wire","points":[{"x":145,"y":155},{"x":145,"y":175}]},
+        {"id":"e57","kind":"wire","points":[{"x":145,"y":185},{"x":145,"y":240}]},
+        {"id":"e57-j1","kind":"junction","x":145,"y":240},
+        {
+          "id": "e58",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Start and stop with the pushbuttons.\nThe emergency stop opens the\ncontrol circuit.",
+          "x": 170,
+          "y": 100
+        }
+      ],
+      "location": "DS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Control circuit 24 V DC"}
+    },
+    {
+      "id": "p7",
+      "type": "plc",
+      "elements": [
+        {
+          "id": "e59",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.0",
+          "x": 120,
+          "y": 50
+        },
+        {"id":"e60","kind":"wire","points":[{"x":100,"y":50},{"x":120,"y":50}]},
+        {
+          "id": "e61",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Emergency stop healthy",
+          "x": 40,
+          "y": 51.5
+        },
+        {
+          "id": "e62",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.1",
+          "x": 120,
+          "y": 62
+        },
+        {"id":"e63","kind":"wire","points":[{"x":100,"y":62},{"x":120,"y":62}]},
+        {"id":"e64","kind":"text","align":"left","rot":0,"size":3,"text":"Start","x":40,"y":63.5},
+        {
+          "id": "e65",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.2",
+          "x": 120,
+          "y": 74
+        },
+        {"id":"e66","kind":"wire","points":[{"x":100,"y":74},{"x":120,"y":74}]},
+        {"id":"e67","kind":"text","align":"left","rot":0,"size":3,"text":"Stop","x":40,"y":75.5},
+        {
+          "id": "e68",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-output",
+          "value": "Q0.0",
+          "x": 120,
+          "y": 86
+        },
+        {"id":"e69","kind":"wire","points":[{"x":100,"y":86},{"x":120,"y":86}]},
+        {
+          "id": "e70",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Conveyor contactor",
+          "x": 40,
+          "y": 87.5
+        },
+        {
+          "id": "e71",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-output",
+          "value": "Q0.1",
+          "x": 120,
+          "y": 98
+        },
+        {"id":"e72","kind":"wire","points":[{"x":100,"y":98},{"x":120,"y":98}]},
+        {
+          "id": "e73",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Running lamp",
+          "x": 40,
+          "y": 99.5
+        },
+        {"id":"e74","kind":"rect","dashed":true,"h":66,"label":"PLC","w":25,"x":118,"y":42},
+        {
+          "id": "e75",
+          "kind": "table",
+          "cells": [
+            ["Address","Signal","Device"],
+            ["I0.0","Emergency stop healthy","-S0"],
+            ["I0.1","Start","-S1"],
+            ["I0.2","Stop","-S2"],
+            ["Q0.0","Conveyor contactor","-KM1"],
+            ["Q0.1","Running lamp","-H1"]
+          ],
+          "colWidths": [20,55,20],
+          "headerRow": true,
+          "rowHeight": 7,
+          "size": 3,
+          "x": 170,
+          "y": 50
+        }
+      ],
+      "location": "DS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"PLC inputs and outputs"}
+    },
+    {
+      "id": "p8",
+      "type": "terminals",
+      "elements": [
+        {
+          "id": "e76",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "This page is filled from the schematic by the report and layout features (milestones M3 and M6).",
+          "x": 40,
+          "y": 40
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Terminals","it":"Morsettiere"}
+    },
+    {
+      "id": "p9",
+      "type": "cables",
+      "elements": [
+        {
+          "id": "e77",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "This page is filled from the schematic by the report and layout features (milestones M3 and M6).",
+          "x": 40,
+          "y": 40
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Cables","it":"Cavi"}
+    },
+    {
+      "id": "p10",
+      "type": "layout",
+      "elements": [
+        {
+          "id": "e78",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "This page is filled from the schematic by the report and layout features (milestones M3 and M6).",
+          "x": 40,
+          "y": 40
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Cabinet layout","it":"Layout quadro"}
+    }
+  ],
+  "assets": {},
+  "symbols": []
+}

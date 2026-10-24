@@ -1,0 +1,54 @@
+{
+  "id": "dc-dc-converter",
+  "kind": "symbol",
+  "title": {
+    "en": "DC/DC converter",
+    "it": "Convertitore DC/DC"
+  },
+  "category": "electronics",
+  "function": "converter",
+  "designationLetter": "T",
+  "source": "IEC 60617 part 6: converter, direct current to direct current",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "IN+",
+      "x": -2.5,
+      "y": -10,
+      "dir": "up"
+    },
+    {
+      "id": "IN-",
+      "x": 2.5,
+      "y": -10,
+      "dir": "up"
+    },
+    {
+      "id": "OUT+",
+      "x": -2.5,
+      "y": 10,
+      "dir": "down"
+    },
+    {
+      "id": "OUT-",
+      "x": 2.5,
+      "y": 10,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": -2.5, "y1": -10, "x2": -2.5, "y2": -7.5 },
+    { "t": "line", "x1": 2.5, "y1": -10, "x2": 2.5, "y2": -7.5 },
+    { "t": "line", "x1": -2.5, "y1": 7.5, "x2": -2.5, "y2": 10 },
+    { "t": "line", "x1": 2.5, "y1": 7.5, "x2": 2.5, "y2": 10 },
+    { "t": "rect", "x": -7.5, "y": -7.5, "w": 15, "h": 15 },
+    { "t": "line", "x1": -7.5, "y1": 7.5, "x2": 7.5, "y2": -7.5 },
+    { "t": "text", "x": -3.75, "y": -3.5, "text": "=", "size": 3, "anchor": "middle" },
+    { "t": "text", "x": 3.75, "y": 4, "text": "=", "size": 3, "anchor": "middle" }
+  ],
+  "label": {
+    "x": 9,
+    "y": 0
+  }
+}

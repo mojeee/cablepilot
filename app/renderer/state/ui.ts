@@ -1,17 +1,11 @@
-// UI state (Zustand). The project itself arrives in M1 as pure data in /shared with a command layer;
-// until then the navigator shows sample pages so the layout can be seen and tested.
+// UI preferences (Zustand): theme, canvas colour, UI language and the message list. The project
+// and the editor are in state/editor.ts.
 
 import { create } from 'zustand';
 import { setLanguage, type Lang } from '@shared/i18n';
 import type { CanvasTheme, Settings, Theme } from '@shared/settings';
 import { DEFAULT_SETTINGS } from '@shared/settings';
-import type { PageType, SheetSize } from '@shared/sheets';
 
-export interface SamplePage {
-  id: string;
-  type: PageType;
-  number: number;
-}
 export interface Message {
   id: number;
   severity: 'info' | 'warning' | 'error';
@@ -20,23 +14,13 @@ export interface Message {
 }
 
 interface UiState extends Settings {
-  pages: SamplePage[];
-  selectedPage: string;
-  sheetSize: SheetSize;
   messages: Message[];
   setTheme(theme: Theme): void;
   setCanvas(canvas: CanvasTheme): void;
   setLang(language: Lang): void;
-  selectPage(id: string): void;
   addMessage(severity: Message['severity'], text: () => string): void;
   hydrate(settings: Settings): void;
 }
-
-const SAMPLE_PAGES: SamplePage[] = (['cover', 'contents', 'power', 'control', 'plc', 'terminals', 'cables', 'layout'] as const).map((type, i) => ({
-  id: `p${i + 1}`,
-  type,
-  number: i + 1,
-}));
 
 let nextMessage = 1;
 
@@ -54,9 +38,6 @@ function persist(patch: Partial<Settings>): void {
 
 export const useUi = create<UiState>((set) => ({
   ...DEFAULT_SETTINGS,
-  pages: SAMPLE_PAGES,
-  selectedPage: 'p3',
-  sheetSize: 'A3',
   messages: [],
   setTheme: (theme) => {
     persist({ theme });
@@ -70,8 +51,7 @@ export const useUi = create<UiState>((set) => ({
     persist({ language });
     set({ language });
   },
-  selectPage: (selectedPage) => set({ selectedPage }),
-  addMessage: (severity, text) => set((s) => ({ messages: [...s.messages, { id: nextMessage++, severity, text }] })),
+  addMessage: (severity, text) => set((s) => ({ messages: [...s.messages.slice(-199), { id: nextMessage++, severity, text }] })),
   hydrate: (settings) => {
     const root = document.documentElement;
     root.dataset.theme = settings.theme;

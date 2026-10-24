@@ -1,0 +1,61 @@
+{
+  "id": "rectifier-3ph",
+  "kind": "symbol",
+  "title": {
+    "en": "Rectifier, three-phase",
+    "it": "Raddrizzatore trifase"
+  },
+  "category": "electronics",
+  "function": "rectifier",
+  "designationLetter": "T",
+  "source": "IEC 60617 part 6: rectifier (converter) with AC and DC side marked",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "L1",
+      "x": -5,
+      "y": -10,
+      "dir": "up"
+    },
+    {
+      "id": "L2",
+      "x": 0,
+      "y": -10,
+      "dir": "up"
+    },
+    {
+      "id": "L3",
+      "x": 5,
+      "y": -10,
+      "dir": "up"
+    },
+    {
+      "id": "DC+",
+      "x": -2.5,
+      "y": 10,
+      "dir": "down"
+    },
+    {
+      "id": "DC-",
+      "x": 2.5,
+      "y": 10,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": -5, "y1": -10, "x2": -5, "y2": -7.5 },
+    { "t": "line", "x1": 0, "y1": -10, "x2": 0, "y2": -7.5 },
+    { "t": "line", "x1": 5, "y1": -10, "x2": 5, "y2": -7.5 },
+    { "t": "line", "x1": -2.5, "y1": 7.5, "x2": -2.5, "y2": 10 },
+    { "t": "line", "x1": 2.5, "y1": 7.5, "x2": 2.5, "y2": 10 },
+    { "t": "rect", "x": -7.5, "y": -7.5, "w": 15, "h": 15 },
+    { "t": "line", "x1": -7.5, "y1": 7.5, "x2": 7.5, "y2": -7.5 },
+    { "t": "text", "x": -3.75, "y": -3.5, "text": "3~", "size": 2.8, "anchor": "middle" },
+    { "t": "text", "x": 3.75, "y": 4, "text": "=", "size": 3, "anchor": "middle" }
+  ],
+  "label": {
+    "x": 9,
+    "y": 0
+  }
+}

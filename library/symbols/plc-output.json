@@ -1,0 +1,38 @@
+{
+  "id": "plc-output",
+  "kind": "symbol",
+  "title": {
+    "en": "PLC output channel",
+    "it": "Canale di uscita PLC"
+  },
+  "category": "plc",
+  "function": "plc-output",
+  "verification": "secondary",
+  "source": "CablePilot generic PLC channel box (not a standard symbol); the value holds the address",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": 0,
+      "y": 0,
+      "dir": "left"
+    }
+  ],
+  "graphics": [
+    { "t": "rect", "x": 0, "y": -2.5, "w": 17.5, "h": 5 },
+    {
+      "t": "text",
+      "x": 8.75,
+      "y": 0,
+      "text": "{value}",
+      "size": 2.8,
+      "anchor": "middle"
+    },
+    { "t": "line", "x1": 17.5, "y1": -2.5, "x2": 15, "y2": 0 },
+    { "t": "line", "x1": 15, "y1": 0, "x2": 17.5, "y2": 2.5 }
+  ],
+  "label": {
+    "x": 0,
+    "y": -4.5
+  }
+}

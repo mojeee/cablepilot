@@ -1,0 +1,54 @@
+{
+  "id": "power-supply",
+  "kind": "symbol",
+  "title": {
+    "en": "Power supply, AC/DC",
+    "it": "Alimentatore AC/DC"
+  },
+  "category": "sources",
+  "function": "power-supply",
+  "designationLetter": "G",
+  "source": "IEC 60617 part 6: power supply unit (rectifier), AC input, DC output",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "L",
+      "x": -2.5,
+      "y": -10,
+      "dir": "up"
+    },
+    {
+      "id": "N",
+      "x": 2.5,
+      "y": -10,
+      "dir": "up"
+    },
+    {
+      "id": "+",
+      "x": -2.5,
+      "y": 10,
+      "dir": "down"
+    },
+    {
+      "id": "-",
+      "x": 2.5,
+      "y": 10,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": -2.5, "y1": -10, "x2": -2.5, "y2": -7.5 },
+    { "t": "line", "x1": 2.5, "y1": -10, "x2": 2.5, "y2": -7.5 },
+    { "t": "line", "x1": -2.5, "y1": 7.5, "x2": -2.5, "y2": 10 },
+    { "t": "line", "x1": 2.5, "y1": 7.5, "x2": 2.5, "y2": 10 },
+    { "t": "rect", "x": -7.5, "y": -7.5, "w": 15, "h": 15 },
+    { "t": "line", "x1": -7.5, "y1": 7.5, "x2": 7.5, "y2": -7.5 },
+    { "t": "text", "x": -3.75, "y": -3.5, "text": "~", "size": 3, "anchor": "middle" },
+    { "t": "text", "x": 3.75, "y": 4, "text": "=", "size": 3, "anchor": "middle" }
+  ],
+  "label": {
+    "x": 9,
+    "y": 0
+  }
+}

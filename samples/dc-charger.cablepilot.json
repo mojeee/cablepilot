@@ -1,0 +1,838 @@
+{
+  "format": "cablepilot-project",
+  "version": 1,
+  "id": "sample-dc-charger",
+  "name": "Caricabatterie 110 V DC",
+  "settings": {
+    "defaultSize": "A3",
+    "defaultTemplateId": "default",
+    "drawingLanguage": "it",
+    "style": {
+      "colours": {
+        "annotation": "#000000",
+        "designation": "#d40000",
+        "frame": "#000000",
+        "symbol": "#000000",
+        "text": "#000000",
+        "titleBlock": "#000000",
+        "wire": "#000000",
+        "wireNumber": "#d40000"
+      },
+      "font": "sans",
+      "textSizes": {"designation":3.5,"text":3.5,"wireNumber":2.5},
+      "weights": {"annotation":0.35,"frame":0.7,"symbol":0.35,"wire":0.35}
+    },
+    "symbolStandard": "iec"
+  },
+  "properties": {
+    "client": "Cliente di esempio S.r.l.",
+    "copyright": "Progetto di esempio di CablePilot (Apache-2.0). Solo dati di esempio.",
+    "drawingNo": "SMP-CHG-001",
+    "drawn": "CablePilot",
+    "issueDate": "2026-10-24",
+    "orderNo": "ESEMPIO-0003",
+    "product": "Quadro caricabatterie 110 V DC",
+    "revision": "A"
+  },
+  "assembly": {
+    "batteryCapacity": "100",
+    "batteryNominalVoltage": "110",
+    "batteryType": "Piombo-acido ermetico",
+    "dcOutputCurrent": "30",
+    "dcOutputVoltage": "110",
+    "earthingSystem": "TN-S",
+    "enclosureMaterial": "Lamiera di acciaio verniciata",
+    "formOfSeparation": "1",
+    "installation": "indoor",
+    "ipDegree": "IP31",
+    "mobility": "fixed",
+    "ratedCurrent": "40",
+    "ratedDiversityFactor": "1",
+    "ratedFrequency": "50",
+    "ratedImpulseVoltage": "6",
+    "ratedInsulationVoltage": "690",
+    "ratedOperationalVoltage": "400",
+    "ratedShortTimeCurrent": "10"
+  },
+  "templates": [
+    {
+      "id": "default",
+      "name": "Default",
+      "frame": {
+        "columns": ["1","2","3","4","5","6","7","8"],
+        "margins": {"b":10,"l":20,"r":10,"t":10},
+        "rows": ["A","B","C","D","E","F"]
+      },
+      "titleBlock": {
+        "cells": [
+          {"h":36,"key":"logo","w":40,"x":0,"y":0},
+          {"h":9,"key":"client","w":70,"x":40,"y":0},
+          {"h":9,"key":"product","w":70,"x":110,"y":0},
+          {"h":9,"key":"sheetTitle","w":140,"x":40,"y":9},
+          {"h":9,"key":"drawingNo","w":50,"x":40,"y":18},
+          {"h":9,"key":"orderNo","w":30,"x":90,"y":18},
+          {"h":9,"key":"issueDate","w":30,"x":120,"y":18},
+          {"h":9,"key":"revision","w":30,"x":150,"y":18},
+          {"h":9,"key":"drawn","w":30,"x":40,"y":27},
+          {"h":9,"key":"checked","w":30,"x":70,"y":27},
+          {"h":9,"key":"approved","w":30,"x":100,"y":27},
+          {"h":9,"key":"sheet","w":17.5,"x":130,"y":27},
+          {"h":9,"key":"nextSheet","w":17.5,"x":147.5,"y":27},
+          {"h":9,"key":"totalSheets","w":15,"x":165,"y":27}
+        ],
+        "h": 36,
+        "w": 180
+      }
+    }
+  ],
+  "potentials": [
+    {"id":"L1","kind":"ac","label":"L1"},
+    {"id":"L2","kind":"ac","label":"L2"},
+    {"id":"L3","kind":"ac","label":"L3"},
+    {"id":"N","kind":"neutral","label":"N"},
+    {"id":"PE","kind":"pe","label":"PE"},
+    {"id":"L+","kind":"dc-plus","label":"L+"},
+    {"id":"L-","kind":"dc-minus","label":"L−"},
+    {"id":"24VDC","kind":"dc-plus","label":"24 V DC"},
+    {"id":"0V","kind":"dc-minus","label":"0 V"},
+    {"id":"110VDC","kind":"dc-plus","label":"110 V DC"}
+  ],
+  "pages": [
+    {
+      "id": "p1",
+      "type": "cover",
+      "elements": [],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Cover sheet","it":"Copertina"}
+    },
+    {
+      "id": "p2",
+      "type": "contents",
+      "elements": [],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Contents","it":"Indice"}
+    },
+    {
+      "id": "p3",
+      "type": "data",
+      "elements": [
+        {
+          "id": "e1",
+          "kind": "form",
+          "items": [
+            {"type":"heading","label":{"en":"Electrical data","it":"Dati elettrici"}},
+            {
+              "type": "table",
+              "label": {"en":"Rated data","it":"Dati nominali"},
+              "rows": [
+                {
+                  "bind": "assembly.ratedOperationalVoltage",
+                  "label": {"en":"Rated operational voltage Ue","it":"Tensione nominale di impiego Ue"}
+                },
+                {
+                  "bind": "assembly.ratedInsulationVoltage",
+                  "label": {"en":"Rated insulation voltage Ui","it":"Tensione nominale di isolamento Ui"}
+                },
+                {
+                  "bind": "assembly.ratedImpulseVoltage",
+                  "label": {
+                    "en": "Rated impulse withstand voltage Uimp",
+                    "it": "Tensione nominale di tenuta a impulso Uimp"
+                  }
+                },
+                {
+                  "bind": "assembly.ratedCurrent",
+                  "label": {
+                    "en": "Rated current of the assembly InA",
+                    "it": "Corrente nominale dell'assieme InA"
+                  }
+                },
+                {
+                  "bind": "assembly.ratedShortTimeCurrent",
+                  "label": {
+                    "en": "Rated short-time withstand current Icw",
+                    "it": "Corrente nominale di breve durata Icw"
+                  }
+                },
+                {
+                  "bind": "assembly.ratedFrequency",
+                  "label": {"en":"Rated frequency","it":"Frequenza nominale"}
+                },
+                {
+                  "bind": "assembly.ratedDiversityFactor",
+                  "label": {"en":"Rated diversity factor RDF","it":"Fattore di contemporaneità nominale RDF"}
+                }
+              ]
+            },
+            {"type":"heading","label":{"en":"Earthing system","it":"Sistema di distribuzione"}},
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TN-S","it":"TN-S"},
+              "value": "TN-S"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TN-C","it":"TN-C"},
+              "value": "TN-C"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TN-C-S","it":"TN-C-S"},
+              "value": "TN-C-S"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"TT","it":"TT"},
+              "value": "TT"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.earthingSystem",
+              "label": {"en":"IT","it":"IT"},
+              "value": "IT"
+            },
+            {"type":"heading","label":{"en":"Mechanical data","it":"Dati meccanici"}},
+            {
+              "type": "text",
+              "bind": "assembly.ipDegree",
+              "label": {"en":"Degree of protection (IP)","it":"Grado di protezione (IP)"}
+            },
+            {
+              "type": "text",
+              "bind": "assembly.enclosureMaterial",
+              "label": {"en":"Enclosure material","it":"Materiale del contenitore"}
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.installation",
+              "label": {"en":"Indoor","it":"Interno"},
+              "value": "indoor"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.installation",
+              "label": {"en":"Outdoor","it":"Esterno"},
+              "value": "outdoor"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.mobility",
+              "label": {"en":"Fixed assembly","it":"Assieme fisso"},
+              "value": "fixed"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.mobility",
+              "label": {"en":"Movable assembly","it":"Assieme mobile"},
+              "value": "movable"
+            },
+            {
+              "type": "heading",
+              "label": {"en":"Form of internal separation","it":"Forma di segregazione interna"}
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 1","it":"Forma 1"},
+              "value": "1"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 2a","it":"Forma 2a"},
+              "value": "2a"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 2b","it":"Forma 2b"},
+              "value": "2b"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 3a","it":"Forma 3a"},
+              "value": "3a"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 3b","it":"Forma 3b"},
+              "value": "3b"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 4a","it":"Forma 4a"},
+              "value": "4a"
+            },
+            {
+              "type": "tick",
+              "bind": "assembly.formOfSeparation",
+              "label": {"en":"Form 4b","it":"Forma 4b"},
+              "value": "4b"
+            }
+          ],
+          "w": 170,
+          "x": 30,
+          "y": 18
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"General data of the assembly","it":"Dati generali dell'assieme"}
+    },
+    {
+      "id": "p4",
+      "type": "data",
+      "elements": [
+        {
+          "id": "e2",
+          "kind": "form",
+          "items": [
+            {"type":"heading","label":{"en":"DC output","it":"Uscita DC"}},
+            {
+              "type": "table",
+              "label": {"en":"DC data","it":"Dati DC"},
+              "rows": [
+                {
+                  "bind": "assembly.dcOutputVoltage",
+                  "label": {"en":"DC output voltage","it":"Tensione di uscita DC"}
+                },
+                {
+                  "bind": "assembly.dcOutputCurrent",
+                  "label": {"en":"DC output current","it":"Corrente di uscita DC"}
+                }
+              ]
+            },
+            {"type":"heading","label":{"en":"Battery","it":"Batteria"}},
+            {
+              "type": "table",
+              "label": {"en":"Battery data","it":"Dati batteria"},
+              "rows": [
+                {
+                  "bind": "assembly.batteryType",
+                  "label": {"en":"Battery type","it":"Tipo di batteria"}
+                },
+                {
+                  "bind": "assembly.batteryNominalVoltage",
+                  "label": {"en":"Battery nominal voltage","it":"Tensione nominale batteria"}
+                },
+                {
+                  "bind": "assembly.batteryCapacity",
+                  "label": {"en":"Battery capacity","it":"Capacità batteria"}
+                }
+              ]
+            }
+          ],
+          "w": 170,
+          "x": 30,
+          "y": 18
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Battery and DC output data","it":"Dati batteria e uscita DC"}
+    },
+    {
+      "id": "p5",
+      "type": "singleLine",
+      "elements": [
+        {
+          "id": "e3",
+          "kind": "symbol",
+          "designation": "-QF1",
+          "functionText": {"en":"Input breaker","it":"Interruttore di ingresso"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "mcb-1p",
+          "x": 80,
+          "y": 55
+        },
+        {
+          "id": "e4",
+          "kind": "symbol",
+          "designation": "-T1",
+          "functionText": {"en":"Transformer\nDyn11","it":"Trasformatore\nDyn11"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "transformer-3ph",
+          "x": 80,
+          "y": 95
+        },
+        {
+          "id": "e5",
+          "kind": "wire",
+          "conductors": 3,
+          "points": [{"x":80,"y":30},{"x":80,"y":50}],
+          "potential": "L1"
+        },
+        {"id":"e6","kind":"wire","conductors":3,"points":[{"x":80,"y":60},{"x":80,"y":87.5}]},
+        {
+          "id": "e7",
+          "kind": "symbol",
+          "designation": "-U1",
+          "functionText": {"en":"Rectifier module 1","it":"Modulo raddrizzatore 1"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "rectifier-3ph",
+          "x": 60,
+          "y": 150
+        },
+        {
+          "id": "e8",
+          "kind": "symbol",
+          "designation": "-U2",
+          "functionText": {"en":"Rectifier module 2","it":"Modulo raddrizzatore 2"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "rectifier-3ph",
+          "x": 120,
+          "y": 150
+        },
+        {
+          "id": "e9",
+          "kind": "wire",
+          "conductors": 3,
+          "points": [{"x":80,"y":102.5},{"x":80,"y":112},{"x":60,"y":112},{"x":60,"y":140}]
+        },
+        {
+          "id": "e10",
+          "kind": "wire",
+          "conductors": 3,
+          "points": [{"x":80,"y":112},{"x":120,"y":112},{"x":120,"y":140}]
+        },
+        {"id":"e10-j1","kind":"junction","x":80,"y":112},
+        {"id":"e11","kind":"rect","dashed":true,"h":55,"w":55,"x":40,"y":125},
+        {"id":"e12","kind":"rect","dashed":true,"h":55,"w":55,"x":100,"y":125},
+        {
+          "id": "e13",
+          "kind": "symbol",
+          "designation": "-G1",
+          "functionText": {"en":"Battery 110 V","it":"Batteria 110 V"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "battery",
+          "x": 200,
+          "y": 190
+        },
+        {
+          "id": "e14",
+          "kind": "wire",
+          "conductors": 2,
+          "points": [{"x":57.5,"y":160},{"x":57.5,"y":185},{"x":200,"y":185},{"x":200,"y":182.5}],
+          "potential": "L+"
+        },
+        {"id":"e15","kind":"wire","points":[{"x":117.5,"y":160},{"x":117.5,"y":185}]},
+        {"id":"e15-j1","kind":"junction","x":117.5,"y":185},
+        {"id":"e16","kind":"warning","sign":"electric","size":12,"x":250,"y":60},
+        {
+          "id": "e17",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3.5,
+          "text": "Alimentazione 400 V 3~ 50 Hz\nUscita 110 V DC",
+          "x": 150,
+          "y": 60
+        }
+      ],
+      "location": "DS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Single-line diagram","it":"Schema unifilare"}
+    },
+    {
+      "id": "p6",
+      "type": "power",
+      "elements": [
+        {
+          "id": "e18",
+          "kind": "symbol",
+          "designation": "-QF1",
+          "functionText": {"en":"Input breaker","it":"Interruttore di ingresso"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "mcb-3p",
+          "x": 60,
+          "y": 60
+        },
+        {
+          "id": "e19",
+          "kind": "symbol",
+          "designation": "-T1",
+          "functionText": {"en":"Three-phase transformer","it":"Trasformatore trifase"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "transformer-3ph",
+          "x": 60,
+          "y": 95
+        },
+        {"id":"e20","kind":"wire","points":[{"x":55,"y":30},{"x":55,"y":55}],"potential":"L1"},
+        {"id":"e21","kind":"wire","points":[{"x":60,"y":30},{"x":60,"y":55}],"potential":"L2"},
+        {"id":"e22","kind":"wire","points":[{"x":65,"y":30},{"x":65,"y":55}],"potential":"L3"},
+        {"id":"e23","kind":"wire","number":"001","points":[{"x":55,"y":65},{"x":55,"y":87.5}]},
+        {"id":"e24","kind":"wire","number":"002","points":[{"x":60,"y":65},{"x":60,"y":87.5}]},
+        {"id":"e25","kind":"wire","number":"003","points":[{"x":65,"y":65},{"x":65,"y":87.5}]},
+        {
+          "id": "e26",
+          "kind": "symbol",
+          "designation": "-U1",
+          "functionText": {"en":"Rectifier module 1","it":"Modulo raddrizzatore 1"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "rectifier-3ph",
+          "x": 60,
+          "y": 135
+        },
+        {
+          "id": "e27",
+          "kind": "symbol",
+          "designation": "-U2",
+          "functionText": {"en":"Rectifier module 2","it":"Modulo raddrizzatore 2"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "rectifier-3ph",
+          "x": 110,
+          "y": 135
+        },
+        {"id":"e28","kind":"wire","number":"004L","points":[{"x":55,"y":102.5},{"x":55,"y":125}]},
+        {"id":"e29","kind":"wire","number":"005M","points":[{"x":60,"y":102.5},{"x":60,"y":125}]},
+        {"id":"e30","kind":"wire","number":"006N","points":[{"x":65,"y":102.5},{"x":65,"y":125}]},
+        {"id":"e31","kind":"wire","points":[{"x":55,"y":116},{"x":105,"y":116},{"x":105,"y":125}]},
+        {"id":"e31-j1","kind":"junction","x":55,"y":116},
+        {"id":"e32","kind":"wire","points":[{"x":60,"y":112},{"x":110,"y":112},{"x":110,"y":125}]},
+        {"id":"e32-j1","kind":"junction","x":60,"y":112},
+        {"id":"e33","kind":"wire","points":[{"x":65,"y":108},{"x":115,"y":108},{"x":115,"y":125}]},
+        {"id":"e33-j1","kind":"junction","x":65,"y":108},
+        {
+          "id": "e34",
+          "kind": "wire",
+          "points": [
+            {"x":62.5,"y":145},
+            {"x":62.5,"y":160},
+            {"x":225,"y":160},
+            {"x":225,"y":185},
+            {"x":190,"y":185}
+          ],
+          "potential": "L-"
+        },
+        {"id":"e35","kind":"wire","points":[{"x":112.5,"y":145},{"x":112.5,"y":160}]},
+        {"id":"e35-j1","kind":"junction","x":112.5,"y":160},
+        {
+          "id": "e36",
+          "kind": "symbol",
+          "designation": "-G1",
+          "functionText": {"en":"Battery 110 V","it":"Batteria 110 V"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "battery",
+          "x": 190,
+          "y": 177.5
+        },
+        {
+          "id": "e37",
+          "kind": "symbol",
+          "designation": "-F1",
+          "functionText": {"en":"Battery fuse","it":"Fusibile batteria"},
+          "mirror": false,
+          "rot": 90,
+          "symbolId": "fuse",
+          "x": 160,
+          "y": 170
+        },
+        {
+          "id": "e38",
+          "kind": "wire",
+          "points": [{"x":57.5,"y":145},{"x":57.5,"y":170},{"x":155,"y":170}],
+          "potential": "L+"
+        },
+        {"id":"e39","kind":"wire","points":[{"x":107.5,"y":145},{"x":107.5,"y":170}]},
+        {"id":"e39-j1","kind":"junction","x":107.5,"y":170},
+        {"id":"e40","kind":"wire","points":[{"x":165,"y":170},{"x":215,"y":170}]},
+        {
+          "id": "e41",
+          "kind": "symbol",
+          "designation": "-P1",
+          "functionText": {"en":"Battery voltage","it":"Tensione batteria"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "voltmeter",
+          "x": 215,
+          "y": 165
+        },
+        {"id":"e42","kind":"rect","dashed":true,"h":50,"w":40,"x":40,"y":120},
+        {"id":"e43","kind":"rect","dashed":true,"h":50,"w":40,"x":90,"y":120},
+        {"id":"e44","kind":"warning","sign":"electric","size":12,"x":40,"y":75},
+        {
+          "id": "e45",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Uscita 110 V DC, 30 A.\nI due moduli lavorano in parallelo.",
+          "x": 140,
+          "y": 80
+        }
+      ],
+      "location": "DS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Input and rectifier modules","it":"Ingresso e moduli raddrizzatori"}
+    },
+    {
+      "id": "p7",
+      "type": "control",
+      "elements": [
+        {"id":"e46","kind":"wire","points":[{"x":60,"y":60},{"x":200,"y":60}],"potential":"24VDC"},
+        {"id":"e47","kind":"wire","points":[{"x":60,"y":200},{"x":200,"y":200}],"potential":"0V"},
+        {
+          "id": "e48",
+          "kind": "symbol",
+          "designation": "-K1",
+          "functionText": {"en":"Relay Mains failure","it":"Relè Mancanza rete"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 90,
+          "y": 100
+        },
+        {"id":"e49","kind":"wire","points":[{"x":90,"y":60},{"x":90,"y":95}]},
+        {"id":"e49-j1","kind":"junction","x":90,"y":60},
+        {"id":"e50","kind":"wire","points":[{"x":90,"y":105},{"x":90,"y":200}]},
+        {"id":"e50-j1","kind":"junction","x":90,"y":200},
+        {
+          "id": "e51",
+          "kind": "symbol",
+          "designation": "-K1",
+          "functionText": {"en":"Mains failure","it":"Mancanza rete"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-no",
+          "x": 120,
+          "y": 140
+        },
+        {
+          "id": "e52",
+          "kind": "symbol",
+          "designation": "-H1",
+          "functionText": {"en":"Mains failure indication","it":"Segnalazione mancanza rete"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "lamp",
+          "x": 120,
+          "y": 175
+        },
+        {"id":"e53","kind":"wire","points":[{"x":120,"y":60},{"x":120,"y":135}]},
+        {"id":"e53-j1","kind":"junction","x":120,"y":60},
+        {"id":"e54","kind":"wire","points":[{"x":120,"y":145},{"x":120,"y":170}]},
+        {"id":"e55","kind":"wire","points":[{"x":120,"y":180},{"x":120,"y":200}]},
+        {"id":"e55-j1","kind":"junction","x":120,"y":200},
+        {
+          "id": "e56",
+          "kind": "symbol",
+          "designation": "-K2",
+          "functionText": {"en":"Relay Battery low","it":"Relè Batteria scarica"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "coil",
+          "x": 160,
+          "y": 100
+        },
+        {"id":"e57","kind":"wire","points":[{"x":160,"y":60},{"x":160,"y":95}]},
+        {"id":"e57-j1","kind":"junction","x":160,"y":60},
+        {"id":"e58","kind":"wire","points":[{"x":160,"y":105},{"x":160,"y":200}]},
+        {"id":"e58-j1","kind":"junction","x":160,"y":200},
+        {
+          "id": "e59",
+          "kind": "symbol",
+          "designation": "-K2",
+          "functionText": {"en":"Battery low","it":"Batteria scarica"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "contact-no",
+          "x": 190,
+          "y": 140
+        },
+        {
+          "id": "e60",
+          "kind": "symbol",
+          "designation": "-H2",
+          "functionText": {"en":"Battery low indication","it":"Segnalazione batteria scarica"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "lamp",
+          "x": 190,
+          "y": 175
+        },
+        {"id":"e61","kind":"wire","points":[{"x":190,"y":60},{"x":190,"y":135}]},
+        {"id":"e61-j1","kind":"junction","x":190,"y":60},
+        {"id":"e62","kind":"wire","points":[{"x":190,"y":145},{"x":190,"y":170}]},
+        {"id":"e63","kind":"wire","points":[{"x":190,"y":180},{"x":190,"y":200}]},
+        {"id":"e63-j1","kind":"junction","x":190,"y":200}
+      ],
+      "location": "DS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Alarm relays","it":"Relè di allarme"}
+    },
+    {
+      "id": "p8",
+      "type": "plc",
+      "elements": [
+        {
+          "id": "e64",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.0",
+          "x": 120,
+          "y": 50
+        },
+        {"id":"e65","kind":"wire","points":[{"x":100,"y":50},{"x":120,"y":50}]},
+        {
+          "id": "e66",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Mancanza rete",
+          "x": 40,
+          "y": 51.5
+        },
+        {
+          "id": "e67",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.1",
+          "x": 120,
+          "y": 62
+        },
+        {"id":"e68","kind":"wire","points":[{"x":100,"y":62},{"x":120,"y":62}]},
+        {
+          "id": "e69",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Batteria scarica",
+          "x": 40,
+          "y": 63.5
+        },
+        {
+          "id": "e70",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "plc-input",
+          "value": "I0.2",
+          "x": 120,
+          "y": 74
+        },
+        {"id":"e71","kind":"wire","points":[{"x":100,"y":74},{"x":120,"y":74}]},
+        {
+          "id": "e72",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Interruttore ingresso aperto",
+          "x": 40,
+          "y": 75.5
+        },
+        {"id":"e73","kind":"rect","dashed":true,"h":42,"label":"PLC","w":25,"x":118,"y":42},
+        {
+          "id": "e74",
+          "kind": "table",
+          "cells": [
+            ["Indirizzo","Segnale","Dispositivo"],
+            ["I0.0","Mancanza rete","-K1"],
+            ["I0.1","Batteria scarica","-K2"],
+            ["I0.2","Interruttore ingresso aperto","-Q1"]
+          ],
+          "colWidths": [20,60,20],
+          "headerRow": true,
+          "rowHeight": 7,
+          "size": 3,
+          "x": 170,
+          "y": 50
+        }
+      ],
+      "location": "DS",
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"PLC interface","it":"Interfaccia PLC"}
+    },
+    {
+      "id": "p9",
+      "type": "terminals",
+      "elements": [
+        {
+          "id": "e75",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Questa pagina si compila dagli schemi con le funzioni dei report (milestone M3 e M6).",
+          "x": 40,
+          "y": 40
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Terminals","it":"Morsettiere"}
+    },
+    {
+      "id": "p10",
+      "type": "cables",
+      "elements": [
+        {
+          "id": "e76",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Questa pagina si compila dagli schemi con le funzioni dei report (milestone M3 e M6).",
+          "x": 40,
+          "y": 40
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Cables","it":"Cavi"}
+    },
+    {
+      "id": "p11",
+      "type": "layout",
+      "elements": [
+        {
+          "id": "e77",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 3,
+          "text": "Questa pagina si compila dagli schemi con le funzioni dei report (milestone M3 e M6).",
+          "x": 40,
+          "y": 40
+        }
+      ],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Cabinet layout","it":"Layout quadro"}
+    }
+  ],
+  "assets": {},
+  "symbols": []
+}

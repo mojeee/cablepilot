@@ -1,0 +1,68 @@
+{
+  "id": "contactor-3p",
+  "kind": "symbol",
+  "title": {
+    "en": "Contactor, 3 poles",
+    "it": "Contattore, 3 poli"
+  },
+  "category": "switching",
+  "function": "contactor",
+  "designationLetter": "K",
+  "source": "IEC 60617 part 7: contactor, make contacts, mechanical link",
+  "verification": "secondary",
+  "verifiedFrom": "Standard part and symbol family from secondary sources; the graphics are our own drawing. Listed in docs/to-verify.md.",
+  "pins": [
+    {
+      "id": "1",
+      "x": -5,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "3",
+      "x": 0,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "5",
+      "x": 5,
+      "y": -5,
+      "dir": "up"
+    },
+    {
+      "id": "2",
+      "x": -5,
+      "y": 5,
+      "dir": "down"
+    },
+    {
+      "id": "4",
+      "x": 0,
+      "y": 5,
+      "dir": "down"
+    },
+    {
+      "id": "6",
+      "x": 5,
+      "y": 5,
+      "dir": "down"
+    }
+  ],
+  "graphics": [
+    { "t": "line", "x1": -5, "y1": -5, "x2": -5, "y2": -2.5 },
+    { "t": "line", "x1": -5, "y1": 5, "x2": -5, "y2": 2.5 },
+    { "t": "line", "x1": -5, "y1": 2.5, "x2": -7.5, "y2": -1.8 },
+    { "t": "line", "x1": 0, "y1": -5, "x2": 0, "y2": -2.5 },
+    { "t": "line", "x1": 0, "y1": 5, "x2": 0, "y2": 2.5 },
+    { "t": "line", "x1": 0, "y1": 2.5, "x2": -2.5, "y2": -1.8 },
+    { "t": "line", "x1": 5, "y1": -5, "x2": 5, "y2": -2.5 },
+    { "t": "line", "x1": 5, "y1": 5, "x2": 5, "y2": 2.5 },
+    { "t": "line", "x1": 5, "y1": 2.5, "x2": 2.5, "y2": -1.8 },
+    { "t": "line", "x1": -5, "y1": 0, "x2": 5, "y2": 0, "dash": true }
+  ],
+  "label": {
+    "x": 9,
+    "y": 0
+  }
+}

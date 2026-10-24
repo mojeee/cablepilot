@@ -18,21 +18,21 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 
 ## M1 Schematic editor
 
-- [ ] Project with pages of different types: cover, contents, power, control, PLC, terminals, cables, layout
-- [ ] Single-line (overview) pages with n-conductor tick marks, next to the multi-line pages
-- [ ] Project data pages: forms (text fields, tick boxes, tables) filled from project and assembly properties (IEC 61439 data)
-- [ ] Page frames with column and row zones, configurable zone labels (e.g. skip I and O), sheet sizes A4 to A0 (ISO 5457)
-- [ ] Company templates stored in the project and reusable: frame, title block (logo, drawing number, order number, client, product, sheet title, drawn / checked / approved, issue date, sheet / next sheet / total, revision), margin text
-- [ ] Drawing styles: colours per element type, line weights, fonts; print preview always on white
-- [ ] Drawing language as a project setting, separate from the UI language; device and function texts in English and Italian
-- [ ] IEC 60617 symbol library as data: graphics, connection points, function type
-- [ ] In-app symbol editor, saving to a company library checked by the same validation script
-- [ ] Place, move, rotate and mirror
-- [ ] Orthogonal wires with auto-connect and junctions
-- [ ] Potentials (L1/L2/L3/N/PE, L+/L-, 24 V DC, 0 V, 110 V DC)
-- [ ] IEC 81346 designations with automatic numbering, including location (+DS, +MO...)
-- [ ] Free annotation: text (rotated, multi-line), lines, rectangles, dashed outlines, tables, images (PNG, JPEG, SVG), warning-sign graphics
-- [ ] Undo, save, PDF export of pages
+- [x] Project with pages of different types: cover, contents, power, control, PLC, terminals, cables, layout
+- [x] Single-line (overview) pages with n-conductor tick marks, next to the multi-line pages
+- [x] Project data pages: forms (text fields, tick boxes, tables) filled from project and assembly properties (IEC 61439 data)
+- [x] Page frames with column and row zones, configurable zone labels (e.g. skip I and O), sheet sizes A4 to A0 (ISO 5457)
+- [x] Company templates stored in the project and reusable: frame, title block (logo, drawing number, order number, client, product, sheet title, drawn / checked / approved, issue date, sheet / next sheet / total, revision), margin text
+- [x] Drawing styles: colours per element type, line weights, fonts; print preview always on white
+- [x] Drawing language as a project setting, separate from the UI language; device and function texts in English and Italian
+- [x] IEC 60617 symbol library as data: graphics, connection points, function type
+- [x] In-app symbol editor, saving to a company library checked by the same validation script
+- [x] Place, move, rotate and mirror
+- [x] Orthogonal wires with auto-connect and junctions
+- [x] Potentials (L1/L2/L3/N/PE, L+/L-, 24 V DC, 0 V, 110 V DC)
+- [x] IEC 81346 designations with automatic numbering, including location (+DS, +MO...)
+- [x] Free annotation: text (rotated, multi-line), lines, rectangles, dashed outlines, tables, images (PNG, JPEG, SVG), warning-sign graphics
+- [x] Undo, save, PDF export of pages
 
 ## M2 Devices and cross-references
 
