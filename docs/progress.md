@@ -277,6 +277,46 @@ One entry per milestone: what works, what is left, and anything the owner must d
   generic breaking capacities; then set `CORRECTION_VERIFIED` and `VOLTAGE_DROP_VERIFIED` to true.
 - Try your own ERP export in the warehouse window and tell us which column layouts or encodings fail.
 
+## M6 part 3: Cabinet layout (done)
+
+**What works**
+
+- Layout pages drawn in real millimetres with the CAD workspace tools: enclosure and plate from the library (or drawn),
+  DIN rails and wire ducts (two points, grips to resize, MOVE and typed coordinates), no-mount zones (hatched), covers,
+  dimension lines, notes; devices placed from the BOM at their real size and snapped onto rails; ALIGN and DISTRIBUTE;
+  the list of devices not yet placed; a door page with the door devices and the flexible-cable note; a generated side
+  view with the device depths; outlines from the library, an imported DXF, SVG or image.
+- A suggested layout as a preview (enclosure and plate with the spare-space percentage, rails, ducts, every device
+  placed, ducts upsized under the fill limit), the rules it applied listed with their sources, accepted then edited;
+  moved or locked items stay put when it is run again. The built-in assistant answers "suggest a layout", "move the PLC
+  to the right and rearrange" and "explain the layout" as previews.
+- Layout templates in the company library; layout exchange as documented JSON and CSV (`docs/layout-format.md`) and
+  DXF of the 2D views, previewed and undoable, from a file or a watched folder; enclosure and device sizes from an ERP
+  item master through the warehouse's column mapping.
+- 3D view (three.js, lazy loaded), duct fill rate, wire lengths estimated along the ducts in the wire list and the
+  cable metres of the BOM and warehouse (a typed length always wins), mounting-plate DXF for drilling, the layout pages
+  in the PDF set at a standard scale.
+- Samples: all three ship with a suggested layout (pump station: front and side; conveyor and charger: front, door and
+  side); they still open with no check findings and no layout problems. File format 7.
+- Tests: placement and rail snapping, align and distribute, suggestion rules and lock behaviour, templates, JSON, CSV and
+  DXF round trips, item-master sizes, duct fill, wire lengths and cable metres, migration 6 to 7; an end-to-end flow
+  (draw plate and rail, place a device, accept a suggestion, edit and suggest again, import a changed file, 3D, drilling DXF).
+
+**What is left**
+
+- Generic body sizes, hole patterns, wire diameters, scales and the company defaults are unverified (`docs/to-verify.md`);
+  import the real sizes from your item master.
+- One enclosure per project; rails and ducts are straight and axis-aligned; the suggestion never rotates devices,
+  has no manufacturer clearances or heat rules, and no STEP export. Door devices are routed through the plate's ducts
+  with the cabinet depth added. A live ERP connection is not built (files and a watched folder).
+- The 3D view shows boxes only (no models, no labels on the boxes: the name shows on hover).
+
+**What the owner must do by hand**
+
+- Check the new rows of `docs/to-verify.md` and replace the generic part sizes with your own through the item master.
+- Try the layout with your own enclosure and tell us which rules (clearances, heat, wire routes) your workshop needs.
+- Try your ERP's item-master export in the layout window and tell us which column layouts fail.
+
 ## M6 part 2: CAD workspace with the AI inside (done)
 
 **What works**

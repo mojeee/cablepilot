@@ -106,7 +106,7 @@ test('place a symbol, draw a wire, undo, save and export a PDF', async () => {
 test('the sample projects open', async () => {
   const { page, close } = await launch();
   try {
-    for (const [id, name, pages] of [['conveyor', 'Conveyor with direct-on-line starter', 19], ['pump-station', 'Pump station, two pumps', 21], ['dc-charger', 'Caricabatterie 110 V DC', 25]] as const) {
+    for (const [id, name, pages] of [['conveyor', 'Conveyor with direct-on-line starter', 22], ['pump-station', 'Pump station, two pumps', 22], ['dc-charger', 'Caricabatterie 110 V DC', 27]] as const) {
       await page.getByTestId('samples').selectOption(id);
       await expect(page.getByTestId('project-name')).toContainText(name);
       await expect(page.getByRole('region', { name: 'Messages' })).toContainText(`Opened ${name}.`);
@@ -286,7 +286,7 @@ test('M3: number the wires, view the terminal diagram, export the PDF set and th
     const pdf = readdirSync(out).find((f) => f.endsWith('.pdf'))!;
     const pdfBytes = readFileSync(join(out, pdf));
     const doc = await PDFDocument.load(pdfBytes);
-    expect(doc.getPageCount()).toBe(25);
+    expect(doc.getPageCount()).toBe(27);
     // The text is embedded (a font file in the PDF), so it shows in every viewer.
     expect(doc.context.enumerateIndirectObjects().some(([, o]) => o instanceof PDFDict && o.has(PDFName.of('FontFile2')))).toBe(true);
   } finally {
@@ -366,7 +366,7 @@ test('M4: issue a revision, see the changed page, compare, and read the cover sh
     await page.getByTestId('save').click();
     const file = readdirSync(out).find((f) => f.endsWith('.cablepilot.json'))!;
     const saved = JSON.parse(readFileSync(join(out, file), 'utf8')) as { issueStatus: string; version: number; revisions: { number: string; description: string; pages: unknown[] }[] };
-    expect(saved.version).toBe(6);
+    expect(saved.version).toBe(7);
     expect(saved.issueStatus).toBe('construction');
     expect(saved.revisions.map((r) => r.number)).toEqual(['0', '1']);
     expect(saved.revisions[1].description).toBe('Lamp added');

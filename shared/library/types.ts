@@ -51,6 +51,9 @@ export type SymbolCategory = (typeof SYMBOL_CATEGORIES)[number];
  * A generic part (rule 9): what a device is made of in the BOM. Data under /library/parts, same
  * source rules as symbols. Never manufacturer catalogue data unless licensed.
  */
+/** rail: on a DIN rail; plate: screwed to the plate; door: in the door; field: outside the cabinet; none: not a separate body (a module's capacitor, a cable). */
+export type PartMount = 'rail' | 'plate' | 'door' | 'field' | 'none';
+export const PART_MOUNTS: readonly PartMount[] = ['rail', 'plate', 'door', 'field', 'none'];
 export interface PartDef {
   id: string;
   kind: 'part';
@@ -64,6 +67,8 @@ export interface PartDef {
   data: Record<string, string>;
   /** Body size in millimetres, for the cabinet layout (M6). */
   dimensions?: { w: number; h: number; d: number };
+  /** Where the part is mounted (cabinet layout); absent: the default of its category (shared/cabinet/size.ts). */
+  mount?: PartMount;
   source: string;
   verification: 'primary' | 'secondary';
   verifiedFrom?: string;

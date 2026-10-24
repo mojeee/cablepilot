@@ -15,7 +15,8 @@
   "data": {
     "Cores": "3",
     "Conductor cross-section": "1.5 mm²",
-    "Shield": "Yes"
+    "Shield": "Yes",
+    "Outer diameter": "8.5 mm"
   },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",

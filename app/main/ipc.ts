@@ -7,6 +7,7 @@ import type { Settings } from '@shared/settings';
 import type { FileService } from './files';
 import type { SettingsStore } from './settings';
 import type { WarehouseService } from './warehouse';
+import type { LayoutService } from './layoutFiles';
 import { statusOf, type AiProvider } from './ai/provider';
 import type { AiRequest } from '@shared/ai/types';
 
@@ -27,9 +28,9 @@ async function guardAsync<T>(fn: () => Promise<Result<T>>): Promise<Result<T>> {
   }
 }
 
-const isKind = (k: unknown): k is CompanyKind => k === 'symbols' || k === 'templates' || k === 'macros' || k === 'parts';
+const isKind = (k: unknown): k is CompanyKind => k === 'symbols' || k === 'templates' || k === 'macros' || k === 'parts' || k === 'layouts';
 
-export function registerIpc(deps: { settings: SettingsStore; files: FileService; warehouse: WarehouseService; ai: AiProvider }): void {
+export function registerIpc(deps: { settings: SettingsStore; files: FileService; warehouse: WarehouseService; layout: LayoutService; ai: AiProvider }): void {
   const { files } = deps;
   ipcMain.handle('app:info', (): Result<AppInfo> => guard(() => ({ name: app.getName(), version: app.getVersion(), platform: process.platform })));
   ipcMain.handle('settings:get', (): Result<Settings> => guard(() => deps.settings.get()));
@@ -62,6 +63,12 @@ export function registerIpc(deps: { settings: SettingsStore; files: FileService;
   ipcMain.handle('warehouse:refresh', () => safe(() => wh.refresh()));
   ipcMain.handle('warehouse:sample', () => safe(() => wh.sample()));
   ipcMain.handle('warehouse:watch', (_e, on: unknown) => safe(() => wh.watch(on === true)));
+  const lay = deps.layout;
+  ipcMain.handle('layout:pick', (_e, kind: unknown) => guardAsync(() => lay.pick(kind === 'itemMaster' ? 'itemMaster' : 'layout')));
+  ipcMain.handle('layout:pickFolder', () => guardAsync(() => lay.pickFolder()));
+  ipcMain.handle('layout:refresh', () => safe(() => lay.refresh()));
+  ipcMain.handle('layout:folder', () => safe(() => lay.folder()));
+  ipcMain.handle('layout:watch', (_e, on: unknown) => safe(() => lay.watch(on === true)));
   ipcMain.handle('ai:status', () => safe(() => ok(statusOf(deps.ai))));
   ipcMain.handle('ai:ask', (_e, req: unknown) => guardAsync(async () => {
     const r = req as Partial<AiRequest> | null;

@@ -2,7 +2,11 @@ import { useEffect } from "react";
 import { t, getLanguage } from '@shared/i18n';
 import { usesValue } from '@shared/draw/symbol';
 import { SHEET_SIZES, type SheetSize } from '@shared/sheets';
-import type { El, Page, Project, SymbolEl, TableEl, WarningSign } from '@shared/model/types';
+import type { CabEl, CabItem, El, Page, Project, SymbolEl, TableEl, WarningSign } from '@shared/model/types';
+import { apply, type Command } from '@shared/commands';
+import { readDxf } from '@shared/export/dxf';
+import { cabinetOf } from '@shared/cabinet/model';
+import { syncSizeCommands } from '@shared/cabinet/place';
 import { useEditor } from '../state/editor';
 import { useUi } from '../state/ui';
 import { Check, NumField, Select, TextField } from './fields';
@@ -62,6 +66,59 @@ function TableProps({ el, page }: { el: TableEl; page: string }) {
 }
 function CellInput({ value, onCommit }: { value: string; onCommit: (v: string) => void }) {
   return <input type="text" defaultValue={value} aria-label={t('Table cell')} onBlur={(e) => e.target.value !== value && onCommit(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()} />;
+}
+
+const CAB_TITLE: Record<CabItem, () => string> = { enclosure: () => t('Enclosure'), plate: () => t('Mounting plate'), rail: () => t('DIN rail'), duct: () => t('Wire duct'), device: () => t('Device on the layout'), zone: () => t('No-mount zone'), cover: () => t('Cover'), dim: () => t('Dimension line') };
+/** A cabinet layout item: position and size in millimetres on the layout page, lock, note, and for a device the outline from a file. */
+function CabProps({ el, page }: { el: CabEl; page: Page }) {
+  const up = (patch: Record<string, unknown>) => patchEl(page.id, el.id, patch);
+  const project = useEditor((s) => s.history.present);
+  const lib = useEditor((s) => s.lib);
+  const cab = cabinetOf(project);
+  const o = cab.plate ?? cab.enclosure;
+  const hasD = el.item === 'enclosure' || el.item === 'device' || el.item === 'duct';
+  return (
+    <>
+      <h3>{CAB_TITLE[el.item]()}</h3>
+      {el.item === 'device' ? <p className="mono" data-testid="prop-cab-designation">{el.designation}</p> : el.item !== 'dim' && <TextField label={t('Label')} testid="prop-cab-label" value={el.designation ?? ''} onCommit={(v) => up({ designation: v || undefined })} mono />}
+      <NumField label={t('X (mm on the page)')} testid="prop-cab-x" value={el.x} step={1} onCommit={(v) => up({ x: v })} />
+      <NumField label={t('Y (mm on the page)')} testid="prop-cab-y" value={el.y} step={1} onCommit={(v) => up({ y: v })} />
+      {o && el.item !== 'enclosure' && <p className="hint">{t('From the plate corner: {x}, {y} mm', { x: Math.round((el.x - o.x) * 10) / 10, y: Math.round((el.y - o.y) * 10) / 10 })}</p>}
+      {el.item !== 'dim' && <NumField label={t('Width (mm)')} testid="prop-cab-w" value={el.w} min={1} step={1} onCommit={(v) => up({ w: v, ...(el.item === 'device' ? { custom: true } : {}) })} />}
+      {el.item !== 'dim' && <NumField label={t('Height (mm)')} testid="prop-cab-h" value={el.h} min={1} step={1} onCommit={(v) => up({ h: v, ...(el.item === 'device' ? { custom: true } : {}) })} />}
+      {hasD && <NumField label={t('Depth (mm)')} testid="prop-cab-d" value={el.d ?? 0} min={1} step={1} onCommit={(v) => up({ d: v, ...(el.item === 'device' ? { custom: true } : {}) })} />}
+      {el.item === 'dim' && <NumField label={t('Offset of the dimension line (mm)')} value={el.d ?? 0} step={5} onCommit={(v) => up({ d: v })} />}
+      {(el.item === 'zone' || el.item === 'cover' || el.item === 'dim') && <TextField label={el.item === 'dim' ? t('Text instead of the length') : t('Note')} value={el.note ?? ''} onCommit={(v) => up({ note: v || undefined })} />}
+      {el.item === 'device' && (
+        <>
+          <p className="hint">{el.rail ? t('On rail {name}', { name: cab.rails.find((r) => r.el.id === el.rail)?.el.designation ?? '' }) : t('Not on a rail')}{el.custom ? ` · ${t('size set by hand')}` : ` · ${t('size from the part')}`}</p>
+          <Check label={t('Locked: a new suggestion never moves it')} testid="prop-cab-locked" checked={!!el.locked} onChange={(v) => up({ locked: v || undefined })} />
+          <div className="row-buttons">
+            <button type="button" onClick={() => { const clear: Command = { type: 'el/update', page: page.id, id: el.id, patch: { custom: undefined } }; const sync = syncSizeCommands(apply(project, clear, { lib }), lib).filter((c) => c.type === 'el/update' && c.id === el.id); useEditor.getState().exec({ type: 'batch', label: 'Size from the part', commands: [clear, ...sync] }); }}>{t('Size from the part')}</button>
+            <button type="button" data-testid="outline-dxf" onClick={() => void outlineFromDxf(page.id, el)}>{t('Outline from DXF...')}</button>
+            <button type="button" data-testid="outline-image" onClick={() => { useEditor.getState().patch({ outlineTarget: { page: page.id, id: el.id } }); document.querySelector<HTMLInputElement>('[data-testid="image-input"]')?.click(); }}>{t('Outline from image or SVG...')}</button>
+            {el.outline && <button type="button" onClick={() => up({ outline: undefined })}>{t('Remove the outline')}</button>}
+          </div>
+        </>
+      )}
+      {el.item !== 'device' && <Check label={t('Locked: a new suggestion never moves it')} checked={!!el.locked} onChange={(v) => up({ locked: v || undefined })} />}
+    </>
+  );
+}
+
+async function outlineFromDxf(page: string, el: CabEl): Promise<void> {
+  const r = await window.cablepilot.files.importDxf();
+  if (!r.ok) return useUi.getState().addMessage('error', () => `${r.error.message} ${r.error.hint}`);
+  if (!r.value) return;
+  const read = readDxf(r.value.text);
+  const polys = read.shapes.filter((s) => s.pts && s.pts.length > 1).map((s) => (s.pts ?? []).map((p) => ({ x: p.x * read.unit, y: p.y * read.unit })));
+  const all = polys.flat();
+  if (!all.length) return useUi.getState().addMessage('warning', () => t('The DXF file has no lines this app can read.'));
+  const x0 = Math.min(...all.map((p) => p.x)), x1 = Math.max(...all.map((p) => p.x)), y0 = Math.min(...all.map((p) => p.y)), y1 = Math.max(...all.map((p) => p.y));
+  const w = Math.round((x1 - x0) * 100) / 100, h = Math.round((y1 - y0) * 100) / 100;
+  // DXF y runs up; the layout's runs down.
+  const out = polys.map((pl) => pl.flatMap((p) => [Math.round((p.x - x0) * 100) / 100, Math.round((y1 - p.y) * 100) / 100]));
+  useEditor.getState().exec({ type: 'el/update', page, id: el.id, patch: { w, h, custom: true, outline: { polys: out } } });
 }
 
 function ElementProps({ el, page, project }: { el: El; page: Page; project: Project }) {
@@ -125,6 +182,7 @@ function ElementProps({ el, page, project }: { el: El; page: Page; project: Proj
         </>
       );
     case 'table': return (<><h3>{t('Table')}</h3><TableProps el={el} page={page.id} /></>);
+    case 'cab': return <CabProps el={el} page={page} />;
     case 'image':
       return (
         <>

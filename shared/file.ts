@@ -3,9 +3,9 @@
 
 import { PAGE_TYPES } from './sheets';
 import { SHEET_SIZES } from './sheets';
-import { CURRENT_VERSION, DEFAULT_BOM, DEFAULT_CROSSREF, DEFAULT_PLC, DEFAULT_SUPPLY } from './model/defaults';
+import { CURRENT_VERSION, DEFAULT_BOM, DEFAULT_CROSSREF, DEFAULT_LAYOUT, DEFAULT_PLC, DEFAULT_SUPPLY } from './model/defaults';
 import { DEFAULT_NUMBERING, DEFAULT_WIRE_CLASSES } from './model/wireDefaults';
-import { ISSUE_STATUSES, PROJECT_FORMAT, type Project } from './model/types';
+import { CAB_ITEMS, ISSUE_STATUSES, PROJECT_FORMAT, type Project } from './model/types';
 import { fail, ok, type Result } from './result';
 
 /** Key order of the written file: identity first, then the rest alphabetically; top level is fixed. */
@@ -69,6 +69,11 @@ export const MIGRATIONS: Record<number, Migration> = {
     const settings = (d.settings ?? {}) as Record<string, unknown>;
     return { ...d, settings: { ...settings, supply: { ...DEFAULT_SUPPLY } } };
   },
+  // 6 -> 7 (M6 part 3): the cabinet layout defaults. Layout items (kind "cab") and the page's `layout` view are optional.
+  6: (d) => {
+    const settings = (d.settings ?? {}) as Record<string, unknown>;
+    return { ...d, settings: { ...settings, layout: { ...DEFAULT_LAYOUT } } };
+  },
 };
 
 export function migrate(data: Record<string, unknown>, migrations: Record<number, Migration> = MIGRATIONS, target = CURRENT_VERSION): Result<Record<string, unknown>> {
@@ -107,6 +112,7 @@ const NEEDS: Record<string, (e: Record<string, unknown>) => boolean> = {
   warning: (e) => isNum(e.x) && isNum(e.y) && isNum(e.size) && ['general', 'electric', 'hot', 'autostart'].includes(e.sign as string),
   report: (e) => isNum(e.x) && isNum(e.y) && isStr(e.report) && isNum(e.offset) && isNum(e.rows),
   form: (e) => isNum(e.x) && isNum(e.y) && isNum(e.w) && Array.isArray(e.items),
+  cab: (e) => CAB_ITEMS.includes(e.item as never) && isNum(e.x) && isNum(e.y) && isNum(e.w) && isNum(e.h) && (e.d === undefined || isNum(e.d)) && (e.designation === undefined || isStr(e.designation)),
 };
 
 /** Problems found in a project object (empty: valid). Paths point at the damaged part. */
@@ -141,7 +147,7 @@ export function validateProject(d: unknown): string[] {
   if (!Array.isArray(d.devices) || !d.devices.every((r) => isObj(r) && isStr(r.designation) && Array.isArray(r.parts) && isObj(r.fields))) errs.push('devices must be an array of device records');
   if (!Array.isArray(d.parts)) errs.push('parts must be an array');
   if (!Array.isArray(d.projectParts) || !d.projectParts.every((r) => isObj(r) && isStr(r.id) && isStr(r.part) && isNum(r.qty))) errs.push('projectParts must be an array of parts');
-  if (isObj(s) && (!isObj(s.crossRef) || !isObj(s.bom) || !isObj(s.numbering) || !isObj(s.plc) || !isObj(s.supply))) errs.push('settings.crossRef, settings.bom, settings.numbering, settings.plc and settings.supply are required');
+  if (isObj(s) && (!isObj(s.crossRef) || !isObj(s.bom) || !isObj(s.numbering) || !isObj(s.plc) || !isObj(s.supply) || !isObj(s.layout))) errs.push('settings.crossRef, settings.bom, settings.numbering, settings.plc, settings.supply and settings.layout are required');
   if (!Array.isArray(d.wireClasses) || !Array.isArray(d.wireTypes) || !Array.isArray(d.cables)) errs.push('wireClasses, wireTypes and cables must be arrays');
   if (!ISSUE_STATUSES.includes(d.issueStatus as never)) errs.push('issueStatus must be proposal, approval, construction or asBuilt');
   if (!Array.isArray(d.revisions) || !d.revisions.every((r) => isObj(r) && isStr(r.number) && isStr(r.date) && Array.isArray(r.pages) && isObj(r.inventory))) errs.push('revisions must be an array of issued revisions');
@@ -156,6 +162,7 @@ export function validateProject(d: unknown): string[] {
       if (!PAGE_TYPES.includes(p.type as never)) errs.push(`pages[${i}].type "${String(p.type)}" is not a page type`);
       if (!SHEET_SIZES.includes(p.size as never)) errs.push(`pages[${i}].size must be A4 to A0`);
       if (!isObj(p.title)) errs.push(`pages[${i}].title must be an object`);
+      if (p.layout !== undefined && !(isObj(p.layout) && ['front', 'door', 'side'].includes(p.layout.view as string) && isNum(p.layout.w) && isNum(p.layout.h))) errs.push(`pages[${i}].layout needs a view (front, door or side) and a size`);
       if (!Array.isArray(p.elements)) return errs.push(`pages[${i}].elements must be an array`);
       const eids = new Set<string>();
       p.elements.forEach((e, j) => {

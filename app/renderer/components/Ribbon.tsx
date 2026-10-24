@@ -56,7 +56,10 @@ const GROUPS: Record<string, () => Group[]> = {
     { label: () => t('PLC'), buttons: [b('PLC', 'plc', () => t('PLC I/O'), { testid: 'plc', title: () => t('PLC I/O overview and tag lists') }), b('INSERT', 'symbol', () => t('PLC input'), { args: 'plc-input', testid: 'rb-plc-input' }), b('INSERT', 'symbol', () => t('PLC output'), { args: 'plc-output', testid: 'rb-plc-output' })] },
   ],
   layout: () => [
-    { label: () => t('Cabinet layout'), buttons: [b('ADDPAGE', 'page', () => t('Add layout page')), b('DXFIN', 'dxf', () => t('Import DXF'))] },
+    { label: () => t('Cabinet'), buttons: [b('ENCLOSURE', 'enclosure', () => t('Enclosure'), { testid: 'rb-enclosure', title: () => t('Place an enclosure from the library') }), b('PLATE', 'rect', () => t('Plate'), { testid: 'rb-plate' }), b('RAIL', 'rail', () => t('DIN rail'), { testid: 'rb-rail' }), b('DUCT', 'duct', () => t('Duct'), { testid: 'rb-duct' }), b('ZONE', 'zone', () => t('No-mount zone'), { testid: 'rb-zone' }), b('COVER', 'cover', () => t('Cover'), { testid: 'rb-cover' }), b('DIM', 'dim', () => t('Dimension'), { testid: 'rb-dim' }), b('TEXT', 'text', () => t('Note'))] },
+    { label: () => t('Devices'), buttons: [b('PLACE', 'place', () => t('Place devices'), { testid: 'rb-place', title: () => t('Place the devices of the schematic that are not on the layout yet') }), b('ALIGN', 'align', () => t('Align left'), { args: 'left', testid: 'rb-align-left' }), b('ALIGN', 'align', () => t('Align top'), { args: 'top', testid: 'rb-align-top' }), b('DISTRIBUTE', 'distribute', () => t('Distribute across'), { args: 'h', testid: 'rb-distribute-h' }), b('DISTRIBUTE', 'distribute', () => t('Distribute down'), { args: 'v', testid: 'rb-distribute-v' })] },
+    { label: () => t('Suggestion'), buttons: [b('SUGGEST', 'suggest', () => t('Suggest layout'), { testid: 'rb-suggest', title: () => t('Suggest the whole layout as a preview') }), b('LAYOUT', 'layout', () => t('Layout window'), { testid: 'rb-layout', title: () => t('Devices not yet placed, templates, exchange, duct fill') })] },
+    { label: () => t('Views and output'), buttons: [b('VIEW3D', 'cube', () => t('3D view'), { testid: 'rb-3d' }), b('DRILL', 'drill', () => t('Drilling DXF'), { testid: 'rb-drill', title: () => t('Mounting plate DXF for drilling') }), b('DXFOUT', 'dxf', () => t('Export view as DXF')), b('DXFIN', 'dxf', () => t('Import DXF'))] },
   ],
   view: () => [
     { label: () => t('Zoom'), buttons: [b('ZOOM', 'zoom', () => t('Zoom')), b('EXTENTS', 'extents', () => t('Whole page')), b('PAN', 'pan', () => t('Pan'))] },
@@ -115,7 +118,6 @@ export function Ribbon() {
               <div className="ribbon-group-label">{g.label()}</div>
             </div>
           ))}
-          {tab === 'layout' && <p className="hint ribbon-note">{t('Cabinet layout tools (enclosures, rails, ducts, device placement) arrive in a later milestone; layout pages and DXF import work today.')}</p>}
         </div>
       )}
     </div>

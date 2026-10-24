@@ -30,7 +30,7 @@ export function selectInRect(page: Page, items: { id: string; box: Box }[], rect
     const e = byId.get(it.id);
     if (e && (e.kind === 'wire' || e.kind === 'line')) {
       if (e.points.some((p, i) => i > 0 && segTouchesRect(e.points[i - 1], p, rect))) out.push(it.id);
-    } else if (e && e.kind === 'rect') {
+    } else if (e && (e.kind === 'rect' || (e.kind === 'cab' && (e.item === 'enclosure' || e.item === 'plate')))) {
       if (rectEdges(e.x, e.y, e.w, e.h).some(([a, c]) => segTouchesRect(a, c, rect))) out.push(it.id);
     } else out.push(it.id);
   }

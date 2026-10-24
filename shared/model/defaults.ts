@@ -3,11 +3,11 @@
 import { DEFAULT_POTENTIALS } from '../potentials';
 import { zoneRange } from './zones';
 import { DEFAULT_NUMBERING, DEFAULT_WIRE_CLASSES } from './wireDefaults';
-import type { BomSettings, CrossRefSettings, DrawingStyle, Page, PlcSettings, Project, ProjectSettings, SupplyData, Template, TitleCell } from './types';
+import type { BomSettings, CrossRefSettings, DrawingStyle, LayoutSettings, Page, PlcSettings, Project, ProjectSettings, SupplyData, Template, TitleCell } from './types';
 import { PROJECT_FORMAT } from './types';
 import type { SheetSize } from '../sheets';
 
-export const CURRENT_VERSION = 6;
+export const CURRENT_VERSION = 7;
 
 /** Designations and wire numbers in red, as on the reference style of production sets (brief, M1). */
 export const DEFAULT_STYLE: DrawingStyle = {
@@ -78,6 +78,12 @@ export const DEFAULT_PLC: PlcSettings = { style: 'siemens', start: { di: 0, do: 
  */
 export const DEFAULT_SUPPLY: SupplyData = { voltage: 400, ik: 0, ambient: 30, grouping: 1, maxDropPct: 5 };
 
+/**
+ * Cabinet layout defaults: company choices, listed in docs/to-verify.md. 20 % spare space and a 50 % duct
+ * fill are common company rules of thumb, not requirements of IEC 61439.
+ */
+export const DEFAULT_LAYOUT: LayoutSettings = { sparePct: 20, ductFillMax: 50, gap: 5, rowClearance: 20, slack: 100 };
+
 export function defaultSettings(): ProjectSettings {
   return {
     drawingLanguage: 'en',
@@ -92,6 +98,7 @@ export function defaultSettings(): ProjectSettings {
     installationMethod: '',
     supply: { ...DEFAULT_SUPPLY },
     plc: structuredClone(DEFAULT_PLC),
+    layout: { ...DEFAULT_LAYOUT },
   };
 }
 

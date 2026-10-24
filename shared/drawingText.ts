@@ -67,6 +67,17 @@ export const DRAWING_TEXT = {
   'type.data': { en: 'Project data', it: 'Dati di progetto' },
   'type.bom': { en: 'Bill of materials', it: 'Distinta materiali' },
   'type.report': { en: 'Lists and tables', it: 'Elenchi e tabelle' },
+  'layout.front': { en: 'Mounting plate, front view', it: 'Piastra di montaggio, vista frontale' },
+  'layout.door': { en: 'Door, view from the front', it: 'Porta, vista frontale' },
+  'layout.side': { en: 'Side view, device depths', it: 'Vista laterale, profondità dei componenti' },
+  'layout.scale': { en: 'Scale', it: 'Scala' },
+  'layout.noMount': { en: 'No-mount zone', it: 'Zona di non montaggio' },
+  'layout.cover': { en: 'Cover', it: 'Coperchio' },
+  'layout.depth': { en: 'Depth', it: 'Profondità' },
+  'layout.plate': { en: 'Mounting plate', it: 'Piastra' },
+  'layout.door.label': { en: 'Door', it: 'Porta' },
+  'layout.cableNote': { en: 'Door devices: flexible cable to the plate, at least {n} mm.', it: 'Componenti in porta: cavo flessibile verso la piastra, almeno {n} mm.' },
+  'layout.cableEntry': { en: 'Cable entry', it: 'Ingresso cavi' },
 } as const satisfies Record<string, { en: string; it: string }>;
 export type DrawingTextKey = keyof typeof DRAWING_TEXT;
 

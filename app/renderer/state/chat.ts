@@ -8,6 +8,7 @@ import { apply, type Command } from '@shared/commands';
 import type { AiAnswer, AiStatus } from '@shared/ai/types';
 import type { Project } from '@shared/model/types';
 import { useEditor } from './editor';
+import { withShown } from '@shared/layout';
 import { useUi } from './ui';
 
 export interface ChatMsg {
@@ -39,6 +40,8 @@ interface ChatState {
   setHint(h: { text: string; prompt: string } | null): void;
   loadStatus(): Promise<void>;
   ask(prompt: string): Promise<void>;
+  /** Shows an answer made here (a layout suggestion, an import preview) as the assistant would: text, sources and a proposal to accept or reject. */
+  present(text: string, answer: AiAnswer): void;
   accept(): void;
   reject(): void;
 }
@@ -92,6 +95,23 @@ export const useChat = create<ChatState>((set, get) => ({
       if (answer.proposal.page) useEditor.getState().patch({ pageId: answer.proposal.page, selection: [] });
       set((s) => ({ busy: false, proposal: { msg: id, answer, base, preview, highlight, command }, messages: [...s.messages, { id, role: 'assistant', text: answer.text, answer, outcome: 'pending' }] }));
     } else set((s) => ({ busy: false, messages: [...s.messages, { id, role: 'assistant', text: answer.text, answer }] }));
+  },
+  present: (text, answer) => {
+    const ed = useEditor.getState();
+    const prev = get().proposal;
+    const id = nextId++;
+    if (!answer.proposal) {
+      set((s) => ({ messages: [...s.messages, { id: nextId++, role: 'user', text }, { id, role: 'assistant', text: answer.text, answer }] }));
+      return;
+    }
+    const base = ed.project();
+    const command: Command = answer.proposal.commands.length === 1 ? answer.proposal.commands[0] : { type: 'batch', label: answer.proposal.label, commands: answer.proposal.commands };
+    const preview = apply(base, command, { lib: ed.lib });
+    const highlight = changedElementIds(base, preview);
+    if (answer.proposal.page) ed.patch({ pageId: answer.proposal.page, selection: [] });
+    set((s) => ({ proposal: { msg: id, answer, base, preview, highlight, command }, messages: [...s.messages.map((m) => (prev && m.id === prev.msg ? { ...m, outcome: 'stale' as const } : m)), { id: nextId++, role: 'user', text }, { id, role: 'assistant', text: answer.text, answer, outcome: 'pending' as const }] }));
+    const ui = useUi.getState();
+    ui.setLayout(withShown(ui.layout, 'chat'));
   },
   accept: () => {
     const p = get().proposal;

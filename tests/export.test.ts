@@ -53,7 +53,7 @@ describe('ZIP and XLSX', () => {
     expect(sheets).toHaveLength(REPORT_IDS.length);
     const expected = workbookSheets(p, lib);
     const wires = sheets.find((s) => s.name === 'Elenco fili');
-    expect(wires?.rows[0]).toEqual(['Numero', 'Da', 'A', 'Sezione', 'Colore', 'Tipo', 'Cavo']);
+    expect(wires?.rows[0]).toEqual(['Numero', 'Da', 'A', 'Sezione', 'Colore', 'Tipo', 'Cavo', 'Lunghezza (m)']);
     expect(wires?.rows.length).toBe(expected.find((s) => s.name === 'Elenco fili')?.rows.length);
   });
 });

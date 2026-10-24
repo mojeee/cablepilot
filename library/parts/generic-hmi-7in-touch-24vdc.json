@@ -17,6 +17,12 @@
     "Interface": "Ethernet",
     "Supply voltage": "24 V DC"
   },
+  "dimensions": {
+    "w": 190,
+    "h": 140,
+    "d": 40
+  },
+  "mount": "door",
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",
   "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"

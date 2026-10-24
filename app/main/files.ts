@@ -29,7 +29,7 @@ export class FileService {
     private readonly samplesDir: string,
     private readonly window: () => BrowserWindow | null,
   ) {
-    for (const d of ['autosave', 'company-library/symbols', 'company-library/templates', 'company-library/macros', 'company-library/parts']) mkdirSync(join(dataDir, d), { recursive: true });
+    for (const d of ['autosave', 'company-library/symbols', 'company-library/templates', 'company-library/macros', 'company-library/parts', 'company-library/layouts']) mkdirSync(join(dataDir, d), { recursive: true });
   }
 
   async open(): Promise<Result<OpenedFile | null>> {

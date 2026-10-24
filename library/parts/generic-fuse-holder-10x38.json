@@ -16,6 +16,11 @@
     "Fuse size": "10 x 38 mm",
     "Poles": "1"
   },
+  "dimensions": {
+    "w": 17.5,
+    "h": 90,
+    "d": 68
+  },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",
   "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"

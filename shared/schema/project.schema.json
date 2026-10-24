@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cablepilot.agentflowbind.com/schema/project.schema.json",
-  "title": "CablePilot project, file format version 5",
+  "title": "CablePilot project, file format version 7",
   "description": "A CablePilot project file (.cablepilot.json). Lengths are millimetres on the page; the origin is the top-left corner of the sheet, y down. Written with a stable key order so it diffs well in Git.",
   "type": "object",
   "required": ["format", "version", "id", "name", "settings", "properties", "assembly", "templates", "potentials", "pages", "assets", "symbols", "devices", "parts", "projectParts", "wireClasses", "wireTypes", "cables", "issueStatus", "revisions"],
@@ -12,13 +12,14 @@
     "name": { "type": "string" },
     "settings": {
       "type": "object",
-      "required": ["drawingLanguage", "symbolStandard", "style", "defaultSize", "defaultTemplateId", "crossRef", "bom", "numbering", "wireColours", "installationMethod", "supply", "plc"],
+      "required": ["drawingLanguage", "symbolStandard", "style", "defaultSize", "defaultTemplateId", "crossRef", "bom", "numbering", "wireColours", "installationMethod", "supply", "plc", "layout"],
       "properties": {
         "drawingLanguage": { "enum": ["en", "it"] },
         "symbolStandard": { "enum": ["iec", "nfpa"] },
         "defaultSize": { "$ref": "#/$defs/size" },
         "defaultTemplateId": { "type": "string" },
         "plc": { "type": "object", "description": "PLC addressing scheme: address style and the first byte of each area", "required": ["style", "start"], "properties": { "style": { "enum": ["siemens", "iec"] }, "start": { "type": "object", "required": ["di", "do", "ai", "ao"], "properties": { "di": { "type": "integer", "minimum": 0 }, "do": { "type": "integer", "minimum": 0 }, "ai": { "type": "integer", "minimum": 0 }, "ao": { "type": "integer", "minimum": 0 } } } } }, "supply": { "type": "object", "description": "Supply data for sizing: line voltage (V), prospective short-circuit current (kA, 0 = not stated), ambient temperature (degrees C), grouped circuits, largest voltage drop (%)", "required": ["voltage", "ik", "ambient", "grouping", "maxDropPct"], "properties": { "voltage": { "type": "number", "exclusiveMinimum": 0 }, "ik": { "type": "number", "minimum": 0 }, "ambient": { "type": "number" }, "grouping": { "type": "integer", "minimum": 1 }, "maxDropPct": { "type": "number", "exclusiveMinimum": 0 } } }, "wireColours": { "type": "boolean" }, "installationMethod": { "type": "string", "description": "IEC 60364-5-52 installation method letter stated for the conductors (B2, C, E...); empty: not stated" }, "numbering": { "type": "object", "required": ["scheme", "pattern", "start", "step"], "properties": { "scheme": { "enum": ["potential", "page-column", "sequential"] }, "pattern": { "type": "string" }, "start": { "type": "integer", "minimum": 0 }, "step": { "type": "integer", "minimum": 1 } } }, "crossRef": { "type": "object", "required": ["format", "pageDigits"], "properties": { "format": { "enum": ["page.column", "page-column-row"] }, "pageDigits": { "type": "integer", "minimum": 0 } } },
+        "layout": { "type": "object", "description": "Cabinet layout defaults (company choices): spare space and duct fill in percent, gap, row clearance and wire slack in millimetres", "required": ["sparePct", "ductFillMax", "gap", "rowClearance", "slack"], "properties": { "sparePct": { "type": "number", "minimum": 0 }, "ductFillMax": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }, "gap": { "type": "number", "minimum": 0 }, "rowClearance": { "type": "number", "minimum": 0 }, "slack": { "type": "number", "minimum": 0 } } },
         "bom": { "type": "object", "required": ["columns", "units", "group", "userFields"], "properties": { "columns": { "type": "array", "items": { "type": "string" } }, "units": { "type": "number", "minimum": 1 }, "group": { "enum": ["device", "part"] }, "userFields": { "type": "array", "items": { "type": "object", "required": ["id", "label"], "properties": { "id": { "type": "string" }, "label": { "$ref": "#/$defs/ltext" } } } } } },
         "style": {
           "type": "object",
@@ -92,6 +93,7 @@
         "templateId": { "type": "string" },
         "function": { "type": "string" },
         "location": { "type": "string" },
+        "layout": { "type": "object", "description": "Cabinet layout page: what it shows and its drawing extent in millimetres (the sheet gets the drawing at a standard scale)", "required": ["view", "w", "h"], "properties": { "view": { "enum": ["front", "door", "side"] }, "w": { "type": "number", "exclusiveMinimum": 0 }, "h": { "type": "number", "exclusiveMinimum": 0 }, "of": { "type": "string", "description": "Side view: the id of the front page it is generated from" } } },
         "elements": { "type": "array", "items": { "$ref": "#/$defs/element" } }
       }
     },
@@ -111,6 +113,7 @@
         { "properties": { "kind": { "const": "image" }, "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "h": { "type": "number" }, "assetId": { "type": "string" } }, "required": ["x", "y", "w", "h", "assetId"] },
         { "properties": { "kind": { "const": "warning" }, "x": { "type": "number" }, "y": { "type": "number" }, "size": { "type": "number" }, "sign": { "enum": ["general", "electric", "hot", "autostart"] } }, "required": ["x", "y", "size", "sign"] },
         { "properties": { "kind": { "const": "form" }, "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "items": { "type": "array" } }, "required": ["x", "y", "w", "items"] },
+        { "properties": { "kind": { "const": "cab" }, "item": { "enum": ["enclosure", "plate", "rail", "duct", "device", "zone", "cover", "dim"] }, "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "h": { "type": "number" }, "d": { "type": "number" }, "rot": { "enum": [0, 90, 180, 270] }, "designation": { "type": "string" }, "part": { "type": "string" }, "rail": { "type": "string" }, "locked": { "type": "boolean" }, "auto": { "type": "boolean" }, "custom": { "type": "boolean" }, "note": { "type": "string" }, "outline": { "type": "object", "properties": { "polys": { "type": "array", "items": { "type": "array", "items": { "type": "number" } } }, "assetId": { "type": "string" } } } }, "required": ["item", "x", "y", "w", "h"] },
         { "properties": { "kind": { "const": "report" }, "x": { "type": "number" }, "y": { "type": "number" }, "report": { "enum": ["terminals", "cables", "wires", "pins", "bom", "contents", "legend", "colours", "suffixes", "torque", "nameplates", "wireMarkers", "terminalMarkers", "plcIo"] }, "offset": { "type": "integer", "minimum": 0 }, "rows": { "type": "integer", "minimum": 0 } }, "required": ["x", "y", "report", "offset", "rows"] }
       ]
     }

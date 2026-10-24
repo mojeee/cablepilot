@@ -24,6 +24,14 @@ const api: CablePilotApi = {
       return () => void ipcRenderer.removeListener('warehouse:changed', fn);
     },
   },
+  layout: {
+    pick: call('layout:pick'), pickFolder: call('layout:pickFolder'), refresh: call('layout:refresh'), folder: call('layout:folder'), watch: call('layout:watch'),
+    onChanged: (cb) => {
+      const fn = () => cb();
+      ipcRenderer.on('layout:changed', fn);
+      return () => void ipcRenderer.removeListener('layout:changed', fn);
+    },
+  },
   ai: { status: call('ai:status'), ask: call('ai:ask') },
   company: { list: call('company:list'), save: call('company:save'), folder: call('company:folder') },
 };

@@ -48,6 +48,13 @@ export function snapGeometry(page: Page, lib: Library): SnapGeometry {
       case 'rect':
         for (const [a, b] of rectEdges(e.x, e.y, e.w, e.h)) { g.segs.push({ a, b, id: e.id }); g.endpoints.push(a); }
         break;
+      case 'cab':
+        if (e.item === 'dim') { poly([{ x: e.x, y: e.y }, { x: e.x + e.w, y: e.y + e.h }], e.id); g.endpoints.push({ x: e.x, y: e.y }, { x: e.x + e.w, y: e.y + e.h }); break; }
+        for (const [a, b] of rectEdges(e.x, e.y, e.w, e.h)) { g.segs.push({ a, b, id: e.id }); g.endpoints.push(a); }
+        // The centre of a device or rail (where a rail carries a device) and the centre line of a rail.
+        g.endpoints.push({ x: e.x + e.w / 2, y: e.y + e.h / 2 });
+        if (e.item === 'rail') poly(e.w >= e.h ? [{ x: e.x, y: e.y + e.h / 2 }, { x: e.x + e.w, y: e.y + e.h / 2 }] : [{ x: e.x + e.w / 2, y: e.y }, { x: e.x + e.w / 2, y: e.y + e.h }], e.id);
+        break;
     }
   }
   return g;

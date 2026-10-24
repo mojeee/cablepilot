@@ -126,7 +126,7 @@ describe('reports', () => {
   it('generates the wire list with from, to, cross-section, colour and type', () => {
     const { b } = field();
     const t = reportTable(b.project, lib, 'wires');
-    expect(t.headers).toEqual(['Number', 'From', 'To', 'Cross-section', 'Colour', 'Type', 'Cable']);
+    expect(t.headers).toEqual(['Number', 'From', 'To', 'Cross-section', 'Colour', 'Type', 'Cable', 'Length (m)']);
     const row = t.rows.find((r) => r.cells[1] === '-F1:2');
     expect(row?.cells.slice(1, 6)).toEqual(['-F1:2', '-X1:1', '1.5', 'BK', 'H07V-K']);
     expect(t.rows.length).toBeGreaterThanOrEqual(2);

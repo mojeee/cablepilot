@@ -12,6 +12,7 @@ import { Modal } from './Modal';
 const FIELD_LABEL: Record<StockField, () => string> = {
   code: () => t('Part code'), manufacturer: () => t('Manufacturer'), description: () => t('Description'), onHand: () => t('On hand'),
   reserved: () => t('Reserved'), location: () => t('Location'), warehouse: () => t('Warehouse'), unit: () => t('Unit'),
+  width: () => t('Width (mm, item master)'), height: () => t('Height (mm, item master)'), depth: () => t('Depth (mm, item master)'),
 };
 const MAX_ROWS = 300;
 

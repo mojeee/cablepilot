@@ -3,9 +3,16 @@
 //   "add contacts for -K1"          places the contacts of a coil (the count comes from the device's part, else 1 NO + 1 NC)
 //   "number the wires on this page"  the automatic wire numbering (shared/wires.ts), for the page or the project
 //   "size the feeder of -M1"         the sizing engine (shared/feeders.ts, shared/sizing.ts); never an invented rating
+//   "suggest a layout"               the cabinet layout suggestion (shared/cabinet/suggest.ts), with the rules it applied
+//   "move the PLC to the right and rearrange"  moves one device on the layout, keeps it there and arranges the rest around it
+//   "explain the layout"             lists the rules the layout was made with
 // Anything else gets an honest answer: a real request needs an API key (M7). Pure: no network, no clock.
 
 import { computeBom } from '../bom';
+import { cabinetOf, isCab } from '../cabinet/model';
+import { suggestLayout } from '../cabinet/suggest';
+import { cabinetDevices } from '../cabinet/size';
+import { shortDesignation } from '../cabinet/draw';
 import { parseContacts } from '../checks';
 import { apply, type Command } from '../commands';
 import { keyOf } from '../devices';
@@ -18,7 +25,7 @@ import type { AiAnswer, AiRequest, Claim } from './types';
 
 const PROVIDER = { id: 'built-in', fake: true } as const;
 
-export const FAKE_EXAMPLES = ['add contacts for -K1', 'number the wires on this page', 'size the feeder of -M1'];
+export const FAKE_EXAMPLES = ['add contacts for -K1', 'number the wires on this page', 'size the feeder of -M1', 'suggest a layout', 'move the PLC to the right and rearrange'];
 
 const DES = /(?:^|[\s(])(-?[A-Za-z]{1,3}\d+[A-Za-z0-9.]*)(?=[\s?.,)]|$)/g;
 /** The designations named in a prompt, normalised to "-K1". */
@@ -38,6 +45,13 @@ export function fakeAnswer(req: AiRequest, libIn: Library, newId: (prefix?: stri
   const lib = withProjectSymbols(libIn, project.symbols);
   const page = project.pages.find((x) => x.id === req.pageId);
   const des = designationsIn(req.prompt);
+
+  if (/(layout|quadro|cabinet|armadio|piastra)/.test(p)) {
+    if (/(explain|why|spiega|perch)/.test(p)) return explainLayout(project, libIn, newId);
+    if (/(move|shift|sposta)/.test(p)) return moveDevice(project, libIn, req.prompt, des, /(rearrange|reorder|riorganizza|riordina|sistema)/.test(p), newId);
+    return suggest(project, libIn, newId);
+  }
+  if (/(move|sposta)/.test(p) && /(right|left|destra|sinistra)/.test(p) && cabinetOf(project).devices.length > 0) return moveDevice(project, libIn, req.prompt, des, /(rearrange|reorder|riorganizza|riordina|sistema)/.test(p), newId);
 
   if (/contact|contatt/.test(p)) {
     let target = des[0];
@@ -121,5 +135,63 @@ function sizeFeeder(project: Project, lib: Library, des: string): AiAnswer {
   return say(t('I propose these ratings for the feeder of {des}. They are suggestions from the stated data; confirm each one.', { des }), {
     claims,
     proposal: { label: `AI: size ${des}`, commands: [{ type: 'batch', label: `AI: size ${des}`, commands: cmds }], summary },
+  });
+}
+
+function suggest(project: Project, lib: Library, newId: (prefix?: string) => string): AiAnswer {
+  const sug = suggestLayout(project, lib, { newId });
+  if (!sug.commands.length) return say(t('Every device is already placed and nothing is left to arrange.'), { claims: sug.rules });
+  const note = sug.issues.length ? ` ${t('Look at: {issues}', { issues: sug.issues.join(' ') })}` : '';
+  return say(t('I propose a cabinet layout: {summary}. Accept it to put it on the layout pages, then edit it with the normal tools.', { summary: sug.summary.join('; ') }) + note, {
+    claims: sug.rules,
+    proposal: { label: 'AI: suggested layout', commands: [{ type: 'batch', label: 'AI: suggested layout', commands: sug.commands }], summary: sug.summary.concat(sug.issues), page: sug.page },
+  });
+}
+
+function explainLayout(project: Project, lib: Library, newId: (prefix?: string) => string): AiAnswer {
+  const sug = suggestLayout(project, lib, { newId });
+  return say(t('This is how a layout is suggested. The rules apply to the devices that are not placed or locked by you; the rest stays where it is.'), { claims: sug.rules });
+}
+
+/** The device a prompt names: a designation, or a kind of device (PLC, HMI) that is on the layout. */
+function findDevice(project: Project, lib: Library, prompt: string, des: string[]): string | undefined {
+  const cab = cabinetOf(project);
+  const keys = cab.devices.map((p) => p.el.designation as string);
+  for (const d of des) { const k = keys.find((x) => x.endsWith(d)); if (k) return k; }
+  const p = prompt.toLowerCase();
+  const byCategory = (cat: string, id?: string) => cabinetDevices(project, lib).filter((d) => keys.includes(d.key) && d.part?.category === cat && (!id || d.part.id.includes(id)));
+  if (/\bplc\b/.test(p)) return (byCategory('plc', 'cpu')[0] ?? byCategory('plc')[0])?.key;
+  if (/\bhmi\b/.test(p)) return byCategory('hmi-network', 'hmi')[0]?.key;
+  return undefined;
+}
+
+function moveDevice(project: Project, lib: Library, prompt: string, des: string[], rearrange: boolean, newId: (prefix?: string) => string): AiAnswer {
+  const cab = cabinetOf(project);
+  const key = findDevice(project, lib, prompt, des);
+  const placed = cab.devices.find((p) => p.el.designation === key);
+  if (!key || !placed) return say(t('Which device on the layout should move? Name it, for example "move the PLC to the right" or "move -K1 to the left". Suggest a layout first if nothing is placed.'), { examples: FAKE_EXAMPLES });
+  const right = /(right|destra)/.test(prompt.toLowerCase());
+  const e = placed.el;
+  const rail = cab.rails.find((r) => r.el.id === e.rail)?.el;
+  const door = cab.doors.includes(placed.page);
+  const frame = rail ?? (door ? cab.doorFrame : (cab.plate ?? cab.enclosure));
+  if (!frame) return say(t('There is no plate to move the device on.'));
+  const x = right ? frame.x + frame.w - e.w - (rail ? 0 : 15) : frame.x + (rail ? 0 : 15);
+  const move: Command = { type: 'el/update', page: placed.page.id, id: e.id, patch: { x } };
+  const name = shortDesignation(key);
+  const claims: Claim[] = [{ text: t('{name} is on the layout at x = {x} mm.', { name, x: Math.round(e.x) }), source: { kind: 'project', ref: t('Layout page') } }];
+  if (!rearrange) {
+    const others = cab.devices.filter((p) => p.page === placed.page && p !== placed && p.el.x < x + e.w && p.el.x + p.el.w > x && Math.abs(p.el.y - e.y) < e.h);
+    return say(t('I propose to move {name} to the {side}.', { name, side: right ? t('right') : t('left') }) + (others.length ? ` ${t('It would overlap {n} device(s); add "and rearrange" to arrange the others around it.', { n: others.length })}` : ''), {
+      claims, proposal: { label: `AI: move ${name}`, commands: [move], summary: [t('{name} to the {side}', { name, side: right ? t('right') : t('left') })], page: placed.page.id },
+    });
+  }
+  // Moved by hand counts as placed by the user: the suggestion keeps it and arranges the rest around it.
+  const moved = apply(project, move, { lib });
+  const sug = suggestLayout(moved, lib, { newId });
+  const cmds = [move, ...sug.commands];
+  return say(t('I propose to move {name} to the {side} and keep it there, then arrange the other devices around it. It is a preview: accept it or reject it.', { name, side: right ? t('right') : t('left') }), {
+    claims: [...claims, ...sug.rules],
+    proposal: { label: `AI: move ${name} and rearrange`, commands: [{ type: 'batch', label: `AI: move ${name} and rearrange`, commands: cmds }], summary: [t('{name} to the {side}', { name, side: right ? t('right') : t('left') }), ...sug.summary], page: placed.page.id },
   });
 }

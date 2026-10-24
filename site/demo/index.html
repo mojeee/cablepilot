@@ -60,7 +60,8 @@
             <li><a href="#step-5"><span>05</span> PLC I/O overview and a tag list</a></li>
             <li><a href="#step-6"><span>06</span> PDF and XLSX</a></li>
             <li><a href="#step-7"><span>07</span> Sizing from the schematic, parts from the warehouse</a></li>
-            <li><a href="#step-8"><span>08</span> The CAD workspace and the assistant</a></li>
+            <li><a href="#step-8"><span>08</span> The cabinet layout</a></li>
+            <li><a href="#step-9"><span>09</span> The CAD workspace and the assistant</a></li>
           </ol>
         </div>
       </section>
@@ -137,12 +138,22 @@
       <section class="step alt" id="step-8" aria-labelledby="step-8-h">
         <div class="wrap step-grid">
           <div class="step-text">
-          <h2 id="step-8-h"><span class="label">Step 8</span> The CAD workspace and the assistant</h2>
+          <h2 id="step-8-h"><span class="label">Step 8</span> The cabinet layout</h2>
+          <p>Open the layout page of the conveyor sample (the front view of the mounting plate, drawn to scale), erase it, and click <strong>Suggest layout</strong> on the Layout tab. The suggestion is a preview: the enclosure and plate sized with the company's spare-space percentage, DIN rails, wire ducts, and every device of the BOM at its real size (power on top, control below, terminals by the cable entry, door devices on the door page). The assistant panel lists the rules it applied and where each comes from. <strong>Accept</strong> puts it on the layout pages, then edit it with the normal tools: drag a device and it snaps onto its rail. Open <strong>3D view</strong> and turn the cabinet with the mouse.</p>
+          <p>- Items you move or lock stay where they are when you suggest again; the rest is arranged around them. - The layout also gives a side view with the device depths, the duct fill rate, wire lengths estimated along the ducts   and a drilling DXF of the plate, and it exchanges with your ERP as JSON, CSV and DXF.</p>
+          </div>
+          <figure class="step-shot"><img src="/img/demo-8.png" alt="The conveyor sample after Accept on the suggested cabinet layout: the front view of the mounting plate with its rails, ducts and devices, one device just moved onto its rail." width="1920" height="1080" loading="lazy" /></figure>
+        </div>
+      </section>
+      <section class="step" id="step-9" aria-labelledby="step-9-h">
+        <div class="wrap step-grid">
+          <div class="step-text">
+          <h2 id="step-9-h"><span class="label">Step 9</span> The CAD workspace and the assistant</h2>
           <p>On a page of the conveyor sample, click the command line and type <code>L</code>, press Enter, then type <code>30,40</code> and <code>@60,0</code> (Enter after each) and Enter again: the line is drawn from typed coordinates. Type <code>L</code> again and bring the cursor near the end of that line: it locks on and the status bar names the snap (object snap, F3). Then place a coil from the symbol list: the app offers &quot;Add the contacts of -K1?&quot;. Ask: the built-in assistant answers in the chat panel with a highlighted preview on the canvas and a source on every claim (this project, or &quot;suggestion&quot; where it proposes a count). <strong>Accept</strong> places the contacts as one undo step.</p>
           <p>- The ribbon, the command line (aliases such as <code>L</code>, <code>PL</code>, <code>REC</code>, <code>M</code>, <code>CO</code>, <code>TR</code>, <code>Z</code>), the status-bar aids   (grid F7, ortho F8, snap F9, object snap F3, polar F10), layers and the dockable panels are all in the app. - Until M7 the chat uses a built-in stand-in provider that understands a few requests and says that free-form   requests need an API key; the app is fully usable without it.</p>
           <p>The video ends on the cover sheet of the conveyor sample.</p>
           </div>
-          <figure class="step-shot"><img src="/img/demo-8.png" alt="The conveyor sample after Accept: the contacts of the new coil placed, the command line below and the chat panel showing the accepted proposal with its sources." width="1920" height="1080" loading="lazy" /></figure>
+          <figure class="step-shot"><img src="/img/demo-9.png" alt="The conveyor sample after Accept: the contacts of the new coil placed, the command line below and the chat panel showing the accepted proposal with its sources." width="1920" height="1080" loading="lazy" /></figure>
         </div>
       </section>
       <section class="band dark try" aria-labelledby="try-h">

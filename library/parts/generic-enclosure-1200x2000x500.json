@@ -1,0 +1,28 @@
+{
+  "id": "generic-enclosure-1200x2000x500",
+  "kind": "part",
+  "title": {
+    "en": "Floor-standing enclosure 1200 x 2000 x 500 mm (W x H x D), sheet steel",
+    "it": "Armadio a pavimento 1200 x 2000 x 500 mm (L x A x P), lamiera di acciaio"
+  },
+  "category": "enclosures",
+  "code": "GEN-ENCLOSURE-1200X2000X500",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Floor-standing enclosure 1200 x 2000 x 500 mm (W x H x D), sheet steel",
+    "it": "Armadio a pavimento 1200 x 2000 x 500 mm (L x A x P), lamiera di acciaio"
+  },
+  "data": {
+    "Width": "1200 mm",
+    "Height": "2000 mm",
+    "Depth": "500 mm"
+  },
+  "dimensions": {
+    "w": 1200,
+    "h": 2000,
+    "d": 500
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

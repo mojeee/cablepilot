@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+### M6 part 3: Cabinet layout
+
+- Layout pages in real millimetres drawn with the CAD workspace tools: enclosure and plate from the library, DIN rails
+  and wire ducts, hatched no-mount zones, covers, dimension lines and notes; devices placed from the BOM at their real
+  size, snapped to rails, aligned and distributed; a list of devices not yet placed; a door page, a generated side
+  view with device depths; outlines from the library or an imported DXF, SVG or image. New commands ENCLOSURE, PLATE,
+  RAIL, DUCT, ZONE, COVER, DIM, PLACE, ALIGN, DISTRIBUTE, LAYOUT, SUGGEST, VIEW3D, DRILL and a full Layout ribbon tab.
+- Suggested layout as a preview with the rules applied and their sources (enclosure and plate with the spare-space
+  percentage, rows on rails, ducts under their fill limit, door devices, terminals by the cable entry); accept, edit,
+  suggest again: moved or locked items stay put. The built-in assistant answers "suggest a layout" and "move the PLC to
+  the right and rearrange".
+- Layout templates in the company library; layout exchange as documented, versioned JSON and CSV
+  (`docs/layout-format.md`) and DXF, previewed and undoable, from a file or a watched folder; device and enclosure
+  sizes from an ERP item master through the warehouse's column mapping.
+- 3D view with three.js and @react-three/fiber (lazy loaded), duct fill rate, wire lengths estimated along the ducts
+  (the wire list, the BOM's cable metres and the warehouse use them; a typed length wins), mounting-plate DXF for
+  drilling, layout pages in the PDF set at a standard scale.
+- Library: body sizes and mounting for the cabinet parts, more enclosures, plates and ducts. File format 7 (migration
+  adds the layout settings); every sample ships with a suggested layout.
+- Website: the Cabinet layout block is Available with a 2D and a 3D screenshot, the layout page joins the drawing-set
+  strip, a layout step in the demo.
+
 ### M6 part 2: CAD workspace with the AI inside
 
 - A CAD-style workspace: ribbon (Home, Insert, Wires, Reports, PLC, Layout, View; grouped tools with our own icons,

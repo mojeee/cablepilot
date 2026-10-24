@@ -9,7 +9,8 @@ import type { Lang } from './i18n';
 import type { Library } from './library/types';
 import { findPart, isTerminalPart, withProjectSymbols } from './library/types';
 import type { Page, Project } from './model/types';
-import { numOf } from './sizing';
+import { cableLength } from './cabinet/route';
+import { cabinetOf } from './cabinet/model';
 
 export const BOM_BASE_COLUMNS = ['designation', 'position', 'qty', 'code', 'description', 'manufacturer'] as const;
 /** Stock columns, shown when a stock list is loaded (shared/stock.ts fills them). */
@@ -121,8 +122,17 @@ export function computeBom(project: Project, lib: Library): Bom {
   for (const c of project.cables) {
     if (!c.part) continue;
     const part = findPart(lib, project.parts, c.part);
-    const len = numOf(c.length);
+    const len = cableLength(project, lib, c)?.m ?? NaN;
     rows.push({ level: 0, designation: c.id, position: '', qty: units, qtyPerUnit: 1, part: c.part, fields: {}, ...(Number.isFinite(len) && len > 0 ? { metres: len * units } : {}), code: part?.code ?? c.part, description: part ? pick(part.description, lang) : '', manufacturer: part?.manufacturer ?? '' });
+  }
+  // Enclosure, plate, rails and ducts of the cabinet layout (M6 part 3): one row each, from the layout itself.
+  const cab = cabinetOf(project);
+  for (const p of [cab.enclosure && { el: cab.enclosure }, cab.plate && { el: cab.plate }, ...cab.rails, ...cab.ducts]) {
+    if (!p || !p.el.part) continue;
+    const part = findPart(lib, project.parts, p.el.part);
+    const nominal = part?.dimensions ? Math.max(part.dimensions.w, part.dimensions.h) : 0;
+    const per = (p.el.item === 'rail' || p.el.item === 'duct') && nominal > 0 ? Math.ceil((Math.max(p.el.w, p.el.h) - 0.5) / nominal) : 1;
+    rows.push({ level: 0, designation: p.el.designation ?? '', position: '', qty: per * units, qtyPerUnit: per, part: p.el.part, fields: {}, code: part?.code ?? p.el.part, description: part ? pick(part.description, lang) : '', manufacturer: part?.manufacturer ?? '' });
   }
   for (const pp of project.projectParts) {
     const part = findPart(lib, project.parts, pp.part);

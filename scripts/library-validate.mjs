@@ -79,6 +79,7 @@ export const KINDS = {
       else for (const k of need) if (!isStr(d.data[k]) || !/\d/.test(d.data[k]) && k !== 'Tripping characteristic') err(`a ${d.data.Type} needs data "${k}" for sizing`);
     }
     if (d.dimensions !== undefined && !(isObj(d.dimensions) && ['w', 'h', 'd'].every((k) => isNum(d.dimensions[k]) && d.dimensions[k] > 0))) err('dimensions needs positive w, h and d in millimetres');
+    if (d.mount !== undefined && !['rail', 'plate', 'door', 'field', 'none'].includes(d.mount)) err('mount must be rail, plate, door, field or none');
   },
   macro: (d, err) => {
     if (!isObj(d.title) || !isStr(d.title.en) || !isStr(d.title.it)) err('title needs en and it');
@@ -93,6 +94,13 @@ export const KINDS = {
         else ids.add(e.id);
       });
     }
+  },
+  // A cabinet layout template (M6 part 3): enclosure, plate, rails, ducts and device slots, in millimetres.
+  'layout-template': (d, err) => {
+    if (!isObj(d.title) || !isStr(d.title.en) || !isStr(d.title.it)) err('title needs en and it');
+    if (!isObj(d.enclosure) || !['w', 'h', 'd'].every((k) => isNum(d.enclosure[k]) && d.enclosure[k] > 0)) err('enclosure needs positive w, h and d');
+    if (!Array.isArray(d.items) || !d.items.every((i) => isObj(i) && ['rail', 'duct', 'zone', 'cover'].includes(i.item) && ['x', 'y', 'w', 'h'].every((k) => isNum(i[k])))) err('items must be rails, ducts, zones or covers with x, y, w and h');
+    if (!Array.isArray(d.slots) || !d.slots.every((s) => isObj(s) && isStr(s.rail) && isStr(s.part) && isNum(s.dx))) err('slots need rail, part and dx');
   },
   template: (d, err) => {
     if (!isObj(d.template) || !isStr(d.template.name) || !isObj(d.template.frame) || !isObj(d.template.titleBlock)) err('template needs name, frame and titleBlock');

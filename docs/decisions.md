@@ -362,6 +362,52 @@ IEC 60617 symbols by default with NFPA 79 / ANSI as an option from M1; three sam
   adds or changes, and applies it as one batch on Accept. A proposal made for an older state of the project is dropped.
   The built-in provider is deterministic and offline and states that free-form requests need an API key (M7).
 
+## M6 part 3: Cabinet layout
+
+- **A layout page is drawn in real millimetres.** `Page.layout = { view: 'front' | 'door' | 'side', w, h }` marks it
+  and gives its drawing extent; its elements are `cab` elements (enclosure, plate, rail, duct, device, zone, cover,
+  dim) in page millimetres. Every CAD tool therefore works unchanged (snaps, typed coordinates, grips, MOVE, ROTATE,
+  layers) and typed values are real sizes. The sheet gets the drawing at a standard scale (ISO 5455 series) with the
+  text sizes and line weights scaled, so the PDF prints in the company frame at 1:5, 1:10... A page without `layout`
+  (a DXF imported as plain graphics, or from an older project) is drawn as before. File format 7, migration 6 to 7 adds
+  `settings.layout`.
+- **Devices are links, not copies.** A device on the layout carries its full designation; its parts, name and the
+  rest are the schematic's. Its size is stored (so it can be edited, or come from an imported outline) and refreshed
+  from the part's dimensions by "Size from the part" and by the ERP item master import. Devices that are not in the
+  cabinet (motors, sensors, battery cells, cables) are known by the part's `mount` (`rail`, `plate`, `door`, `field`,
+  `none`), with a default per category; only cabinet devices appear in "not yet placed".
+- **Layout parts in the BOM come from the layout.** Enclosure, plate, rails and ducts with a part are BOM rows computed
+  from the layout (rails and ducts by length over the part's nominal length), not project parts, so they follow edits.
+- **Suggestion: rows on rails, pinned items.** The engine tries library enclosures from the smallest up (the plate is
+  at least 100 mm smaller each way; the area for devices, clearances and ducts plus the spare percentage must fit),
+  packs devices into rows (power, plate-mounted, control, terminals; schematic order inside a group), puts a rail
+  under every rail row, a duct above and below every row and a vertical duct, and upsizes the ducts one library
+  size at a time until the fill is under the limit. Door devices go on the door page. An item the user placed, moved
+  or locked (its `auto` flag is gone, or `locked`) is pinned. When anything is pinned the structure (enclosure,
+  plate, rails, ducts) stays as it is and only devices are placed again: first on free room of the existing rails, by
+  the group already there, then in new rows around the pinned items. Moves and edits clear `auto`, so "moved items stay
+  put" needs no extra bookkeeping.
+- **Previews reuse the proposal mechanism.** A suggestion, a layout import and an item-master import are `Proposal`s
+  shown through the chat panel's preview (Accept / Reject, one undo step), with the rules as claims and their sources.
+  The fake provider answers "suggest a layout", "move the PLC to the right and rearrange" and "explain the layout".
+- **Wire lengths and duct fill share one router.** Ducts are a graph of centre lines; a device attaches to the nearest
+  duct point; a wire is routed device to device through the graph (Dijkstra) plus a slack per end; without ducts it is
+  the Manhattan distance. The wire list shows `~1.2` for an estimate; a typed length (`WireEl.length`,
+  `CableRec.length`) always wins. Cable metres in the BOM and the warehouse use the typed length, else the routed
+  length between the cable's two ends when both are devices on the layout. External cables are never estimated.
+- **Exchange.** JSON and CSV in the documented format (`docs/layout-format.md`), coordinates from the plate corner,
+  devices matched to the schematic. Item-master sizes reuse the warehouse column mapping (width, height, depth added
+  to its fields) and are stored as `part/dims` on the project's copy of the part. Files and a watched folder are read in
+  the main process (`app/main/layoutFiles.ts`); no live ERP connection.
+- **3D with three.js and @react-three/fiber (both MIT).** Boxes from the dimensions, an orbit control made with
+  three's own OrbitControls (no drei). The module is a lazy import: it loads when the view opens, so startup is
+  unchanged. Packages: `three`, `@react-three/fiber` (and its small dependencies) and `@types/three`, all development
+  dependencies bundled by Vite like the rest of the renderer.
+- **Layout checks are not ERC findings.** Overlaps, devices outside the plate, in a zone, too deep, ducts over their
+  limit and unplaced devices show in the layout window, so the samples' rule check stays about the schematic.
+- **Samples.** Every sample ships with the suggested layout (front and side views; the conveyor and the charger also
+  have a door page); the generator replaces the placeholder layout page after the parts are final.
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite
@@ -381,6 +427,9 @@ bundles the renderer; the main process uses only Electron and Node).
 | @types/node, @types/react, @types/react-dom | MIT | Type definitions. |
 | pdf-lib (runtime) | MIT | PDF export of pages at true scale (M1). |
 | ajv | MIT | Dev only: checks project files against the JSON Schema in tests (M1). |
+| three | MIT | 3D view of the cabinet (M6 part 3): devices as boxes from their dimensions, loaded only when the view opens. |
+| @react-three/fiber | MIT | React renderer for three.js (brief: 3D through @react-three/fiber); with its small dependencies (its-fine, react-use-measure, scheduler, suspend-react, zustand). |
+| @types/three | MIT | Type definitions of three. |
 | @pdf-lib/fontkit | MIT | Embeds the TrueType font in the PDF export so text shows in every viewer (M3). |
 | Roboto Regular and Bold (font files, not a package) | SIL OFL 1.1 | Bundled in `shared/fonts/` with its licence; embedded as a subset in PDFs. Taken from the `@expo-google-fonts/roboto` package (MIT wrapper); only the two TTF files and the font licence are copied. |
 

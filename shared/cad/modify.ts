@@ -61,6 +61,13 @@ export function offsetCircle(c: { x: number; y: number; r: number }, d: number, 
   return r > 0 ? r : null;
 }
 
+/** Where a dimension line's offset grip sits: the middle of the dimension line, `d` away from the measured points (to the left of the direction of measurement). */
+export function dimLinePoint(el: { x: number; y: number; w: number; h: number; d?: number }): Pt {
+  const len = Math.hypot(el.w, el.h) || 1;
+  const off = el.d ?? 0;
+  return { x: el.x + el.w / 2 - (el.h / len) * off, y: el.y + el.h / 2 + (el.w / len) * off };
+}
+
 export interface Grip {
   /** Index within the element's grips. */
   i: number;
@@ -76,6 +83,15 @@ export function gripsOf(el: El): Grip[] {
     case 'rect': return [{ x: el.x, y: el.y }, { x: el.x + el.w, y: el.y }, { x: el.x + el.w, y: el.y + el.h }, { x: el.x, y: el.y + el.h }].map((pt, i) => ({ i, pt, role: 'corner' as const }));
     case 'circle': return [{ i: 0, pt: { x: el.x, y: el.y }, role: 'move' }, { i: 1, pt: { x: el.x + el.r, y: el.y }, role: 'radius' }];
     case 'junction': return [];
+    case 'cab': {
+      const mid = { x: el.x + el.w / 2, y: el.y + el.h / 2 };
+      if (el.item === 'dim') return [{ i: 0, pt: { x: el.x, y: el.y }, role: 'vertex' }, { i: 1, pt: { x: el.x + el.w, y: el.y + el.h }, role: 'vertex' }, { i: 2, pt: dimLinePoint(el), role: 'vertex' }];
+      if (el.item === 'rail') return el.w >= el.h
+        ? [{ i: 0, pt: { x: el.x, y: mid.y }, role: 'vertex' }, { i: 1, pt: { x: el.x + el.w, y: mid.y }, role: 'vertex' }, { i: 4, pt: mid, role: 'move' }]
+        : [{ i: 0, pt: { x: mid.x, y: el.y }, role: 'vertex' }, { i: 1, pt: { x: mid.x, y: el.y + el.h }, role: 'vertex' }, { i: 4, pt: mid, role: 'move' }];
+      if (el.item === 'device') return [{ i: 4, pt: mid, role: 'move' }];
+      return [...[{ x: el.x, y: el.y }, { x: el.x + el.w, y: el.y }, { x: el.x + el.w, y: el.y + el.h }, { x: el.x, y: el.y + el.h }].map((pt, i) => ({ i, pt, role: 'corner' as const })), { i: 4, pt: mid, role: 'move' as const }];
+    }
     case 'symbol': case 'box': case 'text': case 'table': case 'image': case 'warning': case 'form': case 'report': return [{ i: 0, pt: { x: el.x, y: el.y }, role: 'move' }];
   }
 }
@@ -89,6 +105,24 @@ export function gripCommand(page: string, el: El, i: number, to: Pt): Command | 
     case 'line': return upd({ points: el.points.map((p, k) => (k === i ? to : p)) });
     case 'wire': return upd({ points: moveWireEnd(el.points, i === 0 ? 'start' : 'end', to) });
     case 'rect': {
+      const opp = gripsOf(el)[(i + 2) % 4].pt;
+      const w = Math.abs(to.x - opp.x), h = Math.abs(to.y - opp.y);
+      return w > 0 && h > 0 ? upd({ x: Math.min(to.x, opp.x), y: Math.min(to.y, opp.y), w, h }) : null;
+    }
+    case 'cab': {
+      if (g.role === 'move') return { type: 'el/move', page, ids: [el.id], dx: to.x - g.pt.x, dy: to.y - g.pt.y };
+      if (el.item === 'dim') {
+        if (i === 0) return upd({ x: to.x, y: to.y, w: el.x + el.w - to.x, h: el.y + el.h - to.y });
+        if (i === 1) return upd({ w: to.x - el.x, h: to.y - el.y });
+        // The offset grip: the distance of the dimension line from the measured points, signed by side.
+        const len = Math.hypot(el.w, el.h) || 1;
+        return upd({ d: Math.round(((to.x - el.x) * -el.h + (to.y - el.y) * el.w) / len) });
+      }
+      if (el.item === 'rail') {
+        if (el.w >= el.h) { const x0 = i === 0 ? to.x : el.x, x1 = i === 0 ? el.x + el.w : to.x; return Math.abs(x1 - x0) > 0 ? upd({ x: Math.min(x0, x1), w: Math.abs(x1 - x0) }) : null; }
+        const y0 = i === 0 ? to.y : el.y, y1 = i === 0 ? el.y + el.h : to.y;
+        return Math.abs(y1 - y0) > 0 ? upd({ y: Math.min(y0, y1), h: Math.abs(y1 - y0) }) : null;
+      }
       const opp = gripsOf(el)[(i + 2) % 4].pt;
       const w = Math.abs(to.x - opp.x), h = Math.abs(to.y - opp.y);
       return w > 0 && h > 0 ? upd({ x: Math.min(to.x, opp.x), y: Math.min(to.y, opp.y), w, h }) : null;

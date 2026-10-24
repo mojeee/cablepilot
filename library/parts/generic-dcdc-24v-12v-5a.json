@@ -16,6 +16,12 @@
     "Input": "24 V DC",
     "Output": "12 V DC, 5 A"
   },
+  "dimensions": {
+    "w": 32,
+    "h": 124,
+    "d": 102
+  },
+  "mount": "rail",
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",
   "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"

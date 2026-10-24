@@ -1,6 +1,6 @@
 {
   "format": "cablepilot-project",
-  "version": 6,
+  "version": 7,
   "id": "sample-conveyor",
   "name": "Conveyor with direct-on-line starter",
   "settings": {
@@ -27,6 +27,7 @@
     "defaultTemplateId": "default",
     "drawingLanguage": "en",
     "installationMethod": "B1",
+    "layout": {"ductFillMax":50,"gap":5,"rowClearance":20,"slack":100,"sparePct":20},
     "numbering": {"pattern":"{n:3}{suffix}","scheme":"potential","start":1,"step":1},
     "plc": {"start":{"ai":64,"ao":64,"di":0,"do":0},"style":"siemens"},
     "style": {
@@ -377,7 +378,7 @@
         },
         {"id":"e10","kind":"warning","sign":"electric","size":12,"x":290,"y":70},
         {
-          "id": "e90",
+          "id": "e89",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -644,7 +645,7 @@
           "y": 80
         },
         {
-          "id": "e91",
+          "id": "e90",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -655,7 +656,7 @@
           "y": 25
         },
         {
-          "id": "e92",
+          "id": "e91",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -666,7 +667,7 @@
           "y": 25
         },
         {
-          "id": "e93",
+          "id": "e92",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -677,7 +678,7 @@
           "y": 25
         },
         {
-          "id": "e94",
+          "id": "e93",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -873,7 +874,7 @@
           "y": 70
         },
         {
-          "id": "e95",
+          "id": "e94",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -884,7 +885,7 @@
           "y": 25
         },
         {
-          "id": "e96",
+          "id": "e95",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -895,7 +896,7 @@
           "y": 25
         },
         {
-          "id": "e97",
+          "id": "e96",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1128,7 +1129,7 @@
           "y": 28
         },
         {
-          "id": "e98",
+          "id": "e97",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1161,23 +1162,379 @@
       "title": {"en":"Cable list"}
     },
     {
-      "id": "p8",
+      "id": "lay-front",
       "type": "layout",
       "elements": [
         {
-          "id": "e89",
-          "kind": "text",
-          "align": "left",
-          "rot": 0,
-          "size": 3,
-          "text": "This page is filled by the cabinet layout feature (milestone M6).",
-          "x": 40,
-          "y": 40
+          "id": "lay3",
+          "kind": "cab",
+          "auto": true,
+          "d": 300,
+          "designation": "A1",
+          "h": 800,
+          "item": "enclosure",
+          "part": "generic-enclosure-600x800x300",
+          "w": 600,
+          "x": 120,
+          "y": 100
+        },
+        {
+          "id": "lay4",
+          "kind": "cab",
+          "auto": true,
+          "d": 3,
+          "designation": "MP1",
+          "h": 700,
+          "item": "plate",
+          "part": "generic-mounting-plate-500x700",
+          "w": 500,
+          "x": 170,
+          "y": 150
+        },
+        {
+          "id": "lay5",
+          "kind": "cab",
+          "auto": true,
+          "designation": "R1",
+          "h": 35,
+          "item": "rail",
+          "part": "generic-din-rail-35mm-1m",
+          "w": 405,
+          "x": 250,
+          "y": 290
+        },
+        {
+          "id": "lay11",
+          "kind": "cab",
+          "auto": true,
+          "designation": "R2",
+          "h": 35,
+          "item": "rail",
+          "part": "generic-din-rail-35mm-1m",
+          "w": 405,
+          "x": 250,
+          "y": 502.5
+        },
+        {
+          "id": "lay15",
+          "kind": "cab",
+          "auto": true,
+          "designation": "R3",
+          "h": 35,
+          "item": "rail",
+          "part": "generic-din-rail-35mm-1m",
+          "w": 405,
+          "x": 250,
+          "y": 675
+        },
+        {
+          "id": "lay18",
+          "kind": "cab",
+          "auto": true,
+          "d": 60,
+          "designation": "D1",
+          "h": 60,
+          "item": "duct",
+          "part": "generic-cable-duct-60x60-2m",
+          "w": 410,
+          "x": 245,
+          "y": 165
+        },
+        {
+          "id": "lay19",
+          "kind": "cab",
+          "auto": true,
+          "d": 60,
+          "designation": "D2",
+          "h": 60,
+          "item": "duct",
+          "part": "generic-cable-duct-60x60-2m",
+          "w": 410,
+          "x": 245,
+          "y": 390
+        },
+        {
+          "id": "lay20",
+          "kind": "cab",
+          "auto": true,
+          "d": 60,
+          "designation": "D3",
+          "h": 60,
+          "item": "duct",
+          "part": "generic-cable-duct-60x60-2m",
+          "w": 410,
+          "x": 245,
+          "y": 590
+        },
+        {
+          "id": "lay21",
+          "kind": "cab",
+          "auto": true,
+          "d": 60,
+          "designation": "D4",
+          "h": 60,
+          "item": "duct",
+          "part": "generic-cable-duct-60x60-2m",
+          "w": 410,
+          "x": 245,
+          "y": 735
+        },
+        {
+          "id": "lay22",
+          "kind": "cab",
+          "auto": true,
+          "d": 60,
+          "designation": "D5",
+          "h": 630,
+          "item": "duct",
+          "part": "generic-cable-duct-60x60-2m",
+          "w": 60,
+          "x": 185,
+          "y": 165
+        },
+        {
+          "id": "lay23",
+          "kind": "cab",
+          "auto": true,
+          "h": 50,
+          "item": "zone",
+          "note": "Cable entry",
+          "w": 470,
+          "x": 185,
+          "y": 795
+        },
+        {"id":"lay24","kind":"cab","auto":true,"d":45,"h":0,"item":"dim","w":600,"x":120,"y":900},
+        {"id":"lay25","kind":"cab","auto":true,"d":45,"h":800,"item":"dim","w":0,"x":120,"y":100},
+        {"id":"lay26","kind":"cab","auto":true,"d":20,"h":0,"item":"dim","w":500,"x":170,"y":850},
+        {"id":"lay27","kind":"cab","auto":true,"d":-20,"h":700,"item":"dim","w":0,"x":670,"y":150},
+        {"id":"lay28","kind":"cab","auto":true,"d":28,"h":157.5,"item":"dim","w":0,"x":720,"y":150},
+        {
+          "id": "lay29",
+          "kind": "cab",
+          "auto": true,
+          "d": 28,
+          "h": 212.5,
+          "item": "dim",
+          "w": 0,
+          "x": 720,
+          "y": 307.5
+        },
+        {"id":"lay30","kind":"cab","auto":true,"d":28,"h":172.5,"item":"dim","w":0,"x":720,"y":520},
+        {
+          "id": "lay6",
+          "kind": "cab",
+          "auto": true,
+          "d": 70,
+          "designation": "+DS-QF1",
+          "h": 90,
+          "item": "device",
+          "rail": "lay5",
+          "w": 52.5,
+          "x": 250,
+          "y": 262.5
+        },
+        {
+          "id": "lay7",
+          "kind": "cab",
+          "auto": true,
+          "d": 85,
+          "designation": "+DS-KM1",
+          "h": 80,
+          "item": "device",
+          "rail": "lay5",
+          "w": 45,
+          "x": 307.5,
+          "y": 267.5
+        },
+        {
+          "id": "lay8",
+          "kind": "cab",
+          "auto": true,
+          "d": 70,
+          "designation": "+DS-QS1",
+          "h": 90,
+          "item": "device",
+          "rail": "lay5",
+          "w": 70,
+          "x": 357.5,
+          "y": 262.5
+        },
+        {
+          "id": "lay9",
+          "kind": "cab",
+          "auto": true,
+          "d": 80,
+          "designation": "+DS-FR1",
+          "h": 70,
+          "item": "device",
+          "rail": "lay5",
+          "w": 45,
+          "x": 432.5,
+          "y": 272.5
+        },
+        {
+          "id": "lay10",
+          "kind": "cab",
+          "auto": true,
+          "d": 120,
+          "designation": "+DS-G1",
+          "h": 125,
+          "item": "device",
+          "rail": "lay5",
+          "w": 60,
+          "x": 482.5,
+          "y": 245
+        },
+        {
+          "id": "lay12",
+          "kind": "cab",
+          "auto": true,
+          "d": 75,
+          "designation": "+DS-A2",
+          "h": 100,
+          "item": "device",
+          "rail": "lay11",
+          "w": 30,
+          "x": 250,
+          "y": 470
+        },
+        {
+          "id": "lay13",
+          "kind": "cab",
+          "auto": true,
+          "d": 75,
+          "designation": "+DS-A3",
+          "h": 100,
+          "item": "device",
+          "rail": "lay11",
+          "w": 30,
+          "x": 285,
+          "y": 470
+        },
+        {
+          "id": "lay14",
+          "kind": "cab",
+          "auto": true,
+          "d": 75,
+          "designation": "+DS-A1",
+          "h": 100,
+          "item": "device",
+          "rail": "lay11",
+          "w": 90,
+          "x": 320,
+          "y": 470
+        },
+        {
+          "id": "lay16",
+          "kind": "cab",
+          "auto": true,
+          "d": 40,
+          "designation": "+DS-X1",
+          "h": 45,
+          "item": "device",
+          "rail": "lay15",
+          "w": 34.6,
+          "x": 250,
+          "y": 670
+        },
+        {
+          "id": "lay17",
+          "kind": "cab",
+          "auto": true,
+          "d": 40,
+          "designation": "+DS-X2",
+          "h": 45,
+          "item": "device",
+          "rail": "lay15",
+          "w": 47,
+          "x": 289.6,
+          "y": 670
         }
       ],
+      "layout": {"h":1020,"view":"front","w":840},
       "size": "A3",
       "templateId": "",
-      "title": {"en":"Cabinet layout","it":"Layout quadro"}
+      "title": {"en":"Cabinet layout, mounting plate","it":"Layout quadro, piastra di montaggio"}
+    },
+    {
+      "id": "lay-door",
+      "type": "layout",
+      "elements": [
+        {
+          "id": "lay31",
+          "kind": "cab",
+          "auto": true,
+          "d": 300,
+          "designation": "A1",
+          "h": 800,
+          "item": "enclosure",
+          "part": "generic-enclosure-600x800x300",
+          "w": 600,
+          "x": 120,
+          "y": 100
+        },
+        {
+          "id": "lay32",
+          "kind": "cab",
+          "auto": true,
+          "d": 60,
+          "designation": "+DS-S0",
+          "h": 40,
+          "item": "device",
+          "w": 40,
+          "x": 180,
+          "y": 160
+        },
+        {
+          "id": "lay33",
+          "kind": "cab",
+          "auto": true,
+          "d": 50,
+          "designation": "+DS-S2",
+          "h": 30,
+          "item": "device",
+          "w": 30,
+          "x": 245,
+          "y": 160
+        },
+        {
+          "id": "lay34",
+          "kind": "cab",
+          "auto": true,
+          "d": 50,
+          "designation": "+DS-S1",
+          "h": 30,
+          "item": "device",
+          "w": 30,
+          "x": 300,
+          "y": 160
+        },
+        {
+          "id": "lay35",
+          "kind": "cab",
+          "auto": true,
+          "d": 50,
+          "designation": "+DS-H1",
+          "h": 30,
+          "item": "device",
+          "w": 30,
+          "x": 355,
+          "y": 160
+        }
+      ],
+      "layout": {"h":1020,"view":"door","w":840},
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Cabinet layout, door","it":"Layout quadro, porta"}
+    },
+    {
+      "id": "lay-side",
+      "type": "layout",
+      "elements": [],
+      "layout": {"h":1120,"of":"lay-front","view":"side","w":620},
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Cabinet layout, side view","it":"Layout quadro, vista laterale"}
     },
     {
       "id": "pg-rep5",
@@ -1193,60 +1550,68 @@
       "elements": [{"id":"r-rep8","kind":"report","offset":0,"report":"bom","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
-      "title": {"en":"Bill of materials"}
+      "title": {"en":"Bill of materials 1/2"}
     },
     {
       "id": "pg-rep9",
+      "type": "bom",
+      "elements": [{"id":"r-rep10","kind":"report","offset":34,"report":"bom","rows":34,"x":28,"y":18}],
+      "size": "A3",
+      "templateId": "",
+      "title": {"en":"Bill of materials 2/2"}
+    },
+    {
+      "id": "pg-rep11",
       "type": "report",
-      "elements": [{"id":"r-rep10","kind":"report","offset":0,"report":"legend","rows":14,"x":28,"y":18}],
+      "elements": [{"id":"r-rep12","kind":"report","offset":0,"report":"legend","rows":14,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"en":"Symbol legend 1/2"}
     },
     {
-      "id": "pg-rep11",
+      "id": "pg-rep13",
       "type": "report",
-      "elements": [{"id":"r-rep12","kind":"report","offset":14,"report":"legend","rows":14,"x":28,"y":18}],
+      "elements": [{"id":"r-rep14","kind":"report","offset":14,"report":"legend","rows":14,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"en":"Symbol legend 2/2"}
     },
     {
-      "id": "pg-rep13",
+      "id": "pg-rep15",
       "type": "report",
-      "elements": [{"id":"r-rep14","kind":"report","offset":0,"report":"colours","rows":34,"x":28,"y":18}],
+      "elements": [{"id":"r-rep16","kind":"report","offset":0,"report":"colours","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"en":"Conductor colours"}
     },
     {
-      "id": "pg-rep15",
+      "id": "pg-rep17",
       "type": "report",
-      "elements": [{"id":"r-rep16","kind":"report","offset":0,"report":"suffixes","rows":34,"x":28,"y":18}],
+      "elements": [{"id":"r-rep18","kind":"report","offset":0,"report":"suffixes","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"en":"Wire number suffixes"}
     },
     {
-      "id": "pg-rep17",
+      "id": "pg-rep19",
       "type": "report",
-      "elements": [{"id":"r-rep18","kind":"report","offset":0,"report":"torque","rows":34,"x":28,"y":18}],
+      "elements": [{"id":"r-rep20","kind":"report","offset":0,"report":"torque","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"en":"Terminal tightening torques"}
     },
     {
-      "id": "pg-rep19",
+      "id": "pg-rep21",
       "type": "report",
-      "elements": [{"id":"r-rep20","kind":"report","offset":0,"report":"nameplates","rows":40,"x":28,"y":18}],
+      "elements": [{"id":"r-rep22","kind":"report","offset":0,"report":"nameplates","rows":40,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"en":"Nameplates"}
     },
     {
-      "id": "pg-rep21",
+      "id": "pg-rep23",
       "type": "report",
-      "elements": [{"id":"r-rep22","kind":"report","offset":0,"report":"plcIo","rows":34,"x":28,"y":18}],
+      "elements": [{"id":"r-rep24","kind":"report","offset":0,"report":"plcIo","rows":34,"x":28,"y":18}],
       "size": "A3",
       "templateId": "",
       "title": {"en":"PLC I/O list"}
@@ -1316,6 +1681,7 @@
       "code": "GEN-SWITCH-DISCONNECTOR-3P-63A",
       "data": {"Poles":"3","Rated current":"63 A"},
       "description": {"en":"Switch-disconnector 3 poles, 63 A","it":"Sezionatore sotto carico 3 poli, 63 A"},
+      "dimensions": {"d":70,"h":90,"w":70},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {"en":"Switch-disconnector 3 poles, 63 A","it":"Sezionatore sotto carico 3 poli, 63 A"},
@@ -1364,6 +1730,7 @@
         "en": "Contactor 3 poles, 12 A AC-3, coil 24 V DC",
         "it": "Contattore 3 poli, 12 A AC-3, bobina 24 V DC"
       },
+      "dimensions": {"d":85,"h":80,"w":45},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
@@ -1381,6 +1748,7 @@
       "data": {"Contacts":"1 NO + 1 NC"},
       "description": {"en":"Auxiliary contact block, 1 NO + 1 NC","it":"Blocco di contatti ausiliari, 1 NA + 1 NC"},
       "manufacturer": "Generic",
+      "mount": "none",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {"en":"Auxiliary contact block, 1 NO + 1 NC","it":"Blocco di contatti ausiliari, 1 NA + 1 NC"},
       "verification": "secondary",
@@ -1396,6 +1764,7 @@
         "en": "Thermal overload relay, setting range 9 to 13 A",
         "it": "Relè termico, campo di regolazione da 9 a 13 A"
       },
+      "dimensions": {"d":80,"h":70,"w":45},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
@@ -1428,7 +1797,9 @@
         "en": "Power supply 230 V AC to 24 V DC, 10 A",
         "it": "Alimentatore da 230 V AC a 24 V DC, 10 A"
       },
+      "dimensions": {"d":120,"h":125,"w":60},
       "manufacturer": "Generic",
+      "mount": "rail",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
         "en": "Power supply 230 V AC to 24 V DC, 10 A",
@@ -1447,7 +1818,9 @@
         "en": "Emergency stop pushbutton 22 mm, mushroom head, 1 normally closed contact",
         "it": "Pulsante di emergenza 22 mm, a fungo, 1 contatto normalmente chiuso"
       },
+      "dimensions": {"d":60,"h":40,"w":40},
       "manufacturer": "Generic",
+      "mount": "door",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
         "en": "Emergency stop pushbutton 22 mm, mushroom head, 1 normally closed contact",
@@ -1466,7 +1839,9 @@
         "en": "Pushbutton 22 mm, 1 normally open contact",
         "it": "Pulsante 22 mm, 1 contatto normalmente aperto"
       },
+      "dimensions": {"d":50,"h":30,"w":30},
       "manufacturer": "Generic",
+      "mount": "door",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
         "en": "Pushbutton 22 mm, 1 normally open contact",
@@ -1485,7 +1860,9 @@
         "en": "Pushbutton 22 mm, 1 normally closed contact",
         "it": "Pulsante 22 mm, 1 contatto normalmente chiuso"
       },
+      "dimensions": {"d":50,"h":30,"w":30},
       "manufacturer": "Generic",
+      "mount": "door",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
         "en": "Pushbutton 22 mm, 1 normally closed contact",
@@ -1501,7 +1878,9 @@
       "code": "GEN-PILOT-LAMP-22MM-24VDC",
       "data": {"Mounting":"22 mm","Supply voltage":"24 V DC"},
       "description": {"en":"Pilot lamp 22 mm, LED, 24 V DC","it":"Spia luminosa 22 mm, LED, 24 V DC"},
+      "dimensions": {"d":50,"h":30,"w":30},
       "manufacturer": "Generic",
+      "mount": "door",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {"en":"Pilot lamp 22 mm, LED, 24 V DC","it":"Spia luminosa 22 mm, LED, 24 V DC"},
       "verification": "secondary",
@@ -1514,6 +1893,7 @@
       "code": "GEN-PLC-CPU-COMPACT",
       "data": {"Card type":"cpu","Interface":"Ethernet","Supply voltage":"24 V DC"},
       "description": {"en":"PLC CPU, compact, Ethernet, 24 V DC","it":"CPU PLC compatta, Ethernet, 24 V DC"},
+      "dimensions": {"d":75,"h":100,"w":90},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {"en":"PLC CPU, compact, Ethernet, 24 V DC","it":"CPU PLC compatta, Ethernet, 24 V DC"},
@@ -1527,6 +1907,7 @@
       "code": "GEN-PLC-RACK-4SLOT",
       "data": {"Slots":"4"},
       "description": {"en":"PLC rack, 4 slots","it":"Rack PLC, 4 slot"},
+      "dimensions": {"d":80,"h":110,"w":200},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {"en":"PLC rack, 4 slots","it":"Rack PLC, 4 slot"},
@@ -1543,6 +1924,7 @@
         "en": "PLC input card, 8 digital inputs 24 V DC",
         "it": "Scheda PLC, 8 ingressi digitali 24 V DC"
       },
+      "dimensions": {"d":75,"h":100,"w":30},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
@@ -1562,6 +1944,7 @@
         "en": "PLC output card, 8 digital outputs 24 V DC",
         "it": "Scheda PLC, 8 uscite digitali 24 V DC"
       },
+      "dimensions": {"d":75,"h":100,"w":30},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
@@ -1601,6 +1984,7 @@
         "en": "Mounting plate 600 x 800 mm for enclosure 800 x 1000",
         "it": "Piastra di montaggio 600 x 800 mm per armadio 800 x 1000"
       },
+      "dimensions": {"d":3,"h":800,"w":600},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
@@ -1644,6 +2028,7 @@
         "en": "Feed-through terminal, 4 mm², screw connection",
         "it": "Morsetto passante, 4 mm², a vite"
       },
+      "dimensions": {"d":40,"h":45,"w":6.2},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
@@ -1668,6 +2053,7 @@
         "en": "Protective earth terminal, 4 mm², green-yellow",
         "it": "Morsetto di terra PE, 4 mm², giallo-verde"
       },
+      "dimensions": {"d":40,"h":45,"w":6.2},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {
@@ -1684,6 +2070,7 @@
       "code": "GEN-TERMINAL-END-PLATE",
       "data": {"Width":"2.2 mm"},
       "description": {"en":"End plate for terminal strip","it":"Piastra di chiusura per morsettiera"},
+      "dimensions": {"d":40,"h":45,"w":2.2},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {"en":"End plate for terminal strip","it":"Piastra di chiusura per morsettiera"},
@@ -1697,6 +2084,7 @@
       "code": "GEN-TERMINAL-END-STOP",
       "data": {"Width":"9.5 mm"},
       "description": {"en":"End stop for DIN rail terminal strip","it":"Fermo di fine morsettiera per guida DIN"},
+      "dimensions": {"d":35,"h":45,"w":8},
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {"en":"End stop for DIN rail terminal strip","it":"Fermo di fine morsettiera per guida DIN"},
@@ -1712,6 +2100,7 @@
         "Conductor cross-section": "2.5 mm²",
         "Core colours": "BN, BK, GY, GNYE",
         "Cores": "4",
+        "Outer diameter": "11 mm",
         "Type": "Power cable"
       },
       "description": {"en":"Power cable 4 x 2.5 mm²","it":"Cavo di potenza 4 x 2,5 mm²"},
@@ -1795,12 +2184,15 @@
         },
         "parts": {
           "GEN-AUX-BLOCK-1NO1NC": 1,
+          "GEN-CABLE-DUCT-60X60-2M": 5,
           "GEN-CABLE-POWER-4X2,5MM2": 1,
           "GEN-CONTACTOR-12A": 1,
+          "GEN-DIN-RAIL-35MM-1M": 3,
           "GEN-EMERGENCY-STOP-22MM": 1,
-          "GEN-ENCLOSURE-600X800X300": 1,
+          "GEN-ENCLOSURE-600X800X300": 2,
           "GEN-MCB-3P-C16A": 1,
           "GEN-MOTOR-3PH-5,5KW": 1,
+          "GEN-MOUNTING-PLATE-500X700": 1,
           "GEN-MOUNTING-PLATE-600X800": 1,
           "GEN-OVERLOAD-RELAY-9A-13A": 1,
           "GEN-PILOT-LAMP-22MM-24VDC": 1,
@@ -1857,22 +2249,25 @@
         {"id":"p1","hash":"17934a6b596445","title":"Cover sheet"},
         {"id":"p2","hash":"0ad3e65d6bdf2b","title":"Contents"},
         {"id":"p3","hash":"1a1e091f0157f6","title":"General data of the assembly"},
-        {"id":"p4","hash":"14fba6a4da8283","title":"Single-line diagram"},
-        {"id":"p5","hash":"1b78972105d297","title":"Motor power circuit"},
-        {"id":"p6","hash":"139ab5c46d4956","title":"Control circuit 24 V DC"},
-        {"id":"p7","hash":"0ff991bec9709f","title":"PLC inputs and outputs"},
+        {"id":"p4","hash":"0f7d3d74099ece","title":"Single-line diagram"},
+        {"id":"p5","hash":"127b12991b40c6","title":"Motor power circuit"},
+        {"id":"p6","hash":"14f775c33b40d4","title":"Control circuit 24 V DC"},
+        {"id":"p7","hash":"0055e9f6b203dd","title":"PLC inputs and outputs"},
         {"id":"pg-rep1","hash":"06ff2ec9041b9a.0136b26e","title":"Terminal diagram"},
         {"id":"pg-rep3","hash":"10d57a4ef38aba.0c821d03","title":"Cable list"},
-        {"id":"p8","hash":"1663abaf700e76","title":"Cabinet layout"},
-        {"id":"pg-rep5","hash":"198990f51ffcfa.1bd8592c","title":"Wire list"},
-        {"id":"pg-rep7","hash":"1841cd26871c95.0531bdee","title":"Bill of materials"},
-        {"id":"pg-rep9","hash":"18862e7ab392df.056145a5","title":"Symbol legend 1/2"},
-        {"id":"pg-rep11","hash":"0bc3a8de6953bc.12044c0d","title":"Symbol legend 2/2"},
-        {"id":"pg-rep13","hash":"0971cb79b57391.01f5e98b","title":"Conductor colours"},
-        {"id":"pg-rep15","hash":"0af6beb17a9024.191b8d15","title":"Wire number suffixes"},
-        {"id":"pg-rep17","hash":"1e7f7e570c3ded.1e1b77a6","title":"Terminal tightening torques"},
-        {"id":"pg-rep19","hash":"0c6b113eabc420.121d9697","title":"Nameplates"},
-        {"id":"pg-rep21","hash":"0b72e2120a1857.118a990b","title":"PLC I/O list"}
+        {"id":"lay-front","hash":"01c0032942d578","title":"Cabinet layout, mounting plate"},
+        {"id":"lay-door","hash":"05ba8523e6446c","title":"Cabinet layout, door"},
+        {"id":"lay-side","hash":"1780b2243928aa","title":"Cabinet layout, side view"},
+        {"id":"pg-rep5","hash":"198990f51ffcfa.1c9d3f92","title":"Wire list"},
+        {"id":"pg-rep7","hash":"0e4c7473a90f76.0c6d9d40","title":"Bill of materials 1/2"},
+        {"id":"pg-rep9","hash":"0b345b076c0521.1773d8e1","title":"Bill of materials 2/2"},
+        {"id":"pg-rep11","hash":"13952392b94d71.056145a5","title":"Symbol legend 1/2"},
+        {"id":"pg-rep13","hash":"017919dd71e6fe.12044c0d","title":"Symbol legend 2/2"},
+        {"id":"pg-rep15","hash":"000d3fe884f5cd.01f5e98b","title":"Conductor colours"},
+        {"id":"pg-rep17","hash":"1e4e8cf1f79772.191b8d15","title":"Wire number suffixes"},
+        {"id":"pg-rep19","hash":"1c61c86b9dc062.1e1b77a6","title":"Terminal tightening torques"},
+        {"id":"pg-rep21","hash":"0f352926f8c25c.121d9697","title":"Nameplates"},
+        {"id":"pg-rep23","hash":"1614d142a64b23.118a990b","title":"PLC I/O list"}
       ],
       "status": "approval"
     }

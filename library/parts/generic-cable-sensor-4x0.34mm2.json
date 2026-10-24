@@ -15,7 +15,8 @@
   "data": {
     "Cores": "4",
     "Conductor cross-section": "0.34 mm²",
-    "Core colours": "WH, YE, GN, BN"
+    "Core colours": "WH, YE, GN, BN",
+    "Outer diameter": "5.5 mm"
   },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",

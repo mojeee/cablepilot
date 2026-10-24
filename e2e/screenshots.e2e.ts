@@ -146,6 +146,25 @@ test('screenshots of the sample projects, dark and light', async () => {
     await page.screenshot({ path: join(out, 'feat-workspace.png') });
     await page.getByTestId('panel-toggle-properties').click();
 
+    // The cabinet layout: the pump station's mounting plate in front view with dimensions (top half, real size), then the 3D view.
+    await open('pump-station');
+    await theme('dark', 'dark');
+    await goto('Cabinet layout, mounting plate');
+    const lc = page.getByTestId('cmd-input');
+    await lc.click();
+    await lc.fill('ZOOM');
+    await lc.press('Enter');
+    for (const t of ['60,110', '980,640']) { await lc.fill(t); await lc.press('Enter'); }
+    await page.waitForTimeout(500);
+    await canvas().screenshot({ path: join(out, 'feat-layout.png') });
+    await tab(page, 'layout');
+    await page.getByTestId('rb-3d').click();
+    await expect(page.getByTestId('cabinet-3d').locator('canvas')).toBeVisible({ timeout: 30_000 });
+    await page.waitForTimeout(1200);
+    const db = (await page.getByRole('dialog').boundingBox())!;
+    await page.screenshot({ path: join(out, 'feat-layout3d.png'), clip: { x: db.x, y: db.y, width: db.width, height: Math.min(db.height, Math.round((db.width * 7) / 12)) } });
+    await page.keyboard.press('Escape');
+
     // The drawing set: pages as they print (white), from the charger sample.
     await open('dc-charger');
     await theme('light', 'white');
@@ -153,6 +172,12 @@ test('screenshots of the sample projects, dark and light', async () => {
       await goto(title);
       await canvas().screenshot({ path: join(out, `${file}.png`) });
     }
+    // The layout page prints at a standard scale in the company frame: show the print preview.
+    await goto('piastra di montaggio');
+    await page.getByLabel('Print preview (white)').check();
+    await page.waitForTimeout(400);
+    await canvas().screenshot({ path: join(out, 'set-layout.png') });
+    await page.getByLabel('Print preview (white)').uncheck();
   } finally {
     await close();
   }

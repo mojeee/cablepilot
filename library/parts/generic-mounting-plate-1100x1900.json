@@ -1,0 +1,27 @@
+{
+  "id": "generic-mounting-plate-1100x1900",
+  "kind": "part",
+  "title": {
+    "en": "Mounting plate 1100 x 1900 mm for enclosure 1200 x 2000",
+    "it": "Piastra di montaggio 1100 x 1900 mm per armadio 1200 x 2000"
+  },
+  "category": "enclosures",
+  "code": "GEN-MOUNTING-PLATE-1100X1900",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Mounting plate 1100 x 1900 mm for enclosure 1200 x 2000",
+    "it": "Piastra di montaggio 1100 x 1900 mm per armadio 1200 x 2000"
+  },
+  "data": {
+    "Width": "1100 mm",
+    "Height": "1900 mm"
+  },
+  "dimensions": {
+    "w": 1100,
+    "h": 1900,
+    "d": 3
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

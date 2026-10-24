@@ -13,7 +13,8 @@
     "it": "Cavo piatto con due connettori IDC a 10 poli"
   },
   "data": {
-    "Conductors": "10"
+    "Conductors": "10",
+    "Outer diameter": "7 mm"
   },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",

@@ -24,6 +24,8 @@ import { templateOf } from '@shared/model/queries';
 import type { El, Pt, Rot, SymbolEl } from '@shared/model/types';
 import { zoneIndex } from '@shared/model/zones';
 import { sheetMm } from '@shared/sheets';
+import { adaptMove } from '@shared/cabinet/place';
+import { isLayoutPage, pageExtent } from '@shared/cabinet/model';
 import { drawBuilt, type View } from '../render/canvas';
 import { enterKey, escapeKey, runCommand, submit } from '../cad/run';
 import { snapLabel } from '../cad/labels';
@@ -110,7 +112,7 @@ export function CanvasView() {
   const page = shown.pages.find((p) => p.id === pageId);
   const pageIndex = shown.pages.findIndex((p) => p.id === pageId);
   const fullLib = useMemo(() => withProjectSymbols(lib, project.symbols), [lib, project.symbols]);
-  const built: Built | null = useMemo(() => (page ? buildPage(shown, page, lib, pageIndex) : null), [shown, page, lib, pageIndex]);
+  const built: Built | null = useMemo(() => (page ? buildPage(shown, page, lib, pageIndex, printPreview ? 'sheet' : 'edit') : null), [shown, page, lib, pageIndex, printPreview]);
   // What can be picked: elements on layers that are on and not locked.
   const pickable = useMemo(() => {
     if (!built || !page) return null;
@@ -119,7 +121,7 @@ export function CanvasView() {
     return { allowed, items, page: { ...page, elements: page.elements.filter((e) => allowed.has(e.id)) }, index: buildIndex(items) };
   }, [built, page, shown]);
   const geom = useMemo(() => (page ? snapGeometry(page, fullLib) : null), [page, fullLib]);
-  const sheet = page ? sheetMm(page.size) : { w: 420, h: 297 };
+  const sheet = page ? (printPreview && isLayoutPage(page) ? sheetMm(page.size) : pageExtent(page)) : { w: 420, h: 297 };
 
   const setViewKeep = useCallback((f: (v: View) => View) => {
     prevViews.current = [...prevViews.current.slice(-9), viewRef.current];
@@ -455,7 +457,7 @@ export function CanvasView() {
     if (!res || !page) return useCad.getState().patch({ cursor: null });
     const tpl = templateOf(shown, page);
     const f = frameRect(tpl, sheet.w, sheet.h);
-    const inside = res.pt.x >= f.fx && res.pt.x <= f.fx + f.fw && res.pt.y >= f.fy && res.pt.y <= f.fy + f.fh;
+    const inside = !isLayoutPage(page) && res.pt.x >= f.fx && res.pt.x <= f.fx + f.fw && res.pt.y >= f.fy && res.pt.y <= f.fy + f.fh;
     const zone = inside ? `${tpl.frame.rows[zoneIndex(res.pt.y, f.fy, f.fh, tpl.frame.rows.length)] ?? ''}${tpl.frame.columns[zoneIndex(res.pt.x, f.fx, f.fw, tpl.frame.columns.length)] ?? ''}` : '';
     useCad.getState().patch({ cursor: { x: res.pt.x, y: res.pt.y, on: res.on, zone } });
   };
@@ -475,21 +477,21 @@ export function CanvasView() {
     const a = useCad.getState().active;
     if (a?.preview && !d) {
       const cmd = a.preview(sp.pt);
-      setPreview(cmd ? apply(project, cmd, { lib }) : null);
+      setPreview(cmd ? apply(project, adaptMove(project, lib, cmd), { lib }) : null);
     }
     if (!d) return;
     if (d.mode === 'move') {
       const dx = snapGrid(sp.pt.x - d.start.x), dy = snapGrid(sp.pt.y - d.start.y);
       if (dx !== d.dx || dy !== d.dy) {
         setDrag({ ...d, dx, dy });
-        setPreview(dx || dy ? apply(project, { type: 'el/move', page: pageId, ids: d.ids, dx, dy }, { lib }) : null);
+        setPreview(dx || dy ? apply(project, adaptMove(project, lib, { type: 'el/move', page: pageId, ids: d.ids, dx, dy }), { lib }) : null);
       }
     } else if (d.mode === 'band') setDrag({ ...d, end: w });
     else if (d.mode === 'grip') {
       const to = resolveAt(w, e.altKey).pt;
       setDrag({ ...d, to });
       const cmd = gripCommand(pageId, d.el, d.i, to);
-      setPreview(cmd ? apply(project, cmd, { lib }) : null);
+      setPreview(cmd ? apply(project, adaptMove(project, lib, cmd), { lib }) : null);
     }
   };
 

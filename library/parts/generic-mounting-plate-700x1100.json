@@ -1,0 +1,27 @@
+{
+  "id": "generic-mounting-plate-700x1100",
+  "kind": "part",
+  "title": {
+    "en": "Mounting plate 700 x 1100 mm for enclosure 800 x 1200",
+    "it": "Piastra di montaggio 700 x 1100 mm per armadio 800 x 1200"
+  },
+  "category": "enclosures",
+  "code": "GEN-MOUNTING-PLATE-700X1100",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Mounting plate 700 x 1100 mm for enclosure 800 x 1200",
+    "it": "Piastra di montaggio 700 x 1100 mm per armadio 800 x 1200"
+  },
+  "data": {
+    "Width": "700 mm",
+    "Height": "1100 mm"
+  },
+  "dimensions": {
+    "w": 700,
+    "h": 1100,
+    "d": 3
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

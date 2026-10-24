@@ -11,7 +11,7 @@ import type { Lang } from './i18n';
 import type { PartDef } from './library/types';
 import type { Match } from './sizing';
 
-export const STOCK_FIELDS = ['code', 'manufacturer', 'description', 'onHand', 'reserved', 'location', 'warehouse', 'unit'] as const;
+export const STOCK_FIELDS = ['code', 'manufacturer', 'description', 'onHand', 'reserved', 'location', 'warehouse', 'unit', 'width', 'height', 'depth'] as const;
 export type StockField = (typeof STOCK_FIELDS)[number];
 /** Fields that must be mapped for an import to make sense. */
 export const REQUIRED_FIELDS: readonly StockField[] = ['code', 'onHand'];
@@ -62,6 +62,10 @@ const SYNONYMS: Record<StockField, string[]> = {
   location: ['location', 'bin', 'shelf', 'ubicazione', 'scaffale', 'posizione'],
   warehouse: ['warehouse', 'store', 'depot', 'site', 'magazzino', 'deposito'],
   unit: ['unit', 'uom', 'unit of measure', 'um', 'unita', 'unita di misura'],
+  // The body size of an item master (cabinet layout, M6 part 3), in millimetres.
+  width: ['width', 'w', 'width mm', 'larghezza', 'larghezza mm', 'breite'],
+  height: ['height', 'h', 'height mm', 'altezza', 'altezza mm', 'hohe'],
+  depth: ['depth', 'd', 'depth mm', 'profondita', 'profondita mm', 'tiefe'],
 };
 
 /** Guesses the mapping from the header row by common English and Italian column names; unmatched fields stay unmapped. */
@@ -127,6 +131,29 @@ export function applyMapping(rows: string[][], m: ColumnMapping): ImportResult {
 }
 
 const key = (code: string): string => code.trim().toLowerCase().replace(/\s+/g, '');
+
+/**
+ * Body sizes from an ERP item master through the same column mapping as the stock list (M6 part 3): one entry per
+ * row with a part code and a width, height and depth in millimetres. Rows without a code or with a size that is not a
+ * positive number are reported, never guessed. The stock quantity is not needed.
+ */
+export function dimsFromRows(rows: string[][], m: ColumnMapping): { items: { code: string; dims: { w: number; h: number; d: number } }[]; skipped: { row: number; reason: 'no-code' | 'bad-size' }[]; mapped: boolean } {
+  const idx = { code: columnIndex(rows, m, 'code'), w: columnIndex(rows, m, 'width'), h: columnIndex(rows, m, 'height'), d: columnIndex(rows, m, 'depth') };
+  const items: { code: string; dims: { w: number; h: number; d: number } }[] = [];
+  const skipped: { row: number; reason: 'no-code' | 'bad-size' }[] = [];
+  if (idx.code < 0 || idx.w < 0 || idx.h < 0 || idx.d < 0) return { items, skipped, mapped: false };
+  rows.forEach((r, i) => {
+    if (m.header && i === 0) return;
+    if (r.every((c) => !c.trim())) return;
+    const code = (r[idx.code] ?? '').trim();
+    if (!code) return void skipped.push({ row: i + 1, reason: 'no-code' });
+    const w = parseQuantity(r[idx.w] ?? ''), h = parseQuantity(r[idx.h] ?? ''), d = parseQuantity(r[idx.d] ?? '');
+    if (![w, h, d].every((v) => Number.isFinite(v) && v > 0)) return void skipped.push({ row: i + 1, reason: 'bad-size' });
+    items.push({ code, dims: { w, h, d } });
+  });
+  return { items, skipped, mapped: true };
+}
+export const codeKey = key;
 
 /**
  * Builds the stock list after an import: manual links carry over from the previous list, and the codes that had free

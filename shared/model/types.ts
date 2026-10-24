@@ -58,7 +58,7 @@ export interface WireEl {
   /** Cable (designation, e.g. "-W1") this wire is a core of, and the core's colour code or number. */
   cable?: string;
   core?: string;
-  /** Length of the conductor in metres, entered by hand until the cabinet layout estimates it (M6 part 1). */
+  /** Length of the conductor in metres, entered by hand; it overrides the length the cabinet layout estimates (M6 part 3). */
   length?: string;
 }
 export interface JunctionEl {
@@ -232,9 +232,60 @@ export interface ReportEl {
   rows: number;
 }
 
-export type El = SymbolEl | BoxEl | WireEl | JunctionEl | TextEl | LineEl | RectEl | CircleEl | TableEl | ImageEl | WarningEl | FormEl | ReportEl;
+/** What a cabinet-layout item is (M6 part 3, shared/cabinet). */
+export const CAB_ITEMS = ['enclosure', 'plate', 'rail', 'duct', 'device', 'zone', 'cover', 'dim'] as const;
+export type CabItem = (typeof CAB_ITEMS)[number];
+/**
+ * An item of a cabinet layout page, in real millimetres on the layout page (y down). `x, y, w, h` is the
+ * footprint seen from the front; a device's footprint is already rotated. A dimension line (`dim`) runs from
+ * (x, y) to (x + w, y + h) and sits `d` millimetres away from it. Devices are linked to the schematic by
+ * `designation` (the full designation), so their data (parts, name) is never typed twice.
+ */
+export interface CabEl {
+  id: string;
+  kind: 'cab';
+  /** Layer id (shared/layers.ts); absent: the default layer of this kind. */
+  layer?: string;
+  item: CabItem;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  /** Depth in millimetres: enclosure, devices, duct section height. */
+  d?: number;
+  /** Device rotation on the plate, degrees clockwise; the footprint (w, h) already includes it. */
+  rot?: Rot;
+  /** Devices: the full designation. Other items: their label ("A1", "R1", "D1"). */
+  designation?: string;
+  /** Library (or embedded) part of an enclosure, plate, rail or duct. */
+  part?: string;
+  /** Devices: the id of the rail element they sit on. */
+  rail?: string;
+  /** Locked: a re-suggestion never moves it. */
+  locked?: boolean;
+  /** Made by the layout suggestion and not touched since; the next suggestion may replace it. */
+  auto?: boolean;
+  /** Devices: the size was typed or imported, not taken from the part. */
+  custom?: boolean;
+  /** Zones, covers and dimension lines: the text shown. */
+  note?: string;
+  /** Devices: an outline imported from a DXF (polylines in millimetres from the footprint's top-left) or an image asset. */
+  outline?: { polys?: number[][]; assetId?: string };
+}
+
+export type El = SymbolEl | BoxEl | WireEl | JunctionEl | TextEl | LineEl | RectEl | CircleEl | TableEl | ImageEl | WarningEl | FormEl | ReportEl | CabEl;
 export type ElKind = El['kind'];
 
+/** What a layout page shows (M6 part 3): the plate front view, the door, or the generated side view of a front page. */
+export type LayoutView = 'front' | 'door' | 'side';
+export interface PageLayout {
+  view: LayoutView;
+  /** The extent of the drawing area in millimetres (the layout is drawn in real size; the sheet gets it at a scale). */
+  w: number;
+  h: number;
+  /** Side view: the front page it is generated from. */
+  of?: string;
+}
 export interface Page {
   id: string;
   type: PageType;
@@ -246,6 +297,8 @@ export interface Page {
   function?: string;
   location?: string;
   elements: El[];
+  /** Layout pages made by the cabinet layout (M6 part 3); absent on other pages and on layout pages of older projects. */
+  layout?: PageLayout;
 }
 
 export type StyleColourKey = 'symbol' | 'wire' | 'designation' | 'wireNumber' | 'text' | 'annotation' | 'frame' | 'titleBlock';
@@ -384,6 +437,20 @@ export interface BomSettings {
   userFields: { id: string; label: LText }[];
 }
 
+/** Company defaults of the cabinet layout (M6 part 3, shared/cabinet). Every value is a company choice, not a standard. */
+export interface LayoutSettings {
+  /** Spare space in percent: the suggestion keeps this much of the plate free. */
+  sparePct: number;
+  /** Largest fill rate of a wire duct in percent. */
+  ductFillMax: number;
+  /** Gap between neighbouring devices on a rail, millimetres. */
+  gap: number;
+  /** Free height between a device row and the duct above or below it, millimetres. */
+  rowClearance: number;
+  /** Extra wire length per end for the connection, millimetres. */
+  slack: number;
+}
+
 /** How automatic wire numbers are made (shared/wires.ts). */
 export interface NumberingSettings {
   /** Which counter a wire uses: one per potential, one per page and column, or a single one. */
@@ -473,6 +540,8 @@ export interface ProjectSettings {
   supply: SupplyData;
   /** PLC addressing scheme (M5). */
   plc: PlcSettings;
+  /** Cabinet layout defaults (M6 part 3). */
+  layout: LayoutSettings;
 }
 
 export const PROJECT_FORMAT = 'cablepilot-project';

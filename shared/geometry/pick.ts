@@ -39,6 +39,8 @@ export function hitTest(page: Page, items: { id: string; box: Box }[], idx: Spat
       case 'line': if (distToPolyline(x, y, e.points) <= tol) return e.id; break;
       case 'junction': if (Math.hypot(x - e.x, y - e.y) <= tol) return e.id; break;
       case 'rect': if (!rectHit && distToBorder(box, x, y) <= tol) rectHit = e.id; break;
+      // A cabinet frame (enclosure, plate) is picked at its border so the devices inside stay pickable.
+      case 'cab': if (e.item === 'enclosure' || e.item === 'plate') { if (!rectHit && distToBorder(box, x, y) <= tol) rectHit = e.id; } else if (inBox(box, x, y, tol * 0.5)) return e.id; break;
       default: if (inBox(box, x, y, tol * 0.5)) return e.id;
     }
   }

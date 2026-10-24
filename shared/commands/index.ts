@@ -51,6 +51,8 @@ export type Command =
   /** Device data: parts, user fields (empty text removes a field), the parent assembly (null clears it). */
   | { type: 'device/update'; key: string; patch: { parts?: PartUse[]; fields?: Record<string, string>; parent?: string | null; load?: LoadData | null } }
   | { type: 'part/embed'; def: PartDef }
+  /** Sets the body size of a part in this project (an embedded copy of a library part, made when needed): the ERP item master, M6 part 3. */
+  | { type: 'part/dims'; id: string; dims: { w: number; h: number; d: number } }
   | { type: 'projectPart/set'; part: ProjectPart }
   | { type: 'projectPart/remove'; id: string }
   /** Draws a dashed outline for an assembly (rect.assembly is its designation) and nests the devices in it. */
@@ -162,6 +164,13 @@ function transform(pg: Page, ids: string[], f: PointMap, mode: 'move' | 'rotate'
         const a = f({ x: e.x, y: e.y }), b = f({ x: e.x + e.w, y: e.y + e.h });
         return { ...e, x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), w: Math.abs(b.x - a.x), h: Math.abs(b.y - a.y) };
       }
+      case 'cab': {
+        // Footprints move by their corners (so a quarter turn swaps the sides); a dimension line is its two end points.
+        const a = f({ x: e.x, y: e.y }), b = f({ x: e.x + e.w, y: e.y + e.h });
+        const { auto: _auto, ...rest } = e;
+        const geo = e.item === 'dim' ? { x: a.x, y: a.y, w: b.x - a.x, h: b.y - a.y } : { x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), w: Math.abs(b.x - a.x), h: Math.abs(b.y - a.y) };
+        return { ...rest, ...geo, ...(mode === 'rotate' && e.item === 'device' ? { rot: ((((e.rot ?? 0) + 90) % 360) as Rot) } : {}) };
+      }
       case 'circle':
       case 'table':
       case 'report':
@@ -192,7 +201,7 @@ function centre(pg: Page, ids: string[]): Pt {
   for (const e of pg.elements) {
     if (!sel.has(e.id)) continue;
     if (e.kind === 'wire' || e.kind === 'line') for (const p of e.points) { xs.push(p.x); ys.push(p.y); }
-    else if ('x' in e) { xs.push(e.x); ys.push(e.y); if (e.kind === 'rect' || e.kind === 'image' || e.kind === 'box') { xs.push(e.x + e.w); ys.push(e.y + e.h); } }
+    else if ('x' in e) { xs.push(e.x); ys.push(e.y); if (e.kind === 'rect' || e.kind === 'image' || e.kind === 'box' || e.kind === 'cab') { xs.push(e.x + e.w); ys.push(e.y + e.h); } }
   }
   if (xs.length === 0) return { x: 0, y: 0 };
   return { x: round25((Math.min(...xs) + Math.max(...xs)) / 2), y: round25((Math.min(...ys) + Math.max(...ys)) / 2) };
@@ -320,7 +329,8 @@ export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
     case 'page/update': return mapPage(project, cmd.id, (pg) => ({ ...pg, ...cmd.patch }));
     case 'el/add': return mapPage(project, cmd.page, (pg) => ({ ...pg, elements: [...pg.elements, ...cmd.elements] }));
     case 'el/update': {
-      const updated = mapPage(project, cmd.page, (pg) => ({ ...pg, elements: pg.elements.map((e) => (e.id === cmd.id ? ({ ...e, ...cmd.patch, id: e.id, kind: e.kind } as El) : e)) }));
+      // A layout item edited by hand is no longer the suggestion's: it stays put when the layout is suggested again.
+      const updated = mapPage(project, cmd.page, (pg) => ({ ...pg, elements: pg.elements.map((e) => (e.id === cmd.id ? ({ ...e, ...(e.kind === 'cab' && !('auto' in cmd.patch) ? { auto: undefined } : {}), ...cmd.patch, id: e.id, kind: e.kind } as El) : e)) }));
       // Changing the designation of a device's symbol renames the device: every representation follows.
       const pg = project.pages.find((p) => p.id === cmd.page);
       const old = pg?.elements.find((e) => e.id === cmd.id);
@@ -336,6 +346,13 @@ export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
         return { ...pg, elements: [...pg.elements, el] };
       });
     case 'device/update': return updateDevice(project, cmd.key, cmd.patch);
+    case 'part/dims': {
+      const own = project.parts.find((p) => p.id === cmd.id);
+      const def = own ?? lib.parts.get(cmd.id);
+      if (!def) return project;
+      const next: PartDef = { ...def, dimensions: { ...cmd.dims } };
+      return { ...project, parts: own ? project.parts.map((p) => (p.id === cmd.id ? next : p)) : [...project.parts, next] };
+    }
     case 'part/embed': return project.parts.some((p) => p.id === cmd.def.id) ? project : { ...project, parts: [...project.parts, cmd.def] };
     case 'projectPart/set': {
       const i = project.projectParts.findIndex((p) => p.id === cmd.part.id);

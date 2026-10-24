@@ -40,7 +40,14 @@ export interface WarehouseFile {
   modified: string;
 }
 export type WarehouseState = WarehouseData & { source: { kind: 'file' | 'folder'; name: string } | null; watching: boolean };
-export type CompanyKind = 'symbols' | 'templates' | 'macros' | 'parts';
+export type CompanyKind = 'symbols' | 'templates' | 'macros' | 'parts' | 'layouts';
+/** A layout exchange file or an ERP item master read by the main process (M6 part 3): JSON text, or CSV and XLSX rows. */
+export interface LayoutFileData {
+  name: string;
+  ext: 'json' | 'csv' | 'xlsx';
+  text: string;
+  rows: string[][];
+}
 
 export interface CablePilotApi {
   app: {
@@ -90,6 +97,18 @@ export interface CablePilotApi {
     /** The generic sample stock list that ships with the app. */
     sample(): Promise<Result<WarehouseFile>>;
     /** Watches the source: `onChanged` fires when the file changes. Returns whether it is watching. */
+    watch(on: boolean): Promise<Result<boolean>>;
+    onChanged(cb: () => void): () => void;
+  };
+  /** Layout exchange (M6 part 3): files and a watched folder are read here, never in the renderer. */
+  layout: {
+    /** Asks for a layout file (JSON or CSV) or an ERP item master (CSV or XLSX); null when the user cancels. */
+    pick(kind: 'layout' | 'itemMaster'): Promise<Result<LayoutFileData | null>>;
+    /** Asks for a folder to watch; its newest layout file is read. */
+    pickFolder(): Promise<Result<LayoutFileData | null>>;
+    /** Reads the newest layout file of the remembered folder again; null when there is none. */
+    refresh(): Promise<Result<LayoutFileData | null>>;
+    folder(): Promise<Result<{ name: string; watching: boolean } | null>>;
     watch(on: boolean): Promise<Result<boolean>>;
     onChanged(cb: () => void): () => void;
   };

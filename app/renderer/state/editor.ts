@@ -25,6 +25,9 @@ import type { BoxEl, El, Page, Project, ReportId, WarningSign } from '@shared/mo
 import { reportCsv, workbookBytes } from '@shared/export/lists';
 import { dxfElements, writeDxf } from '@shared/export/dxf';
 import { buildPage } from '@shared/draw/page';
+import { adaptMove } from '@shared/cabinet/place';
+import { layoutPageDxf } from '@shared/cabinet/dxf';
+import { isLayoutPage } from '@shared/cabinet/model';
 import { reportCapacity, reportPageCommands, reportSyncCommands } from '@shared/draw/report';
 import { rt } from '@shared/reportText';
 import { FORM_PRESETS } from '@shared/forms';
@@ -39,7 +42,7 @@ import { loadPdfFonts } from '../render/fonts';
 import { useUi } from './ui';
 
 export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'table' | 'image' | 'warning';
-export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc' | 'sizing' | 'warehouse';
+export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc' | 'sizing' | 'warehouse' | 'layout' | 'layout3d';
 
 export interface Recovery {
   id: string;
@@ -74,6 +77,8 @@ interface EditorState {
   sizingFocus: string | null;
   /** Asks the properties panel to focus its text field (after placing a text). */
   focusText: boolean;
+  /** The device whose outline the next image file chosen becomes (M6 part 3). */
+  outlineTarget: { page: string; id: string } | null;
   /** A hint for the status bar: what the active tool expects next. */
   hint: string;
 
@@ -139,6 +144,8 @@ const msg = useUi.getState;
 export function makePage(project: Project, type: PageType, title: string, size: SheetSize, presetId?: string): Page {
   const lang = project.settings.drawingLanguage;
   const page = newPage(newId('pg'), type, { [lang]: title }, size);
+  // A layout page is drawn in real millimetres (M6 part 3): an empty front view the user draws the enclosure and plate on.
+  if (type === 'layout') return { ...page, layout: { view: 'front', w: 1100, h: 1300 } };
   if (type === 'data') {
     const preset = FORM_PRESETS.find((p) => p.id === presetId) ?? FORM_PRESETS[0];
     const tpl = templateOf(project, page);
@@ -205,6 +212,7 @@ export const useEditor = create<EditorState>((set, get) => {
     recovery: [],
     sizingFocus: null,
     focusText: false,
+    outlineTarget: null,
     hint: '',
 
     project: () => get().history.present,
@@ -212,7 +220,8 @@ export const useEditor = create<EditorState>((set, get) => {
     dirty: () => get().history.present !== get().saved,
 
     exec: (cmd) => {
-      const h = execHistory(get().history, cmd, ctx());
+      // On a layout page a move snaps devices to rails and rails take their devices along.
+      const h = execHistory(get().history, adaptMove(get().history.present, get().lib, cmd), ctx());
       if (h === get().history) return;
       const p = h.present;
       // Keep the selection to elements that still exist; keep the page if it still exists.
@@ -427,8 +436,10 @@ export const useEditor = create<EditorState>((set, get) => {
       const p = get().project();
       const i = p.pages.findIndex((x) => x.id === get().pageId);
       if (i < 0) return;
-      const built = buildPage(p, p.pages[i], get().lib, i);
-      const r = await window.cablepilot.files.exportText(writeDxf(built.prims, built.height), `${projectFileName(p).replace(/\.cablepilot\.json$/, '')}-${String(i + 1).padStart(2, '0')}.dxf`);
+      const pg = p.pages[i];
+      // A layout page goes out at real size, one layer per kind of item.
+      const text = isLayoutPage(pg) ? layoutPageDxf(p, pg, get().lib) : (() => { const built = buildPage(p, pg, get().lib, i); return writeDxf(built.prims, built.height); })();
+      const r = await window.cablepilot.files.exportText(text, `${projectFileName(p).replace(/\.cablepilot\.json$/, '')}-${String(i + 1).padStart(2, '0')}.dxf`);
       if (!r.ok) return errMsg(r.error);
       if (r.value) { const file = r.value.name; flash('info', () => t('Page exported to {name}.', { name: file })); }
     },

@@ -13,6 +13,7 @@ import { useCad } from '../state/cad';
 import { useEditor } from '../state/editor';
 import { useUi } from '../state/ui';
 import { circleSession, distSession, end, eraseSession, extendSession, lineSession, mirrorSession, moveSession, offsetSession, plineSession, rectSession, rotateSession, trimSession, zoomSession } from './sessions';
+import { LAYOUT_RUN } from './layoutCmds';
 import { view } from './viewBridge';
 
 const ed = () => useEditor.getState();
@@ -123,6 +124,7 @@ const RUN: Record<string, Runner> = {
   RESETLAYOUT: () => { useUi.getState().resetLayout(); cad().say('info', t('The panel layout is back to the default.')); },
   PREVIEW: () => ed().patch({ printPreview: !ed().printPreview }),
   HELP: dialog('shortcuts'),
+  ...LAYOUT_RUN,
 };
 
 /** Runs a command by name or alias, as if typed. Stops the running command first. */

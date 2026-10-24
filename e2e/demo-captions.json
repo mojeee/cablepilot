@@ -1,5 +1,5 @@
 [
-  {"id": "open", "en": "Open the battery-charger sample: a complete drawing set, 25 pages.", "it": "Apri il caricabatterie di esempio: un set di disegni completo, 25 pagine."},
+  {"id": "open", "en": "Open the battery-charger sample: a complete drawing set, 27 pages.", "it": "Apri il caricabatterie di esempio: un set di disegni completo, 27 pagine."},
   {"id": "cover", "en": "The cover sheet: every sheet with its revision, issue status and the customer's approval.", "it": "La copertina: ogni foglio con la sua revisione, lo stato di emissione e l'approvazione del cliente."},
   {"id": "coil", "en": "Place a contactor coil from the library: its designation is assigned by itself.", "it": "Inserisci una bobina di contattore dalla libreria: la designazione è assegnata da sola."},
   {"id": "contact", "en": "Place its contact: same device, and the cross-references appear on both.", "it": "Inserisci il suo contatto: stesso dispositivo, e i riferimenti incrociati compaiono su entrambi."},
@@ -16,6 +16,9 @@
   {"id": "size", "en": "Sizing: the motor is raised to 7.5 kW and the feeder is sized from the schematic.", "it": "Dimensionamento: il motore passa a 7,5 kW e la linea è dimensionata dallo schema."},
   {"id": "pick", "en": "The contactor that meets the requirement and is in stock, with warehouse and location: select and confirm.", "it": "Il contattore che soddisfa il requisito ed è a magazzino, con magazzino e ubicazione: seleziona e conferma."},
   {"id": "stock", "en": "The BOM shows the new part with on hand, available and location.", "it": "La distinta mostra il nuovo articolo con giacenza, disponibile e ubicazione."},
+  {"id": "layout", "en": "Cabinet layout: suggest the whole layout. It is a preview, with the rules it applied.", "it": "Layout del quadro: suggerisci tutto il layout. È un'anteprima, con le regole applicate."},
+  {"id": "move", "en": "Accept it, then move a device: it snaps onto its DIN rail.", "it": "Accettalo, poi sposta un componente: si aggancia alla sua guida DIN."},
+  {"id": "view3d", "en": "The same cabinet in 3D, devices as boxes from their dimensions.", "it": "Lo stesso quadro in 3D, con i componenti come parallelepipedi dalle loro dimensioni."},
   {"id": "cmd", "en": "The CAD workspace: type L, then coordinates, and the line is drawn.", "it": "L'area di lavoro CAD: scrivi L, poi le coordinate, e la linea è disegnata."},
   {"id": "snap", "en": "Object snap: the cursor locks on the end of the line and says so.", "it": "Snap a oggetto: il cursore si aggancia all'estremità della linea e lo dice."},
   {"id": "chat", "en": "Place a coil: the assistant offers its contacts, as a preview with its sources.", "it": "Inserisci una bobina: l'assistente propone i suoi contatti, in anteprima e con le fonti."},

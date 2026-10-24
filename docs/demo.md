@@ -75,7 +75,20 @@ the BOM shows the new part with its on-hand and available quantities.
   against the standard yet are flagged, and no result replaces the engineer's verification.
 - Confirming a line is one undo step, and **Accept all proposals** is one undo step for the whole project.
 
-## 8. The CAD workspace and the assistant
+## 8. The cabinet layout
+
+Open the layout page of the conveyor sample (the front view of the mounting plate, drawn to scale), erase it, and
+click **Suggest layout** on the Layout tab. The suggestion is a preview: the enclosure and plate sized with the
+company's spare-space percentage, DIN rails, wire ducts, and every device of the BOM at its real size (power on top,
+control below, terminals by the cable entry, door devices on the door page). The assistant panel lists the rules it
+applied and where each comes from. **Accept** puts it on the layout pages, then edit it with the normal tools: drag a
+device and it snaps onto its rail. Open **3D view** and turn the cabinet with the mouse.
+
+- Items you move or lock stay where they are when you suggest again; the rest is arranged around them.
+- The layout also gives a side view with the device depths, the duct fill rate, wire lengths estimated along the ducts
+  and a drilling DXF of the plate, and it exchanges with your ERP as JSON, CSV and DXF.
+
+## 9. The CAD workspace and the assistant
 
 On a page of the conveyor sample, click the command line and type `L`, press Enter, then type `30,40` and `@60,0`
 (Enter after each) and Enter again: the line is drawn from typed coordinates. Type `L` again and bring the

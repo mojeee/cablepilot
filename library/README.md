@@ -15,6 +15,12 @@ manufacturer "Generic", data and optional dimensions), `macro` (`library/macros/
 project) and `template` (company title-block templates). The rules live in `scripts/library-validate.mjs`; new kinds are added there together with their
 first data file. `npm run check:library -- <folder>` checks any folder, for example a company library.
 
+Cabinet layout (M6 part 3): a part's `dimensions` (width, height, depth in millimetres) are its body on the plate (a terminal's
+width is one terminal; a duct's `w` is its length, `h` and `d` its section; a plate's `d` is its thickness), and an
+optional `mount` (`rail`, `plate`, `door`, `field` or `none`) says where it goes; without it the default of its category
+applies (`shared/cabinet/size.ts`). Cables may carry `Outer diameter` in their data. A `layout-template` file (company
+library, `layouts/`) holds a saved cabinet layout (see `docs/layout-format.md`).
+
 Parts the sizing engine can propose (M6 part 1) carry `data.Type` (`MCB`, `MPCB`, `Contactor`, `Overload relay` or
 `Power cable`) and the fields that type needs: `Poles`, `Tripping characteristic` (B, C, D), `Rated current`, `Breaking
 capacity` (kA) for an MCB; `Poles`, `Setting range` ("10 - 16 A"), `Breaking capacity` for a motor protective circuit

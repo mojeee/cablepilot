@@ -9,7 +9,11 @@ import type { El, LineEl, TextEl } from '../model/types';
 const f = (n: number) => String(Math.round(n * 1e4) / 1e4);
 const hexInt = (c: string) => parseInt(c.slice(1), 16) || 0;
 
-export function writeDxf(prims: Prim[], pageHeight: number, layer = 'CABLEPILOT'): string {
+/** `layer` is one layer name for everything, or a function that names the layer of each primitive (the cabinet layout writes one layer per kind of item). */
+export function writeDxf(prims: Prim[], pageHeight: number, layer: string | ((p: Prim) => string) = 'CABLEPILOT'): string {
+  const layerOf = typeof layer === 'string' ? () => layer : layer;
+  const names = [...new Set(prims.map(layerOf))];
+  if (names.length === 0) names.push(typeof layer === 'string' ? layer : 'CABLEPILOT');
   const out: string[] = [];
   const g = (code: number, v: string | number) => out.push(String(code), String(v));
   const y = (v: number) => pageHeight - v;
@@ -19,12 +23,12 @@ export function writeDxf(prims: Prim[], pageHeight: number, layer = 'CABLEPILOT'
   g(0, 'LTYPE'); g(2, 'CONTINUOUS'); g(70, 0); g(3, 'Solid line'); g(72, 65); g(73, 0); g(40, 0);
   g(0, 'LTYPE'); g(2, 'DASHED'); g(70, 0); g(3, 'Dashed'); g(72, 65); g(73, 2); g(40, 2.5); g(49, 1.5); g(49, -1);
   g(0, 'ENDTAB');
-  g(0, 'TABLE'); g(2, 'LAYER'); g(70, 1);
-  g(0, 'LAYER'); g(2, layer); g(70, 0); g(62, 7); g(6, 'CONTINUOUS');
+  g(0, 'TABLE'); g(2, 'LAYER'); g(70, names.length);
+  for (const n of names) { g(0, 'LAYER'); g(2, n); g(70, 0); g(62, 7); g(6, 'CONTINUOUS'); }
   g(0, 'ENDTAB');
   g(0, 'ENDSEC');
   g(0, 'SECTION'); g(2, 'ENTITIES');
-  const head = (type: string, p: { c: string; dash?: boolean }) => { g(0, type); g(8, layer); g(6, p.dash ? 'DASHED' : 'BYLAYER'); g(420, hexInt(p.c)); };
+  const head = (type: string, p: { c: string; dash?: boolean }) => { g(0, type); g(8, layerOf(p as Prim)); g(6, p.dash ? 'DASHED' : 'BYLAYER'); g(420, hexInt(p.c)); };
   for (const p of prims) {
     switch (p.k) {
       case 'poly':

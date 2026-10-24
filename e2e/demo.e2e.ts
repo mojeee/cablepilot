@@ -124,7 +124,7 @@ test('demo recording: the battery-charger story', async () => {
     await cue('cover');
     const matrix = await mm(205, 118);
     await zoomAt(matrix.x, matrix.y, 7);
-    await wait(1440);
+    await wait(900);
     await fit();
     await wait(300);
 
@@ -142,8 +142,9 @@ test('demo recording: the battery-charger story', async () => {
     await page.keyboard.press('Escape');
     await wait(700);
     await zoomAt(coilAt.x, coilAt.y, 8);
-    await wait(600);
+    await wait(300);
     await fit();
+    await wait(300);
     await wait(300);
 
     await cue('contact');
@@ -161,7 +162,7 @@ test('demo recording: the battery-charger story', async () => {
     await clickOn(page.getByTestId('device-reps').locator('li').first(), 500);
     await wait(500);
     await zoomAt(coilAt.x, (coilAt.y + contactAt.y) / 2, 5);
-    await wait(720);
+    await wait(400);
     await fit();
     // select the contact again to keep the Properties panel on the device
     await wait(300);
@@ -195,7 +196,7 @@ test('demo recording: the battery-charger story', async () => {
     await clickOn(page.getByTestId('reports'), 700);
     await clickOn(page.getByTestId('report-wires'), 500);
     await expect(page.getByTestId('report-table')).toContainText('020');
-    await wait(840);
+    await wait(500);
     await cue('bom');
     await clickOn(page.getByTestId('report-bom'), 500);
     await wait(700);
@@ -203,7 +204,7 @@ test('demo recording: the battery-charger story', async () => {
     await expect(row).toContainText('GEN-CONTACTOR-9A');
     const rp = await centre(row);
     await glide(rp.x, rp.y, 600);
-    await wait(900);
+    await wait(600);
     await page.keyboard.press('Escape');
     await wait(300);
 
@@ -218,7 +219,7 @@ test('demo recording: the battery-charger story', async () => {
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('checks-banner')).toBeVisible();
     await expect(page.getByTestId('checks-summary')).toContainText('0 errors, 1 warnings');
-    await wait(1320);
+    await wait(900);
     await cue('fix');
     await clickOn(page.getByTestId('fix-one'), 800);
     await expect(page.getByTestId('checks-banner')).toHaveCount(0);
@@ -235,10 +236,10 @@ test('demo recording: the battery-charger story', async () => {
     await wait(540);
     await clickOn(page.getByTestId('tags-export-codesys'), 700);
     await expect(messages).toContainText('Tag list exported');
-    await wait(960);
+    await wait(500);
     await page.keyboard.press('Escape');
     await wait(300);
-    await gotoPage(9, 1600);
+    await gotoPage(9, 500);
 
     // ============ 6. PDF, XLSX, the cover ============
     await cue('pdf');
@@ -250,7 +251,7 @@ test('demo recording: the battery-charger story', async () => {
     await clickOn(page.getByTestId('reports'), 600);
     await clickOn(page.getByTestId('export-xlsx'), 600);
     await expect(messages).toContainText('Lists exported');
-    await wait(660);
+    await wait(300);
     await page.keyboard.press('Escape');
     await wait(300);
 
@@ -277,7 +278,7 @@ test('demo recording: the battery-charger story', async () => {
     await clickOn(page.getByTestId('device-sizing'), 600);
     const km = page.locator('[data-testid="sizing-line"][data-role="contactor"]');
     await expect(km).toHaveAttribute('data-status', 'change');
-    await wait(720);
+    await wait(400);
     await cue('pick');
     await clickOn(km.getByTestId('sizing-choose'), 600);
     await expect(page.getByTestId('sizing-panel')).toBeVisible();
@@ -293,12 +294,63 @@ test('demo recording: the battery-charger story', async () => {
     await expect(stockRow).toContainText('A-03-03');
     const sp = await centre(stockRow);
     await glide(sp.x, sp.y, 600);
-    await wait(1080);
+    await wait(600);
     await page.keyboard.press('Escape');
     await wait(300);
     await gotoPage(1, 400);
 
-    // ============ 8. The CAD workspace: a typed command, a snap, and the assistant proposing ============
+    // ============ 8. The cabinet layout: suggest it, accept, move a device onto its rail, turn it in 3D ============
+    await cue('layout');
+    await clickOn(page.locator('.page-item', { hasText: 'mounting plate' }).first(), 500);
+    await fit();
+    const lc = page.getByTestId('cmd-input');
+    await lc.fill('SELECTALL');
+    await lc.press('Enter');
+    await lc.fill('ERASE');
+    await lc.press('Enter');
+    await wait(700);
+    await tab(page, 'layout');
+    await clickOn(page.getByTestId('rb-suggest'), 700);
+    await expect(page.getByTestId('chat-proposal').last()).toBeVisible();
+    await wait(1300);
+    await clickOn(page.getByTestId('chat-accept'), 600);
+    await expect(page.getByTestId('chat-outcome').last()).toContainText('Accepted');
+    await wait(900);
+
+    await cue('move');
+    await page.getByTestId('save').click();
+    const doc = JSON.parse(readFileSync(join(out, readdirSync(out).find((f) => f.endsWith('.cablepilot.json'))!), 'utf8')) as { pages: { layout?: { view: string; w: number; h: number }; elements: { item?: string; designation?: string; x: number; y: number; w: number; h: number }[] }[] };
+    const lp = doc.pages.find((p) => p.layout?.view === 'front')!;
+    const dev = lp.elements.find((e) => e.item === 'device' && e.designation?.endsWith('-KM1'))!;
+    const cb = (await canvas.boundingBox())!;
+    const zoom = Number(/Zoom\s+(\d+)\s*%/.exec(await page.locator('body').innerText())![1]) / 100;
+    const toScreen = (x: number, y: number) => ({ x: cb.x + cb.width / 2 + (x - lp.layout!.w / 2) * zoom, y: cb.y + cb.height / 2 + (y - lp.layout!.h / 2) * zoom });
+    const from = toScreen(dev.x + dev.w / 2, dev.y + dev.h / 2);
+    await glide(from.x, from.y, 800);
+    await wait(300);
+    await page.mouse.down();
+    await glide(from.x + 70 * zoom, from.y + 14 * zoom, 900);
+    await wait(500);
+    await page.mouse.up();
+    await wait(900);
+    await page.keyboard.press('Escape');
+
+    await cue('view3d');
+    await tab(page, 'layout');
+    await clickOn(page.getByTestId('rb-3d'), 700);
+    await expect(page.getByTestId('cabinet-3d').locator('canvas')).toBeVisible({ timeout: 30_000 });
+    await wait(900);
+    const vb = (await page.getByTestId('cabinet-3d').boundingBox())!;
+    await glide(vb.x + vb.width * 0.45, vb.y + vb.height * 0.5, 600);
+    await page.mouse.down();
+    await glide(vb.x + vb.width * 0.62, vb.y + vb.height * 0.42, 1100);
+    await page.mouse.up();
+    await wait(900);
+    await page.keyboard.press('Escape');
+    await wait(300);
+    await gotoPage(1, 300);
+
+    // ============ 9. The CAD workspace: a typed command, a snap, and the assistant proposing ============
     await cue('cmd');
     await gotoPage(6, 600);
     await fit();
@@ -319,7 +371,7 @@ test('demo recording: the battery-charger story', async () => {
     await cmdLine.press('Enter');
     const endAt = await mm(90, 40);
     await glide(endAt.x + 3, endAt.y + 2, 800);
-    await wait(1500);
+    await wait(900);
     await cmdLine.press('Escape');
     await cue('chat');
     const coilPos = await mm(300, 60);
@@ -329,16 +381,16 @@ test('demo recording: the battery-charger story', async () => {
     await expect(page.getByTestId('ai-hint')).toBeVisible();
     await wait(800);
     await clickOn(page.getByTestId('ai-hint-ask'), 700);
-    await expect(page.getByTestId('chat-proposal')).toBeVisible();
-    await wait(2600);
+    await expect(page.getByTestId('chat-proposal').last()).toBeVisible();
+    await wait(1800);
     await cue('accept');
     await clickOn(page.getByTestId('chat-accept'), 700);
-    await expect(page.getByTestId('chat-outcome')).toContainText('Accepted');
-    await wait(1800);
+    await expect(page.getByTestId('chat-outcome').last()).toContainText('Accepted');
+    await wait(1000);
     await gotoPage(1, 300);
     await cue('end');
     await glide(1500, 1000, 700);
-    await wait(1320);
+    await wait(700);
     expect(readdirSync(out).some((f) => f.endsWith('.pdf'))).toBe(true);
     marks.__end = Date.now();
   } finally {

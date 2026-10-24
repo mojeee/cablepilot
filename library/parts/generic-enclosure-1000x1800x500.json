@@ -1,0 +1,28 @@
+{
+  "id": "generic-enclosure-1000x1800x500",
+  "kind": "part",
+  "title": {
+    "en": "Floor-standing enclosure 1000 x 1800 x 500 mm (W x H x D), sheet steel",
+    "it": "Armadio a pavimento 1000 x 1800 x 500 mm (L x A x P), lamiera di acciaio"
+  },
+  "category": "enclosures",
+  "code": "GEN-ENCLOSURE-1000X1800X500",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Floor-standing enclosure 1000 x 1800 x 500 mm (W x H x D), sheet steel",
+    "it": "Armadio a pavimento 1000 x 1800 x 500 mm (L x A x P), lamiera di acciaio"
+  },
+  "data": {
+    "Width": "1000 mm",
+    "Height": "1800 mm",
+    "Depth": "500 mm"
+  },
+  "dimensions": {
+    "w": 1000,
+    "h": 1800,
+    "d": 500
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { t } from '@shared/i18n';
 import { TopBar } from './components/TopBar';
 import { Ribbon } from './components/Ribbon';
@@ -16,12 +16,16 @@ import { ChecksBanner } from './components/ChecksBanner';
 import { RevisionsDialog } from './components/RevisionsDialog';
 import { SizingDialog } from './components/SizingDialog';
 import { WarehouseDialog } from './components/WarehouseDialog';
+import { LayoutDialog } from './components/LayoutDialog';
 import { useEditor } from './state/editor';
+import { useLayout } from './state/layout';
 import { watchProposals } from './state/chat';
 import { listenForStockChanges, useStock } from './state/stock';
 import { useUi } from './state/ui';
 
 const AUTOSAVE_MS = 4000;
+// The 3D view loads only when it is opened: three.js stays out of the startup (M6 part 3).
+const Cabinet3D = lazy(() => import('./components/Cabinet3D'));
 
 export function App() {
   // Re-render on language change: t() reads the current language.
@@ -45,6 +49,7 @@ export function App() {
     })();
   }, []);
   useEffect(() => listenForStockChanges(), []);
+  useEffect(() => window.cablepilot?.layout.onChanged(() => void useLayout.getState().refreshFolder(true)), []);
   useEffect(() => watchProposals(), []);
   // Autosave: while the project has unsaved changes, write a recovery copy a few seconds after the
   // last change, and again when the window goes away. Saving clears it (state/editor.ts).
@@ -86,6 +91,8 @@ export function App() {
       {dialog === 'plc' && <PlcDialog />}
       {dialog === 'sizing' && <SizingDialog />}
       {dialog === 'warehouse' && <WarehouseDialog />}
+      {dialog === 'layout' && <LayoutDialog />}
+      {dialog === 'layout3d' && <Suspense fallback={null}><Cabinet3D /></Suspense>}
     </div>
   );
 }

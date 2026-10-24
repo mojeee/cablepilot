@@ -1,0 +1,28 @@
+{
+  "id": "generic-enclosure-400x600x200",
+  "kind": "part",
+  "title": {
+    "en": "Wall enclosure 400 x 600 x 200 mm (W x H x D), sheet steel",
+    "it": "Armadio a parete 400 x 600 x 200 mm (L x A x P), lamiera di acciaio"
+  },
+  "category": "enclosures",
+  "code": "GEN-ENCLOSURE-400X600X200",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Wall enclosure 400 x 600 x 200 mm (W x H x D), sheet steel",
+    "it": "Armadio a parete 400 x 600 x 200 mm (L x A x P), lamiera di acciaio"
+  },
+  "data": {
+    "Width": "400 mm",
+    "Height": "600 mm",
+    "Depth": "200 mm"
+  },
+  "dimensions": {
+    "w": 400,
+    "h": 600,
+    "d": 200
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

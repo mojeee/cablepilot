@@ -131,6 +131,21 @@ describe('project file', () => {
     const back = parseProject(serializeProject(withLoad));
     expect(back.ok && back.value.devices[0].load).toEqual({ kind: 'motor', powerKw: 5.5, cosPhi: 0.85, efficiency: 87 });
   });
+  it('migrates a version 6 file (M6 part 2) to the layout settings and keeps layout pages and items', () => {
+    const v7 = JSON.parse(serializeProject(sample())) as Record<string, unknown>;
+    const { layout, ...settings } = v7.settings as Record<string, unknown>;
+    void layout;
+    const r = parseProject(JSON.stringify({ ...v7, version: 6, settings }));
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.value.settings.layout).toEqual({ sparePct: 20, ductFillMax: 50, gap: 5, rowClearance: 20, slack: 100 });
+    const p = sample();
+    const withLayout = { ...p, pages: [...p.pages, { id: 'lay', type: 'layout' as const, title: {}, size: 'A3' as const, templateId: '', layout: { view: 'front' as const, w: 1000, h: 1200 }, elements: [{ id: 'c1', kind: 'cab' as const, item: 'rail' as const, x: 10, y: 20, w: 400, h: 35, designation: 'R1' }] }] };
+    const back = parseProject(serializeProject(withLayout));
+    expect(back.ok && back.value.pages[back.value.pages.length - 1].layout).toEqual({ view: 'front', w: 1000, h: 1200 });
+    const bad = JSON.parse(serializeProject(withLayout)) as { pages: { elements: { item?: string }[] }[] };
+    bad.pages[bad.pages.length - 1].elements[0].item = 'spaceship';
+    expect(parseProject(JSON.stringify(bad)).ok).toBe(false);
+  });
   it('migrates a version 2 file (M2) and writes it back as the current version', () => {
     const v3 = JSON.parse(serializeProject(sample())) as Record<string, unknown>;
     const { wireClasses, wireTypes, cables, ...v2 } = v3;

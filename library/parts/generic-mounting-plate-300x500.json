@@ -1,0 +1,27 @@
+{
+  "id": "generic-mounting-plate-300x500",
+  "kind": "part",
+  "title": {
+    "en": "Mounting plate 300 x 500 mm for enclosure 400 x 600",
+    "it": "Piastra di montaggio 300 x 500 mm per armadio 400 x 600"
+  },
+  "category": "enclosures",
+  "code": "GEN-MOUNTING-PLATE-300X500",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Mounting plate 300 x 500 mm for enclosure 400 x 600",
+    "it": "Piastra di montaggio 300 x 500 mm per armadio 400 x 600"
+  },
+  "data": {
+    "Width": "300 mm",
+    "Height": "500 mm"
+  },
+  "dimensions": {
+    "w": 300,
+    "h": 500,
+    "d": 3
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}

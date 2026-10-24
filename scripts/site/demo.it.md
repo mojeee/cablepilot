@@ -1,7 +1,7 @@
 <!--
 Italian text of the demo page (/it/demo/), translated from docs/demo.md: same "## N." sections.
 "source" is the hash the build prints when docs/demo.md changes; update it together with the translation.
-source: 5871b1efad
+source: 7bfcbc7dba
 -->
 # Demo: disegna una volta, gli elenchi e il set di disegni seguono
 
@@ -84,7 +84,21 @@ il nuovo articolo con giacenza e quantità disponibile.
   verificati sulla norma sono segnalati e nessun risultato sostituisce la verifica del progettista.
 - Confermare una riga è un solo passo di annullamento, e **Accetta tutte le proposte** lo è per l’intero progetto.
 
-## 8. L’area di lavoro CAD e l’assistente
+## 8. Il layout del quadro
+
+Apri la pagina di layout del nastro trasportatore di esempio (la vista frontale della piastra di montaggio, in scala),
+cancellala e fai clic su **Suggerisci layout** nella scheda Layout. Il suggerimento è un’anteprima: armadio e piastra
+dimensionati con la percentuale di spazio di riserva dell’azienda, guide DIN, canaline e ogni componente della distinta
+alla sua misura reale (potenza in alto, comando sotto, morsetti vicino all’ingresso cavi, componenti in porta nella pagina
+della porta). Il pannello dell’assistente elenca le regole applicate e la fonte di ciascuna. **Accetta** lo mette nelle
+pagine di layout, poi lo modifichi con i normali strumenti: trascina un componente e si aggancia alla sua guida. Apri
+**Vista 3D** e ruota il quadro con il mouse.
+
+- Gli elementi che sposti o blocchi restano dove sono quando suggerisci di nuovo; il resto si sistema intorno.
+- Il layout dà anche una vista laterale con le profondità dei componenti, il riempimento delle canaline, le lunghezze dei
+  fili stimate lungo le canaline e un DXF di foratura della piastra, e si scambia con l’ERP in JSON, CSV e DXF.
+
+## 9. L’area di lavoro CAD e l’assistente
 
 In una pagina del nastro trasportatore di esempio, fai clic sulla riga di comando e scrivi `L`, premi Invio, poi scrivi `30,40` e `@60,0`
 (Invio dopo ciascuno) e ancora Invio: la linea viene disegnata da coordinate scritte. Scrivi di nuovo `L` e avvicina il

@@ -17,6 +17,8 @@ import { warningPrims } from './warning';
 import { reportPrims } from './report';
 import { coverPrims } from './cover';
 import { pageRevision } from '../revisions';
+import { cabPrims, drawingArea, layoutBody, layoutCaption, layoutScale, transformPrims } from '../cabinet/draw';
+import { isLayoutPage } from '../cabinet/model';
 import { pageNets } from '../connectivity';
 import { applyLayer, layerLookup } from '../layers';
 import { bundleLabel, colourHex, STRIPE_HEX, wireSpec } from '../wires';
@@ -360,6 +362,7 @@ function elementPrims(el: El, project: Project, page: Page, lib: Library, pins: 
     case 'image': return [{ k: 'image', x: el.x, y: el.y, w: el.w, h: el.h, assetId: el.assetId, id: el.id }];
     case 'warning': return warningPrims(el.sign, el.x, el.y, el.size, st.colours.annotation, el.id);
     case 'form': return formPrims(el, project, el.id);
+    case 'cab': return cabPrims(el, { project, lib, s: layoutScale(project, page), lang: project.settings.drawingLanguage });
   }
 }
 
@@ -392,24 +395,43 @@ function generatedBody(project: Project, page: Page): Prim[] {
   return out;
 }
 
-export function buildPage(project: Project, page: Page, libIn: Library, index: number): Built {
+/**
+ * The primitives of a page. A layout page is drawn in real millimetres: mode 'edit' returns that model space
+ * (what the canvas edits), mode 'sheet' (the default: PDF, print preview) puts it on the sheet at its scale.
+ */
+export function buildPage(project: Project, page: Page, libIn: Library, index: number, mode: 'edit' | 'sheet' = 'sheet'): Built {
   const lib = withProjectSymbols(libIn, project.symbols);
+  const layoutPage = isLayoutPage(page);
   const { w, h } = sheetMm(page.size);
-  const prims: Prim[] = furniture(project, page, index);
-  prims.push(...generatedBody(project, page));
+  const prims: Prim[] = layoutPage && mode === 'edit' ? [] : furniture(project, page, index);
+  if (!layoutPage) prims.push(...generatedBody(project, page));
   const items: Built['items'] = [];
   const pins = pinKeys(page, lib);
   const xref: XrefCtx = { idx: deviceIndex(project, libIn), page: page.id, lib: libIn };
   const netPot = new Map<string, string | undefined>();
   if (project.settings.wireColours) for (const n of pageNets(project, page, libIn)) for (const w of n.wires) netPot.set(w, n.potential);
   const layerOfEl = layerLookup(project);
+  const body: Prim[] = [];
   for (const el of page.elements) {
     const layer = layerOfEl(el);
     if (!layer.on) continue;
     const ps = applyLayer(elementPrims(el, project, page, lib, pins, xref, netPot), layer);
-    prims.push(...ps);
+    body.push(...ps);
     const box = unionBox(ps.map(primBox));
     if (box) items.push({ id: el.id, box: box as Box });
   }
-  return { prims, items, width: w, height: h };
+  if (!layoutPage) return { prims: [...prims, ...body], items, width: w, height: h };
+  body.push(...layoutBody(project, page, libIn));
+  const ext = { w: page.layout?.w ?? w, h: page.layout?.h ?? h };
+  if (mode === 'edit') return { prims: body, items, width: ext.w, height: ext.h };
+  // On the sheet: the drawing at its scale, centred in the drawing area, with its caption.
+  const s = layoutScale(project, page);
+  const a = drawingArea(project, page);
+  const ox = a.x + (a.w - ext.w / s) / 2, oy = a.y + (a.h - ext.h / s) / 2;
+  const t = templateOf(project, page);
+  const fr = frameRect(t, w, h);
+  prims.push({ k: 'text', x: fr.fx + 8, y: fr.fy + 9, text: layoutCaption(project, page), size: 4, anchor: 'start', rot: 0, c: project.settings.style.colours.text, bold: true });
+  prims.push(...transformPrims(body, 1 / s, ox, oy));
+  const moved = items.map((i) => ({ id: i.id, box: [ox + i.box[0] / s, oy + i.box[1] / s, ox + i.box[2] / s, oy + i.box[3] / s] as Box }));
+  return { prims, items: moved, width: w, height: h };
 }

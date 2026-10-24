@@ -36,6 +36,13 @@ export function Toolbar() {
       return;
     }
     const assetId = newId('as');
+    // The file chosen for a device's outline on the layout: the image goes into the device, not onto the page.
+    const target = st().outlineTarget;
+    if (target) {
+      st().patch({ outlineTarget: null });
+      st().exec({ type: 'batch', label: 'outline', commands: [{ type: 'asset/add', id: assetId, asset: r.asset }, { type: 'el/update', page: target.page, id: target.id, patch: { outline: { assetId }, custom: true } }] });
+      return;
+    }
     st().exec({ type: 'asset/add', id: assetId, asset: r.asset });
     st().patch({ pendingImage: { assetId, w: r.asset.w, h: r.asset.h }, tool: 'image', selection: [] });
   };

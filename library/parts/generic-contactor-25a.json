@@ -19,6 +19,11 @@
     "Coil voltage": "230 V AC",
     "Auxiliary contacts": "1 NO + 1 NC"
   },
+  "dimensions": {
+    "w": 55,
+    "h": 90,
+    "d": 95
+  },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",
   "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"

@@ -98,19 +98,19 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 
 ## M6 Cabinet layout
 
-- [ ] Enclosure and mounting plate from the library, DIN rails and wire ducts
-- [ ] Drawn by the user with the CAD workspace tools (snaps, typed coordinates, grips, layers)
-- [ ] Devices placed from the BOM at real size in a 2D front view to scale; outlines from the library or an imported DXF, SVG or image; snap to rails, align, distribute; list of devices not yet placed
-- [ ] Suggested layout (enclosure and plate size with spare space, rails, ducts, every device placed by function and schematic order, terminals by the cable entry, door devices, clearances, duct fill) as a preview; the user edits it freely; moved or locked items stay put when re-suggesting; the rules applied are listed
-- [ ] Layout templates saved to the company library and loaded into new projects
-- [ ] Layout exchange with an ERP or another system: documented, versioned JSON and CSV (designation, part code, enclosure/plate/door, rail, x, y, z, rotation, size) and DXF; import previewed and undoable; enclosure and device dimensions from the ERP item master via the CSV/XLSX mapping; files or a watched folder (live ERP connection decided with the owner)
-- [ ] Side view showing device depths
-- [ ] Dimension lines, notes, hatched no-mount zones, covers, door-mounted devices
-- [ ] 3D view of the cabinet
-- [ ] Duct fill rate
-- [ ] Wire lengths estimated along the ducts
-- [ ] Mounting-plate DXF for drilling
-- [ ] The layout in the PDF set
+- [x] Enclosure and mounting plate from the library, DIN rails and wire ducts
+- [x] Drawn by the user with the CAD workspace tools (snaps, typed coordinates, grips, layers)
+- [x] Devices placed from the BOM at real size in a 2D front view to scale; outlines from the library or an imported DXF, SVG or image; snap to rails, align, distribute; list of devices not yet placed
+- [x] Suggested layout (enclosure and plate size with spare space, rails, ducts, every device placed by function and schematic order, terminals by the cable entry, door devices, clearances, duct fill) as a preview; the user edits it freely; moved or locked items stay put when re-suggesting; the rules applied are listed
+- [x] Layout templates saved to the company library and loaded into new projects
+- [x] Layout exchange with an ERP or another system: documented, versioned JSON and CSV (designation, part code, enclosure/plate/door, rail, x, y, z, rotation, size) and DXF; import previewed and undoable; enclosure and device dimensions from the ERP item master via the CSV/XLSX mapping; files or a watched folder (live ERP connection decided with the owner)
+- [x] Side view showing device depths
+- [x] Dimension lines, notes, hatched no-mount zones, covers, door-mounted devices
+- [x] 3D view of the cabinet
+- [x] Duct fill rate
+- [x] Wire lengths estimated along the ducts
+- [x] Mounting-plate DXF for drilling
+- [x] The layout in the PDF set
 
 ## M7-AI Assistant
 

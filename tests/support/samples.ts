@@ -15,6 +15,8 @@ import { runChecks } from '@shared/checks';
 import { computeBom } from '@shared/bom';
 import { acceptAllCommand, sizeProject } from '@shared/feeders';
 import type { Rot } from '@shared/model/types';
+import { suggestLayout } from '@shared/cabinet/suggest';
+import { idGen } from '@shared/ids';
 import { builder } from './builder';
 
 type B = ReturnType<typeof builder>;
@@ -35,12 +37,17 @@ function link3(b: B, pg: string, a: Placed, c: Placed, topPins = ['1', '3', '5']
   bottomPins.forEach((bp, i) => b.wire(pg, [a.pin(bp), c.pin(topPins[i])], number ? { number: number() } : {}));
 }
 const note = (b: B, pg: string, x: number, y: number, text: string) => b.text(pg, x, y, text, { size: 3 });
-/** The cabinet layout page is M6: a labelled placeholder until then. */
-const layoutPage = (b: B, lang: 'en' | 'it') => {
-  const msg = lang === 'it' ? 'Questa pagina si compila con il layout del quadro (milestone M6).' : 'This page is filled by the cabinet layout feature (milestone M6).';
-  const id = b.addPage('layout', { en: 'Cabinet layout', it: 'Layout quadro' });
-  note(b, id, 40, 40, msg);
+/** A placeholder that marks where the cabinet layout pages go; finishSample replaces it with the suggested layout once the parts are final. */
+const layoutPage = (b: B, _lang: 'en' | 'it') => {
+  b.addPage('layout', { en: 'Cabinet layout', it: 'Layout quadro' });
 };
+/** The suggested cabinet layout (the same engine the app uses), accepted as it is; it takes the place of the placeholder page. */
+function cabinetLayout(b: B, lib: Library) {
+  const sug = suggestLayout(b.project, lib, { newId: idGen('lay') });
+  b.run({ type: 'batch', label: 'Suggested layout', commands: sug.commands });
+  const ph = b.project.pages.find((p) => p.type === 'layout' && !p.layout);
+  if (ph) b.run({ type: 'page/remove', id: ph.id });
+}
 /** Routes wires from `from` pins through the terminals of a strip (15 mm apart) to the `to` pins; the outgoing wires can be cores of a cable. */
 function viaTerminals(b: B, pg: string, from: Pt[], to: Pt[], strip: string, opts: { cable?: string; cores?: string[] } = {}) {
   const yMid = Math.round((from[0].y + to[0].y) / 5) * 2.5;
@@ -68,6 +75,7 @@ function finishSample(b: B, lib: Library, early: ReportId[], late: ReportId[]) {
   b.run({ type: 'terminal/renumber' });
   b.run({ type: 'wire/renumber' });
   b.run({ type: 'project/settings', settings: { wireColours: true } });
+  cabinetLayout(b, lib);
   const at = b.project.pages.findIndex((p) => p.type === 'layout');
   b.run({ type: 'batch', label: 'report pages', commands: reportPageCommands(b.project, lib, early, at, mk) });
   b.run({ type: 'batch', label: 'report pages', commands: reportPageCommands(b.project, lib, late, undefined, mk) });

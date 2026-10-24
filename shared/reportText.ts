@@ -41,6 +41,7 @@ export const REPORT_TEXT = {
   'col.cable': { en: 'Cable', it: 'Cavo' },
   'col.core': { en: 'Core', it: 'Anima' },
   'col.length': { en: 'Length', it: 'Lunghezza' },
+  'col.lengthM': { en: 'Length (m)', it: 'Lunghezza (m)' },
   'col.pin': { en: 'Pin', it: 'Pin' },
   'col.name': { en: 'Name', it: 'Nome' },
   'col.connectedTo': { en: 'Connected to', it: 'Collegato a' },

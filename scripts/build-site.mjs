@@ -282,7 +282,12 @@ const statusTag = (lang, m, isDone = done(m)) =>
 
 function landingVars(lang) {
   // Screenshots come from the real app (npm run screenshots, e2e/screenshots.e2e.ts) and show only for features that are done.
-  const featImg = (f) => (featureDone(f) && imgExists(`feat-${f.key}.png`) ? `<img class="card-img" src="/img/feat-${f.key}.png" alt="${esc(tx(lang, `feat.${f.key}.alt`))}" width="1200" height="700" loading="lazy" />` : '');
+  const featImg = (f) => {
+    if (!featureDone(f) || !imgExists(`feat-${f.key}.png`)) return '';
+    const one = (file, alt) => `<img class="card-img" src="/img/${file}" alt="${esc(tx(lang, alt))}" width="1200" height="700" loading="lazy" />`;
+    // The cabinet layout shows its 2D front view and its 3D view.
+    return one(`feat-${f.key}.png`, `feat.${f.key}.alt`) + (imgExists(`feat-${f.key}3d.png`) ? one(`feat-${f.key}3d.png`, `feat.${f.key}3d.alt`) : '');
+  };
   const features = FEATURES.map(
     (f) => `<article class="card">${featImg(f)}<h3>${esc(tx(lang, `feat.${f.key}.title`))}</h3>${statusTag(lang, f.m, featureDone(f))}<p>${esc(tx(lang, `feat.${f.key}.text`))}</p>${f.std.map((s) => `<span class="std">${esc(s)}</span>`).join('')}</article>`,
   ).join('\n      ');

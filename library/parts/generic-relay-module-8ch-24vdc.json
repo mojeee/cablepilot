@@ -17,6 +17,11 @@
     "Contacts per channel": "1 CO",
     "Coil voltage": "24 V DC"
   },
+  "dimensions": {
+    "w": 100,
+    "h": 90,
+    "d": 62
+  },
   "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
   "verification": "secondary",
   "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"

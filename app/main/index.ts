@@ -7,6 +7,7 @@ import { FileService } from './files';
 import { registerIpc } from './ipc';
 import { SettingsStore } from './settings';
 import { WarehouseService } from './warehouse';
+import { LayoutService } from './layoutFiles';
 import { FakeProvider } from './ai/fake';
 
 // CP_PROFILE=<dir>: use this folder as the app's data. End-to-end tests start from a clean profile,
@@ -17,6 +18,7 @@ let mainWindow: BrowserWindow | null = null;
 // Sample projects ship in /samples next to the app (packaging copies them in M8).
 const files = new FileService(app.getPath('userData'), join(app.getAppPath(), 'samples'), () => mainWindow);
 const warehouse = new WarehouseService(app.getPath('userData'), join(app.getAppPath(), 'samples'), () => mainWindow);
+const layout = new LayoutService(app.getPath('userData'), () => mainWindow);
 
 function createWindow(): void {
   const dark = settings.get().theme !== 'light';
@@ -53,7 +55,7 @@ function createWindow(): void {
 }
 
 void app.whenReady().then(() => {
-  registerIpc({ settings, files, warehouse, ai: new FakeProvider() });
+  registerIpc({ settings, files, warehouse, layout, ai: new FakeProvider() });
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

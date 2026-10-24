@@ -24,7 +24,7 @@ export function builtinLayers(): Layer[] {
 /** The layer an element sits on when it names none. */
 export function defaultLayerOf(kind: El['kind']): string {
   switch (kind) {
-    case 'symbol': case 'box': return 'symbols';
+    case 'symbol': case 'box': case 'cab': return 'symbols';
     case 'wire': case 'junction': return 'wires';
     case 'text': return 'text';
     case 'report': case 'form': return 'reports';
@@ -43,12 +43,14 @@ export function layersOf(project: Pick<Project, 'layers'>): Layer[] {
   return [...base, ...(project.layers ?? []).filter((l) => !BUILTIN_LAYER_IDS.includes(l.id as (typeof BUILTIN_LAYER_IDS)[number]))];
 }
 
-export const layerOf = (el: El): string => el.layer ?? defaultLayerOf(el.kind);
+/** Cabinet layout items: dimension lines, zones and covers are annotation; the rest (enclosure, plate, rails, ducts, devices) sit on the symbols layer. */
+const defaultOf = (el: El): string => (el.kind === 'cab' && (el.item === 'dim' || el.item === 'zone' || el.item === 'cover') ? 'annotation' : defaultLayerOf(el.kind));
+export const layerOf = (el: El): string => el.layer ?? defaultOf(el);
 
 /** A lookup of layer states, built once per page build. An unknown layer id counts as the default layer of the kind. */
 export function layerLookup(project: Pick<Project, 'layers'>): (el: El) => Layer {
   const all = new Map(layersOf(project).map((l) => [l.id, l]));
-  return (el) => all.get(el.layer ?? '') ?? all.get(defaultLayerOf(el.kind))!;
+  return (el) => all.get(el.layer ?? '') ?? all.get(defaultOf(el))!;
 }
 
 /** The layer's colour and line type applied to an element's primitives. */

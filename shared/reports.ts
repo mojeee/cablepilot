@@ -14,6 +14,7 @@ import type { CableRec, Page, Project, ReportId, SymbolEl } from './model/types'
 import { netlist, destinations, type NetlistGroup } from './netlist';
 import { plcChannels } from './plc';
 import { rt, type ReportTextKey } from './reportText';
+import { metres, routerOf } from './cabinet/route';
 import { colourName, formatWireNumber, isNumbered, wireSpec } from './wires';
 
 export interface ReportRow {
@@ -120,14 +121,14 @@ function terminalTable(project: Project, lib: Library, lang: Lang): ReportTable 
 }
 
 /** One connection per pair of neighbouring endpoints of a net group (a daisy chain in reading order). */
-interface Connection {
+export interface Connection {
   number: string;
   from: string;
   to: string;
   group: NetlistGroup;
   wire: NetlistGroup['wires'][number] | undefined;
 }
-function connections(project: Project, lib: Library): Connection[] {
+export function connections(project: Project, lib: Library): Connection[] {
   const out: Connection[] = [];
   // Wires of single-line, data and report pages are not numbered and are not conductors to pull: the
   // multi-line pages carry the connections (M4 fix: they showed in the wire list with an empty number).
@@ -150,19 +151,33 @@ export function coreSpec(project: Project, lib: Library, w: { cable?: string; co
   return { colour: w.core && /^[A-Z]{2,4}$/.test(w.core) ? w.core : undefined, crossSection: xs ? String(num(xs)) : undefined };
 }
 
-/** The connections of the wire list as cells: number, from, to, cross-section, colour, type, cable:core. */
+/**
+ * The length of a connection in metres, as text: the wire's typed length, else "~" and the length estimated
+ * along the wire ducts of the cabinet layout (M6 part 3), else empty.
+ */
+export function connectionLength(project: Project, c: Connection): string {
+  const typed = c.wire?.wire.length;
+  if (typed) return typed;
+  const r = routerOf(project);
+  if (!r) return '';
+  const a = c.group.pins.find((p) => p.label && p.label === c.from)?.device, b = c.group.pins.find((p) => p.label && p.label === c.to)?.device;
+  const rt = a && b ? r.route(a, b) : null;
+  return rt ? `~${metres(rt.mm)}` : '';
+}
+
+/** The connections of the wire list as cells: number, from, to, cross-section, colour, type, cable:core, length (m). */
 export function wireRows(project: Project, lib: Library): string[][] {
   return connections(project, lib).map((c) => {
     const w = c.wire?.wire;
     const spec = wireSpec(project, { wireType: w?.wireType, potential: w?.potential }, c.group.potential);
     const core = w ? coreSpec(project, lib, w) : {};
-    return [c.number, c.from, c.to, core.crossSection ?? spec.crossSection, core.colour ?? spec.colour, spec.type, w?.cable ? `${w.cable}${w.core ? `:${w.core}` : ''}` : ''];
+    return [c.number, c.from, c.to, core.crossSection ?? spec.crossSection, core.colour ?? spec.colour, spec.type, w?.cable ? `${w.cable}${w.core ? `:${w.core}` : ''}` : '', connectionLength(project, c)];
   });
 }
 
 function wireTable(project: Project, lib: Library, lang: Lang): ReportTable {
   const rows = wireRows(project, lib).map((c) => R(...c));
-  return { id: 'wires', title: rt(lang, 'report.wires'), headers: [rt(lang, 'col.number'), rt(lang, 'col.from'), rt(lang, 'col.to'), rt(lang, 'col.crossSection'), rt(lang, 'col.colour'), rt(lang, 'col.type'), rt(lang, 'col.cable')], widths: [24, 52, 52, 24, 20, 30, 30], rows };
+  return { id: 'wires', title: rt(lang, 'report.wires'), headers: [rt(lang, 'col.number'), rt(lang, 'col.from'), rt(lang, 'col.to'), rt(lang, 'col.crossSection'), rt(lang, 'col.colour'), rt(lang, 'col.type'), rt(lang, 'col.cable'), rt(lang, 'col.lengthM')], widths: [22, 48, 48, 22, 18, 28, 28, 18], rows };
 }
 
 function boxesByDesignation(project: Project): Map<string, { page: Page; box: Extract<Page['elements'][number], { kind: 'box' }> }> {

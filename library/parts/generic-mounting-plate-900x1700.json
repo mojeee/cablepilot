@@ -1,0 +1,27 @@
+{
+  "id": "generic-mounting-plate-900x1700",
+  "kind": "part",
+  "title": {
+    "en": "Mounting plate 900 x 1700 mm for enclosure 1000 x 1800",
+    "it": "Piastra di montaggio 900 x 1700 mm per armadio 1000 x 1800"
+  },
+  "category": "enclosures",
+  "code": "GEN-MOUNTING-PLATE-900X1700",
+  "manufacturer": "Generic",
+  "description": {
+    "en": "Mounting plate 900 x 1700 mm for enclosure 1000 x 1800",
+    "it": "Piastra di montaggio 900 x 1700 mm per armadio 1000 x 1800"
+  },
+  "data": {
+    "Width": "900 mm",
+    "Height": "1700 mm"
+  },
+  "dimensions": {
+    "w": 900,
+    "h": 1700,
+    "d": 3
+  },
+  "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+  "verification": "secondary",
+  "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+}
