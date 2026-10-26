@@ -42,7 +42,7 @@ import { loadPdfFonts } from '../render/fonts';
 import { useUi } from './ui';
 
 export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'table' | 'image' | 'warning';
-export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc' | 'sizing' | 'warehouse' | 'layout' | 'layout3d' | 'ai';
+export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc' | 'sizing' | 'warehouse' | 'erp' | 'reservation' | 'layout' | 'layout3d' | 'ai';
 
 export interface Recovery {
   id: string;
@@ -75,6 +75,8 @@ interface EditorState {
   recovery: Recovery[];
   /** The device the sizing dialog opens on (set from the properties panel); null: the whole project. */
   sizingFocus: string | null;
+  /** The device the warehouse window picks a stock item for (M8 part 1); null: no device. */
+  warehouseFocus: string | null;
   /** Asks the properties panel to focus its text field (after placing a text). */
   focusText: boolean;
   /** The device whose outline the next image file chosen becomes (M6 part 3). */
@@ -211,6 +213,7 @@ export const useEditor = create<EditorState>((set, get) => {
     dialog: null,
     recovery: [],
     sizingFocus: null,
+    warehouseFocus: null,
     focusText: false,
     outlineTarget: null,
     hint: '',

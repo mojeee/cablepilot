@@ -120,6 +120,22 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 - [x] Each proposal shows as a highlighted preview with Accept / Reject and goes into undo
 - [x] Tested against a fake provider in CI; a real-key test is written but skipped until a key is set
 
+## M8-ERP link (part 1 of M8, asked by the owner on 2026-10-26)
+
+- [x] Live link to the company's ERP over HTTP (REST or OData v4 JSON, with paging): items and stock pulled into the warehouse through the same column mapping as a stock file, refreshed on demand or every few minutes
+- [x] Connection settings (items URL, rows path, next-page path, authentication: none, basic, bearer token or API-key header); the password or token encrypted with safeStorage and never shown to the renderer; Test connection
+- [x] Pick from the warehouse: search the stock and assign an item to the selected device in one undoable step (its library part when linked, otherwise the ERP item marked "data missing")
+- [x] Send back to the ERP: the project's reservation request (documented, versioned JSON and CSV: part code, quantity × units to build, unit, devices, warehouse, location) previewed first, then sent by HTTP POST or written to an outbox folder; stock refreshed afterwards
+- [x] A demo ERP inside the app (local only, generic sample stock) so the two-way flow can be shown without a real ERP (rule 10)
+- [x] Docs (`docs/erp-link.md`), tests (mapping of JSON records, paging, authentication headers, secrets kept out of errors, reservation arithmetic, outbox files) and an end-to-end test against the demo ERP
+
+## M8-Panel designer features (part 2 of M8, parity with Capital X Panel Designer)
+
+- [ ] Insert a symbol onto an existing wire: the wire is split at the symbol's connection points and the wire numbers follow
+- [ ] Auto-wire: connect the selected symbols in sequence with one command
+- [ ] Ladder pages (NFPA 79 option): numbered rungs, line-reference cross-references and wire numbers by rung
+- [ ] Project history: automatic daily backups and named versions, compared and rolled back as one undoable step
+
 ## M8 Release 1 (end of phase 1)
 
 - [ ] Release builds from a git tag: macOS dmg (arm64 and x64), Windows installer, Linux AppImage (unsigned at first, ready for signing)

@@ -50,6 +50,7 @@ const GROUPS: Record<string, () => Group[]> = {
   reports: () => [
     { label: () => t('Lists'), buttons: [b('REPORT', 'report', () => t('Reports'), { testid: 'reports' }), b('BOM', 'bom', () => t('BOM'), { testid: 'bom', title: () => t('Bill of materials') })] },
     { label: () => t('Sizing and stock'), buttons: [b('SIZE', 'size', () => t('Sizing'), { testid: 'sizing', title: () => t('Size cables and components from the schematic and the warehouse') }), b('WAREHOUSE', 'warehouse', () => t('Warehouse'), { testid: 'warehouse', title: () => t('Stock list, links to library parts') })] },
+    { label: () => t('ERP'), buttons: [b('ERPPULL', 'erp', () => t('Pull stock'), { testid: 'rb-erp-pull', title: () => t('Pull the stock from the ERP') }), b('RESERVE', 'reserve', () => t('Reserve'), { testid: 'rb-reserve', title: () => t('Reservation request for the ERP') }), b('ERP', 'settings', () => t('ERP link'), { testid: 'rb-erp', title: () => t('ERP link: items, stock and reservations') })] },
     { label: () => t('Issue'), buttons: [b('REVISIONS', 'revisions', () => t('Revisions'), { testid: 'revisions', title: () => t('Revisions and issue status') }), b('SETTINGS', 'settings', () => t('Project settings...'), { testid: 'settings' }), b('PDF', 'pdf', () => t('Export PDF'), { testid: 'rb-pdf' }), b('DXFOUT', 'dxf', () => t('Export DXF'))] },
   ],
   plc: () => [

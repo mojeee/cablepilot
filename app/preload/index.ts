@@ -24,6 +24,10 @@ const api: CablePilotApi = {
       return () => void ipcRenderer.removeListener('warehouse:changed', fn);
     },
   },
+  erp: {
+    status: call('erp:status'), setConfig: call('erp:setConfig'), setSecret: call('erp:setSecret'), clearSecret: call('erp:clearSecret'),
+    pickOutbox: call('erp:pickOutbox'), useDemo: call('erp:useDemo'), test: call('erp:test'), pull: call('erp:pull'), send: call('erp:send'),
+  },
   layout: {
     pick: call('layout:pick'), pickFolder: call('layout:pickFolder'), refresh: call('layout:refresh'), folder: call('layout:folder'), watch: call('layout:watch'),
     onChanged: (cb) => {

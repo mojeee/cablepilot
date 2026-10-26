@@ -9,6 +9,7 @@ import cad from './it/cad';
 import checks from './it/checks';
 import devices from './it/devices';
 import editor from './it/editor';
+import erp from './it/erp';
 import layout from './it/layout';
 import plc from './it/plc';
 import reports from './it/reports';
@@ -20,7 +21,7 @@ export const LANGS: { id: Lang; label: string }[] = [
   { id: 'it', label: 'Italiano' },
 ];
 
-export const IT: Record<string, string> = { ...app, ...editor, ...devices, ...reports, ...checks, ...plc, ...sizing, ...cad, ...layout, ...ai };
+export const IT: Record<string, string> = { ...app, ...editor, ...devices, ...reports, ...checks, ...plc, ...sizing, ...cad, ...layout, ...ai, ...erp };
 
 let current: Lang = 'en';
 const listeners = new Set<(l: Lang) => void>();

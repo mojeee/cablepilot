@@ -97,6 +97,7 @@ function DeviceParts({ device, project }: { device: Device; project: Project }) 
           </li>
         ))}
       </ul>
+      <button type="button" data-testid="device-pick-warehouse" onClick={() => { const s = useEditor.getState(); s.patch({ warehouseFocus: device.key }); s.setDialog('warehouse'); }}>{t('Pick from warehouse...')}</button>
       <PartPicker
         testid="part"
         onAdd={(def, qty) => {

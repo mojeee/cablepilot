@@ -441,6 +441,42 @@ IEC 60617 symbols by default with NFPA 79 / ANSI as an option from M1; three sam
 - **Library.** `library/macros/star-delta-starter.json`, drawn from the pump-station sample (generic symbols, ratings
   not part of the macro, a PE stub so a new page does not trigger the missing-PE check).
 
+## M8 part 1: ERP link
+
+The owner asked (2026-10-26) for a two-way link with the ERP: pick parts from the warehouse, and data shared both
+ways. No specific ERP was named, so the conservative choice is one generic connector rather than one per product.
+
+- **HTTP with JSON, OData v4 included.** Most ERPs offer it (SAP S/4HANA and Business Central speak OData v4; Odoo,
+  ERPNext and many others have REST JSON endpoints). The connector reads an array of records at a configurable path
+  (`value` for OData, empty for a top-level array) and follows a next-page link at a configurable path
+  (`@odata.nextLink`). Nested fields are flattened with dots (`Inventory.OnHand`). Product-specific connectors (Odoo
+  JSON-RPC, SAP Business One Service Layer) can come later if companies ask; no SQL driver is added (it would need a
+  native dependency per database).
+- **Records become rows.** The pulled records are turned into the same rows a stock file gives (header = every field
+  name, in first-seen order), so the column-mapping wizard, the saved mapping, availability, sizing suggestions and
+  the item-master sizes all work unchanged. The ERP is a third source next to "file" and "watched folder".
+- **Credentials.** Authentication none, basic (user + password), bearer token, or an API-key header. The password or
+  token is encrypted with safeStorage exactly like the AI keys (not stored at all without OS encryption), lives only
+  in the main process and is scrubbed from every error. Plain `http://` is allowed (ERPs on the company network often
+  have no certificate) but the settings warn when credentials would travel unencrypted to a host that is not the
+  computer itself.
+- **Limits.** 30 s per request, 50 pages, 100,000 records, 50 MB per response; automatic refresh at least every
+  5 minutes when switched on.
+- **Writing back is a reservation request, never a direct stock change.** CablePilot does not know the ERP's
+  business rules, so it sends a documented, versioned document (`cablepilot-reservation`, version 1: project, order
+  number, units to build, and per stock code the quantity this project needs with its unit, devices, warehouse and
+  location) and the ERP (or a small adapter the company writes) decides what to do with it. It is shown as a preview
+  and only sent when the user presses Send. Targets: HTTP POST of the JSON to a configured URL, or the JSON and a CSV
+  written to an outbox folder (for ERPs that import files). After sending, the stock is pulled again so the reserved
+  quantities the ERP set show up.
+- **Picking from the warehouse** assigns the stock item to the selected device as one undoable command: the linked
+  library part when there is one (so sizing has its data), otherwise a project part made from the ERP item (code,
+  manufacturer, description; source "ERP item", verification secondary). Such a part carries no technical data, so
+  sizing still shows it as "data missing" and never proposes it for a rating (rule 12 unchanged).
+- **Demo ERP.** A small HTTP server inside the main process, on 127.0.0.1 and a random port, started only on request:
+  it serves the generic sample stock list as OData v4 in pages of 25 and accepts reservations (raising "reserved").
+  It shows the whole two-way flow without a real ERP (rule 10) and is what the end-to-end test talks to.
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite

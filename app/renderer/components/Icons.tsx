@@ -43,6 +43,8 @@ const ICONS: Record<string, ReactNode[]> = {
   size: [P('M4 18 L12 6 L20 18 Z M9 14 H15')],
   plc: [P('M4 5 H20 V19 H4 Z M8 5 V19 M4 9 H8 M4 14 H8 M12 9 H17 M12 13 H17')],
   warehouse: [P('M3 10 L12 4 L21 10 V20 H3 Z M8 20 V13 H16 V20')],
+  erp: [P('M4 7 H16 L13 4 M16 7 L13 10 M20 17 H8 L11 14 M8 17 L11 20')],
+  reserve: [P('M5 4 H19 V20 H5 Z M8 9 L10.5 11.5 L16 6 M8 15 H16')],
   revisions: [P('M12 7 V12 L15 14'), C(12, 12, 8)],
   settings: [C(12, 12, 3), P('M12 3 V6 M12 18 V21 M3 12 H6 M18 12 H21 M5.6 5.6 L7.7 7.7 M16.3 16.3 L18.4 18.4 M5.6 18.4 L7.7 16.3 M16.3 7.7 L18.4 5.6')],
   grid: [P('M4 4 H20 V20 H4 Z M4 9.3 H20 M4 14.7 H20 M9.3 4 V20 M14.7 4 V20')],

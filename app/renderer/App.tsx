@@ -16,6 +16,9 @@ import { ChecksBanner } from './components/ChecksBanner';
 import { RevisionsDialog } from './components/RevisionsDialog';
 import { SizingDialog } from './components/SizingDialog';
 import { WarehouseDialog } from './components/WarehouseDialog';
+import { ErpDialog } from './components/ErpDialog';
+import { ReservationDialog } from './components/ReservationDialog';
+import { useErp } from './state/erp';
 import { AiSettingsDialog } from './components/AiSettingsDialog';
 import { LayoutDialog } from './components/LayoutDialog';
 import { useEditor } from './state/editor';
@@ -46,6 +49,7 @@ export function App() {
       }
       await useEditor.getState().loadCompany();
       await useStock.getState().load();
+      await useErp.getState().load();
       await useEditor.getState().checkRecovery();
     })();
   }, []);
@@ -92,6 +96,8 @@ export function App() {
       {dialog === 'plc' && <PlcDialog />}
       {dialog === 'sizing' && <SizingDialog />}
       {dialog === 'warehouse' && <WarehouseDialog />}
+      {dialog === 'erp' && <ErpDialog />}
+      {dialog === 'reservation' && <ReservationDialog />}
       {dialog === 'ai' && <AiSettingsDialog />}
       {dialog === 'layout' && <LayoutDialog />}
       {dialog === 'layout3d' && <Suspense fallback={null}><Cabinet3D /></Suspense>}

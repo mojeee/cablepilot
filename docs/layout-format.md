@@ -6,8 +6,8 @@ STEP (3D) is planned for later. The format is versioned; this page describes ver
 
 Import and export live in the layout window (Layout tab, Exchange). An import is shown as a preview first
 (Accept or Reject in the assistant panel) and is one undo step. Files are read and written in the app's main process,
-from a file you pick or from a watched folder (the newest `.json` or `.csv` file in it). A live connection to a
-specific ERP is decided with the owner and is not built.
+from a file you pick or from a watched folder (the newest `.json` or `.csv` file in it). The live link with an ERP
+for items, stock and reservations is described in [erp-link.md](erp-link.md).
 
 ## Coordinates
 

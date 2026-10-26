@@ -54,19 +54,29 @@ export const DEFAULT_STALE_DAYS = 7;
 
 const norm = (s: string): string => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 const SYNONYMS: Record<StockField, string[]> = {
-  code: ['part code', 'code', 'item', 'item code', 'item no', 'part number', 'part no', 'article', 'sku', 'codice', 'codice articolo', 'articolo', 'material'],
-  manufacturer: ['manufacturer', 'make', 'brand', 'vendor', 'costruttore', 'produttore', 'marca', 'fornitore'],
-  description: ['description', 'name', 'text', 'descrizione', 'denominazione', 'descrizione articolo'],
-  onHand: ['on hand', 'qty on hand', 'quantity on hand', 'stock', 'quantity', 'qty', 'giacenza', 'quantita', 'disponibilita', 'q ta', 'esistenza'],
-  reserved: ['reserved', 'allocated', 'committed', 'riservato', 'impegnato', 'prenotato'],
-  location: ['location', 'bin', 'shelf', 'ubicazione', 'scaffale', 'posizione'],
-  warehouse: ['warehouse', 'store', 'depot', 'site', 'magazzino', 'deposito'],
-  unit: ['unit', 'uom', 'unit of measure', 'um', 'unita', 'unita di misura'],
+  // "number", "product" and "default code" are the item-code fields of common ERP APIs (Business Central, SAP, Odoo).
+  code: ['part code', 'code', 'item', 'item code', 'item no', 'item number', 'part number', 'part no', 'article', 'sku', 'codice', 'codice articolo', 'articolo', 'material', 'number', 'product', 'default code'],
+  manufacturer: ['manufacturer', 'make', 'brand', 'vendor', 'costruttore', 'produttore', 'marca', 'fornitore', 'manufacturer name'],
+  description: ['description', 'name', 'text', 'descrizione', 'denominazione', 'descrizione articolo', 'display name', 'product description'],
+  onHand: ['on hand', 'qty on hand', 'quantity on hand', 'stock', 'quantity', 'qty', 'giacenza', 'quantita', 'disponibilita', 'q ta', 'esistenza', 'inventory', 'qty available'],
+  reserved: ['reserved', 'allocated', 'committed', 'riservato', 'impegnato', 'prenotato', 'reserved qty', 'qty reserved'],
+  location: ['location', 'bin', 'shelf', 'ubicazione', 'scaffale', 'posizione', 'bin code', 'storage location'],
+  warehouse: ['warehouse', 'store', 'depot', 'site', 'magazzino', 'deposito', 'plant', 'location code'],
+  unit: ['unit', 'uom', 'unit of measure', 'um', 'unita', 'unita di misura', 'base unit of measure', 'base unit of measure code', 'unit of measure code'],
   // The body size of an item master (cabinet layout, M6 part 3), in millimetres.
   width: ['width', 'w', 'width mm', 'larghezza', 'larghezza mm', 'breite'],
   height: ['height', 'h', 'height mm', 'altezza', 'altezza mm', 'hohe'],
   depth: ['depth', 'd', 'depth mm', 'profondita', 'profondita mm', 'tiefe'],
 };
+
+/**
+ * The names a header can match by: as written, with camelCase split into words ("ItemNo", "onHand": field names of
+ * an ERP API), and for a flattened ERP field ("Inventory.OnHand") its last part too.
+ */
+function headerNames(h: string): string[] {
+  const last = h.includes('.') ? h.slice(h.lastIndexOf('.') + 1) : '';
+  return [h, last].filter(Boolean).flatMap((x) => [norm(x), norm(x.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))]);
+}
 
 /** Guesses the mapping from the header row by common English and Italian column names; unmatched fields stay unmapped. */
 export function guessMapping(rows: string[][]): ColumnMapping {
@@ -74,7 +84,7 @@ export function guessMapping(rows: string[][]): ColumnMapping {
   const columns: Partial<Record<StockField, string>> = {};
   const taken = new Set<number>();
   for (const f of STOCK_FIELDS) {
-    const i = head.findIndex((h, k) => !taken.has(k) && SYNONYMS[f].includes(norm(h)));
+    const i = head.findIndex((h, k) => !taken.has(k) && headerNames(h).some((n) => SYNONYMS[f].includes(n)));
     if (i >= 0) { columns[f] = head[i]; taken.add(i); }
   }
   return { header: true, columns };

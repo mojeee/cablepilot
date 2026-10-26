@@ -275,6 +275,7 @@ const FEATURES = [
   { key: 'sizing', m: 'M6', section: /^Sizing and warehouse/i, std: ['IEC 60364-5-52', 'IEC 60364-4-43', 'IEC 60947-2', 'IEC 60947-4-1'] },
   { key: 'workspace', m: 'M6', section: /^CAD workspace with the AI inside/i, std: [] },
   { key: 'layout', m: 'M6', std: ['IEC 61439'] },
+  { key: 'erp', m: 'M8', section: /^ERP link/i, std: [] },
 ];
 const featureDone = (f) => (f.section ? sectionDone(f.section) : done(f.m));
 const statusTag = (lang, m, isDone = done(m)) =>

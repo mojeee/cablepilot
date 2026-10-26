@@ -4,6 +4,7 @@
 import type { Result } from './result';
 import type { Settings } from './settings';
 import type { WarehouseData } from './stock';
+import type { ErpConfig } from './erp';
 import type { AiAnswer, AiProgress, AiProviderId, AiRequest, AiStatus } from './ai/types';
 
 export interface AppInfo {
@@ -40,6 +41,27 @@ export interface WarehouseFile {
   modified: string;
 }
 export type WarehouseState = WarehouseData & { source: { kind: 'file' | 'folder'; name: string } | null; watching: boolean };
+/** The ERP link as the renderer sees it (M8 part 1): the settings, never the password or token. */
+export interface ErpStatus {
+  config: ErpConfig;
+  hasSecret: boolean;
+  /** Whether the OS can encrypt a password (safeStorage); without it none is stored. */
+  secureStorage: boolean;
+  /** The outbox folder's name (the path stays in the main process). */
+  outbox: string | null;
+  /** Whether the settings point at the running demo ERP. */
+  demo: boolean;
+}
+export interface ErpTest {
+  records: number;
+  /** Field names of the first page, as the column mapping will see them. */
+  fields: string[];
+}
+export interface ErpReceipt {
+  to: 'http' | 'folder';
+  /** The ERP's reference for the request, or the file written. */
+  reference: string;
+}
 export type CompanyKind = 'symbols' | 'templates' | 'macros' | 'parts' | 'layouts';
 /** A layout exchange file or an ERP item master read by the main process (M6 part 3): JSON text, or CSV and XLSX rows. */
 export interface LayoutFileData {
@@ -99,6 +121,23 @@ export interface CablePilotApi {
     /** Watches the source: `onChanged` fires when the file changes. Returns whether it is watching. */
     watch(on: boolean): Promise<Result<boolean>>;
     onChanged(cb: () => void): () => void;
+  };
+  /** The live ERP link (M8 part 1): requests and credentials stay in the main process. */
+  erp: {
+    status(): Promise<Result<ErpStatus>>;
+    setConfig(config: ErpConfig): Promise<Result<ErpStatus>>;
+    setSecret(secret: string): Promise<Result<ErpStatus>>;
+    clearSecret(): Promise<Result<ErpStatus>>;
+    /** Asks for the outbox folder; null when the user cancels. */
+    pickOutbox(): Promise<Result<ErpStatus | null>>;
+    /** Starts the demo ERP on this computer and points the settings at it. */
+    useDemo(): Promise<Result<ErpStatus>>;
+    /** Reads the first page only. */
+    test(): Promise<Result<ErpTest>>;
+    /** Items and stock as rows, like a stock file. */
+    pull(): Promise<Result<WarehouseFile>>;
+    /** Sends a reservation request the user has confirmed. */
+    send(doc: unknown): Promise<Result<ErpReceipt>>;
   };
   /** Layout exchange (M6 part 3): files and a watched folder are read here, never in the renderer. */
   layout: {

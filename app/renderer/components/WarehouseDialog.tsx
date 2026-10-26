@@ -1,10 +1,17 @@
 // The warehouse (rule 12): import the company's stock list from a CSV or XLSX file (a column-mapping wizard, saved
 // per company), refresh it from the file or a watched folder, and link stock items to library parts. Items with no
 // technical data are shown as "data missing" and are never suggested. The file is read by the main process.
+// M8 part 1: the stock can also be pulled from the ERP, a stock item can be picked for the selected device (one
+// undoable command), and the project's needs go back to the ERP as a reservation request.
 import { useMemo, useState } from 'react';
 import { t, getLanguage } from '@shared/i18n';
-import { columnIndex, dataMissing, isStale, linkedPart, REQUIRED_FIELDS, STOCK_FIELDS, type ColumnMapping, type StockField } from '@shared/stock';
+import { columnIndex, dataMissing, isStale, linkedPart, REQUIRED_FIELDS, STOCK_FIELDS, type ColumnMapping, type StockField, type StockItem } from '@shared/stock';
+import { partFromStockItem } from '@shared/erp';
+import { newId } from '@shared/ids';
+import type { PartDef } from '@shared/library/types';
 import { useEditor } from '../state/editor';
+import { useErp } from '../state/erp';
+import { useUi } from '../state/ui';
 import { today, useStock } from '../state/stock';
 import { Check, NumField } from './fields';
 import { Modal } from './Modal';
@@ -53,8 +60,21 @@ function Wizard() {
   );
 }
 
+/** Assigns a stock item to a device as one undoable command: its linked library part, else a project part made from the ERP item. */
+function pickFor(device: string, item: StockItem, parts: readonly PartDef[], links: Record<string, string>): void {
+  const ed = useEditor.getState();
+  const project = ed.history.present;
+  const def = linkedPart(item.code, parts, links) ?? partFromStockItem(item, newId('cp'));
+  const cur = project.devices.find((r) => r.designation === device)?.parts ?? [];
+  const next = cur.some((x) => x.part === def.id) ? cur : [...cur, { part: def.id, qty: 1 }];
+  ed.exec({ type: 'batch', label: 'pick from warehouse', commands: [{ type: 'part/embed', def }, { type: 'device/update', key: device, patch: { parts: next } }] });
+  useUi.getState().addMessage('info', () => t('{code} assigned to {device}.', { code: item.code, device }));
+}
+
 export function WarehouseDialog() {
   const { stock, source, watching, pending } = useStock();
+  const focus = useEditor((s) => s.warehouseFocus);
+  const erp = useErp();
   const lib = useEditor((s) => s.lib);
   const project = useEditor((s) => s.history.present);
   const [query, setQuery] = useState('');
@@ -70,7 +90,7 @@ export function WarehouseDialog() {
   const stale = stock ? isStale(stock, today()) : false;
   const missing = stock ? stock.items.filter((i) => dataMissing(i, parts, stock.links)).length : 0;
   return (
-    <Modal title={t('Warehouse')} wide onClose={() => useEditor.getState().setDialog(null)}>
+    <Modal title={t('Warehouse')} wide onClose={() => { useEditor.getState().patch({ warehouseFocus: null }); useEditor.getState().setDialog(null); }}>
       <p className="hint">{t('The company\'s stock list, from a CSV or XLSX file exported by your ERP or warehouse system. Stock items are linked to library parts, which carry the technical data sizing needs; an item without it is shown as "data missing" and never suggested.')}</p>
       <div className="bom-controls">
         <button type="button" data-testid="wh-pick-file" onClick={() => void st.pickFile()}>{t('Choose stock file...')}</button>
@@ -79,6 +99,13 @@ export function WarehouseDialog() {
         <Check label={t('Refresh when the file changes')} checked={watching} onChange={(on) => void st.watch(on)} testid="wh-watch" />
         <button type="button" data-testid="wh-sample" onClick={() => void st.useSample()}>{t('Use the sample stock list')}</button>
       </div>
+      <div className="bom-controls" data-testid="wh-erp">
+        <button type="button" data-testid="wh-erp-pull" disabled={erp.busy || !erp.status?.config.itemsUrl} onClick={() => void erp.pull()}>{t('Pull from ERP')}</button>
+        <button type="button" data-testid="wh-erp-settings" onClick={() => useEditor.getState().setDialog('erp')}>{t('ERP settings...')}</button>
+        <button type="button" data-testid="wh-reserve" onClick={() => useEditor.getState().setDialog('reservation')}>{t('Reservation request...')}</button>
+        {erp.status?.config.itemsUrl && <span className="hint" data-testid="wh-erp-host">{erp.status.demo ? t('Demo ERP on this computer') : t('ERP: {url}', { url: erp.status.config.itemsUrl })}</span>}
+      </div>
+      {focus && <p className="hint" data-testid="wh-focus">{t('Choosing a part for {device}: press "Use" on a stock row.', { device: focus })}</p>}
       {source && <p className="hint" data-testid="wh-source">{source.kind === 'folder' ? t('Watched folder, newest file: {name}', { name: source.name }) : t('Source file: {name}', { name: source.name })}</p>}
       {pending && <Wizard />}
       {!stock && !pending && <p className="hint" data-testid="wh-empty">{t('No stock list yet. Choose your file, or load the sample list to try sizing.')}</p>}
@@ -111,6 +138,7 @@ export function WarehouseDialog() {
                           {noData && <span className="badge warn" data-testid="wh-data-missing">{t('data missing')}</span>}{' '}
                           {part ? <span title={part.title[lang]}>{part.code}</span> : null}{' '}
                           <button type="button" className="link" data-testid="wh-link" onClick={() => setEditing(i.code)}>{part ? t('Change link') : t('Link...')}</button>
+                          {focus && <button type="button" data-testid="wh-use" onClick={() => pickFor(focus, i, parts, stock.links)}>{t('Use for {device}', { device: focus })}</button>}
                         </>
                       )}
                     </td>

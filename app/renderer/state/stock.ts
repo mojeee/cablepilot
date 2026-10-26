@@ -23,6 +23,8 @@ interface StockState {
   pickFolder(): Promise<void>;
   refresh(auto?: boolean): Promise<void>;
   useSample(): Promise<void>;
+  /** Rows pulled from the ERP (M8 part 1): applied with the saved mapping when it fits, else the wizard opens. */
+  receive(file: WarehouseFile): Promise<void>;
   setPendingMapping(m: ColumnMapping): void;
   cancelPending(): void;
   /** Applies the pending file with the chosen mapping, saves the mapping per company and the new stock list. */
@@ -53,7 +55,7 @@ export const useStock = create<StockState>((set, get) => {
     const saved = get().mapping;
     if (saved && resolves(file.rows, saved) && (auto || !get().stock)) return apply(file, saved);
     set({ pending: { file, mapping: saved && resolves(file.rows, saved) ? saved : guessMapping(file.rows) } });
-    if (auto) flash('warning', () => t('The stock file {name} has columns that do not match the saved mapping. Open the warehouse to map them.', { name: file.name }));
+    if (auto && saved) flash('warning', () => t('The stock file {name} has columns that do not match the saved mapping. Open the warehouse to map them.', { name: file.name }));
   };
   return {
     stock: null, mapping: null, source: null, watching: false, pending: null,
@@ -85,6 +87,7 @@ export const useStock = create<StockState>((set, get) => {
       const m = guessMapping(r.value.rows);
       await apply(r.value, m);
     },
+    receive: (file) => received(file, true),
     setPendingMapping: (mapping) => set((s) => (s.pending ? { pending: { ...s.pending, mapping } } : {})),
     cancelPending: () => set({ pending: null }),
     confirmImport: async () => {

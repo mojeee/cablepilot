@@ -2,12 +2,14 @@
 
 import { app, ipcMain } from 'electron';
 import { fail, ok, type Result } from '@shared/result';
+import { setLanguage } from '@shared/i18n';
 import type { AppInfo, CompanyKind } from '@shared/api';
 import type { Settings } from '@shared/settings';
 import type { FileService } from './files';
 import type { SettingsStore } from './settings';
 import type { WarehouseService } from './warehouse';
 import type { LayoutService } from './layoutFiles';
+import type { ErpService } from './erp';
 
 function guard<T>(fn: () => T): Result<T> {
   try {
@@ -28,7 +30,7 @@ async function guardAsync<T>(fn: () => Promise<Result<T>>): Promise<Result<T>> {
 
 const isKind = (k: unknown): k is CompanyKind => k === 'symbols' || k === 'templates' || k === 'macros' || k === 'parts' || k === 'layouts';
 
-export function registerIpc(deps: { settings: SettingsStore; files: FileService; warehouse: WarehouseService; layout: LayoutService }): void {
+export function registerIpc(deps: { settings: SettingsStore; files: FileService; warehouse: WarehouseService; layout: LayoutService; erp: ErpService }): void {
   const { files } = deps;
   ipcMain.handle('app:info', (): Result<AppInfo> => guard(() => ({ name: app.getName(), version: app.getVersion(), platform: process.platform })));
   ipcMain.handle('settings:get', (): Result<Settings> => guard(() => deps.settings.get()));
@@ -61,6 +63,18 @@ export function registerIpc(deps: { settings: SettingsStore; files: FileService;
   ipcMain.handle('warehouse:refresh', () => safe(() => wh.refresh()));
   ipcMain.handle('warehouse:sample', () => safe(() => wh.sample()));
   ipcMain.handle('warehouse:watch', (_e, on: unknown) => safe(() => wh.watch(on === true)));
+  const erp = deps.erp;
+  // ERP messages and the CSV separator follow the UI language.
+  const lang = () => setLanguage(deps.settings.get().language);
+  ipcMain.handle('erp:status', () => safe(() => erp.status()));
+  ipcMain.handle('erp:setConfig', (_e, config: unknown) => safe(() => (lang(), erp.setConfig(config))));
+  ipcMain.handle('erp:setSecret', (_e, secret: unknown) => safe(() => (lang(), erp.setSecret(typeof secret === 'string' ? secret : ''))));
+  ipcMain.handle('erp:clearSecret', () => safe(() => erp.clearSecret()));
+  ipcMain.handle('erp:pickOutbox', () => guardAsync(() => (lang(), erp.pickOutbox())));
+  ipcMain.handle('erp:useDemo', () => guardAsync(() => erp.useDemo()));
+  ipcMain.handle('erp:test', () => guardAsync(() => (lang(), erp.test())));
+  ipcMain.handle('erp:pull', () => guardAsync(() => (lang(), erp.pull())));
+  ipcMain.handle('erp:send', (_e, doc: unknown) => guardAsync(() => (lang(), erp.send(doc))));
   const lay = deps.layout;
   ipcMain.handle('layout:pick', (_e, kind: unknown) => guardAsync(() => lay.pick(kind === 'itemMaster' ? 'itemMaster' : 'layout')));
   ipcMain.handle('layout:pickFolder', () => guardAsync(() => lay.pickFolder()));

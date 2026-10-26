@@ -378,3 +378,33 @@ One entry per milestone: what works, what is left, and anything the owner must d
   runs one short request with the fast model; without a key it is skipped. In development (`npm run dev`) the same
   variables act as a fallback key.
 
+## M8 part 1: ERP link (done)
+
+The owner asked (2026-10-26) for a two-way ERP link and for the features of Siemens Capital Electra X (now Capital X
+Panel Designer) before release 1. Both are now parts of M8 in the roadmap. This is the first part.
+
+**What works**
+
+- Pulling items and stock over HTTP (REST or OData v4 with paging) into the warehouse through the column mapping;
+  automatic pull; ERP settings with encrypted credentials and Test connection; picking a stock item for a device as
+  one undo step; the reservation request previewed and sent by HTTP POST or to an outbox folder, then the stock
+  pulled again; a demo ERP on 127.0.0.1 for demos and tests. The format is in `docs/erp-link.md`.
+- Tests: unit tests of the pure part and of the main-process service (fake fetch), a round trip against the demo
+  ERP, and an end-to-end test of the whole flow in the built app.
+
+**What is left**
+
+- One generic HTTP connector. There are no product-specific connectors (Odoo JSON-RPC, SAP Business One Service
+  Layer) and no direct SQL access. Add them if companies ask.
+- The ERP does not push changes; CablePilot pulls (on demand or every 5 minutes or more).
+- One saved column mapping per company: switching between a stock file and the ERP asks for the mapping again.
+- The item-master sizes for the cabinet layout still come from a CSV or XLSX file, not from the live pull.
+
+**What the owner must do by hand**
+
+- Try it against your own ERP: **Reports → ERP link**, write the items address, choose the sign-in, **Test
+  connection**, then **Pull stock now**. Tell us which ERP it is and what failed. The "Common ERPs" section of
+  `docs/erp-link.md` lists starting points that have not been tested against a live system.
+- Decide whether reservations should go by HTTP or through an outbox folder, and who writes the small adapter on the
+  ERP side that turns the request into a reservation.
+

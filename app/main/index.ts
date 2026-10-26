@@ -7,6 +7,7 @@ import { FileService } from './files';
 import { registerIpc } from './ipc';
 import { SettingsStore } from './settings';
 import { WarehouseService } from './warehouse';
+import { ErpService } from './erp';
 import { LayoutService } from './layoutFiles';
 import { registerAiIpc } from './ai/ipc';
 import { KeyStore, type SafeStorageLike } from './ai/keys';
@@ -27,6 +28,9 @@ const layout = new LayoutService(app.getPath('userData'), () => mainWindow);
 // provider is never called in that mode.
 const fakeStorage: SafeStorageLike = { isEncryptionAvailable: () => true, encryptString: (s) => Buffer.from(s, 'utf8'), decryptString: (b) => b.toString('utf8') };
 const keys = new KeyStore({ dataDir: app.getPath('userData'), safeStorage: useFake() ? fakeStorage : safeStorage, ...(app.isPackaged ? {} : { env: process.env, devEnvFile: join(app.getAppPath(), '.env.local') }) });
+
+// The ERP link (M8 part 1): its password or token is encrypted the same way as the AI keys.
+const erp = new ErpService({ dataDir: app.getPath('userData'), safeStorage: useFake() ? fakeStorage : safeStorage, window: () => mainWindow, sampleStock: join(app.getAppPath(), 'samples', 'stock-sample.csv'), ...(process.env.CP_E2E_DIR ? { e2eDir: process.env.CP_E2E_DIR } : {}) });
 
 function createWindow(): void {
   const dark = settings.get().theme !== 'light';
@@ -63,13 +67,15 @@ function createWindow(): void {
 }
 
 void app.whenReady().then(() => {
-  registerIpc({ settings, files, warehouse, layout });
+  registerIpc({ settings, files, warehouse, layout, erp });
   registerAiIpc({ settings, keys, warehouse });
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
+
+app.on('before-quit', () => erp.demo.stop());
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();

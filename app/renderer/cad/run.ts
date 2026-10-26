@@ -11,6 +11,7 @@ import { withShown, type PanelId } from '@shared/layout';
 import { useChat } from '../state/chat';
 import { useCad } from '../state/cad';
 import { useEditor } from '../state/editor';
+import { useErp } from '../state/erp';
 import { useUi } from '../state/ui';
 import { circleSession, distSession, end, eraseSession, extendSession, lineSession, mirrorSession, moveSession, offsetSession, plineSession, rectSession, rotateSession, trimSession, zoomSession } from './sessions';
 import { LAYOUT_RUN } from './layoutCmds';
@@ -94,7 +95,10 @@ const RUN: Record<string, Runner> = {
   },
   SIZE: () => { ed().patch({ sizingFocus: null }); ed().setDialog('sizing'); },
   PLC: dialog('plc'),
-  WAREHOUSE: dialog('warehouse'),
+  WAREHOUSE: () => { ed().patch({ warehouseFocus: null }); ed().setDialog('warehouse'); },
+  ERP: dialog('erp'),
+  ERPPULL: () => void useErp.getState().pull(),
+  RESERVE: dialog('reservation'),
   AISETTINGS: dialog('ai'),
   REVISIONS: dialog('revisions'),
   SETTINGS: dialog('settings'),

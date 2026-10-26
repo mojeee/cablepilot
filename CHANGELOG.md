@@ -2,6 +2,30 @@
 
 ## Unreleased
 
+### M8 part 1: ERP link
+
+- Live link with the company's ERP over HTTP (REST or OData v4 JSON, with paging). Items and stock are pulled into
+  the warehouse and go through the same column-mapping wizard as a stock file. The wizard now also recognises
+  camelCase and nested ERP fields (`itemNo`, `inventory.onHand`, Business Central's `number` and `inventory`). Pull on
+  demand or automatically every few minutes (at least 5).
+- ERP settings: items address, rows path, next-page path, authentication (none, basic, bearer token, API-key header),
+  Test connection. The password or token is encrypted with safeStorage, never reaches the renderer and is scrubbed
+  from errors. It is only sent to the server of the items address. Plain http to another computer is flagged.
+  Limits: 30 s per request, 50 pages, 100,000 records, 50 MB.
+- Pick from the warehouse: **Pick from warehouse...** on a device, then **Use for -K1** on a stock row adds its
+  library part (or, with no linked part, a project part made from the ERP item, shown as "data missing" for sizing)
+  as one undoable step.
+- Reservation request (`cablepilot-reservation`, version 1, documented in `docs/erp-link.md`). One line per part with
+  the quantity × units to build, unit, devices, the warehouse rows it comes from and what is short. It is previewed,
+  then sent by HTTP POST or written as JSON and CSV to an outbox folder (or saved as a file). The stock is pulled
+  again after sending.
+- A demo ERP inside the app (127.0.0.1, the generic sample stock as OData v4, accepts reservations) shows the
+  two-way flow without a real ERP.
+- Ribbon (Reports tab, ERP group) and commands `ERP`, `ERPPULL`, `RESERVE`. Italian texts.
+- Tests: JSON and OData records as rows, paging and relative next links, settings validation, authentication headers,
+  secrets kept out of disk and errors, the next page on another server refused, page limit, outbox files, the
+  reservation arithmetic, and a round trip against the demo ERP; an end-to-end test of the whole flow.
+
 ### M7: AI assistant
 
 - Real providers: Claude (default `claude-sonnet-5-5`, fast model `claude-haiku-4-5-20251001`), OpenAI and Gemini with
