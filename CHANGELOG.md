@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+### M8 part 3: release preparation
+
+- Release builds: `npm run dist` packages the app with electron-builder (macOS dmg for arm64 and x64, Windows
+  installer, Linux AppImage, unsigned). `.github/workflows/release.yml` builds and publishes them when a `v*` tag is
+  pushed. A new app icon (`build/icon.svg`, `npm run icon`).
+- CI: the end-to-end tests use software WebGL on Linux, and failures show as annotations on the run.
+- Docs: Getting started, How numbering works and The project file format, with an index in `docs/README.md`.
+- Website, in BoardPilot's style: a sticky navigation bar, a centred hero, facts counted from the repository, the
+  guides as real pages in English and Italian, an FAQ and a footer with columns. For search engines: titles and
+  descriptions per page, schema.org data (software, website, FAQ, articles, breadcrumbs), social cards with a real
+  screenshot, touch icons and a web manifest. Still no script, cookie, web font or third-party request.
+- README in BoardPilot's style: logo, badges, links, screenshot, features and install table.
+- End-to-end tests of every main workflow: black boxes and connectors with a ribbon cable, macros, DXF out and in,
+  report pages and nameplates, project data in the title block, page types (`e2e/workflows.e2e.ts`). 33 tests.
+- Launch check: the DC battery-charger sample prints as a complete 27-sheet set. It gained a company logo in the
+  title block, a second location (`+BT` battery), a wire bundle labelled "10 mm² BK", a sensor cable with coloured
+  cores, a DC/DC converter, an HMI front-view illustration, a company symbol (RJ45 service socket), a voltmeter on
+  the single-line page and a protection cover on the layout. `docs/reference-drawing-check.md` gives the evidence
+  sheet by sheet.
+- Fixed: a wire whose both ends are on pins no longer prints its potential name in the middle of the page, where it
+  overlapped the tag that already named it.
+
 ### Demo video with the new design
 
 - The full demo video, its captions, the step frames and the hero loop are recorded again with the new design.

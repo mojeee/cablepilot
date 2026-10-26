@@ -18,6 +18,8 @@ import type { Rot } from '@shared/model/types';
 import { suggestLayout } from '@shared/cabinet/suggest';
 import { idGen } from '@shared/ids';
 import { builder } from './builder';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 type B = ReturnType<typeof builder>;
 type Placed = ReturnType<B['place']>;
@@ -38,6 +40,8 @@ function link3(b: B, pg: string, a: Placed, c: Placed, topPins = ['1', '3', '5']
 }
 const note = (b: B, pg: string, x: number, y: number, text: string) => b.text(pg, x, y, text, { size: 3 });
 /** A placeholder that marks where the cabinet layout pages go; finishSample replaces it with the suggested layout once the parts are final. */
+/** An image of samples/assets/ (drawn by scripts/make-sample-assets.mjs) as a project asset. */
+const sampleImage = (file: string, w: number, h: number) => ({ name: file, mime: 'image/png' as const, data: readFileSync(join(__dirname, '..', '..', 'samples', 'assets', file)).toString('base64'), w, h });
 const layoutPage = (b: B, _lang: 'en' | 'it') => {
   b.addPage('layout', { en: 'Cabinet layout', it: 'Layout quadro' });
 };
@@ -400,6 +404,9 @@ export function chargerSample(lib: Library) {
   const tpl = structuredClone(b.project.templates[0]);
   tpl.frame.columns = [...zoneRange('A', 'H'), ...zoneRange('M', 'U', ['O', 'Q'])];
   tpl.frame.rows = zoneRange('0', '9');
+  // The client company's logo in the title block (a fictional company, drawn by scripts/make-sample-assets.mjs).
+  b.run({ type: 'asset/add', id: 'logo-esempio', asset: sampleImage('logo-esempio.png', 600, 180) });
+  tpl.titleBlock.logoAssetId = 'logo-esempio';
   b.run({ type: 'template/upsert', template: tpl });
   b.run({ type: 'project/settings', settings: { crossRef: { format: 'page-column-row', pageDigits: 2 }, bom: { ...b.project.settings.bom, units: 1, userFields: [{ id: 'make', label: { en: 'Make or buy', it: 'Produzione o acquisto' } }, { id: 'notes', label: { en: 'Notes', it: 'Note' } }] } } });
   b.addPage('cover', { en: 'Cover sheet', it: 'Copertina' });
@@ -418,9 +425,13 @@ export function chargerSample(lib: Library) {
   b.wire(sl, [P(130, 140), P(170, 140), r2.pin('L2')], { conductors: 3 });
   b.rect(sl, 65, 155, 50, 55, { dashed: true });
   b.rect(sl, 145, 155, 50, 55, { dashed: true });
-  b.place(sl, 'battery', 300, 225, { designation: '-G1', functionText: { it: 'Batteria 110 V', en: 'Battery 110 V' } });
+  // The battery stands in its own rack: location +BT, next to the panel +DS (IEC 81346 location aspect).
+  b.place(sl, 'battery', 300, 225, { designation: '-G1', location: 'BT', functionText: { it: 'Batteria 110 V', en: 'Battery 110 V' } });
   b.wire(sl, [r1.pin('DC+'), P(r1.pin('DC+').x, 205), P(300, 205), P(300, 217.5)], { conductors: 2, potential: 'L+' });
   b.wire(sl, [r2.pin('DC+'), P(r2.pin('DC+').x, 205)]);
+  // A measurement on the single-line: the battery voltmeter -P1 (the same device as on the DC page, cross-referenced).
+  const pv = b.place(sl, 'voltmeter', 340, 225, { designation: '-P1', functionText: { it: 'Tensione batteria', en: 'Battery voltage' } });
+  b.wire(sl, [P(300, 205), P(340, 205), pv.pin('1')]);
   b.warning(sl, 300, 70, 'electric');
   b.text(sl, 200, 70, 'Alimentazione 400 V 3~ 50 Hz\nUscita 110 V DC', { size: 3.5 });
   // Power: input and rectifiers (page 06). The DC output continues on page 07 through interruption points.
@@ -459,20 +470,22 @@ export function chargerSample(lib: Library) {
   const km = b.place(dc, 'contactor-1p', 112, 80, { rot: 90, designation: '-KM1', functionText: { it: 'Contattore DC', en: 'DC contactor' } });
   const v1 = b.place(dc, 'diode', 144, 80, { rot: 270, designation: '-V1', functionText: { it: 'Diodo di blocco', en: 'Blocking diode' } });
   const bs = b.place(dc, 'hall-sensor', 176, 80, { designation: '-B1', functionText: { it: 'Sensore di corrente', en: 'Current sensor' } });
-  const g1 = b.place(dc, 'battery', 290, 125, { designation: '-G1', functionText: { it: 'Batteria 110 V', en: 'Battery 110 V' } });
+  const g1 = b.place(dc, 'battery', 290, 125, { designation: '-G1', location: 'BT', functionText: { it: 'Batteria 110 V', en: 'Battery 110 V' } });
   const p1 = b.place(dc, 'voltmeter', 250, 125, { designation: '-P1', functionText: { it: 'Tensione batteria', en: 'Battery voltage' } });
   b.wire(dc, [P(40, 80), f1.pin('2')], { potential: 'L+' });
   b.wire(dc, [f1.pin('1'), km.pin('2')]);
   b.wire(dc, [km.pin('1'), v1.pin('A')]);
-  b.wire(dc, [v1.pin('K'), P(290, 80), g1.pin('+')]);
+  const link = b.wire(dc, [v1.pin('K'), P(290, 80), g1.pin('+')], { bundle: true });
   b.wire(dc, [P(40, 170), P(290, 170)], { potential: 'L-' });
   b.wire(dc, [g1.pin('-'), P(290, 170)]);
   b.wire(dc, [P(250, 80), p1.pin('1')]);
   b.wire(dc, [p1.pin('2'), P(250, 170)]);
-  b.wire(dc, [bs.pin('+'), P(173.5, 60)], { potential: '24VDC' });
-  b.wire(dc, [bs.pin('-'), P(178.5, 67.5), P(186, 67.5)], { potential: '0V' });
-  b.wire(dc, [bs.pin('OUT'), P(176, 100)]);
-  b.place(dc, 'interruption-point', 176, 100, { value: 'IOUT' });
+  // The sensor's harness is a 4-core cable -W3 with coloured cores (WH, YE, GN, BN; YE spare).
+  // Long enough runs that the wire numbers and the core labels have room.
+  b.wire(dc, [bs.pin('+'), P(173.5, 42.5)], { potential: '24VDC', cable: '-W3', core: 'BN' });
+  b.wire(dc, [bs.pin('-'), P(178.5, 65), P(205, 65)], { potential: '0V', cable: '-W3', core: 'WH' });
+  b.wire(dc, [bs.pin('OUT'), P(176, 112.5)], { cable: '-W3', core: 'GN' });
+  b.place(dc, 'interruption-point', 176, 112.5, { value: 'IOUT' });
   b.assembly(dc, '-A5', { x: 65, y: 53, w: 165, h: 45, label: 'Blocco di manovra' }, ['-F1', '-KM1', '-V1', '-B1']);
   // Output to the load through terminal strip -X1 (terminals 1 and 2).
   const xo1 = b.place(dc, 'terminal', 330, 95, { designation: '-X1', functionText: { it: 'Uscita carico L+', en: 'Load output L+' } });
@@ -481,6 +494,14 @@ export function chargerSample(lib: Library) {
   b.wire(dc, [xo1.pin('2'), P(330, 125)], { potential: 'L+' });
   b.wire(dc, [P(290, 170), P(385, 170), P(385, 75), P(360, 75), xo2.pin('1')]);
   b.wire(dc, [xo2.pin('2'), P(360, 125)], { potential: 'L-' });
+  // The 24 V auxiliary supply: a DC/DC converter -U3 fed from the 110 V bus.
+  // Input from L+ (an interruption point to the left) and the L- bus above; outputs led apart to their tags.
+  const u3 = b.place(dc, 'dc-dc-converter', 220, 202.5, { designation: '-U3', functionText: { it: 'Convertitore DC/DC 110/24 V', en: 'DC/DC converter 110/24 V' } });
+  b.place(dc, 'interruption-point', 185, 185, { value: 'L+', mirror: true });
+  b.wire(dc, [P(185, 185), P(217.5, 185), u3.pin('IN+')]);
+  b.wire(dc, [u3.pin('IN-'), P(222.5, 170)]);
+  b.wire(dc, [u3.pin('OUT+'), P(217.5, 227.5), P(195, 227.5)], { potential: '24VDC' });
+  b.wire(dc, [u3.pin('OUT-'), P(222.5, 227.5), P(245, 227.5)], { potential: '0V' });
   b.warning(dc, 370, 30, 'electric');
   note(b, dc, 40, 215, 'Batteria: 54 elementi al piombo da 2 V in serie (108 V).\nIl sensore -B1 misura la corrente di uscita (segnale IOUT).');
   // Alarm relays and the plug to the PLC interface (page 08).
@@ -531,6 +552,23 @@ export function chargerSample(lib: Library) {
   b.box(plc, { variant: 'connector', x: 322, y: 195, w: 20, h: 25, designation: '-X20', title: { it: 'Intestazione scheda interfaccia', en: 'Interface board header' }, pins: [['1', 'right', 'K1'], ['2', 'right', 'K2'], ['3', 'right', '24V'], ['4', 'right', '0V']] });
   b.box(plc, { variant: 'connector', x: 372, y: 195, w: 20, h: 25, designation: '-X21', title: { it: 'Intestazione ingressi PLC', en: 'PLC input header' }, pins: [['1', 'left', 'I0.0'], ['2', 'left', 'I0.1'], ['3', 'left', '24V'], ['4', 'left', '0V']] });
   b.text(plc, 346, 192, 'Cavo piatto', { size: 2.5 });
+  // A company symbol (drawn with the symbol editor and embedded in the project, so it opens anywhere): the service RJ45
+  // socket in the door, patched to the switch. The legend lists it with the library symbols.
+  b.run({ type: 'symbol/embed', def: {
+    id: 'company-rj45-service-socket', kind: 'symbol', title: { en: 'RJ45 service socket (company symbol)', it: 'Presa RJ45 di servizio (simbolo aziendale)' },
+    category: 'terminals', function: 'socket', designationLetter: 'X', autoNumber: false,
+    source: 'Company symbol of the sample project, drawn in the CablePilot symbol editor', verification: 'secondary', verifiedFrom: 'Company drawing; no standard symbol',
+    pins: [{ id: '1', x: -7.5, y: 0, dir: 'left' }],
+    graphics: [
+      { t: 'rect', x: -5, y: -4, w: 10, h: 8 }, { t: 'line', x1: -7.5, y1: 0, x2: -5, y2: 0 },
+      { t: 'rect', x: -2.5, y: -2, w: 5, h: 3.5 }, { t: 'line', x1: -1, y1: 1.5, x2: -1, y2: 2.5 }, { t: 'line', x1: 1, y1: 1.5, x2: 1, y2: 2.5 },
+    ],
+  } });
+  b.place(plc, 'company-rj45-service-socket', 160, 248, { designation: '-X30', functionText: { it: 'Presa RJ45 di servizio in porta (cavo patch verso -A4:P2)', en: 'Service RJ45 socket in the door (patch cable to -A4:P2)' } });
+  // A front view of the HMI panel next to its black box (our own illustration, scripts/make-sample-assets.mjs).
+  b.run({ type: 'asset/add', id: 'hmi-front', asset: sampleImage('hmi-front.png', 480, 320) });
+  b.run({ type: 'el/add', page: plc, elements: [{ id: 'img-hmi', kind: 'image', x: 55, y: 236, w: 42, h: 28, assetId: 'hmi-front' }] });
+  b.text(plc, 55, 269, 'Vista frontale -A3 (illustrazione)', { size: 2.5 });
   layoutPage(b, 'it');
   // Parts: several parts per device (a module plus its capacitors), project-level parts without designation.
   b.parts(pw, '-QF1', [['generic-mcb-3p-c32a', 1]]);
@@ -541,7 +579,7 @@ export function chargerSample(lib: Library) {
   b.parts(dc, '-KM1', [['generic-contactor-dc-2p-63a', 1]]);
   b.parts(dc, '-V1', [['generic-diode-power-50a-1600v', 1]]);
   b.parts(dc, '-B1', [['generic-hall-sensor-100a', 1]]);
-  b.parts(dc, '-G1', [['generic-battery-cell-2v-100ah', 54]]);
+  b.parts(dc, '-G1', [['generic-battery-cell-2v-100ah', 54]], 'BT');
   b.parts(dc, '-P1', [['generic-panel-meter-dc-voltmeter', 1]]);
   b.parts(dc, '-A5', [['generic-din-rail-35mm-1m', 1]]);
   b.parts(al, '-K1', [['generic-phase-monitor-relay-3ph', 1]]);
@@ -556,7 +594,7 @@ export function chargerSample(lib: Library) {
   b.parts(plc, '-A4', [['generic-switch-ethernet-5port-24vdc', 1]]);
   b.parts(plc, '-X10', [['generic-connector-header-10pin', 1]]);
   b.fields(pw, '-T1', { make: 'Acquisto', notes: 'Gruppo vettoriale Dyn11' });
-  b.fields(dc, '-G1', { make: 'Acquisto' });
+  b.fields(dc, '-G1', { make: 'Acquisto' }, 'BT');
   b.projectPart('generic-enclosure-800x1000x300', 1, { make: 'Acquisto' });
   b.projectPart('generic-mounting-plate-600x800', 1, { make: 'Acquisto' });
   b.projectPart('generic-wiring-kit', 1, { make: 'Produzione' });
@@ -567,17 +605,31 @@ export function chargerSample(lib: Library) {
   b.parts(dc, '-X1', [['generic-terminal-feedthrough-6mm2', 1], ['generic-terminal-end-plate', 1], ['generic-terminal-end-stop', 2]]);
   b.parts(plc, '-X20', [['generic-connector-header-10pin', 1]]);
   b.parts(plc, '-X21', [['generic-connector-header-10pin', 1]]);
-  for (const id of ['generic-cable-ribbon-flat-10pole', 'generic-cable-patch-rj45-cat5e']) b.run({ type: 'part/embed', def: lib.parts.get(id)! });
+  b.parts(dc, '-U3', [['generic-dcdc-110v-24v-10a', 1]]);
+  b.parts(plc, '-X30', [['generic-socket-rj45-cat5e-panel', 1]]);
+  for (const id of ['generic-cable-ribbon-flat-10pole', 'generic-cable-patch-rj45-cat5e', 'generic-cable-sensor-4x0.34mm2']) b.run({ type: 'part/embed', def: lib.parts.get(id)! });
+  b.run({ type: 'cable/set', cable: { id: '-W3', kind: 'multicore', part: 'generic-cable-sensor-4x0.34mm2', length: '1,5 m', functionText: { it: 'Cablaggio sensore di corrente -B1', en: 'Current sensor -B1 harness' } } });
+  // The battery link is drawn as one line for its bundle of conductors, labelled with its wire type (10 mm² BK).
+  b.run({ type: 'project/wires', wireTypes: [...b.project.wireTypes, { id: 'wt-10bk', type: 'H07V-K', crossSection: '10', colour: 'BK' }] });
+  b.run({ type: 'el/update', page: dc, id: link, patch: { wireType: 'wt-10bk' } });
   b.run({ type: 'cable/set', cable: { id: '-W1', kind: 'ribbon', part: 'generic-cable-ribbon-flat-10pole', from: '-X20', to: '-X21', length: '0,3 m', functionText: { it: 'Cavo piatto interfaccia PLC', en: 'PLC interface ribbon cable' } } });
   b.run({ type: 'cable/set', cable: { id: '-W2', kind: 'patch', part: 'generic-cable-patch-rj45-cat5e', from: '-A3:ETH', to: '-A4:P1', length: '2 m', functionText: { it: 'Collegamento HMI - switch', en: 'HMI to switch link' } } });
   b.fields(pw, '-QF1', { nameplate: 'Ingresso c.a.\nalimentazione ausiliari' });
   b.fields(dc, '-F1', { nameplate: 'Fusibile batteria\n63 A DC' });
   finishSample(b, lib, ['terminals', 'cables'], ['wires', 'pins', 'bom', 'legend', 'colours', 'suffixes', 'torque', 'nameplates', 'plcIo']);
+  // A protective cover on the mounting plate over the two rectifier modules (live parts behind it).
+  const front = b.project.pages.find((pg) => pg.layout?.view === 'front')!;
+  const mods = front.elements.filter((e): e is Extract<typeof e, { kind: 'cab' }> => e.kind === 'cab' && e.item === 'device' && /-U[12]$/.test(e.designation ?? ''));
+  if (mods.length) {
+    const x0 = Math.min(...mods.map((m) => m.x)) - 10, y0 = Math.min(...mods.map((m) => m.y)) - 10;
+    const x1 = Math.max(...mods.map((m) => m.x + m.w)) + 10, y1 = Math.max(...mods.map((m) => m.y + m.h)) + 10;
+    b.run({ type: 'el/add', page: front.id, elements: [{ id: 'cov-rect', kind: 'cab', item: 'cover', x: x0, y: y0, w: x1 - x0, h: y1 - y0, note: 'Copertura di protezione' }] });
+  }
   // A real production set: revision 0 went out for approval; revision 1 changes the battery string, which changes the DC page and the BOM.
   issue(b, '0', '2026-09-15', 'Prima emissione per approvazione', 'approval', { drawn: 'CablePilot', checked: 'Ufficio tecnico', approved: '' });
   const noteEl = b.project.pages.find((p) => p.id === dc)!.elements.find((e) => e.kind === 'text' && e.text.startsWith('Batteria:'))!;
   b.run({ type: 'el/update', page: dc, id: noteEl.id, patch: { text: 'Batteria: 55 elementi al piombo da 2 V in serie (110 V).\nIl sensore -B1 misura la corrente di uscita (segnale IOUT).' } });
-  b.parts(dc, '-G1', [['generic-battery-cell-2v-100ah', 55]]);
+  b.parts(dc, '-G1', [['generic-battery-cell-2v-100ah', 55]], 'BT');
   issue(b, '1', '2026-10-24', 'Batteria portata a 55 elementi (110 V)', 'construction', { drawn: 'CablePilot', checked: 'Ufficio tecnico', approved: 'Direzione' });
   return b.project;
 }

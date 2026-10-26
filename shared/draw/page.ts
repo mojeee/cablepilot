@@ -232,9 +232,11 @@ function wirePrims(el: WireEl, project: Project, pins: Set<string>, netPot?: str
       out.push({ k: 'text', x: seg.mx + nx * 3.2 - seg.dx * 0.5, y: seg.my + ny * 3.2 + 1, text: String(n), size: 2.5, anchor: 'middle', rot: 0, c: st.colours.wire, id: el.id });
     }
   }
-  if (el.potential) {
+  const first = el.points[0], last = el.points[el.points.length - 1];
+  // With both ends on pins (a device and its potential tag) the tag already names the potential: no second label next
+  // to the device pin, where it would collide with its neighbours' labels.
+  if (el.potential && !(pins.has(`${first.x},${first.y}`) && pins.has(`${last.x},${last.y}`))) {
     // The potential name sits at the end of the wire that is not on a symbol pin.
-    const first = el.points[0], last = el.points[el.points.length - 1];
     const atStart = !pins.has(`${first.x},${first.y}`) || pins.has(`${last.x},${last.y}`);
     const p = atStart ? first : last;
     const label = project.potentials.find((x) => x.id === el.potential)?.label ?? el.potential;

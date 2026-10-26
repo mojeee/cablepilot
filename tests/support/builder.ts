@@ -41,7 +41,8 @@ export function builder(lib: Library, projectId: string, name: string, settings:
       const id = nid();
       const element: SymbolEl = { id, kind: 'symbol', symbolId, x, y, rot: o.rot ?? 0, mirror: o.mirror ?? false, designation: o.designation ?? '', ...(o.location ? { location: o.location } : {}), ...(o.functionText ? { functionText: o.functionText } : {}), ...(o.value ? { value: o.value } : {}), ...(o.stateNote ? { stateNote: o.stateNote } : {}) };
       run({ type: 'symbol/place', page, element, autoNumber: o.auto !== false && !o.designation });
-      const def = lib.symbols.get(symbolId);
+      // A library symbol, or a company symbol embedded in the project (symbol/embed).
+      const def = lib.symbols.get(symbolId) ?? project.symbols.find((x) => x.id === symbolId);
       if (!def) throw new Error(`unknown symbol ${symbolId}`);
       const placed = project.pages.find((p) => p.id === page)?.elements.find((e) => e.id === id) as SymbolEl;
       return {
@@ -87,10 +88,10 @@ export function builder(lib: Library, projectId: string, name: string, settings:
         },
       };
     },
-    /** Assigns library parts to a device on a page: [part id, quantity] pairs. */
-    parts(page: string, designation: string, list: [string, number][]) {
+    /** Assigns library parts to a device on a page: [part id, quantity] pairs; `location` when it differs from the page's. */
+    parts(page: string, designation: string, list: [string, number][], location?: string) {
       const pg = project.pages.find((p) => p.id === page) as Page;
-      const key = keyOf(pg, designation);
+      const key = keyOf(pg, designation, location);
       if (!deviceIndex(project, lib).byKey.has(key)) throw new Error(`no device ${key}`);
       for (const [id] of list) {
         const def = lib.parts.get(id);
@@ -99,8 +100,8 @@ export function builder(lib: Library, projectId: string, name: string, settings:
       }
       run({ type: 'device/update', key, patch: { parts: list.map(([part, qty]) => ({ part, qty })) } });
     },
-    fields(page: string, designation: string, fields: Record<string, string>) {
-      const key = keyOf(project.pages.find((p) => p.id === page) as Page, designation);
+    fields(page: string, designation: string, fields: Record<string, string>, location?: string) {
+      const key = keyOf(project.pages.find((p) => p.id === page) as Page, designation, location);
       if (!deviceIndex(project, lib).byKey.has(key)) throw new Error(`no device ${key}`);
       run({ type: 'device/update', key, patch: { fields } });
     },

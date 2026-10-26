@@ -51,3 +51,28 @@ annotation and images, connectors with pins, several parts per device, wire numb
 generated legends and data sheets, nameplate lists, and dimensioned layout views. All of these are now
 in the brief and the roadmap. M8's launch checklist includes rebuilding a set of this kind (the third
 sample project) and ticking every row above.
+
+## Launch check (M8)
+
+The DC battery-charger sample (`samples/dc-charger.cablepilot.json`, built by `tests/support/samples.ts`) printed
+as one vector PDF: 27 A3 landscape sheets in the company frame and title block (logo, client, drawing number, order,
+sheet / next / total, revision), Italian drawing language, zones A–H M–U and 0–9, designations and wire numbers in
+red. It opens with a clean electrical rule check and its issued revisions up to date (`tests/samples.test.ts`).
+Sheet numbers below are the printed set's.
+
+| Row | Evidence in the printed set | Result |
+|---|---|---|
+| 1 Cover | Sheet 1: sheet index with the revision matrix, revision list, issue status boxes, units to build, approval and signature block; sheet 2 contents | Done |
+| 2 Data sheets, colours, suffixes | Sheets 3–4 general, battery and DC-output data with YES/NO boxes; sheet 23 conductor colours (IEC 60445 / IEC 60757); sheet 24 wire-number suffixes | Done |
+| 3–4 Symbol legend | Sheets 21–22, used symbols only, with the company symbol `-X30` (RJ45 service socket, embedded in the project) | Done |
+| 5 Board legend | Not a separate sheet: the boards are black boxes with named pins on sheet 9 (`-X20`, `-X21`, `-A2`, `-A5`) and their pins are listed on sheets 17–18 | Done, laid out differently |
+| 6 Single-line | Sheet 5: n-conductor ticks, dashed module outlines, warning sign, notes, a measurement (`-P1` voltmeter), the battery in its own location `+BT` | Done |
+| 7–9 Multi-line | Sheets 6–8: 3-phase input, transformer with vector group, MCBs, battery fuse, rectifier modules, hall sensor `-B1`, diode, DC contactor `-KM1`, battery, the phase-control relay `-K1` with its contact image and the note "contacts shown with the relay in alarm", cross-references like `[07-P4]`, wire numbers with suffixes (`001L+`), coloured conductors, a bundle labelled "10 mm² BK", locations `+DS` and `+BT`, warning signs | Done. A combined fuse switch-disconnector is not a library symbol: the sample draws a fuse; a company can add its own with the symbol editor |
+| 10 PLC interface | Sheet 9: boards with numbered pins, a ribbon cable, an RJ45 Cat 5 patch cable, the DC/DC converter `-U3` (sheet 7), the sensor cable `-W3` with BN/WH/GN cores, a device illustration (HMI front view) | Done. The sample's ribbon has 4 poles, not 40: the pole count is a property of the connector |
+| 11 Terminals, torque, nameplates | Sheet 10 terminal diagram with strip length; sheet 25 tightening torques with sources; sheet 26 nameplates | Done |
+| 12 Layout | Sheets 12–14: mounting plate to scale 1:10 with dimension lines, hatched cable-entry zone and a protection cover; door with the HMI and the cable-length note; side view with device depths | Done |
+| 13 BOM | Sheets 19–20: designation, position, quantity, part code, description, type, manufacturer; several parts per device and project-level parts | Done |
+| Wire and cable lists, PLC I/O | Sheet 11 cables, sheets 15–16 wires, sheet 27 PLC I/O | Done |
+| Cross-cutting rows | Title block with logo, copyright in the margin, skipped zone letters, drawing style, drawing language, free annotation and images, revisions, DC library: all visible on the sheets above | Done |
+
+Importing an existing PDF or DXF set as an intelligent project stays "after release 1" (see the roadmap).

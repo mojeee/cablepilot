@@ -20,6 +20,21 @@ function proj(lang: 'en' | 'it' = 'en') {
 }
 
 describe('page drawing', () => {
+  it('labels a wire with its potential at the free end, but not when a tag already names it at the other end', () => {
+    const { b, pg } = proj();
+    const lamp = b.place(pg, 'lamp', 100, 100, { designation: '-H1' });
+    // A free end: the potential name is drawn there.
+    b.wire(pg, [lamp.pin('1'), { x: 100, y: 60 }], { potential: '24VDC' });
+    const label = b.project.potentials.find((p) => p.id === '24VDC')?.label ?? '24VDC';
+    expect(texts(buildPage(b.project, b.project.pages.find((p) => p.id === pg)!, lib, 0).prims).filter((t) => t === label)).toHaveLength(1);
+    // Both ends on pins (the lamp and a potential tag): only the tag shows the name, nothing collides at the lamp pin.
+    const { b: b2, pg: pg2 } = proj();
+    const lamp2 = b2.place(pg2, 'lamp', 100, 100, { designation: '-H1' });
+    b2.place(pg2, 'potential-tag', 100, 140, { value: '0V' });
+    b2.wire(pg2, [lamp2.pin('2'), { x: 100, y: 140 }], { potential: '0V' });
+    const zero = b2.project.potentials.find((p) => p.id === '0V')?.label ?? '0V';
+    expect(texts(buildPage(b2.project, b2.project.pages.find((p) => p.id === pg2)!, lib, 0).prims).filter((t) => t === zero)).toHaveLength(1);
+  });
   it('fills the title block from project and page properties', () => {
     const { b } = proj();
     const t = texts(buildPage(b.project, b.project.pages[0], lib, 0).prims);

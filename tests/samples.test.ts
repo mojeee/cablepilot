@@ -49,7 +49,8 @@ describe('sample projects', () => {
       it('has every page type it promises and no unknown symbols', () => {
         const types = new Set(built.pages.map((p) => p.type));
         for (const t of ['cover', 'contents', 'data', 'singleLine', 'power', 'control', 'plc', 'terminals', 'cables', 'layout']) expect(types.has(t as never), t).toBe(true);
-        for (const pg of built.pages) for (const e of pg.elements) if (e.kind === 'symbol') expect(lib.symbols.has(e.symbolId), e.symbolId).toBe(true);
+        // Every symbol resolves: from the library, or a company symbol embedded in the project.
+        for (const pg of built.pages) for (const e of pg.elements) if (e.kind === 'symbol') expect(lib.symbols.has(e.symbolId) || built.symbols.some((x) => x.id === e.symbolId), e.symbolId).toBe(true);
       });
       it('connects without two potentials short-circuited', () => {
         const nets = projectNets(built, lib);

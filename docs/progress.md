@@ -474,3 +474,31 @@ Panel Designer) before release 1. Both are now parts of M8 in the roadmap. This 
   (`scripts/video-sync.mjs`). Before, the end of the file was the anchor, and it drifted by the seconds Playwright
   took to finish writing. The short clips use the same anchor and were recorded again.
 - The demo WebM is encoded a little harder (CRF 38) to stay under the 8 MB budget now that it runs 141 s.
+
+## M8 part 3: release preparation (done, except the first tagged build)
+
+- Release builds are configured (electron-builder, `npm run dist`) and a release workflow runs on `v*` tags.
+- CI runs the end-to-end tests on Linux with software WebGL. This fix is not proven yet: it needs a push.
+- Docs: getting started, numbering and the file format, also as pages on the website in both languages.
+- The website and the README follow BoardPilot's design, with structured data and social cards for search engines.
+- End-to-end tests cover every main workflow: 33 pass. The recordings (demo, clips, screenshots) run on demand.
+- Launch check done: the charger sample prints as 27 sheets, and each row of `docs/reference-drawing-check.md` has
+  its evidence. Two things are drawn differently from the reference set: the board legend is the black boxes plus
+  the pin lists, and there is no combined fuse switch-disconnector symbol (a company can draw one in the symbol
+  editor).
+
+**What is left**
+
+- "Release builds from a git tag": tick it after the first tag run produces the four installers. Ticking it marks
+  M8 done, and the website then shows direct download buttons.
+- The short videos and the demo were recorded before the charger sample gained its new sheets. Record them again
+  (`npm run record:clips`, `npm run record:demo`) when convenient.
+- Electron prints a deprecation warning about `safeStorage` at start-up; it does not affect the app yet.
+
+**What the owner must do by hand**
+
+- Push `main` and check that CI passes on Linux.
+- Push a tag (for example `v0.1.0`) when ready for the first release, and check the installers on each system.
+- On GitHub, under the repository's About: the description, the website `https://cablepilot.agentflowbind.com`,
+  topics (electrical-cad, iec-60617, control-panel, schematic, electron), and under Settings the social preview
+  image `site/img/og.png`.

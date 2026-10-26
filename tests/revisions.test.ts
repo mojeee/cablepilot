@@ -175,7 +175,7 @@ describe('sample projects carry their revisions', () => {
     expect(changedPages(p, lib)).toEqual([]);
     const cmp = compareRevisions(p, lib, '0', '1')!;
     expect(cmp.pages.filter((x) => x.status === 'changed').map((x) => x.title)).toContain('Uscita DC e batteria');
-    expect(cmp.devices.map((d) => d.key)).toContain('+DS-G1');
+    expect(cmp.devices.map((d) => d.key)).toContain('+BT-G1'); // the battery rack is its own location, +BT
     expect(cmp.parts.some((x) => x.from === 54 && x.to === 55)).toBe(true);
     const dc = p.pages.find((x) => x.title.en === 'DC output and battery')!;
     expect(pageRevision(p, dc.id)).toBe('1');

@@ -256,8 +256,9 @@ test('M3: number the wires, view the terminal diagram, export the PDF set and th
     await page.keyboard.press('Escape');
     await page.getByTestId('save').click();
     const saved = await expect.poll(() => readdirSync(out).find((f) => f.endsWith('.cablepilot.json'))).toBeTruthy().then(() => readdirSync(out).find((f) => f.endsWith('.cablepilot.json'))!);
-    const proj = JSON.parse(readFileSync(join(out, saved), 'utf8')) as { pages: { type: string; elements: { kind: string; number?: string }[] }[] };
-    const numbers = proj.pages.filter((p) => p.type === 'power' || p.type === 'control' || p.type === 'plc').flatMap((p) => p.elements).filter((e) => e.kind === 'wire').map((e) => e.number);
+    const proj = JSON.parse(readFileSync(join(out, saved), 'utf8')) as { pages: { type: string; elements: { kind: string; number?: string; bundle?: boolean }[] }[] };
+    // A bundle of wires carries its label ("10 mm² BK"), not a number.
+    const numbers = proj.pages.filter((p) => p.type === 'power' || p.type === 'control' || p.type === 'plc').flatMap((p) => p.elements).filter((e) => e.kind === 'wire' && !e.bundle).map((e) => e.number);
     expect(numbers.length).toBeGreaterThan(30);
     expect(numbers.every((n) => /^\d+$/.test(n ?? ''))).toBe(true);
     // Renumbering is one undo step: undo restores the suffixed numbers of the sample.

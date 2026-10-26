@@ -141,8 +141,8 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 - [ ] Release builds from a git tag: macOS dmg (arm64 and x64), Windows installer, Linux AppImage (unsigned at first, ready for signing)
 - [x] The website with screenshots from the real app and the recorded demo
 - [x] Docs: getting started, the project file format, how numbering works
-- [ ] End-to-end tests of every main workflow
-- [ ] Launch checklist: the DC battery-charger sample printed as a full drawing set, every row of `docs/reference-drawing-check.md` ticked
+- [x] End-to-end tests of every main workflow
+- [x] Launch checklist: the DC battery-charger sample printed as a full drawing set, every row of `docs/reference-drawing-check.md` ticked
 
 ## M9 and later: phase 2, electronics
 

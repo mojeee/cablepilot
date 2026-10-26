@@ -108,6 +108,7 @@
           {"h":9,"key":"totalSheets","w":15,"x":165,"y":27}
         ],
         "h": 36,
+        "logoAssetId": "logo-esempio",
         "w": 180
       }
     }
@@ -443,6 +444,7 @@
           "kind": "symbol",
           "designation": "-G1",
           "functionText": {"en":"Battery 110 V","it":"Batteria 110 V"},
+          "location": "BT",
           "mirror": false,
           "rot": 0,
           "symbolId": "battery",
@@ -458,9 +460,22 @@
         },
         {"id":"e15","kind":"wire","points":[{"x":167.5,"y":190},{"x":167.5,"y":205}]},
         {"id":"e15-j1","kind":"junction","x":167.5,"y":205},
-        {"id":"e16","kind":"warning","sign":"electric","size":12,"x":300,"y":70},
         {
-          "id": "e17",
+          "id": "e16",
+          "kind": "symbol",
+          "designation": "-P1",
+          "functionText": {"en":"Battery voltage","it":"Tensione batteria"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "voltmeter",
+          "x": 340,
+          "y": 225
+        },
+        {"id":"e17","kind":"wire","points":[{"x":300,"y":205},{"x":340,"y":205},{"x":340,"y":220}]},
+        {"id":"e17-j1","kind":"junction","x":300,"y":205},
+        {"id":"e18","kind":"warning","sign":"electric","size":12,"x":300,"y":70},
+        {
+          "id": "e19",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -470,7 +485,7 @@
           "y": 70
         },
         {
-          "id": "e114",
+          "id": "e124",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -491,7 +506,7 @@
       "type": "power",
       "elements": [
         {
-          "id": "e18",
+          "id": "e20",
           "kind": "symbol",
           "designation": "-QF1",
           "functionText": {"en":"Input breaker","it":"Interruttore di ingresso"},
@@ -502,7 +517,7 @@
           "y": 55
         },
         {
-          "id": "e19",
+          "id": "e21",
           "kind": "symbol",
           "designation": "-T1",
           "functionText": {"en":"Three-phase transformer","it":"Trasformatore trifase"},
@@ -513,7 +528,7 @@
           "y": 112
         },
         {
-          "id": "e20",
+          "id": "e22",
           "kind": "wire",
           "number": "001L1",
           "points": [{"x":95,"y":25},{"x":95,"y":50}],
@@ -521,7 +536,7 @@
           "wireType": "6mm2-BK"
         },
         {
-          "id": "e21",
+          "id": "e23",
           "kind": "wire",
           "number": "001L2",
           "points": [{"x":100,"y":25},{"x":100,"y":50}],
@@ -529,7 +544,7 @@
           "wireType": "6mm2-BK"
         },
         {
-          "id": "e22",
+          "id": "e24",
           "kind": "wire",
           "number": "001L3",
           "points": [{"x":105,"y":25},{"x":105,"y":50}],
@@ -537,28 +552,28 @@
           "wireType": "6mm2-BK"
         },
         {
-          "id": "e23",
+          "id": "e25",
           "kind": "wire",
           "number": "001",
           "points": [{"x":95,"y":60},{"x":95,"y":104.5}],
           "wireType": "6mm2-BK"
         },
         {
-          "id": "e24",
+          "id": "e26",
           "kind": "wire",
           "number": "003",
           "points": [{"x":100,"y":60},{"x":100,"y":104.5}],
           "wireType": "6mm2-BK"
         },
         {
-          "id": "e25",
+          "id": "e27",
           "kind": "wire",
           "number": "005",
           "points": [{"x":105,"y":60},{"x":105,"y":104.5}],
           "wireType": "6mm2-BK"
         },
         {
-          "id": "e26",
+          "id": "e28",
           "kind": "symbol",
           "designation": "-U1",
           "functionText": {"en":"Rectifier module 1","it":"Modulo raddrizzatore 1"},
@@ -569,7 +584,7 @@
           "y": 190
         },
         {
-          "id": "e27",
+          "id": "e29",
           "kind": "symbol",
           "designation": "-U2",
           "functionText": {"en":"Rectifier module 2","it":"Modulo raddrizzatore 2"},
@@ -579,60 +594,60 @@
           "x": 240,
           "y": 190
         },
-        {"id":"e28","kind":"wire","number":"002","points":[{"x":95,"y":119.5},{"x":95,"y":180}]},
-        {"id":"e29","kind":"wire","number":"004","points":[{"x":100,"y":119.5},{"x":100,"y":180}]},
-        {"id":"e30","kind":"wire","number":"006","points":[{"x":105,"y":119.5},{"x":105,"y":180}]},
+        {"id":"e30","kind":"wire","number":"002","points":[{"x":95,"y":119.5},{"x":95,"y":180}]},
+        {"id":"e31","kind":"wire","number":"004","points":[{"x":100,"y":119.5},{"x":100,"y":180}]},
+        {"id":"e32","kind":"wire","number":"006","points":[{"x":105,"y":119.5},{"x":105,"y":180}]},
         {
-          "id": "e31",
+          "id": "e33",
           "kind": "wire",
           "number": "002",
           "points": [{"x":95,"y":154},{"x":235,"y":154},{"x":235,"y":180}]
         },
-        {"id":"e31-j1","kind":"junction","x":95,"y":154},
+        {"id":"e33-j1","kind":"junction","x":95,"y":154},
         {
-          "id": "e32",
+          "id": "e34",
           "kind": "wire",
           "number": "004",
           "points": [{"x":100,"y":150},{"x":240,"y":150},{"x":240,"y":180}]
         },
-        {"id":"e32-j1","kind":"junction","x":100,"y":150},
+        {"id":"e34-j1","kind":"junction","x":100,"y":150},
         {
-          "id": "e33",
+          "id": "e35",
           "kind": "wire",
           "number": "006",
           "points": [{"x":105,"y":146},{"x":245,"y":146},{"x":245,"y":180}]
         },
-        {"id":"e33-j1","kind":"junction","x":105,"y":146},
+        {"id":"e35-j1","kind":"junction","x":105,"y":146},
         {
-          "id": "e34",
+          "id": "e36",
           "kind": "wire",
           "number": "001L+",
           "points": [{"x":97.5,"y":200},{"x":97.5,"y":222},{"x":300,"y":222}],
           "potential": "L+"
         },
         {
-          "id": "e35",
+          "id": "e37",
           "kind": "wire",
           "number": "001L+",
           "points": [{"x":237.5,"y":200},{"x":237.5,"y":222}]
         },
-        {"id":"e35-j1","kind":"junction","x":237.5,"y":222},
+        {"id":"e37-j1","kind":"junction","x":237.5,"y":222},
         {
-          "id": "e36",
+          "id": "e38",
           "kind": "wire",
           "number": "001L-",
           "points": [{"x":102.5,"y":200},{"x":102.5,"y":238},{"x":300,"y":238}],
           "potential": "L-"
         },
         {
-          "id": "e37",
+          "id": "e39",
           "kind": "wire",
           "number": "001L-",
           "points": [{"x":242.5,"y":200},{"x":242.5,"y":238}]
         },
-        {"id":"e37-j1","kind":"junction","x":242.5,"y":238},
+        {"id":"e39-j1","kind":"junction","x":242.5,"y":238},
         {
-          "id": "e38",
+          "id": "e40",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -643,7 +658,7 @@
           "y": 222
         },
         {
-          "id": "e39",
+          "id": "e41",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -653,10 +668,10 @@
           "x": 300,
           "y": 238
         },
-        {"id":"e40","kind":"rect","dashed":true,"h":44,"w":40,"x":80,"y":168},
-        {"id":"e41","kind":"rect","dashed":true,"h":44,"w":40,"x":220,"y":168},
+        {"id":"e42","kind":"rect","dashed":true,"h":44,"w":40,"x":80,"y":168},
+        {"id":"e43","kind":"rect","dashed":true,"h":44,"w":40,"x":220,"y":168},
         {
-          "id": "e42",
+          "id": "e44",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -666,15 +681,15 @@
           "y": 60
         },
         {
-          "id": "e43",
+          "id": "e45",
           "kind": "wire",
           "number": "001PE",
           "points": [{"x":380,"y":55},{"x":380,"y":35}],
           "potential": "PE"
         },
-        {"id":"e44","kind":"warning","sign":"electric","size":12,"x":45,"y":100},
+        {"id":"e46","kind":"warning","sign":"electric","size":12,"x":45,"y":100},
         {
-          "id": "e45",
+          "id": "e47",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -684,7 +699,7 @@
           "y": 90
         },
         {
-          "id": "e115",
+          "id": "e125",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -695,7 +710,7 @@
           "y": 25
         },
         {
-          "id": "e116",
+          "id": "e126",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -706,7 +721,7 @@
           "y": 25
         },
         {
-          "id": "e117",
+          "id": "e127",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -717,7 +732,7 @@
           "y": 25
         },
         {
-          "id": "e118",
+          "id": "e128",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -738,7 +753,7 @@
       "type": "power",
       "elements": [
         {
-          "id": "e46",
+          "id": "e48",
           "kind": "symbol",
           "designation": "",
           "mirror": true,
@@ -749,7 +764,7 @@
           "y": 80
         },
         {
-          "id": "e47",
+          "id": "e49",
           "kind": "symbol",
           "designation": "",
           "mirror": true,
@@ -760,7 +775,7 @@
           "y": 170
         },
         {
-          "id": "e48",
+          "id": "e50",
           "kind": "symbol",
           "designation": "-F1",
           "functionText": {"en":"Battery fuse","it":"Fusibile batteria"},
@@ -771,7 +786,7 @@
           "y": 80
         },
         {
-          "id": "e49",
+          "id": "e51",
           "kind": "symbol",
           "designation": "-KM1",
           "functionText": {"en":"DC contactor","it":"Contattore DC"},
@@ -782,7 +797,7 @@
           "y": 80
         },
         {
-          "id": "e50",
+          "id": "e52",
           "kind": "symbol",
           "designation": "-V1",
           "functionText": {"en":"Blocking diode","it":"Diodo di blocco"},
@@ -793,7 +808,7 @@
           "y": 80
         },
         {
-          "id": "e51",
+          "id": "e53",
           "kind": "symbol",
           "designation": "-B1",
           "functionText": {"en":"Current sensor","it":"Sensore di corrente"},
@@ -804,10 +819,11 @@
           "y": 80
         },
         {
-          "id": "e52",
+          "id": "e54",
           "kind": "symbol",
           "designation": "-G1",
           "functionText": {"en":"Battery 110 V","it":"Batteria 110 V"},
+          "location": "BT",
           "mirror": false,
           "rot": 0,
           "symbolId": "battery",
@@ -815,7 +831,7 @@
           "y": 125
         },
         {
-          "id": "e53",
+          "id": "e55",
           "kind": "symbol",
           "designation": "-P1",
           "functionText": {"en":"Battery voltage","it":"Tensione batteria"},
@@ -826,7 +842,7 @@
           "y": 125
         },
         {
-          "id": "e54",
+          "id": "e56",
           "kind": "wire",
           "number": "001L+",
           "points": [{"x":40,"y":80},{"x":75,"y":80}],
@@ -834,48 +850,60 @@
           "wireType": "16mm2-BK"
         },
         {
-          "id": "e55",
+          "id": "e57",
           "kind": "wire",
           "number": "007",
           "points": [{"x":85,"y":80},{"x":107,"y":80}],
           "wireType": "16mm2-BK"
         },
-        {"id":"e56","kind":"wire","number":"008","points":[{"x":117,"y":80},{"x":139,"y":80}]},
+        {"id":"e58","kind":"wire","number":"008","points":[{"x":117,"y":80},{"x":139,"y":80}]},
         {
-          "id": "e57",
+          "id": "e59",
           "kind": "wire",
-          "number": "009",
-          "points": [{"x":149,"y":80},{"x":290,"y":80},{"x":290,"y":117.5}]
+          "bundle": true,
+          "points": [{"x":149,"y":80},{"x":290,"y":80},{"x":290,"y":117.5}],
+          "wireType": "wt-10bk"
         },
         {
-          "id": "e58",
+          "id": "e60",
           "kind": "wire",
           "number": "001L-",
           "points": [{"x":40,"y":170},{"x":290,"y":170}],
           "potential": "L-"
         },
-        {"id":"e59","kind":"wire","number":"001L-","points":[{"x":290,"y":132.5},{"x":290,"y":170}]},
-        {"id":"e60","kind":"wire","number":"009","points":[{"x":250,"y":80},{"x":250,"y":120}]},
-        {"id":"e60-j1","kind":"junction","x":250,"y":80},
-        {"id":"e61","kind":"wire","number":"001L-","points":[{"x":250,"y":130},{"x":250,"y":170}]},
-        {"id":"e61-j1","kind":"junction","x":250,"y":170},
+        {"id":"e61","kind":"wire","number":"001L-","points":[{"x":290,"y":132.5},{"x":290,"y":170}]},
+        {"id":"e62","kind":"wire","number":"010","points":[{"x":250,"y":80},{"x":250,"y":120}]},
+        {"id":"e62-j1","kind":"junction","x":250,"y":80},
+        {"id":"e63","kind":"wire","number":"001L-","points":[{"x":250,"y":130},{"x":250,"y":170}]},
+        {"id":"e63-j1","kind":"junction","x":250,"y":170},
         {
-          "id": "e62",
+          "id": "e64",
           "kind": "wire",
+          "cable": "-W3",
+          "core": "BN",
           "number": "001P",
-          "points": [{"x":173.5,"y":72.5},{"x":173.5,"y":60}],
+          "points": [{"x":173.5,"y":72.5},{"x":173.5,"y":42.5}],
           "potential": "24VDC"
         },
         {
-          "id": "e63",
+          "id": "e65",
           "kind": "wire",
+          "cable": "-W3",
+          "core": "WH",
           "number": "001M",
-          "points": [{"x":178.5,"y":72.5},{"x":178.5,"y":67.5},{"x":186,"y":67.5}],
+          "points": [{"x":178.5,"y":72.5},{"x":178.5,"y":65},{"x":205,"y":65}],
           "potential": "0V"
         },
-        {"id":"e64","kind":"wire","number":"010","points":[{"x":176,"y":87.5},{"x":176,"y":100}]},
         {
-          "id": "e65",
+          "id": "e66",
+          "kind": "wire",
+          "cable": "-W3",
+          "core": "GN",
+          "number": "009",
+          "points": [{"x":176,"y":87.5},{"x":176,"y":112.5}]
+        },
+        {
+          "id": "e67",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -883,10 +911,10 @@
           "symbolId": "interruption-point",
           "value": "IOUT",
           "x": 176,
-          "y": 100
+          "y": 112.5
         },
         {
-          "id": "e66",
+          "id": "e68",
           "kind": "rect",
           "assembly": "-A5",
           "dashed": true,
@@ -897,7 +925,7 @@
           "y": 53
         },
         {
-          "id": "e67",
+          "id": "e69",
           "kind": "symbol",
           "designation": "-X1",
           "functionText": {"en":"Load output L+","it":"Uscita carico L+"},
@@ -909,7 +937,7 @@
           "y": 95
         },
         {
-          "id": "e68",
+          "id": "e70",
           "kind": "symbol",
           "designation": "-X1",
           "functionText": {"en":"Load output L-","it":"Uscita carico L-"},
@@ -921,36 +949,85 @@
           "y": 95
         },
         {
-          "id": "e69",
+          "id": "e71",
           "kind": "wire",
-          "number": "009",
+          "number": "010",
           "points": [{"x":290,"y":80},{"x":330,"y":80},{"x":330,"y":90}]
         },
-        {"id":"e69-j1","kind":"junction","x":290,"y":80},
+        {"id":"e71-j1","kind":"junction","x":290,"y":80},
         {
-          "id": "e70",
+          "id": "e72",
           "kind": "wire",
           "number": "002L+",
           "points": [{"x":330,"y":100},{"x":330,"y":125}],
           "potential": "L+"
         },
         {
-          "id": "e71",
+          "id": "e73",
           "kind": "wire",
           "number": "001L-",
           "points": [{"x":290,"y":170},{"x":385,"y":170},{"x":385,"y":75},{"x":360,"y":75},{"x":360,"y":90}]
         },
-        {"id":"e71-j1","kind":"junction","x":290,"y":170},
+        {"id":"e73-j1","kind":"junction","x":290,"y":170},
         {
-          "id": "e72",
+          "id": "e74",
           "kind": "wire",
           "number": "002L-",
           "points": [{"x":360,"y":100},{"x":360,"y":125}],
           "potential": "L-"
         },
-        {"id":"e73","kind":"warning","sign":"electric","size":12,"x":370,"y":30},
         {
-          "id": "e74",
+          "id": "e75",
+          "kind": "symbol",
+          "designation": "-U3",
+          "functionText": {"en":"DC/DC converter 110/24 V","it":"Convertitore DC/DC 110/24 V"},
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "dc-dc-converter",
+          "x": 220,
+          "y": 202.5
+        },
+        {
+          "id": "e76",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": true,
+          "rot": 0,
+          "symbolId": "interruption-point",
+          "value": "L+",
+          "x": 185,
+          "y": 185
+        },
+        {
+          "id": "e77",
+          "kind": "wire",
+          "number": "001L+",
+          "points": [{"x":185,"y":185},{"x":217.5,"y":185},{"x":217.5,"y":192.5}]
+        },
+        {
+          "id": "e78",
+          "kind": "wire",
+          "number": "001L-",
+          "points": [{"x":222.5,"y":192.5},{"x":222.5,"y":170}]
+        },
+        {"id":"e78-j1","kind":"junction","x":222.5,"y":170},
+        {
+          "id": "e79",
+          "kind": "wire",
+          "number": "002P",
+          "points": [{"x":217.5,"y":212.5},{"x":217.5,"y":227.5},{"x":195,"y":227.5}],
+          "potential": "24VDC"
+        },
+        {
+          "id": "e80",
+          "kind": "wire",
+          "number": "002M",
+          "points": [{"x":222.5,"y":212.5},{"x":222.5,"y":227.5},{"x":245,"y":227.5}],
+          "potential": "0V"
+        },
+        {"id":"e81","kind":"warning","sign":"electric","size":12,"x":370,"y":30},
+        {
+          "id": "e82",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -960,7 +1037,7 @@
           "y": 215
         },
         {
-          "id": "e119",
+          "id": "e129",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -968,21 +1045,21 @@
           "symbolId": "potential-tag",
           "value": "24VDC",
           "x": 173.5,
-          "y": 60
+          "y": 42.5
         },
         {
-          "id": "e120",
+          "id": "e130",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
           "rot": 0,
           "symbolId": "potential-tag",
           "value": "0V",
-          "x": 186,
-          "y": 67.5
+          "x": 205,
+          "y": 65
         },
         {
-          "id": "e121",
+          "id": "e131",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -993,7 +1070,7 @@
           "y": 125
         },
         {
-          "id": "e122",
+          "id": "e132",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1002,6 +1079,28 @@
           "value": "L-",
           "x": 360,
           "y": 125
+        },
+        {
+          "id": "e133",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 180,
+          "symbolId": "potential-tag",
+          "value": "24VDC",
+          "x": 195,
+          "y": 227.5
+        },
+        {
+          "id": "e134",
+          "kind": "symbol",
+          "designation": "",
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "potential-tag",
+          "value": "0V",
+          "x": 245,
+          "y": 227.5
         }
       ],
       "location": "DS",
@@ -1014,21 +1113,21 @@
       "type": "control",
       "elements": [
         {
-          "id": "e75",
+          "id": "e83",
           "kind": "wire",
-          "number": "002P",
+          "number": "003P",
           "points": [{"x":40,"y":60},{"x":395,"y":60}],
           "potential": "24VDC"
         },
         {
-          "id": "e76",
+          "id": "e84",
           "kind": "wire",
-          "number": "002M",
+          "number": "003M",
           "points": [{"x":40,"y":200},{"x":395,"y":200}],
           "potential": "0V"
         },
         {
-          "id": "e77",
+          "id": "e85",
           "kind": "symbol",
           "designation": "-K1",
           "functionText": {"en":"Phase monitoring relay","it":"Relè controllo fasi"},
@@ -1042,12 +1141,12 @@
           "x": 70,
           "y": 100
         },
-        {"id":"e78","kind":"wire","number":"002P","points":[{"x":70,"y":60},{"x":70,"y":95}]},
-        {"id":"e78-j1","kind":"junction","x":70,"y":60},
-        {"id":"e79","kind":"wire","number":"002M","points":[{"x":70,"y":105},{"x":70,"y":200}]},
-        {"id":"e79-j1","kind":"junction","x":70,"y":200},
+        {"id":"e86","kind":"wire","number":"003P","points":[{"x":70,"y":60},{"x":70,"y":95}]},
+        {"id":"e86-j1","kind":"junction","x":70,"y":60},
+        {"id":"e87","kind":"wire","number":"003M","points":[{"x":70,"y":105},{"x":70,"y":200}]},
+        {"id":"e87-j1","kind":"junction","x":70,"y":200},
         {
-          "id": "e80",
+          "id": "e88",
           "kind": "symbol",
           "designation": "-K1",
           "functionText": {"en":"Mains failure","it":"Mancanza rete"},
@@ -1058,7 +1157,7 @@
           "y": 140
         },
         {
-          "id": "e81",
+          "id": "e89",
           "kind": "symbol",
           "designation": "-H1",
           "functionText": {"en":"Mains failure indication","it":"Segnalazione mancanza rete"},
@@ -1068,11 +1167,11 @@
           "x": 130,
           "y": 175
         },
-        {"id":"e82","kind":"wire","number":"002P","points":[{"x":130,"y":60},{"x":130,"y":135}]},
-        {"id":"e82-j1","kind":"junction","x":130,"y":60},
-        {"id":"e83","kind":"wire","number":"011","points":[{"x":130,"y":145},{"x":130,"y":170}]},
-        {"id":"e84","kind":"wire","number":"002M","points":[{"x":130,"y":180},{"x":130,"y":200}]},
-        {"id":"e84-j1","kind":"junction","x":130,"y":200},
+        {"id":"e90","kind":"wire","number":"003P","points":[{"x":130,"y":60},{"x":130,"y":135}]},
+        {"id":"e90-j1","kind":"junction","x":130,"y":60},
+        {"id":"e91","kind":"wire","number":"011","points":[{"x":130,"y":145},{"x":130,"y":170}]},
+        {"id":"e92","kind":"wire","number":"003M","points":[{"x":130,"y":180},{"x":130,"y":200}]},
+        {"id":"e92-j1","kind":"junction","x":130,"y":200},
         {
           "id": "mc1-1",
           "kind": "symbol",
@@ -1106,17 +1205,17 @@
           "x": 220,
           "y": 170
         },
-        {"id":"mc1-4","kind":"wire","number":"002P","points":[{"x":190,"y":60},{"x":190,"y":95}]},
-        {"id":"mc1-5","kind":"wire","number":"002M","points":[{"x":190,"y":105},{"x":190,"y":200}]},
-        {"id":"mc1-6","kind":"wire","number":"002P","points":[{"x":220,"y":60},{"x":220,"y":135}]},
+        {"id":"mc1-4","kind":"wire","number":"003P","points":[{"x":190,"y":60},{"x":190,"y":95}]},
+        {"id":"mc1-5","kind":"wire","number":"003M","points":[{"x":190,"y":105},{"x":190,"y":200}]},
+        {"id":"mc1-6","kind":"wire","number":"003P","points":[{"x":220,"y":60},{"x":220,"y":135}]},
         {"id":"mc1-7","kind":"wire","number":"012","points":[{"x":220,"y":145},{"x":220,"y":165}]},
-        {"id":"mc1-8","kind":"wire","number":"002M","points":[{"x":220,"y":175},{"x":220,"y":200}]},
+        {"id":"mc1-8","kind":"wire","number":"003M","points":[{"x":220,"y":175},{"x":220,"y":200}]},
         {"id":"mc1-4-j1","kind":"junction","x":190,"y":60},
         {"id":"mc1-5-j1","kind":"junction","x":190,"y":200},
         {"id":"mc1-6-j1","kind":"junction","x":220,"y":60},
         {"id":"mc1-8-j1","kind":"junction","x":220,"y":200},
         {
-          "id": "e85",
+          "id": "e93",
           "kind": "symbol",
           "designation": "-KM1",
           "functionText": {"en":"Battery DC contactor","it":"Contattore DC batteria"},
@@ -1126,12 +1225,12 @@
           "x": 360,
           "y": 100
         },
-        {"id":"e86","kind":"wire","number":"002P","points":[{"x":360,"y":60},{"x":360,"y":95}]},
-        {"id":"e86-j1","kind":"junction","x":360,"y":60},
-        {"id":"e87","kind":"wire","number":"002M","points":[{"x":360,"y":105},{"x":360,"y":200}]},
-        {"id":"e87-j1","kind":"junction","x":360,"y":200},
+        {"id":"e94","kind":"wire","number":"003P","points":[{"x":360,"y":60},{"x":360,"y":95}]},
+        {"id":"e94-j1","kind":"junction","x":360,"y":60},
+        {"id":"e95","kind":"wire","number":"003M","points":[{"x":360,"y":105},{"x":360,"y":200}]},
+        {"id":"e95-j1","kind":"junction","x":360,"y":200},
         {
-          "id": "e88",
+          "id": "e96",
           "kind": "box",
           "designation": "-X11",
           "functionText": {"en":"Plug","it":"Spina"},
@@ -1150,37 +1249,37 @@
           "y": 125
         },
         {
-          "id": "e89",
+          "id": "e97",
           "kind": "wire",
           "number": "011",
           "points": [{"x":130,"y":152.5},{"x":270,"y":152.5},{"x":270,"y":130},{"x":300,"y":130}]
         },
-        {"id":"e89-j1","kind":"junction","x":130,"y":152.5},
+        {"id":"e97-j1","kind":"junction","x":130,"y":152.5},
         {
-          "id": "e90",
+          "id": "e98",
           "kind": "wire",
           "number": "012",
           "points": [{"x":220,"y":157.5},{"x":280,"y":157.5},{"x":280,"y":135},{"x":300,"y":135}]
         },
-        {"id":"e90-j1","kind":"junction","x":220,"y":157.5},
+        {"id":"e98-j1","kind":"junction","x":220,"y":157.5},
         {
-          "id": "e91",
+          "id": "e99",
           "kind": "wire",
-          "number": "002P",
+          "number": "003P",
           "points": [{"x":320,"y":130},{"x":330,"y":130},{"x":330,"y":60}],
           "potential": "24VDC"
         },
-        {"id":"e91-j1","kind":"junction","x":330,"y":60},
+        {"id":"e99-j1","kind":"junction","x":330,"y":60},
         {
-          "id": "e92",
+          "id": "e100",
           "kind": "wire",
-          "number": "002M",
+          "number": "003M",
           "points": [{"x":320,"y":135},{"x":335,"y":135},{"x":335,"y":200}],
           "potential": "0V"
         },
-        {"id":"e92-j1","kind":"junction","x":335,"y":200},
+        {"id":"e100-j1","kind":"junction","x":335,"y":200},
         {
-          "id": "e123",
+          "id": "e135",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1191,7 +1290,7 @@
           "y": 60
         },
         {
-          "id": "e124",
+          "id": "e136",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1202,7 +1301,7 @@
           "y": 60
         },
         {
-          "id": "e125",
+          "id": "e137",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1213,7 +1312,7 @@
           "y": 200
         },
         {
-          "id": "e126",
+          "id": "e138",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1234,7 +1333,7 @@
       "type": "plc",
       "elements": [
         {
-          "id": "e93",
+          "id": "e101",
           "kind": "box",
           "designation": "-X10",
           "functionText": {"en":"Socket","it":"Presa"},
@@ -1253,7 +1352,7 @@
           "y": 62
         },
         {
-          "id": "e94",
+          "id": "e102",
           "kind": "box",
           "designation": "-A2",
           "functionText": {"en":"Digital inputs 24 V DC","it":"Ingressi digitali 24 V DC"},
@@ -1289,7 +1388,7 @@
           "y": 45
         },
         {
-          "id": "e95",
+          "id": "e103",
           "kind": "box",
           "designation": "-A5",
           "functionText": {"en":"Analog inputs","it":"Ingressi analogici"},
@@ -1318,7 +1417,7 @@
           "y": 146
         },
         {
-          "id": "e96",
+          "id": "e104",
           "kind": "box",
           "designation": "-A1",
           "functionText": {"en":"PLC CPU","it":"CPU PLC"},
@@ -1331,33 +1430,33 @@
           "y": 60
         },
         {
-          "id": "e97",
+          "id": "e105",
           "kind": "wire",
           "number": "011",
           "points": [{"x":70,"y":67},{"x":150,"y":67},{"x":150,"y":55},{"x":250,"y":55}]
         },
         {
-          "id": "e98",
+          "id": "e106",
           "kind": "wire",
           "number": "012",
           "points": [{"x":70,"y":72},{"x":170,"y":72},{"x":170,"y":65},{"x":250,"y":65}]
         },
         {
-          "id": "e99",
+          "id": "e107",
           "kind": "wire",
-          "number": "002P",
+          "number": "003P",
           "points": [{"x":55,"y":67},{"x":20,"y":67}],
           "potential": "24VDC"
         },
         {
-          "id": "e100",
+          "id": "e108",
           "kind": "wire",
-          "number": "002M",
+          "number": "003M",
           "points": [{"x":55,"y":72},{"x":10,"y":72},{"x":10,"y":97}],
           "potential": "0V"
         },
         {
-          "id": "e101",
+          "id": "e109",
           "kind": "symbol",
           "designation": "",
           "mirror": true,
@@ -1367,9 +1466,9 @@
           "x": 170,
           "y": 152
         },
-        {"id":"e102","kind":"wire","number":"010","points":[{"x":170,"y":152},{"x":250,"y":152}]},
+        {"id":"e110","kind":"wire","number":"009","points":[{"x":170,"y":152},{"x":250,"y":152}]},
         {
-          "id": "e103",
+          "id": "e111",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1379,7 +1478,7 @@
           "y": 142
         },
         {
-          "id": "e104",
+          "id": "e112",
           "kind": "box",
           "designation": "-A3",
           "functionText": {"en":"HMI operator panel","it":"Pannello operatore HMI"},
@@ -1395,7 +1494,7 @@
           "y": 200
         },
         {
-          "id": "e105",
+          "id": "e113",
           "kind": "box",
           "designation": "-A4",
           "functionText": {"en":"Network switch","it":"Switch di rete"},
@@ -1410,9 +1509,9 @@
           "x": 185,
           "y": 200
         },
-        {"id":"e106","kind":"wire","number":"013","points":[{"x":105,"y":205},{"x":185,"y":205}]},
+        {"id":"e114","kind":"wire","number":"013","points":[{"x":105,"y":205},{"x":185,"y":205}]},
         {
-          "id": "e107",
+          "id": "e115",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1422,28 +1521,28 @@
           "y": 198
         },
         {
-          "id": "e108",
+          "id": "e116",
           "kind": "wire",
-          "number": "003P",
+          "number": "004P",
           "points": [{"x":55,"y":205},{"x":20,"y":205}],
           "potential": "24VDC"
         },
         {
-          "id": "e109",
+          "id": "e117",
           "kind": "wire",
-          "number": "003M",
+          "number": "004M",
           "points": [{"x":55,"y":210},{"x":10,"y":210}],
           "potential": "0V"
         },
         {
-          "id": "e110",
+          "id": "e118",
           "kind": "wire",
-          "number": "004P",
+          "number": "005P",
           "points": [{"x":235,"y":210},{"x":270,"y":210}],
           "potential": "24VDC"
         },
         {
-          "id": "e111",
+          "id": "e119",
           "kind": "box",
           "designation": "-X20",
           "functionText": {"en":"Interface board header","it":"Intestazione scheda interfaccia"},
@@ -1460,7 +1559,7 @@
           "y": 195
         },
         {
-          "id": "e112",
+          "id": "e120",
           "kind": "box",
           "designation": "-X21",
           "functionText": {"en":"PLC input header","it":"Intestazione ingressi PLC"},
@@ -1477,7 +1576,7 @@
           "y": 195
         },
         {
-          "id": "e113",
+          "id": "e121",
           "kind": "text",
           "align": "left",
           "rot": 0,
@@ -1487,7 +1586,32 @@
           "y": 192
         },
         {
-          "id": "e127",
+          "id": "e122",
+          "kind": "symbol",
+          "designation": "-X30",
+          "functionText": {
+            "en": "Service RJ45 socket in the door (patch cable to -A4:P2)",
+            "it": "Presa RJ45 di servizio in porta (cavo patch verso -A4:P2)"
+          },
+          "mirror": false,
+          "rot": 0,
+          "symbolId": "company-rj45-service-socket",
+          "x": 160,
+          "y": 248
+        },
+        {"id":"img-hmi","kind":"image","assetId":"hmi-front","h":28,"w":42,"x":55,"y":236},
+        {
+          "id": "e123",
+          "kind": "text",
+          "align": "left",
+          "rot": 0,
+          "size": 2.5,
+          "text": "Vista frontale -A3 (illustrazione)",
+          "x": 55,
+          "y": 269
+        },
+        {
+          "id": "e139",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1498,7 +1622,7 @@
           "y": 67
         },
         {
-          "id": "e128",
+          "id": "e140",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1509,7 +1633,7 @@
           "y": 97
         },
         {
-          "id": "e129",
+          "id": "e141",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1520,7 +1644,7 @@
           "y": 205
         },
         {
-          "id": "e130",
+          "id": "e142",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1531,7 +1655,7 @@
           "y": 210
         },
         {
-          "id": "e131",
+          "id": "e143",
           "kind": "symbol",
           "designation": "",
           "mirror": false,
@@ -1603,10 +1727,10 @@
           "part": "generic-din-rail-35mm-1m",
           "w": 805,
           "x": 250,
-          "y": 287.5
+          "y": 290
         },
         {
-          "id": "lay15",
+          "id": "lay16",
           "kind": "cab",
           "auto": true,
           "designation": "R2",
@@ -1615,10 +1739,10 @@
           "part": "generic-din-rail-35mm-1m",
           "w": 805,
           "x": 250,
-          "y": 964.5
+          "y": 969.5
         },
         {
-          "id": "lay22",
+          "id": "lay23",
           "kind": "cab",
           "auto": true,
           "designation": "R3",
@@ -1627,10 +1751,10 @@
           "part": "generic-din-rail-35mm-1m",
           "w": 805,
           "x": 250,
-          "y": 1146.5
+          "y": 1151.5
         },
         {
-          "id": "lay29",
+          "id": "lay30",
           "kind": "cab",
           "auto": true,
           "d": 60,
@@ -1643,7 +1767,7 @@
           "y": 165
         },
         {
-          "id": "lay30",
+          "id": "lay31",
           "kind": "cab",
           "auto": true,
           "d": 60,
@@ -1653,10 +1777,10 @@
           "part": "generic-cable-duct-60x60-2m",
           "w": 810,
           "x": 245,
-          "y": 385
+          "y": 390
         },
         {
-          "id": "lay31",
+          "id": "lay32",
           "kind": "cab",
           "auto": true,
           "d": 60,
@@ -1666,10 +1790,10 @@
           "part": "generic-cable-duct-60x60-2m",
           "w": 810,
           "x": 245,
-          "y": 845
+          "y": 850
         },
         {
-          "id": "lay32",
+          "id": "lay33",
           "kind": "cab",
           "auto": true,
           "d": 60,
@@ -1679,10 +1803,10 @@
           "part": "generic-cable-duct-60x60-2m",
           "w": 810,
           "x": 245,
-          "y": 1059
+          "y": 1064
         },
         {
-          "id": "lay33",
+          "id": "lay34",
           "kind": "cab",
           "auto": true,
           "d": 60,
@@ -1692,15 +1816,15 @@
           "part": "generic-cable-duct-60x60-2m",
           "w": 810,
           "x": 245,
-          "y": 1209
+          "y": 1214
         },
         {
-          "id": "lay34",
+          "id": "lay35",
           "kind": "cab",
           "auto": true,
           "d": 60,
           "designation": "D6",
-          "h": 1104,
+          "h": 1109,
           "item": "duct",
           "part": "generic-cable-duct-60x60-2m",
           "w": 60,
@@ -1708,7 +1832,7 @@
           "y": 165
         },
         {
-          "id": "lay35",
+          "id": "lay36",
           "kind": "cab",
           "auto": true,
           "h": 60,
@@ -1718,13 +1842,23 @@
           "x": 185,
           "y": 1785
         },
-        {"id":"lay36","kind":"cab","auto":true,"d":45,"h":0,"item":"dim","w":1000,"x":120,"y":1900},
-        {"id":"lay37","kind":"cab","auto":true,"d":45,"h":1800,"item":"dim","w":0,"x":120,"y":100},
-        {"id":"lay38","kind":"cab","auto":true,"d":20,"h":0,"item":"dim","w":900,"x":170,"y":1850},
-        {"id":"lay39","kind":"cab","auto":true,"d":-20,"h":1700,"item":"dim","w":0,"x":1070,"y":150},
-        {"id":"lay40","kind":"cab","auto":true,"d":28,"h":155,"item":"dim","w":0,"x":1120,"y":150},
-        {"id":"lay41","kind":"cab","auto":true,"d":28,"h":677,"item":"dim","w":0,"x":1120,"y":305},
-        {"id":"lay42","kind":"cab","auto":true,"d":28,"h":182,"item":"dim","w":0,"x":1120,"y":982},
+        {"id":"lay37","kind":"cab","auto":true,"d":45,"h":0,"item":"dim","w":1000,"x":120,"y":1900},
+        {"id":"lay38","kind":"cab","auto":true,"d":45,"h":1800,"item":"dim","w":0,"x":120,"y":100},
+        {"id":"lay39","kind":"cab","auto":true,"d":20,"h":0,"item":"dim","w":900,"x":170,"y":1850},
+        {"id":"lay40","kind":"cab","auto":true,"d":-20,"h":1700,"item":"dim","w":0,"x":1070,"y":150},
+        {"id":"lay41","kind":"cab","auto":true,"d":28,"h":157.5,"item":"dim","w":0,"x":1120,"y":150},
+        {
+          "id": "lay42",
+          "kind": "cab",
+          "auto": true,
+          "d": 28,
+          "h": 679.5,
+          "item": "dim",
+          "w": 0,
+          "x": 1120,
+          "y": 307.5
+        },
+        {"id":"lay43","kind":"cab","auto":true,"d":28,"h":182,"item":"dim","w":0,"x":1120,"y":987},
         {
           "id": "lay12",
           "kind": "cab",
@@ -1736,7 +1870,7 @@
           "rail": "lay11",
           "w": 52.5,
           "x": 250,
-          "y": 260
+          "y": 262.5
         },
         {
           "id": "lay13",
@@ -1749,7 +1883,7 @@
           "rail": "lay11",
           "w": 35,
           "x": 307.5,
-          "y": 260
+          "y": 262.5
         },
         {
           "id": "lay14",
@@ -1762,101 +1896,114 @@
           "rail": "lay11",
           "w": 70,
           "x": 347.5,
+          "y": 247.5
+        },
+        {
+          "id": "lay15",
+          "kind": "cab",
+          "auto": true,
+          "d": 120,
+          "designation": "+DS-U3",
+          "h": 125,
+          "item": "device",
+          "rail": "lay11",
+          "w": 60,
+          "x": 422.5,
           "y": 245
         },
         {
-          "id": "lay16",
+          "id": "lay17",
           "kind": "cab",
           "auto": true,
           "d": 75,
           "designation": "+DS-A5",
           "h": 100,
           "item": "device",
-          "rail": "lay15",
+          "rail": "lay16",
           "w": 30,
           "x": 250,
-          "y": 932
-        },
-        {
-          "id": "lay17",
-          "kind": "cab",
-          "auto": true,
-          "d": 65,
-          "designation": "+DS-K1",
-          "h": 90,
-          "item": "device",
-          "rail": "lay15",
-          "w": 22.5,
-          "x": 285,
           "y": 937
         },
         {
           "id": "lay18",
           "kind": "cab",
           "auto": true,
-          "d": 70,
-          "designation": "+DS-K2",
-          "h": 80,
+          "d": 65,
+          "designation": "+DS-K1",
+          "h": 90,
           "item": "device",
-          "rail": "lay15",
-          "w": 12.5,
-          "x": 312.5,
+          "rail": "lay16",
+          "w": 22.5,
+          "x": 285,
           "y": 942
         },
         {
           "id": "lay19",
           "kind": "cab",
           "auto": true,
-          "d": 75,
-          "designation": "+DS-A2",
-          "h": 100,
+          "d": 70,
+          "designation": "+DS-K2",
+          "h": 80,
           "item": "device",
-          "rail": "lay15",
-          "w": 30,
-          "x": 330,
-          "y": 932
+          "rail": "lay16",
+          "w": 12.5,
+          "x": 312.5,
+          "y": 947
         },
         {
           "id": "lay20",
           "kind": "cab",
           "auto": true,
           "d": 75,
-          "designation": "+DS-A1",
+          "designation": "+DS-A2",
           "h": 100,
           "item": "device",
-          "rail": "lay15",
-          "w": 90,
-          "x": 365,
-          "y": 932
+          "rail": "lay16",
+          "w": 30,
+          "x": 330,
+          "y": 937
         },
         {
           "id": "lay21",
           "kind": "cab",
           "auto": true,
           "d": 75,
+          "designation": "+DS-A1",
+          "h": 100,
+          "item": "device",
+          "rail": "lay16",
+          "w": 90,
+          "x": 365,
+          "y": 937
+        },
+        {
+          "id": "lay22",
+          "kind": "cab",
+          "auto": true,
+          "d": 75,
           "designation": "+DS-A4",
           "h": 114,
           "item": "device",
-          "rail": "lay15",
+          "rail": "lay16",
           "w": 28,
           "x": 460,
-          "y": 925
+          "y": 930
         },
         {
-          "id": "lay23",
+          "id": "lay24",
           "kind": "cab",
           "auto": true,
           "d": 45,
           "designation": "+DS-X1",
           "h": 50,
           "item": "device",
-          "rail": "lay22",
+          "rail": "lay23",
           "w": 32.4,
           "x": 250,
-          "y": 1139
+          "y": 1144
         },
         {
-          "id": "lay24",
+          "id": "lay25",
           "kind": "cab",
           "auto": true,
           "d": 220,
@@ -1865,10 +2012,10 @@
           "item": "device",
           "w": 320,
           "x": 250,
-          "y": 465
+          "y": 470
         },
         {
-          "id": "lay25",
+          "id": "lay26",
           "kind": "cab",
           "auto": true,
           "d": 230,
@@ -1877,10 +2024,10 @@
           "item": "device",
           "w": 150,
           "x": 575,
-          "y": 465
+          "y": 470
         },
         {
-          "id": "lay26",
+          "id": "lay27",
           "kind": "cab",
           "auto": true,
           "d": 230,
@@ -1889,10 +2036,10 @@
           "item": "device",
           "w": 150,
           "x": 730,
-          "y": 465
+          "y": 470
         },
         {
-          "id": "lay27",
+          "id": "lay28",
           "kind": "cab",
           "auto": true,
           "d": 60,
@@ -1901,10 +2048,10 @@
           "item": "device",
           "w": 70,
           "x": 885,
-          "y": 465
+          "y": 470
         },
         {
-          "id": "lay28",
+          "id": "lay29",
           "kind": "cab",
           "auto": true,
           "d": 45,
@@ -1913,7 +2060,17 @@
           "item": "device",
           "w": 60,
           "x": 960,
-          "y": 465
+          "y": 470
+        },
+        {
+          "id": "cov-rect",
+          "kind": "cab",
+          "h": 350,
+          "item": "cover",
+          "note": "Copertura di protezione",
+          "w": 325,
+          "x": 565,
+          "y": 460
         }
       ],
       "layout": {"h":2020,"view":"front","w":1240},
@@ -1926,7 +2083,7 @@
       "type": "layout",
       "elements": [
         {
-          "id": "lay43",
+          "id": "lay44",
           "kind": "cab",
           "auto": true,
           "d": 500,
@@ -1939,7 +2096,7 @@
           "y": 100
         },
         {
-          "id": "lay44",
+          "id": "lay45",
           "kind": "cab",
           "auto": true,
           "d": 40,
@@ -1951,7 +2108,7 @@
           "y": 160
         },
         {
-          "id": "lay45",
+          "id": "lay46",
           "kind": "cab",
           "auto": true,
           "d": 65,
@@ -1963,7 +2120,7 @@
           "y": 160
         },
         {
-          "id": "lay46",
+          "id": "lay47",
           "kind": "cab",
           "auto": true,
           "d": 50,
@@ -1975,7 +2132,7 @@
           "y": 160
         },
         {
-          "id": "lay47",
+          "id": "lay48",
           "kind": "cab",
           "auto": true,
           "d": 50,
@@ -1984,6 +2141,18 @@
           "item": "device",
           "w": 30,
           "x": 571,
+          "y": 160
+        },
+        {
+          "id": "lay49",
+          "kind": "cab",
+          "auto": true,
+          "d": 30,
+          "designation": "+DS-X30",
+          "h": 30,
+          "item": "device",
+          "w": 30,
+          "x": 626,
           "y": 160
         }
       ],
@@ -2106,9 +2275,53 @@
       "title": {"it":"Elenco I/O PLC"}
     }
   ],
-  "assets": {},
-  "symbols": [],
+  "assets": {
+    "hmi-front": {
+      "name": "hmi-front.png",
+      "data": "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",
+      "h": 320,
+      "mime": "image/png",
+      "w": 480
+    },
+    "logo-esempio": {
+      "name": "logo-esempio.png",
+      "data": "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",
+      "h": 180,
+      "mime": "image/png",
+      "w": 600
+    }
+  },
+  "symbols": [
+    {
+      "id": "company-rj45-service-socket",
+      "kind": "symbol",
+      "autoNumber": false,
+      "category": "terminals",
+      "designationLetter": "X",
+      "function": "socket",
+      "graphics": [
+        {"h":8,"t":"rect","w":10,"x":-5,"y":-4},
+        {"t":"line","x1":-7.5,"x2":-5,"y1":0,"y2":0},
+        {"h":3.5,"t":"rect","w":5,"x":-2.5,"y":-2},
+        {"t":"line","x1":-1,"x2":-1,"y1":1.5,"y2":2.5},
+        {"t":"line","x1":1,"x2":1,"y1":1.5,"y2":2.5}
+      ],
+      "pins": [{"id":"1","dir":"left","x":-7.5,"y":0}],
+      "source": "Company symbol of the sample project, drawn in the CablePilot symbol editor",
+      "title": {
+        "en": "RJ45 service socket (company symbol)",
+        "it": "Presa RJ45 di servizio (simbolo aziendale)"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Company drawing; no standard symbol"
+    }
+  ],
   "devices": [
+    {
+      "designation": "+BT-G1",
+      "fields": {"make":"Acquisto"},
+      "parts": [{"part":"generic-battery-cell-2v-100ah","qty":55}]
+    },
     {
       "designation": "+DS-A1",
       "fields": {},
@@ -2133,11 +2346,6 @@
       "fields": {"nameplate":"Fusibile batteria\n63 A DC"},
       "parent": "+DS-A5",
       "parts": [{"part":"generic-fuse-holder-dc-63a","qty":1},{"part":"generic-fuse-link-dc-63a","qty":1}]
-    },
-    {
-      "designation": "+DS-G1",
-      "fields": {"make":"Acquisto"},
-      "parts": [{"part":"generic-battery-cell-2v-100ah","qty":55}]
     },
     {"designation":"+DS-H1","fields":{},"parts":[{"part":"generic-pilot-lamp-22mm-24vdc","qty":1}]},
     {"designation":"+DS-H2","fields":{},"parts":[{"part":"generic-pilot-lamp-22mm-24vdc","qty":1}]},
@@ -2188,6 +2396,7 @@
         {"part":"generic-capacitor-electrolytic-4700uf-100v","qty":2}
       ]
     },
+    {"designation":"+DS-U3","fields":{},"parts":[{"part":"generic-dcdc-110v-24v-10a","qty":1}]},
     {
       "designation": "+DS-V1",
       "fields": {},
@@ -2222,6 +2431,11 @@
       "designation": "+DS-X21",
       "fields": {},
       "parts": [{"part":"generic-connector-header-10pin","qty":1}]
+    },
+    {
+      "designation": "+DS-X30",
+      "fields": {},
+      "parts": [{"part":"generic-socket-rj45-cat5e-panel","qty":1}]
     }
   ],
   "parts": [
@@ -2822,6 +3036,48 @@
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
     },
     {
+      "id": "generic-dcdc-110v-24v-10a",
+      "kind": "part",
+      "category": "power-electronics",
+      "code": "GEN-DCDC-110V-24V-10A",
+      "data": {"Input":"110 V DC","Output":"24 V DC, 10 A"},
+      "description": {
+        "en": "DC/DC converter 110 V DC to 24 V DC, 10 A",
+        "it": "Convertitore DC/DC da 110 V DC a 24 V DC, 10 A"
+      },
+      "dimensions": {"d":120,"h":125,"w":60},
+      "manufacturer": "Generic",
+      "mount": "rail",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "DC/DC converter 110 V DC to 24 V DC, 10 A",
+        "it": "Convertitore DC/DC da 110 V DC a 24 V DC, 10 A"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-socket-rj45-cat5e-panel",
+      "kind": "part",
+      "category": "hmi-network",
+      "code": "GEN-SOCKET-RJ45-CAT5E-PANEL",
+      "data": {"Category":"5e","Connector":"RJ45","Shield":"Yes"},
+      "description": {
+        "en": "RJ45 panel socket, category 5e, shielded",
+        "it": "Presa RJ45 da pannello, categoria 5e, schermata"
+      },
+      "dimensions": {"d":30,"h":30,"w":30},
+      "manufacturer": "Generic",
+      "mount": "door",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "RJ45 panel socket, category 5e, shielded",
+        "it": "Presa RJ45 da pannello, categoria 5e, schermata"
+      },
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
       "id": "generic-cable-ribbon-flat-10pole",
       "kind": "part",
       "category": "cables",
@@ -2850,6 +3106,30 @@
       "manufacturer": "Generic",
       "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
       "title": {"en":"Patch cable RJ45, category 5e, 2 m","it":"Cavo patch RJ45, categoria 5e, 2 m"},
+      "verification": "secondary",
+      "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
+    },
+    {
+      "id": "generic-cable-sensor-4x0.34mm2",
+      "kind": "part",
+      "category": "cables",
+      "code": "GEN-CABLE-SENSOR-4X0,34MM2",
+      "data": {
+        "Conductor cross-section": "0.34 mm²",
+        "Core colours": "WH, YE, GN, BN",
+        "Cores": "4",
+        "Outer diameter": "5.5 mm"
+      },
+      "description": {
+        "en": "Sensor cable 4 x 0.34 mm², cores WH YE GN BN",
+        "it": "Cavo sensore 4 x 0,34 mm², anime WH YE GN BN"
+      },
+      "manufacturer": "Generic",
+      "source": "CablePilot generic part (product rule 9): a nominal rating class named in the title, not a manufacturer datasheet",
+      "title": {
+        "en": "Sensor cable 4 x 0.34 mm², cores WH YE GN BN",
+        "it": "Cavo sensore 4 x 0,34 mm², anime WH YE GN BN"
+      },
       "verification": "secondary",
       "verifiedFrom": "Generic definition by CablePilot; rating classes and dimensions are listed in docs/to-verify.md and must be confirmed against the standard or the datasheet of the part actually bought"
     }
@@ -2897,6 +3177,7 @@
     {"id":"signal","type":"H07V-K","colour":"BK","crossSection":"1.5","suffix":""}
   ],
   "wireTypes": [
+    {"id":"wt-10bk","type":"H07V-K","colour":"BK","crossSection":"10"},
     {"id":"6mm2-BK","type":"H07V-K","colour":"BK","crossSection":"6"},
     {"id":"16mm2-BK","type":"H07V-K","colour":"BK","crossSection":"16"}
   ],
@@ -2918,6 +3199,13 @@
       "length": "2 m",
       "part": "generic-cable-patch-rj45-cat5e",
       "to": "-A4:P1"
+    },
+    {
+      "id": "-W3",
+      "kind": "multicore",
+      "functionText": {"en":"Current sensor -B1 harness","it":"Cablaggio sensore di corrente -B1"},
+      "length": "1,5 m",
+      "part": "generic-cable-sensor-4x0.34mm2"
     }
   ],
   "issueStatus": "construction",
@@ -2930,6 +3218,7 @@
       "drawn": "CablePilot",
       "inventory": {
         "devices": {
+          "+BT-G1": "081f4710",
           "+DS-A1": "08ff96e0",
           "+DS-A2": "0c982cee",
           "+DS-A3": "04315227",
@@ -2937,33 +3226,36 @@
           "+DS-A5": "03ac7a0b",
           "+DS-B1": "1a987a4e",
           "+DS-F1": "036f843b",
-          "+DS-G1": "081f4710",
           "+DS-H1": "01784c98",
           "+DS-H2": "072aa9c8",
           "+DS-K1": "18710f2f",
           "+DS-K2": "1f569dee",
           "+DS-KM1": "1caf6802",
-          "+DS-P1": "00fb1411",
+          "+DS-P1": "09379f7d",
           "+DS-QF1": "0bcd63af",
           "+DS-T1": "000c8b3d",
           "+DS-U1": "19c01042",
           "+DS-U2": "0f8fbf38",
+          "+DS-U3": "0d259b98",
           "+DS-V1": "06e9f6fb",
           "+DS-X1": "15a9bef5",
           "+DS-X10": "1db59ff7",
           "+DS-X11": "166f66ba",
           "+DS-X20": "00ce9df7",
-          "+DS-X21": "04e15b7d"
+          "+DS-X21": "04e15b7d",
+          "+DS-X30": "02161d0a"
         },
         "parts": {
           "GEN-BATTERY-CELL-2V-100AH": 54,
           "GEN-CABLE-DUCT-60X60-2M": 10,
           "GEN-CABLE-PATCH-RJ45-CAT5E": 1,
           "GEN-CABLE-RIBBON-FLAT-10POLE": 1,
+          "GEN-CABLE-SENSOR-4X0,34MM2": 1,
           "GEN-CAPACITOR-ELECTROLYTIC-4700UF-100V": 4,
           "GEN-CONNECTOR-HEADER-10PIN": 3,
           "GEN-CONNECTOR-PLUG-SOCKET-8POLE": 1,
           "GEN-CONTACTOR-DC-2P-63A": 1,
+          "GEN-DCDC-110V-24V-10A": 1,
           "GEN-DIN-RAIL-35MM-1M": 6,
           "GEN-DIODE-POWER-50A-1600V": 1,
           "GEN-ENCLOSURE-1000X1800X500": 1,
@@ -2984,6 +3276,7 @@
           "GEN-PLC-RACK-4SLOT": 1,
           "GEN-RECTIFIER-MODULE-3PH-110VDC-15A": 2,
           "GEN-RELAY-INTERFACE-2CO-24VDC": 1,
+          "GEN-SOCKET-RJ45-CAT5E-PANEL": 1,
           "GEN-SWITCH-ETHERNET-5PORT-24VDC": 1,
           "GEN-TERMINAL-END-PLATE": 1,
           "GEN-TERMINAL-END-STOP": 2,
@@ -2995,27 +3288,29 @@
         },
         "wires": {
           "001 -QF1:2>-T1:1U": "11c22bc6",
+          "001L+ -F1:2>-U3:IN+": "1edae787",
           "001L+ -U1:DC+>-U2:DC+": "1edae787",
           "001L+ -U2:DC+>-F1:2": "1edae787",
+          "001L- -G1:->-U3:IN-": "1edae787",
           "001L- -P1:2>-G1:-": "1edae787",
           "001L- -U1:DC->-U2:DC-": "1edae787",
           "001L- -U2:DC->-X1:2": "1edae787",
           "001L- -X1:2>-P1:2": "1edae787",
           "002 -T1:2U>-U1:L1": "073027a2",
           "002 -U1:L1>-U2:L1": "073027a2",
-          "002M -H1:2>-X10:4": "0f55f30e",
-          "002M -H2:2>-H1:2": "0f55f30e",
-          "002M -K1:A2>-K2:A2": "0f55f30e",
-          "002M -K2:A2>-KM1:A2": "0f55f30e",
-          "002M -KM1:A2>-X11:4": "0f55f30e",
-          "002M -X11:4>-H2:2": "0f55f30e",
-          "002P -K1:1>-K2:1": "0f55f30e",
-          "002P -K1:A1>-K2:A1": "0f55f30e",
-          "002P -K2:1>-X10:3": "0f55f30e",
-          "002P -K2:A1>-KM1:A1": "0f55f30e",
-          "002P -KM1:A1>-X11:3": "0f55f30e",
-          "002P -X11:3>-K1:1": "0f55f30e",
           "003 -QF1:4>-T1:1V": "11c22bc6",
+          "003M -H1:2>-X10:4": "0f55f30e",
+          "003M -H2:2>-H1:2": "0f55f30e",
+          "003M -K1:A2>-K2:A2": "0f55f30e",
+          "003M -K2:A2>-KM1:A2": "0f55f30e",
+          "003M -KM1:A2>-X11:4": "0f55f30e",
+          "003M -X11:4>-H2:2": "0f55f30e",
+          "003P -K1:1>-K2:1": "0f55f30e",
+          "003P -K1:A1>-K2:A1": "0f55f30e",
+          "003P -K2:1>-X10:3": "0f55f30e",
+          "003P -K2:A1>-KM1:A1": "0f55f30e",
+          "003P -KM1:A1>-X11:3": "0f55f30e",
+          "003P -X11:3>-K1:1": "0f55f30e",
           "004 -T1:2V>-U1:L2": "073027a2",
           "004 -U1:L2>-U2:L2": "073027a2",
           "005 -QF1:6>-T1:1W": "11c22bc6",
@@ -3023,10 +3318,10 @@
           "006 -U1:L3>-U2:L3": "073027a2",
           "007 -F1:1>-KM1:2": "19230347",
           "008 -KM1:1>-V1:A": "073027a2",
-          "009 -P1:1>-G1:+": "073027a2",
-          "009 -V1:K>-X1:1": "073027a2",
-          "009 -X1:1>-P1:1": "073027a2",
-          "010 -B1:OUT>-A5:0": "073027a2",
+          "009 -B1:OUT>-A5:0": "15d10cca",
+          "010 -P1:1>-G1:+": "073027a2",
+          "010 -V1:K>-X1:1": "073027a2",
+          "010 -X1:1>-P1:1": "073027a2",
           "011 -A2:0>-X10:1": "073027a2",
           "011 -H1:1>-A2:0": "073027a2",
           "011 -K1:2>-H1:1": "073027a2",
@@ -3044,32 +3339,32 @@
         {"id":"p2","hash":"1da184b025ebc9","title":"Indice"},
         {"id":"p3","hash":"1a1e091f0157f6","title":"Dati generali dell'assieme"},
         {"id":"p4","hash":"013e24250aba0d","title":"Dati batteria e uscita DC"},
-        {"id":"p5","hash":"09adc7ef059f31","title":"Schema unifilare"},
-        {"id":"p6","hash":"008d16475e7be0","title":"Ingresso e moduli raddrizzatori"},
-        {"id":"p7","hash":"013d6b977d64cb","title":"Uscita DC e batteria"},
-        {"id":"p8","hash":"1a1d207935d767","title":"Relè di allarme"},
-        {"id":"p9","hash":"1c9c8164447bcd","title":"Interfaccia PLC"},
-        {"id":"pg-rep1","hash":"0cda0e935a3e8c.1c474116","title":"Schema morsettiere"},
-        {"id":"pg-rep3","hash":"1c90b582f359e4.003ff6a4","title":"Elenco cavi"},
-        {"id":"lay-front","hash":"086c2bdc0a45f8","title":"Layout quadro, piastra di montaggio"},
-        {"id":"lay-door","hash":"1d6e9bb3b7c7c7","title":"Layout quadro, porta"},
+        {"id":"p5","hash":"1f9299f1c9fb2d","title":"Schema unifilare"},
+        {"id":"p6","hash":"174307ec9f0cf6","title":"Ingresso e moduli raddrizzatori"},
+        {"id":"p7","hash":"1eda9238346f9b","title":"Uscita DC e batteria"},
+        {"id":"p8","hash":"1f382a9aeaa4e6","title":"Relè di allarme"},
+        {"id":"p9","hash":"1395473cb7361f","title":"Interfaccia PLC"},
+        {"id":"pg-rep1","hash":"0cda0e935a3e8c.125b5d8d","title":"Schema morsettiere"},
+        {"id":"pg-rep3","hash":"1c90b582f359e4.03b9cf46","title":"Elenco cavi"},
+        {"id":"lay-front","hash":"135cef19df908c","title":"Layout quadro, piastra di montaggio"},
+        {"id":"lay-door","hash":"056ac1353908a2","title":"Layout quadro, porta"},
         {"id":"lay-side","hash":"03246a90ff1796","title":"Layout quadro, vista laterale"},
-        {"id":"pg-rep5","hash":"07ff9cae913bec.022ee12a","title":"Elenco fili 1/2"},
-        {"id":"pg-rep7","hash":"01e59d5821eddd.0fa7a928","title":"Elenco fili 2/2"},
-        {"id":"pg-rep9","hash":"06dee5c54293f9.13b1325b","title":"Elenchi pin dei connettori 1/2"},
-        {"id":"pg-rep11","hash":"021890a2a3f1d0.019f4c7f","title":"Elenchi pin dei connettori 2/2"},
-        {"id":"pg-rep13","hash":"125bfd39055dac.177c70a0","title":"Distinta materiali 1/2"},
-        {"id":"pg-rep15","hash":"142fbcfe81a67a.111604f0","title":"Distinta materiali 2/2"},
-        {"id":"pg-rep17","hash":"16722e30b16257.19bcb044","title":"Legenda dei simboli 1/2"},
-        {"id":"pg-rep19","hash":"01f7dae9629387.18b71b24","title":"Legenda dei simboli 2/2"},
-        {"id":"pg-rep21","hash":"147ff7699cd5dd.16923503","title":"Colori dei conduttori"},
+        {"id":"pg-rep5","hash":"07ff9cae913bec.00f38a39","title":"Elenco fili 1/2"},
+        {"id":"pg-rep7","hash":"01e59d5821eddd.0530681a","title":"Elenco fili 2/2"},
+        {"id":"pg-rep9","hash":"06dee5c54293f9.07674169","title":"Elenchi pin dei connettori 1/2"},
+        {"id":"pg-rep11","hash":"021890a2a3f1d0.1378490b","title":"Elenchi pin dei connettori 2/2"},
+        {"id":"pg-rep13","hash":"125bfd39055dac.122e9a28","title":"Distinta materiali 1/2"},
+        {"id":"pg-rep15","hash":"142fbcfe81a67a.1b773bbe","title":"Distinta materiali 2/2"},
+        {"id":"pg-rep17","hash":"16722e30b16257.1f629fd8","title":"Legenda dei simboli 1/2"},
+        {"id":"pg-rep19","hash":"01f7dae9629387.1b71fbd9","title":"Legenda dei simboli 2/2"},
+        {"id":"pg-rep21","hash":"147ff7699cd5dd.00dc5f30","title":"Colori dei conduttori"},
         {"id":"pg-rep23","hash":"144ce3e0221bbd.0ee8be20","title":"Suffissi dei numeri filo"},
         {
           "id": "pg-rep25",
           "hash": "106e77fccdefd0.00745559",
           "title": "Coppie di serraggio dei morsetti"
         },
-        {"id":"pg-rep27","hash":"138302c1d59423.06b5568e","title":"Targhette"},
+        {"id":"pg-rep27","hash":"138302c1d59423.1499f17d","title":"Targhette"},
         {"id":"pg-rep29","hash":"0b04a55fbec012.03af15d6","title":"Elenco I/O PLC"}
       ],
       "status": "approval"
@@ -3082,6 +3377,7 @@
       "drawn": "CablePilot",
       "inventory": {
         "devices": {
+          "+BT-G1": "020ec200",
           "+DS-A1": "08ff96e0",
           "+DS-A2": "0c982cee",
           "+DS-A3": "04315227",
@@ -3089,33 +3385,36 @@
           "+DS-A5": "03ac7a0b",
           "+DS-B1": "1a987a4e",
           "+DS-F1": "036f843b",
-          "+DS-G1": "020ec200",
           "+DS-H1": "01784c98",
           "+DS-H2": "072aa9c8",
           "+DS-K1": "18710f2f",
           "+DS-K2": "1f569dee",
           "+DS-KM1": "1caf6802",
-          "+DS-P1": "00fb1411",
+          "+DS-P1": "09379f7d",
           "+DS-QF1": "0bcd63af",
           "+DS-T1": "000c8b3d",
           "+DS-U1": "19c01042",
           "+DS-U2": "0f8fbf38",
+          "+DS-U3": "0d259b98",
           "+DS-V1": "06e9f6fb",
           "+DS-X1": "15a9bef5",
           "+DS-X10": "1db59ff7",
           "+DS-X11": "166f66ba",
           "+DS-X20": "00ce9df7",
-          "+DS-X21": "04e15b7d"
+          "+DS-X21": "04e15b7d",
+          "+DS-X30": "02161d0a"
         },
         "parts": {
           "GEN-BATTERY-CELL-2V-100AH": 55,
           "GEN-CABLE-DUCT-60X60-2M": 10,
           "GEN-CABLE-PATCH-RJ45-CAT5E": 1,
           "GEN-CABLE-RIBBON-FLAT-10POLE": 1,
+          "GEN-CABLE-SENSOR-4X0,34MM2": 1,
           "GEN-CAPACITOR-ELECTROLYTIC-4700UF-100V": 4,
           "GEN-CONNECTOR-HEADER-10PIN": 3,
           "GEN-CONNECTOR-PLUG-SOCKET-8POLE": 1,
           "GEN-CONTACTOR-DC-2P-63A": 1,
+          "GEN-DCDC-110V-24V-10A": 1,
           "GEN-DIN-RAIL-35MM-1M": 6,
           "GEN-DIODE-POWER-50A-1600V": 1,
           "GEN-ENCLOSURE-1000X1800X500": 1,
@@ -3136,6 +3435,7 @@
           "GEN-PLC-RACK-4SLOT": 1,
           "GEN-RECTIFIER-MODULE-3PH-110VDC-15A": 2,
           "GEN-RELAY-INTERFACE-2CO-24VDC": 1,
+          "GEN-SOCKET-RJ45-CAT5E-PANEL": 1,
           "GEN-SWITCH-ETHERNET-5PORT-24VDC": 1,
           "GEN-TERMINAL-END-PLATE": 1,
           "GEN-TERMINAL-END-STOP": 2,
@@ -3147,27 +3447,29 @@
         },
         "wires": {
           "001 -QF1:2>-T1:1U": "11c22bc6",
+          "001L+ -F1:2>-U3:IN+": "1edae787",
           "001L+ -U1:DC+>-U2:DC+": "1edae787",
           "001L+ -U2:DC+>-F1:2": "1edae787",
+          "001L- -G1:->-U3:IN-": "1edae787",
           "001L- -P1:2>-G1:-": "1edae787",
           "001L- -U1:DC->-U2:DC-": "1edae787",
           "001L- -U2:DC->-X1:2": "1edae787",
           "001L- -X1:2>-P1:2": "1edae787",
           "002 -T1:2U>-U1:L1": "073027a2",
           "002 -U1:L1>-U2:L1": "073027a2",
-          "002M -H1:2>-X10:4": "0f55f30e",
-          "002M -H2:2>-H1:2": "0f55f30e",
-          "002M -K1:A2>-K2:A2": "0f55f30e",
-          "002M -K2:A2>-KM1:A2": "0f55f30e",
-          "002M -KM1:A2>-X11:4": "0f55f30e",
-          "002M -X11:4>-H2:2": "0f55f30e",
-          "002P -K1:1>-K2:1": "0f55f30e",
-          "002P -K1:A1>-K2:A1": "0f55f30e",
-          "002P -K2:1>-X10:3": "0f55f30e",
-          "002P -K2:A1>-KM1:A1": "0f55f30e",
-          "002P -KM1:A1>-X11:3": "0f55f30e",
-          "002P -X11:3>-K1:1": "0f55f30e",
           "003 -QF1:4>-T1:1V": "11c22bc6",
+          "003M -H1:2>-X10:4": "0f55f30e",
+          "003M -H2:2>-H1:2": "0f55f30e",
+          "003M -K1:A2>-K2:A2": "0f55f30e",
+          "003M -K2:A2>-KM1:A2": "0f55f30e",
+          "003M -KM1:A2>-X11:4": "0f55f30e",
+          "003M -X11:4>-H2:2": "0f55f30e",
+          "003P -K1:1>-K2:1": "0f55f30e",
+          "003P -K1:A1>-K2:A1": "0f55f30e",
+          "003P -K2:1>-X10:3": "0f55f30e",
+          "003P -K2:A1>-KM1:A1": "0f55f30e",
+          "003P -KM1:A1>-X11:3": "0f55f30e",
+          "003P -X11:3>-K1:1": "0f55f30e",
           "004 -T1:2V>-U1:L2": "073027a2",
           "004 -U1:L2>-U2:L2": "073027a2",
           "005 -QF1:6>-T1:1W": "11c22bc6",
@@ -3175,10 +3477,10 @@
           "006 -U1:L3>-U2:L3": "073027a2",
           "007 -F1:1>-KM1:2": "19230347",
           "008 -KM1:1>-V1:A": "073027a2",
-          "009 -P1:1>-G1:+": "073027a2",
-          "009 -V1:K>-X1:1": "073027a2",
-          "009 -X1:1>-P1:1": "073027a2",
-          "010 -B1:OUT>-A5:0": "073027a2",
+          "009 -B1:OUT>-A5:0": "15d10cca",
+          "010 -P1:1>-G1:+": "073027a2",
+          "010 -V1:K>-X1:1": "073027a2",
+          "010 -X1:1>-P1:1": "073027a2",
           "011 -A2:0>-X10:1": "073027a2",
           "011 -H1:1>-A2:0": "073027a2",
           "011 -K1:2>-H1:1": "073027a2",
@@ -3196,32 +3498,32 @@
         {"id":"p2","hash":"1da184b025ebc9","title":"Indice"},
         {"id":"p3","hash":"1a1e091f0157f6","title":"Dati generali dell'assieme"},
         {"id":"p4","hash":"013e24250aba0d","title":"Dati batteria e uscita DC"},
-        {"id":"p5","hash":"09adc7ef059f31","title":"Schema unifilare"},
-        {"id":"p6","hash":"008d16475e7be0","title":"Ingresso e moduli raddrizzatori"},
-        {"id":"p7","hash":"12f3edd0144aa6","title":"Uscita DC e batteria"},
-        {"id":"p8","hash":"1a1d207935d767","title":"Relè di allarme"},
-        {"id":"p9","hash":"1c9c8164447bcd","title":"Interfaccia PLC"},
-        {"id":"pg-rep1","hash":"0cda0e935a3e8c.1c474116","title":"Schema morsettiere"},
-        {"id":"pg-rep3","hash":"1c90b582f359e4.003ff6a4","title":"Elenco cavi"},
-        {"id":"lay-front","hash":"086c2bdc0a45f8","title":"Layout quadro, piastra di montaggio"},
-        {"id":"lay-door","hash":"1d6e9bb3b7c7c7","title":"Layout quadro, porta"},
+        {"id":"p5","hash":"1f9299f1c9fb2d","title":"Schema unifilare"},
+        {"id":"p6","hash":"174307ec9f0cf6","title":"Ingresso e moduli raddrizzatori"},
+        {"id":"p7","hash":"0e5eefe724dda1","title":"Uscita DC e batteria"},
+        {"id":"p8","hash":"1f382a9aeaa4e6","title":"Relè di allarme"},
+        {"id":"p9","hash":"1395473cb7361f","title":"Interfaccia PLC"},
+        {"id":"pg-rep1","hash":"0cda0e935a3e8c.125b5d8d","title":"Schema morsettiere"},
+        {"id":"pg-rep3","hash":"1c90b582f359e4.03b9cf46","title":"Elenco cavi"},
+        {"id":"lay-front","hash":"135cef19df908c","title":"Layout quadro, piastra di montaggio"},
+        {"id":"lay-door","hash":"056ac1353908a2","title":"Layout quadro, porta"},
         {"id":"lay-side","hash":"03246a90ff1796","title":"Layout quadro, vista laterale"},
-        {"id":"pg-rep5","hash":"07ff9cae913bec.022ee12a","title":"Elenco fili 1/2"},
-        {"id":"pg-rep7","hash":"01e59d5821eddd.0fa7a928","title":"Elenco fili 2/2"},
-        {"id":"pg-rep9","hash":"06dee5c54293f9.13b1325b","title":"Elenchi pin dei connettori 1/2"},
-        {"id":"pg-rep11","hash":"021890a2a3f1d0.019f4c7f","title":"Elenchi pin dei connettori 2/2"},
-        {"id":"pg-rep13","hash":"125bfd39055dac.18aa6345","title":"Distinta materiali 1/2"},
-        {"id":"pg-rep15","hash":"142fbcfe81a67a.111604f0","title":"Distinta materiali 2/2"},
-        {"id":"pg-rep17","hash":"16722e30b16257.19bcb044","title":"Legenda dei simboli 1/2"},
-        {"id":"pg-rep19","hash":"01f7dae9629387.18b71b24","title":"Legenda dei simboli 2/2"},
-        {"id":"pg-rep21","hash":"147ff7699cd5dd.16923503","title":"Colori dei conduttori"},
+        {"id":"pg-rep5","hash":"07ff9cae913bec.00f38a39","title":"Elenco fili 1/2"},
+        {"id":"pg-rep7","hash":"01e59d5821eddd.0530681a","title":"Elenco fili 2/2"},
+        {"id":"pg-rep9","hash":"06dee5c54293f9.07674169","title":"Elenchi pin dei connettori 1/2"},
+        {"id":"pg-rep11","hash":"021890a2a3f1d0.1378490b","title":"Elenchi pin dei connettori 2/2"},
+        {"id":"pg-rep13","hash":"125bfd39055dac.0f14cc07","title":"Distinta materiali 1/2"},
+        {"id":"pg-rep15","hash":"142fbcfe81a67a.1b773bbe","title":"Distinta materiali 2/2"},
+        {"id":"pg-rep17","hash":"16722e30b16257.1f629fd8","title":"Legenda dei simboli 1/2"},
+        {"id":"pg-rep19","hash":"01f7dae9629387.1b71fbd9","title":"Legenda dei simboli 2/2"},
+        {"id":"pg-rep21","hash":"147ff7699cd5dd.00dc5f30","title":"Colori dei conduttori"},
         {"id":"pg-rep23","hash":"144ce3e0221bbd.0ee8be20","title":"Suffissi dei numeri filo"},
         {
           "id": "pg-rep25",
           "hash": "106e77fccdefd0.00745559",
           "title": "Coppie di serraggio dei morsetti"
         },
-        {"id":"pg-rep27","hash":"138302c1d59423.06b5568e","title":"Targhette"},
+        {"id":"pg-rep27","hash":"138302c1d59423.1499f17d","title":"Targhette"},
         {"id":"pg-rep29","hash":"0b04a55fbec012.03af15d6","title":"Elenco I/O PLC"}
       ],
       "status": "construction"
