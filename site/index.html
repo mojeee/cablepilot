@@ -3,23 +3,37 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CablePilot: open-source electrical design for machines and panels</title>
-    <meta name="description" content="Draw the schematic once; terminals, cables, BOM and cabinet follow. Free and open source electrical CAD that runs on your computer. Your files stay yours." />
+    <title>CablePilot: free electrical CAD for control panels and machines</title>
+    <meta name="description" content="Free, open-source electrical CAD: IEC schematics, terminal and cable lists, PLC I/O, BOM, cabinet layout in 2D and 3D, PDF drawing sets. Runs offline on Mac, Windows and Linux." />
     <link rel="canonical" href="https://cablepilot.agentflowbind.com/" />
     <link rel="alternate" hreflang="en" href="https://cablepilot.agentflowbind.com/" />
     <link rel="alternate" hreflang="it" href="https://cablepilot.agentflowbind.com/it/" />
     <link rel="alternate" hreflang="x-default" href="https://cablepilot.agentflowbind.com/" />
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0f1216" />
+    <link rel="icon" href="/img/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/img/icon-180.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0f1419" />
+    <meta name="color-scheme" content="dark" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="CablePilot" />
     <meta property="og:locale" content="en_GB" />
-    <meta property="og:title" content="CablePilot: open-source electrical design for machines and panels" />
-    <meta property="og:description" content="Draw the schematic once; terminals, cables, BOM and cabinet follow. Free and open source electrical CAD that runs on your computer. Your files stay yours." />
+    <meta property="og:locale:alternate" content="it_IT" />
+    <meta property="og:title" content="CablePilot: free electrical CAD for control panels and machines" />
+    <meta property="og:description" content="Free, open-source electrical CAD: IEC schematics, terminal and cable lists, PLC I/O, BOM, cabinet layout in 2D and 3D, PDF drawing sets. Runs offline on Mac, Windows and Linux." />
     <meta property="og:url" content="https://cablepilot.agentflowbind.com/" />
-    <meta property="og:image" content="https://cablepilot.agentflowbind.com/og.svg" />
+    <meta property="og:image" content="https://cablepilot.agentflowbind.com/img/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="CablePilot: the app window with a multi-line power circuit, next to the headline &quot;Draw the schematic once.&quot;" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="stylesheet" href="/style.css?v=71634ce4b4" />
+    <meta name="twitter:title" content="CablePilot: free electrical CAD for control panels and machines" />
+    <meta name="twitter:description" content="Free, open-source electrical CAD: IEC schematics, terminal and cable lists, PLC I/O, BOM, cabinet layout in 2D and 3D, PDF drawing sets. Runs offline on Mac, Windows and Linux." />
+    <meta name="twitter:image" content="https://cablepilot.agentflowbind.com/img/og.png" />
+    <link rel="stylesheet" href="/style.css?v=0dd1d22f38" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"CablePilot","applicationCategory":"DesignApplication","applicationSubCategory":"Electrical CAD","operatingSystem":"macOS, Windows, Linux","softwareVersion":"0.1.0","description":"Free, open-source electrical CAD: IEC schematics, terminal and cable lists, PLC I/O, BOM, cabinet layout in 2D and 3D, PDF drawing sets. Runs offline on Mac, Windows and Linux.","url":"https://cablepilot.agentflowbind.com/","downloadUrl":"https://github.com/mojeee/cablepilot/releases/latest","installUrl":"https://github.com/mojeee/cablepilot/releases/latest","license":"https://www.apache.org/licenses/LICENSE-2.0","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"inLanguage":["en","it"],"screenshot":"https://cablepilot.agentflowbind.com/img/app-dark.png","image":"https://cablepilot.agentflowbind.com/img/og.png","codeRepository":"https://github.com/mojeee/cablepilot","featureList":["Schematic","Devices and cross-references","Wires and reports","Checks and revisions","PLC","Sizing and warehouse","A familiar CAD workspace, with the chat inside","Cabinet layout","Live link with your ERP","Panel Designer tools"]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"CablePilot","url":"https://cablepilot.agentflowbind.com/","inLanguage":"en"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is CablePilot free?","acceptedAnswer":{"@type":"Answer","text":"Yes. CablePilot is free and open source under the Apache-2.0 licence, for companies too. There is no account and no subscription. The optional AI assistant uses your own API key, billed by your provider."}},{"@type":"Question","name":"Does it need an internet connection or an account?","acceptedAnswer":{"@type":"Answer","text":"No. CablePilot runs on your computer and your projects are files on your disk. Only the optional assistant and the ERP link use the network, and only to the addresses you set."}},{"@type":"Question","name":"Which systems does it run on?","acceptedAnswer":{"@type":"Answer","text":"macOS on Apple Silicon and Intel, Windows 10 and 11 (64-bit), and Linux as an AppImage. The interface and the drawings are in English and Italian."}},{"@type":"Question","name":"Can it replace AutoCAD Electrical or EPLAN?","acceptedAnswer":{"@type":"Answer","text":"It covers the core work of a panel builder: multi-page schematics with IEC symbols and designations, cross-references, wire numbers, terminal, cable and wire lists, PLC I/O, the BOM, a cabinet layout and the PDF drawing set. It does not import their proprietary project files, and it has no PLC programming or circuit simulation. The comparison above shows what is available today."}},{"@type":"Question","name":"Which standards does it follow?","acceptedAnswer":{"@type":"Answer","text":"IEC 60617 symbols, IEC 81346 designations, IEC 61082 documents, IEC 60204-1 for machines, IEC 60364-5-52 for cable sizing, IEC 61439 for assemblies, IEC 60445 and IEC 60757 for conductor colours, and ISO 5457 and ISO 7200 for sheets; NFPA 79 and ANSI symbols as an option. Every rule and table value cites its clause, and values not yet verified are listed openly."}},{"@type":"Question","name":"Can I use my company’s frame and title block?","acceptedAnswer":{"@type":"Answer","text":"Yes. Frames, title blocks with your logo and revision boxes, zone labels and drawing styles are templates, kept in your company library and stored in each project so it opens anywhere."}},{"@type":"Question","name":"Does it work with our ERP?","acceptedAnswer":{"@type":"Answer","text":"Yes. It pulls items and stock over REST or OData (or from a CSV or XLSX file, or a watched folder), lets you pick parts from the warehouse for a device, and sends the project’s reservation request back by HTTP or to an outbox folder. A demo ERP inside the app shows the round trip."}},{"@type":"Question","name":"Is the AI assistant required, and what does it see?","acceptedAnswer":{"@type":"Answer","text":"It is optional. With your own key it reads the project to answer; every change it proposes is a preview you accept or reject, every claim shows its source, and electrical values are labelled as suggestions to confirm. Keys are encrypted by your operating system."}},{"@type":"Question","name":"Will my files be locked in?","acceptedAnswer":{"@type":"Answer","text":"No. A project is one documented JSON file that diffs well in Git, and everything leaves the app as PDF, DXF, CSV or XLSX. DXF pages can be imported too."}}]}</script>
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -27,35 +41,69 @@
       <div class="wrap top-in">
         <a class="logo" href="/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
         <nav class="main-nav" aria-label="Main">
+          <a href="/#features">Features</a>
+          <a href="/#videos">Videos</a>
           <a href="/demo/">Demo</a>
+          <a href="/docs/">Docs</a>
+          <a href="/#compare">Compare</a>
+          <a href="/#faq">FAQ</a>
           <a href="/companies/">For companies</a>
-          <a href="https://github.com/mojeee/cablepilot">GitHub</a>
-          <a href="/it/" hreflang="it" lang="it">Italiano</a>
         </nav>
-        <a class="btn primary sm" href="/#download">Download</a>
+        <div class="nav-right">
+          <div class="lang" role="group" aria-label="Language"><span aria-current="true">EN</span><a href="/it/" hreflang="it" lang="it" title="Italiano">IT</a></div>
+          <a class="gh" href="https://github.com/mojeee/cablepilot" aria-label="CablePilot on GitHub" title="GitHub"><svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+          <a class="btn primary sm" href="/#download">Download</a>
+        </div>
       </div>
     </header>
     <main id="main">
-      <section class="hero dark">
-  <div class="wrap hero-grid">
-    <div>
+      <section class="hero">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap hero-in">
+    <div class="hero-copy">
       <p class="eyebrow">Electrical CAD for machine and panel builders</p>
       <h1>Draw the schematic once. Terminals, cables, BOM and cabinet follow.</h1>
-      <p class="lead">Free and open source, runs on your computer, your files stay yours.</p>
-      <p class="actions">
-        <a class="btn primary" href="https://github.com/mojeee/cablepilot/releases/latest">Download</a>
-        <a class="btn" href="/demo/">Watch the demo</a>
-      </p>
+      <p class="lead">Multi-page IEC schematics with automatic designations, wire numbers and cross-references. Terminal, cable and wire lists, PLC I/O and the BOM generated live. A cabinet layout in 2D and 3D, and the drawing set in your own title block. Free, open source, and it runs on your computer.</p>
+      <p class="actions"><a class="btn primary" href="/demo/">Watch the demo</a> <a class="btn" href="https://github.com/mojeee/cablepilot/releases"><svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Follow on GitHub</a></p>
       <p class="status">Version 0.1.0 · 8/10 milestones done · The first release is not out yet.</p>
+      <div class="chips">
+        <a href="#feature-schematic"><i></i>IEC schematics</a>
+        <a href="#feature-reports"><i class="g"></i>Live reports</a>
+        <a href="#feature-checks"><i class="y"></i>Rule check</a>
+        <a href="#feature-plc"><i></i>PLC I/O</a>
+        <a href="#feature-layout"><i class="g"></i>Cabinet in 3D</a>
+        <a href="#feature-sizing"><i class="y"></i>Sizing from stock</a>
+        <a href="#feature-erp"><i></i>ERP link</a>
+        <a href="#ai"><i class="v"></i>Honest AI</a>
+        <a href="#why"><i class="g"></i>Offline, no account</a>
+      </div>
     </div>
-    <div class="hero-media"><video autoplay muted loop playsinline poster="/img/hero-poster.png"><source src="/video/hero.webm" type="video/webm" /><source src="/video/hero.mp4" type="video/mp4" /></video></div>
+    <div class="hero-shot">
+      <div class="window">
+        <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+        <video autoplay muted loop playsinline poster="/img/hero-poster.png" width="1280" height="720" aria-label="CablePilot numbering the wires of a power circuit, then the wire list and the BOM updating"><source src="/video/hero.webm" type="video/webm" /><source src="/video/hero.mp4" type="video/mp4" /></video>
+      </div>
+    </div>
   </div>
 </section>
 
-<section class="band light" id="videos">
+<section class="strip-facts" aria-label="CablePilot in numbers">
+  <div class="wrap strip-in">
+    <div><b>40</b><span>IEC symbols in the library</span></div>
+    <div><b>112</b><span>generic parts with sources</span></div>
+    <div><b>14</b><span>live reports and lists</span></div>
+    <div><b>3</b><span>complete sample projects</span></div>
+    <div><b>EN · IT</b><span>interface and drawings</span></div>
+  </div>
+</section>
+
+<section class="band" id="videos">
   <div class="wrap">
-    <h2>See every feature in half a minute</h2>
-    <p class="lead">Short videos recorded from the real app on the sample projects. No voice, just captions, so they work with the sound off. Nothing is mocked up.</p>
+    <div class="sec-head center">
+      <p class="eyebrow">Short videos</p>
+      <h2>See every feature in half a minute</h2>
+      <p class="lead">Short videos recorded from the real app on the sample projects. No voice, just captions, so they work with the sound off. Nothing is mocked up.</p>
+    </div>
     <div class="video-grid">
       <figure class="video-card" id="video-schematic"><video src="/video/clip-schematic-en.mp4" poster="/video/clip-schematic-en.jpg" width="1280" height="720" controls muted loop playsinline preload="none" aria-label="Schematic and devices"></video><figcaption><b>Schematic and devices</b><span>IEC symbols, automatic designations, a coil and its contact as one device with cross-references, a part for the BOM.</span></figcaption></figure>
       <figure class="video-card" id="video-reports"><video src="/video/clip-reports-en.mp4" poster="/video/clip-reports-en.jpg" width="1280" height="720" controls muted loop playsinline preload="none" aria-label="Wire numbers and live reports"></video><figcaption><b>Wire numbers and live reports</b><span>Wires numbered with your pattern; wire list, terminal diagram, cable list and BOM generated from the schematic.</span></figcaption></figure>
@@ -68,24 +116,28 @@
       <figure class="video-card" id="video-ai"><video src="/video/clip-ai-en.mp4" poster="/video/clip-ai-en.jpg" width="1280" height="720" controls muted loop playsinline preload="none" aria-label="An AI assistant that shows its sources"></video><figcaption><b>An AI assistant that shows its sources</b><span>Ask in plain words: the proposal appears as a preview with a source on every claim. Accept, or undo. Your own key, optional.</span></figcaption></figure>
       <figure class="video-card" id="video-erp"><video src="/video/clip-erp-en.mp4" poster="/video/clip-erp-en.jpg" width="1280" height="720" controls muted loop playsinline preload="none" aria-label="Live link with your ERP"></video><figcaption><b>Live link with your ERP</b><span>Stock pulled from the ERP, a part picked from the warehouse for a device, and the reservation request sent back.</span></figcaption></figure>
     </div>
-    <p class="note">The sample projects and the demo ERP are fictional. The assistant clip uses a test key and the app’s scripted stand-in, so nothing leaves the computer.</p>
+    <p class="note center">The sample projects and the demo ERP are fictional. The assistant clip uses a test key and the app’s scripted stand-in, so nothing leaves the computer.</p>
   </div>
 </section>
 
-<section class="band dark" id="today">
+<section class="band" id="features">
   <div class="wrap">
-    <h2>In the app today</h2>
-    <p class="lead">One block per feature area. A tag says whether it is available or still planned, and in which milestone. The tags follow the roadmap in the repository.</p>
+    <div class="sec-head">
+      <p class="eyebrow">Features</p>
+      <h2>In the app today</h2>
+      <p class="lead">One block per feature area. A tag says whether it is available or still planned, and in which milestone. The tags follow the roadmap in the repository.</p>
+    </div>
     <div class="grid features">
-      <article class="card"><img class="card-img" src="/img/feat-schematic.png" alt="A power page of the DC battery-charger sample: breaker, transformer and two rectifier modules with wire numbers" width="1200" height="700" loading="lazy" /><h3>Schematic</h3><span class="tag available">Available</span><p>Multi-page projects with IEC symbols, single-line and multi-line pages, your own frame, title block and drawing style.</p><span class="std">IEC 60617</span><span class="std">IEC 81346</span><span class="std">IEC 61082</span><span class="std">ISO 5457</span></article>
-      <article class="card"><img class="card-img" src="/img/feat-devices.png" alt="The alarm relay page of the charger sample with contact images and cross-references" width="1200" height="700" loading="lazy" /><h3>Devices and cross-references</h3><span class="tag available">Available</span><p>One device, several representations, counted once in the BOM and cross-referenced both ways. Connectors with named pins, macros, nested assemblies.</p><span class="std">IEC 81346</span><span class="std">IEC 61439</span></article>
-      <article class="card"><img class="card-img" src="/img/feat-reports.png" alt="The Reports window showing the wire list generated from the schematic" width="1200" height="700" loading="lazy" /><h3>Wires and reports</h3><span class="tag available">Available</span><p>Automatic wire numbers, terminal diagrams, cable and wire lists, nameplates and exports, all generated live from the schematic.</p><span class="std">IEC 60204-1</span><span class="std">IEC 60445</span><span class="std">IEC 60757</span></article>
-      <article class="card"><img class="card-img" src="/img/feat-checks.png" alt="The warnings banner and the list of findings of the electrical rule check, with one-click fixes, over a power page with the markers of the findings" width="1200" height="700" loading="lazy" /><h3>Checks and revisions</h3><span class="tag available">Available</span><p>A continuous electrical rule check with one-click fixes, issued revisions, a generated cover sheet and a comparison of two revisions.</p><span class="std">IEC 60364-5-52</span><span class="std">IEC 60204-1</span></article>
-      <article class="card"><img class="card-img" src="/img/feat-plc.png" alt="The PLC I/O window listing every channel of the conveyor sample with address, tag, comment and what it is wired to, and the tag list export and import" width="1200" height="700" loading="lazy" /><h3>PLC</h3><span class="tag available">Available</span><p>PLC racks and I/O cards as devices with addresses from your addressing scheme, an I/O overview that edits both ways, and tag lists for CODESYS and TIA Portal (the TIA format is marked unverified).</p></article>
-      <article class="card"><img class="card-img" src="/img/feat-sizing.png" alt="The sizing window of the conveyor sample after the motor was raised to 7.5 kW: the contactor and overload relay lines propose parts from the stock list, with warehouse, location and the quantity available for this project" width="1200" height="700" loading="lazy" /><h3>Sizing and warehouse</h3><span class="tag available">Available</span><p>Cables, breakers, contactors and overload relays sized from the schematic with their requirement, assumptions and sources (table values still unverified are flagged), then proposed from your own stock list: ranked by what the warehouse has for this project, with warehouse and location. Confirm one line, or the whole project, in one undo step.</p><span class="std">IEC 60364-5-52</span><span class="std">IEC 60364-4-43</span><span class="std">IEC 60947-2</span><span class="std">IEC 60947-4-1</span></article>
-      <article class="card"><img class="card-img" src="/img/feat-workspace.png" alt="The CablePilot window: the ribbon on top, a drawing page in the middle with the crosshair, the command line and status bar below, and the AI chat docked on the right with a proposal and its sources" width="1200" height="700" loading="lazy" /><h3>A familiar CAD workspace, with the chat inside</h3><span class="tag available">Available</span><p>Ribbon, command line with the aliases CAD users type (L, PL, REC, M, CO, TR, Z...), grid, ortho, object snap and polar tracking, window and crossing selection, layers and dockable panels. A chat panel proposes changes as a preview you accept or reject: with your own API key a model reads, checks, sizes and proposes through tools; without a key a built-in assistant answers a few requests.</p></article>
-      <article class="card"><img class="card-img" src="/img/feat-layout.png" alt="The mounting plate of the pump-station sample in front view to scale: enclosure and plate with dimension lines, wire ducts, DIN rails and the devices at their real size" width="1200" height="700" loading="lazy" /><img class="card-img" src="/img/feat-layout3d.png" alt="The same cabinet in the 3D view: every device a box from its dimensions, coloured by group, with the door drawn transparent" width="1200" height="700" loading="lazy" /><h3>Cabinet layout</h3><span class="tag available">Available</span><p>Draw the enclosure, mounting plate, DIN rails and wire ducts with the same CAD tools as the schematic, and place every device of the BOM at its real size, snapped to the rails, with a front view to scale, a side view with the depths, dimensions, no-mount zones and the door devices. Or let CablePilot suggest the whole layout as a preview, with the rules it applied and their sources: it sizes the enclosure with your spare-space percentage, puts power on top, control below and terminals by the cable entry, and keeps what you moved or locked when you suggest again. Layout templates, a documented JSON, CSV and DXF exchange with your ERP, a 3D view, the duct fill rate, wire lengths estimated along the ducts and a drilling DXF come with it.</p><span class="std">IEC 61439</span></article>
-      <article class="card"><h3>Live link with your ERP</h3><span class="tag available">Available</span><p>Pull items and stock from your ERP over HTTP (REST or OData v4, with paging), map its fields once, and pick parts from the warehouse straight onto a device. The parts a project needs go back as a documented reservation request that you see before it is sent, by HTTP or as JSON and CSV files in an outbox folder. Credentials stay encrypted on your computer. A demo ERP inside the app shows the whole round trip.</p></article>
+      <article class="card" id="feature-schematic"><img class="card-img" src="/img/feat-schematic.png" alt="A power page of the DC battery-charger sample: breaker, transformer and two rectifier modules with wire numbers" width="1200" height="700" loading="lazy" decoding="async" /><div class="card-head"><h3>Schematic</h3><span class="tag available">Available</span></div><p>Multi-page projects with IEC symbols, single-line and multi-line pages, your own frame, title block and drawing style.</p><span class="std">IEC 60617</span><span class="std">IEC 81346</span><span class="std">IEC 61082</span><span class="std">ISO 5457</span></article>
+      <article class="card" id="feature-devices"><img class="card-img" src="/img/feat-devices.png" alt="The alarm relay page of the charger sample with contact images and cross-references" width="1200" height="700" loading="lazy" decoding="async" /><div class="card-head"><h3>Devices and cross-references</h3><span class="tag available">Available</span></div><p>One device, several representations, counted once in the BOM and cross-referenced both ways. Connectors with named pins, macros, nested assemblies.</p><span class="std">IEC 81346</span><span class="std">IEC 61439</span></article>
+      <article class="card" id="feature-reports"><img class="card-img" src="/img/feat-reports.png" alt="The Reports window showing the wire list generated from the schematic" width="1200" height="700" loading="lazy" decoding="async" /><div class="card-head"><h3>Wires and reports</h3><span class="tag available">Available</span></div><p>Automatic wire numbers, terminal diagrams, cable and wire lists, nameplates and exports, all generated live from the schematic.</p><span class="std">IEC 60204-1</span><span class="std">IEC 60445</span><span class="std">IEC 60757</span></article>
+      <article class="card" id="feature-checks"><img class="card-img" src="/img/feat-checks.png" alt="The warnings banner and the list of findings of the electrical rule check, with one-click fixes, over a power page with the markers of the findings" width="1200" height="700" loading="lazy" decoding="async" /><div class="card-head"><h3>Checks and revisions</h3><span class="tag available">Available</span></div><p>A continuous electrical rule check with one-click fixes, issued revisions, a generated cover sheet and a comparison of two revisions.</p><span class="std">IEC 60364-5-52</span><span class="std">IEC 60204-1</span></article>
+      <article class="card" id="feature-plc"><img class="card-img" src="/img/feat-plc.png" alt="The PLC I/O window listing every channel of the conveyor sample with address, tag, comment and what it is wired to, and the tag list export and import" width="1200" height="700" loading="lazy" decoding="async" /><div class="card-head"><h3>PLC</h3><span class="tag available">Available</span></div><p>PLC racks and I/O cards as devices with addresses from your addressing scheme, an I/O overview that edits both ways, and tag lists for CODESYS and TIA Portal (the TIA format is marked unverified).</p></article>
+      <article class="card" id="feature-sizing"><img class="card-img" src="/img/feat-sizing.png" alt="The sizing window of the conveyor sample after the motor was raised to 7.5 kW: the contactor and overload relay lines propose parts from the stock list, with warehouse, location and the quantity available for this project" width="1200" height="700" loading="lazy" decoding="async" /><div class="card-head"><h3>Sizing and warehouse</h3><span class="tag available">Available</span></div><p>Cables, breakers, contactors and overload relays sized from the schematic with their requirement, assumptions and sources (table values still unverified are flagged), then proposed from your own stock list: ranked by what the warehouse has for this project, with warehouse and location. Confirm one line, or the whole project, in one undo step.</p><span class="std">IEC 60364-5-52</span><span class="std">IEC 60364-4-43</span><span class="std">IEC 60947-2</span><span class="std">IEC 60947-4-1</span></article>
+      <article class="card" id="feature-workspace"><img class="card-img" src="/img/feat-workspace.png" alt="The CablePilot window: the ribbon on top, a drawing page in the middle with the crosshair, the command line and status bar below, and the AI chat docked on the right with a proposal and its sources" width="1200" height="700" loading="lazy" decoding="async" /><div class="card-head"><h3>A familiar CAD workspace, with the chat inside</h3><span class="tag available">Available</span></div><p>Ribbon, command line with the aliases CAD users type (L, PL, REC, M, CO, TR, Z...), grid, ortho, object snap and polar tracking, window and crossing selection, layers and dockable panels. A chat panel proposes changes as a preview you accept or reject: with your own API key a model reads, checks, sizes and proposes through tools; without a key a built-in assistant answers a few requests.</p></article>
+      <article class="card" id="feature-layout"><img class="card-img" src="/img/feat-layout.png" alt="The mounting plate of the pump-station sample in front view to scale: enclosure and plate with dimension lines, wire ducts, DIN rails and the devices at their real size" width="1200" height="700" loading="lazy" decoding="async" /><img class="card-img" src="/img/feat-layout3d.png" alt="The same cabinet in the 3D view: every device a box from its dimensions, coloured by group, with the door drawn transparent" width="1200" height="700" loading="lazy" decoding="async" /><div class="card-head"><h3>Cabinet layout</h3><span class="tag available">Available</span></div><p>Draw the enclosure, mounting plate, DIN rails and wire ducts with the same CAD tools as the schematic, and place every device of the BOM at its real size, snapped to the rails, with a front view to scale, a side view with the depths, dimensions, no-mount zones and the door devices. Or let CablePilot suggest the whole layout as a preview, with the rules it applied and their sources: it sizes the enclosure with your spare-space percentage, puts power on top, control below and terminals by the cable entry, and keeps what you moved or locked when you suggest again. Layout templates, a documented JSON, CSV and DXF exchange with your ERP, a 3D view, the duct fill rate, wire lengths estimated along the ducts and a drilling DXF come with it.</p><span class="std">IEC 61439</span></article>
+      <article class="card" id="feature-erp"><div class="card-head"><h3>Live link with your ERP</h3><span class="tag available">Available</span></div><p>Pull items and stock from your ERP over HTTP (REST or OData v4, with paging), map its fields once, and pick parts from the warehouse straight onto a device. The parts a project needs go back as a documented reservation request that you see before it is sent, by HTTP or as JSON and CSV files in an outbox folder. Credentials stay encrypted on your computer. A demo ERP inside the app shows the whole round trip.</p></article>
+      <article class="card" id="feature-panel"><div class="card-head"><h3>Panel Designer tools</h3><span class="tag available">Available</span></div><p>Place a symbol on a wire and the wire splits at its pins. Auto-wire selected symbols in one command. Ladder pages with numbered rungs and line-number references for NFPA 79-style drawings. Project history with daily backups and named versions, restored as one undo step.</p><span class="std">NFPA 79</span></article>
     </div>
     <div class="shots">
       <input type="radio" name="shot-theme" id="shot-dark" checked />
@@ -94,33 +146,53 @@
         <label for="shot-dark">Dark</label>
         <label for="shot-light">Light</label>
       </div>
-      <div class="shot shot-dark-img has-img"><img src="/img/app-dark.png" alt="CablePilot with the dark theme: the motor power page of the conveyor sample" width="1440" height="900" loading="lazy" /></div>
-      <div class="shot shot-light-img has-img"><img src="/img/app-light.png" alt="CablePilot with the light theme: the motor power page of the conveyor sample" width="1440" height="900" loading="lazy" /></div>
+      <div class="shot shot-dark-img has-img"><img src="/img/app-dark.png" alt="CablePilot with the dark theme: the motor power page of the conveyor sample" width="1440" height="900" loading="lazy" decoding="async" /></div>
+      <div class="shot shot-light-img has-img"><img src="/img/app-light.png" alt="CablePilot with the light theme: the motor power page of the conveyor sample" width="1440" height="900" loading="lazy" decoding="async" /></div>
     </div>
   </div>
 </section>
 
-<section class="band light" id="set">
+<section class="band alt" id="how">
   <div class="wrap">
-    <h2>A complete drawing set</h2>
-    <p class="lead">What the workshop gets, printed from the project with nothing drawn by hand afterwards. The thumbnails are pages of the DC battery-charger sample, exported from the real app.</p>
+    <div class="sec-head center">
+      <p class="eyebrow">How it works</p>
+      <h2>One schematic, everything else follows</h2>
+    </div>
+    <ol class="steps">
+      <li><span class="num">1</span><h3>Draw the schematic</h3><p>Place IEC symbols, draw wires and give devices their parts. Designations, cross-references and wire numbers follow automatically.</p></li>
+      <li><span class="num">2</span><h3>The lists follow</h3><p>Terminal diagrams, cable and wire lists, PLC I/O and the BOM are generated from the schematic and update live. The rule check flags mistakes as you draw.</p></li>
+      <li><span class="num">3</span><h3>Build and hand over</h3><p>Lay out the cabinet to scale in 2D and 3D, then print the complete drawing set in your title block, ready for the workshop and the customer’s sign-off.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="band" id="set">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">The drawing set</p>
+      <h2>A complete drawing set</h2>
+      <p class="lead">What the workshop gets, printed from the project with nothing drawn by hand afterwards. The thumbnails are pages of the DC battery-charger sample, exported from the real app.</p>
+    </div>
     <ul class="strip">
-      <li class="thumb has-img"><img src="/img/set-cover.png" alt="Cover with revisions" width="600" height="420" loading="lazy" /><span>Cover with revisions</span></li>
-      <li class="thumb has-img"><img src="/img/set-single.png" alt="Single-line" width="600" height="420" loading="lazy" /><span>Single-line</span></li>
-      <li class="thumb has-img"><img src="/img/set-multi.png" alt="Multi-line" width="600" height="420" loading="lazy" /><span>Multi-line</span></li>
-      <li class="thumb has-img"><img src="/img/set-terminals.png" alt="Terminals" width="600" height="420" loading="lazy" /><span>Terminals</span></li>
-      <li class="thumb has-img"><img src="/img/set-layout.png" alt="Cabinet layout" width="600" height="420" loading="lazy" /><span>Cabinet layout</span></li>
-      <li class="thumb has-img"><img src="/img/set-bom.png" alt="BOM" width="600" height="420" loading="lazy" /><span>BOM</span></li>
+      <li class="thumb has-img"><img src="/img/set-cover.png" alt="Cover with revisions" width="600" height="420" loading="lazy" decoding="async" /><span>Cover with revisions</span></li>
+      <li class="thumb has-img"><img src="/img/set-single.png" alt="Single-line" width="600" height="420" loading="lazy" decoding="async" /><span>Single-line</span></li>
+      <li class="thumb has-img"><img src="/img/set-multi.png" alt="Multi-line" width="600" height="420" loading="lazy" decoding="async" /><span>Multi-line</span></li>
+      <li class="thumb has-img"><img src="/img/set-terminals.png" alt="Terminals" width="600" height="420" loading="lazy" decoding="async" /><span>Terminals</span></li>
+      <li class="thumb has-img"><img src="/img/set-layout.png" alt="Cabinet layout" width="600" height="420" loading="lazy" decoding="async" /><span>Cabinet layout</span></li>
+      <li class="thumb has-img"><img src="/img/set-bom.png" alt="BOM" width="600" height="420" loading="lazy" decoding="async" /><span>BOM</span></li>
     </ul>
   </div>
 </section>
 
-<section class="band dark" id="ai">
+<section class="band alt" id="ai">
   <div class="wrap">
-    <h2>AI inside, you decide</h2>
-    
-    <p class="lead">An optional assistant with your own API key (Claude, OpenAI or Gemini), called from your computer only. It reads the project, runs the checks and the sizing engine with your stock list, and proposes; you accept or reject, and every accepted proposal is one undo step. Nothing is sent anywhere else.</p>
-    
+    <div class="sec-head">
+      <p class="eyebrow">Optional AI</p>
+      <h2>AI inside, you decide</h2>
+      
+      <p class="lead">An optional assistant with your own API key (Claude, OpenAI or Gemini), called from your computer only. It reads the project, runs the checks and the sizing engine with your stock list, and proposes; you accept or reject, and every accepted proposal is one undo step. Nothing is sent anywhere else.</p>
+      
+    </div>
     <div class="grid two">
       <div>
         <h3>Example prompts</h3>
@@ -145,52 +217,86 @@
   </div>
 </section>
 
-<section class="band light" id="why">
+<section class="band" id="why">
   <div class="wrap">
-    <h2>Why CablePilot</h2>
+    <div class="sec-head">
+      <p class="eyebrow">Principles</p>
+      <h2>Why CablePilot</h2>
+    </div>
     <div class="grid four">
-      <div><h3>Local first</h3><p>It runs on your computer. No account, no cloud, no tracking.</p></div>
-      <div><h3>Open format</h3><p>Projects are versioned JSON that diffs well in Git. PDF, DXF and CSV or XLSX out. No lock-in.</p></div>
-      <div><h3>Sourced values</h3><p>Every rule and table value cites its standard and clause. What we could not verify is listed, not shipped as fact.</p></div>
-      <div><h3>Open source</h3><p>Apache-2.0. Read it, change it, build on it.</p></div>
+      <div class="card"><div class="icon g"><svg viewBox="0 0 24 24"><path d="M4 7h16v10H4z M8 21h8 M12 17v4"/></svg></div><h3>Local first</h3><p>It runs on your computer. No account, no cloud, no tracking.</p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z M14 3v5h5 M10 13h6 M10 17h6"/></svg></div><h3>Open format</h3><p>Projects are versioned JSON that diffs well in Git. PDF, DXF and CSV or XLSX out. No lock-in.</p></div>
+      <div class="card"><div class="icon y"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z M9 9h6 M9 13h6 M9 17h3"/></svg></div><h3>Sourced values</h3><p>Every rule and table value cites its standard and clause. What we could not verify is listed, not shipped as fact.</p></div>
+      <div class="card"><div class="icon v"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 4-3.5 7-8 8-4.5-1-8-4-8-8V7z M9 12l2 2 4-4"/></svg></div><h3>Open source</h3><p>Apache-2.0. Read it, change it, build on it.</p></div>
     </div>
   </div>
 </section>
 
-<section class="band light" id="compare">
+<section class="band alt" id="compare">
   <div class="wrap">
-    <h2>How it compares</h2>
-    <p class="lead">We only make claims we can back. This table shows what CablePilot offers and when. Columns for other tools are added only after each claim is verified against the vendor’s own documentation.</p>
-    <table><thead><tr><th scope="col">Capability</th><th scope="col">CablePilot</th></tr></thead><tbody><tr><th scope="row">Open source licence (Apache-2.0)</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Runs locally, no account</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Multi-page schematics with IEC symbols</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Live terminal, cable and wire lists and BOM</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Continuous electrical rule check</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Cabinet layout to scale with a 3D view</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Production drawing sets with revisions and cover sheet</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Optional AI assistant with your own key</th><td><span class="tag available">Available</span></td></tr></tbody></table>
+    <div class="sec-head">
+      <p class="eyebrow">Compare</p>
+      <h2>How it compares</h2>
+      <p class="lead">We only make claims we can back. This table shows what CablePilot offers and when. Columns for other tools are added only after each claim is verified against the vendor’s own documentation.</p>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th scope="col">Capability</th><th scope="col">CablePilot</th></tr></thead><tbody><tr><th scope="row">Open source licence (Apache-2.0)</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Runs locally, no account</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Multi-page schematics with IEC symbols</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Live terminal, cable and wire lists and BOM</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Continuous electrical rule check</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Cabinet layout to scale with a 3D view</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Production drawing sets with revisions and cover sheet</th><td><span class="tag available">Available</span></td></tr><tr><th scope="row">Optional AI assistant with your own key</th><td><span class="tag available">Available</span></td></tr></tbody></table></div>
   </div>
 </section>
 
-<section class="band dark" id="demo">
+<section class="band" id="demo">
   <div class="wrap">
-    <h2>The demo</h2>
-    <a class="demo-poster" href="/demo/"><img src="/img/demo-poster.png" alt="The demo of CablePilot: wires numbered and coloured on the multi-line power page of the battery-charger sample. Opens the demo page." width="1920" height="1080" loading="lazy" /></a>
+    <div class="sec-head">
+      <p class="eyebrow">Two-minute demo</p>
+      <h2>The demo</h2>
+    </div>
+    <a class="demo-poster" href="/demo/"><img src="/img/demo-poster.png" alt="The demo of CablePilot: wires numbered and coloured on the multi-line power page of the battery-charger sample. Opens the demo page." width="1920" height="1080" loading="lazy" decoding="async" /></a>
     <p class="actions"><a class="btn primary" href="/demo/">Watch the demo</a></p>
   </div>
 </section>
 
-<section class="band light" id="download">
+<section class="band alt" id="docs">
   <div class="wrap">
-    <h2>Formats and download</h2>
-    <div class="grid two">
-      <div>
-        <h3>Export formats</h3>
-        <p>PDF drawing sets, DXF (also in), CSV and XLSX lists, KiCad files from phase 2.</p>
-      </div>
-      <div>
-        <h3>Download per system</h3>
-        <ul class="os">
-          <li><a class="btn primary" href="https://github.com/mojeee/cablepilot/releases/latest">macOS (Apple silicon and Intel)</a></li>
-          <li><a class="btn primary" href="https://github.com/mojeee/cablepilot/releases/latest">Windows</a></li>
-          <li><a class="btn primary" href="https://github.com/mojeee/cablepilot/releases/latest">Linux (AppImage)</a></li>
-        </ul>
-        <p class="note">No release is published yet. This button opens the releases page on GitHub.</p>
-        <p><a href="/companies/">Working for a company? See the page for companies.</a></p>
-      </div>
+    <div class="sec-head">
+      <p class="eyebrow">Guides</p>
+      <h2>Learn CablePilot</h2>
+      <p class="lead">Short guides in plain words, written from the app itself: start in ten minutes, understand the numbering, and know exactly what is in your files.</p>
+    </div>
+    <div class="grid three">
+      <a class="card" href="/docs/getting-started/"><h3>Getting started</h3><p>Install CablePilot on Mac, Windows or Linux, open a sample, place symbols, draw wires and print a PDF drawing set in ten minutes.</p><span class="more">Read the guide →</span></a>
+      <a class="card" href="/docs/numbering/"><h3>How numbering works</h3><p>IEC 81346 device designations, wire-number schemes and patterns, terminal numbering and ladder pages in CablePilot.</p><span class="more">Read the guide →</span></a>
+      <a class="card" href="/docs/file-format/"><h3>Project file format</h3><p>What is in a .cablepilot.json project: the documented JSON format, how it is written for Git, versions, migrations and exchange formats.</p><span class="more">Read the guide →</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="faq">
+  <div class="wrap">
+    <div class="sec-head center">
+      <p class="eyebrow">FAQ</p>
+      <h2>Questions engineers ask</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Is CablePilot free?</summary><p>Yes. CablePilot is free and open source under the Apache-2.0 licence, for companies too. There is no account and no subscription. The optional AI assistant uses your own API key, billed by your provider.</p></details>
+      <details><summary>Does it need an internet connection or an account?</summary><p>No. CablePilot runs on your computer and your projects are files on your disk. Only the optional assistant and the ERP link use the network, and only to the addresses you set.</p></details>
+      <details><summary>Which systems does it run on?</summary><p>macOS on Apple Silicon and Intel, Windows 10 and 11 (64-bit), and Linux as an AppImage. The interface and the drawings are in English and Italian.</p></details>
+      <details><summary>Can it replace AutoCAD Electrical or EPLAN?</summary><p>It covers the core work of a panel builder: multi-page schematics with IEC symbols and designations, cross-references, wire numbers, terminal, cable and wire lists, PLC I/O, the BOM, a cabinet layout and the PDF drawing set. It does not import their proprietary project files, and it has no PLC programming or circuit simulation. The comparison above shows what is available today.</p></details>
+      <details><summary>Which standards does it follow?</summary><p>IEC 60617 symbols, IEC 81346 designations, IEC 61082 documents, IEC 60204-1 for machines, IEC 60364-5-52 for cable sizing, IEC 61439 for assemblies, IEC 60445 and IEC 60757 for conductor colours, and ISO 5457 and ISO 7200 for sheets; NFPA 79 and ANSI symbols as an option. Every rule and table value cites its clause, and values not yet verified are listed openly.</p></details>
+      <details><summary>Can I use my company’s frame and title block?</summary><p>Yes. Frames, title blocks with your logo and revision boxes, zone labels and drawing styles are templates, kept in your company library and stored in each project so it opens anywhere.</p></details>
+      <details><summary>Does it work with our ERP?</summary><p>Yes. It pulls items and stock over REST or OData (or from a CSV or XLSX file, or a watched folder), lets you pick parts from the warehouse for a device, and sends the project’s reservation request back by HTTP or to an outbox folder. A demo ERP inside the app shows the round trip.</p></details>
+      <details><summary>Is the AI assistant required, and what does it see?</summary><p>It is optional. With your own key it reads the project to answer; every change it proposes is a preview you accept or reject, every claim shows its source, and electrical values are labelled as suggestions to confirm. Keys are encrypted by your operating system.</p></details>
+      <details><summary>Will my files be locked in?</summary><p>No. A project is one documented JSON file that diffs well in Git, and everything leaves the app as PDF, DXF, CSV or XLSX. DXF pages can be imported too.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="download">
+  <div class="wrap">
+    <div class="dl">
+      <h2>Formats and download</h2>
+      <p class="lead">PDF drawing sets, DXF (also in), CSV and XLSX lists, KiCad files from phase 2.</p>
+      <p class="actions"><a class="btn primary" href="https://github.com/mojeee/cablepilot/releases">Follow the releases on GitHub</a> <a class="btn" href="https://github.com/mojeee/cablepilot"><svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Source code</a></p>
+      <p class="note">No release is published yet. Follow the releases on GitHub to know when the first one is out, or build from the source code.</p>
+      <p><a href="/companies/">Working for a company? See the page for companies.</a></p>
     </div>
   </div>
 </section>
@@ -202,9 +308,9 @@
             <a class="logo" href="/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
             <p>Electrical design for machines, control panels and electronics. Free and open source. Runs on your computer. Your files stay yours.</p>
           </div>
-          <nav aria-label="Footer">
-            <ul><li><a href="/demo/">Demo</a></li><li><a href="/#download">Download</a></li><li><a href="/companies/">For companies</a></li><li><a href="https://github.com/mojeee/cablepilot">GitHub</a></li><li><a href="https://github.com/mojeee/cablepilot/discussions">Discussions</a></li><li><a href="https://github.com/mojeee/cablepilot/releases">Releases</a></li></ul>
-          </nav>
+          <div><p class="foot-h">Product</p><ul><li><a href="/#features">Features</a></li><li><a href="/#videos">Videos</a></li><li><a href="/demo/">Demo</a></li><li><a href="/#download">Download</a></li><li><a href="/companies/">For companies</a></li></ul></div>
+          <div><p class="foot-h">Guides</p><ul><li><a href="/docs/getting-started/">Getting started</a></li><li><a href="/docs/numbering/">How numbering works</a></li><li><a href="/docs/file-format/">Project file format</a></li></ul></div>
+          <div><p class="foot-h">Community</p><ul><li><a href="https://github.com/mojeee/cablepilot">GitHub</a></li><li><a href="https://github.com/mojeee/cablepilot/discussions">Discussions</a></li><li><a href="https://github.com/mojeee/cablepilot/issues">Report a problem</a></li><li><a href="https://github.com/mojeee/cablepilot/releases">Releases</a></li></ul></div>
         </div>
         <div class="foot-base">
           <p>Copyright Mojtaba Amini. Apache-2.0. Version 0.1.0.</p>

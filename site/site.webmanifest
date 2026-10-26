@@ -1,0 +1,21 @@
+{
+  "name": "CablePilot",
+  "short_name": "CablePilot",
+  "description": "Free, open-source electrical CAD: IEC schematics, terminal and cable lists, PLC I/O, BOM, cabinet layout in 2D and 3D, PDF drawing sets. Runs offline on Mac, Windows and Linux.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0f1419",
+  "theme_color": "#0f1419",
+  "icons": [
+    {
+      "src": "/img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

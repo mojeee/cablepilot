@@ -7,24 +7,46 @@ stylesheet with colour tokens (`scripts/site/style.css`; text pairs pass WCAG AA
 the visitor has not asked for less). The approach is the same as MechPilot's site; the texts are
 CablePilot's own.
 
-## What is in it (M0 skeleton)
+## What is in it
+
+The design follows BoardPilot's site (the owner's other product): dark throughout, a sticky blurred navigation bar
+with the sections, an EN/IT switch, the GitHub link and Download; a centred hero; a strip of facts; cards with icons;
+an FAQ; a footer with Product, Guides and Community columns. Fonts stay the system stack (BoardPilot loads web fonts;
+this site loads nothing from a third party).
 
 | Pages | Built from |
 | --- | --- |
 | Landing page (`/`, `/it/`) | `scripts/site/index.template.html` |
+| Guides (`/docs/`, `/docs/getting-started/`, `/docs/numbering/`, `/docs/file-format/` and `/it/docs/...`) | `docs/<slug>.md` in English, `scripts/site/docs.it/<slug>.md` in Italian (with the hash of the English text it translates; a newer English text is a warning) |
 | For companies (`/companies/`, `/it/aziende/`) | `scripts/site/companies.template.html` |
 | Demo (`/demo/`, `/it/demo/`) | `docs/demo.md` and `scripts/site/demo.it.md` (steps), the recording in `site/video/` |
-| 404, `robots.txt`, `sitemap.xml`, `_headers`, `_redirects` | `scripts/build-site.mjs` |
+| 404, `robots.txt`, `sitemap.xml`, `site.webmanifest`, `_headers`, `_redirects` | `scripts/build-site.mjs` |
 
-The landing page has, in order: hero (promise, "free and open source, runs on your computer, your
-files stay yours", Download and Watch the demo, a status line, a slot for the hero video loop); "In
-the app today" (one block per feature area with an Available / Planned (Mx) tag, standards tags, and
-a dark/light screenshot switch made with radio inputs and CSS, no script); "A complete drawing set"
-(thumbnail strip); "AI inside, you decide"; "Why CablePilot"; the comparison table; the demo slot;
-formats and download per OS with a link to For companies.
+The landing page has, in order: the hero (eyebrow, headline, what the app does, the actions, the status line, feature
+chips, the hero video loop in a window frame); a strip of facts counted from the repository (symbols, parts, reports,
+samples, languages); the short videos; "In the app today" (one card per feature area with an Available / Planned (Mx)
+tag and the standards, and a dark/light screenshot switch made with radio inputs and CSS, no script); how it works;
+the drawing set; the assistant; the principles; the comparison; the demo; the guides; the FAQ; download.
 
-Still to come (milestone M8 unless a feature needs one earlier): docs pages, the changelog page, standards
-tables and symbol/device pages generated from `library/`, the guides and real screenshots.
+**Download.** Until every box of `## M8 Release 1` is ticked, the buttons say so honestly (watch the demo, follow the
+releases on GitHub). Once it is, they link straight to the installers on the latest release
+(`releases/latest/download/CablePilot-mac-arm64.dmg`, `-mac-x64.dmg`, `-win-x64.exe`, `-linux-x86_64.AppImage`).
+
+## Search engines
+
+- **Titles and descriptions** say what CablePilot is in the words people search for (electrical CAD, control panels,
+  IEC schematics, terminal and cable lists), in both languages; every page has its own.
+- **Structured data** (schema.org JSON-LD, never run: `<script type="application/ld+json">` is the only script
+  `scripts/check-site.mjs` allows): `SoftwareApplication`, `WebSite` and `FAQPage` on the landing page,
+  `TechArticle` and `BreadcrumbList` on the guides.
+- **Social cards:** `site/img/og.png` and `og-it.png` (1200 x 630: the mark, the headline and a real screenshot) with
+  Open Graph and Twitter tags; touch and manifest icons. `npm run icon` renders them and the app icon with
+  Playwright's Chromium (`scripts/make-icon.mjs`); run it again after `npm run screenshots`.
+- **Language pairs:** canonical links, `hreflang` pairs and `x-default` on every page; the sitemap lists both
+  languages of every page with their alternates.
+- **Guides as pages:** the user guides are real HTML pages with headings and anchors, linked from the navigation, the
+  landing page and the footer.
+- Images carry `width`, `height`, `alt`, `loading="lazy"` and `decoding="async"`; videos load nothing until played.
 
 ## Rules the build enforces
 

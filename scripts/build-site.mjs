@@ -14,7 +14,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { TEXT } from './site/texts.mjs';
-import { escapeHtml as esc } from './site/markdown.mjs';
+import { escapeHtml as esc, renderMarkdown } from './site/markdown.mjs';
 import { checkSite } from './check-site.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -165,6 +165,10 @@ function emit(rel, content) {
 const HOME = { en: '/', it: '/it/' };
 const COMPANIES = { en: '/companies/', it: '/it/aziende/' };
 const DEMO = { en: '/demo/', it: '/it/demo/' };
+const DOCS = { en: '/docs/', it: '/it/docs/' };
+// The user guides published as pages (docs/<slug>.md in English, scripts/site/docs.it/<slug>.md in Italian).
+const DOC_PAGES = [{ slug: 'getting-started' }, { slug: 'numbering' }, { slug: 'file-format' }];
+const docHref = (lang, slug) => `${DOCS[lang]}${slug}/`;
 const LOGO = '<img src="/logo.svg" alt="" width="28" height="28" />';
 
 /** `<!-- if x --> a <!-- else --> b <!-- end -->`: both branches are kept in the source, one is output. */
@@ -190,15 +194,30 @@ function template(name, lang, vars) {
   return fill(conditions(src, { ai: aiReady }), lang, vars);
 }
 
-function page({ lang, path, alt, title, description, body, section = '', full = true }) {
+const GH_ICON = '<svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
+
+/** JSON for a <script type="application/ld+json"> block: "</" is escaped so the data can never close the tag. */
+const ld = (data) => `<script type="application/ld+json">${JSON.stringify(data).replace(/<\//g, '<\\/')}</script>`;
+
+function page({ lang, path, alt, title, description, body, section = '', jsonld = [], ogImage = lang === 'it' ? '/img/og-it.png' : '/img/og.png' }) {
   const other = lang === 'en' ? 'it' : 'en';
+  const home = HOME[lang];
   const links = [
     `<link rel="canonical" href="${SITE}${path}" />`,
     `<link rel="alternate" hreflang="${lang}" href="${SITE}${path}" />`,
     `<link rel="alternate" hreflang="${other}" href="${SITE}${alt}" />`,
     `<link rel="alternate" hreflang="x-default" href="${SITE}${lang === 'en' ? path : alt}" />`,
   ];
-  const footLinks = (items) => `<ul>${items.map(([label, href]) => `<li><a href="${href}">${esc(label)}</a></li>`).join('')}</ul>`;
+  const nav = [
+    [tx(lang, 'nav.features'), `${home}#features`, ''],
+    [tx(lang, 'nav.videos'), `${home}#videos`, ''],
+    [tx(lang, 'nav.demo'), DEMO[lang], 'demo'],
+    [tx(lang, 'nav.docs'), DOCS[lang], 'docs'],
+    [tx(lang, 'nav.compare'), `${home}#compare`, ''],
+    [tx(lang, 'nav.faq'), `${home}#faq`, ''],
+    [tx(lang, 'nav.companies'), COMPANIES[lang], 'companies'],
+  ];
+  const footCol = (head, items) => `<div><p class="foot-h">${esc(head)}</p><ul>${items.map(([label, href]) => `<li><a href="${href}">${esc(label)}</a></li>`).join('')}</ul></div>`;
   const html = `<!doctype html>
 <html lang="${lang}">
   <head>
@@ -208,29 +227,42 @@ function page({ lang, path, alt, title, description, body, section = '', full = 
     <meta name="description" content="${esc(description)}" />
     ${links.join('\n    ')}
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0f1216" />
+    <link rel="icon" href="/img/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/img/icon-180.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0f1419" />
+    <meta name="color-scheme" content="dark" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="CablePilot" />
     <meta property="og:locale" content="${lang === 'en' ? 'en_GB' : 'it_IT'}" />
+    <meta property="og:locale:alternate" content="${lang === 'en' ? 'it_IT' : 'en_GB'}" />
     <meta property="og:title" content="${esc(title)}" />
     <meta property="og:description" content="${esc(description)}" />
     <meta property="og:url" content="${SITE}${path}" />
-    <meta property="og:image" content="${SITE}/og.svg" />
+    <meta property="og:image" content="${SITE}${ogImage}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="${esc(tx(lang, 'og.alt'))}" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${esc(title)}" />
+    <meta name="twitter:description" content="${esc(description)}" />
+    <meta name="twitter:image" content="${SITE}${ogImage}" />
     <link rel="stylesheet" href="${CSS_URL}" />
+    ${jsonld.map(ld).join('\n    ')}
   </head>
   <body>
     <a class="skip" href="#main">${esc(tx(lang, 'nav.skip'))}</a>
     <header class="top">
       <div class="wrap top-in">
-        <a class="logo" href="${HOME[lang]}">${LOGO} CablePilot</a>
+        <a class="logo" href="${home}">${LOGO} CablePilot</a>
         <nav class="main-nav" aria-label="${esc(tx(lang, 'nav.main'))}">
-          <a href="${DEMO[lang]}"${section === 'demo' ? ' aria-current="page"' : ''}>${esc(tx(lang, 'nav.demo'))}</a>
-          <a href="${COMPANIES[lang]}"${section === 'companies' ? ' aria-current="page"' : ''}>${esc(tx(lang, 'nav.companies'))}</a>
-          <a href="${REPO}">GitHub</a>
-          <a href="${alt}" hreflang="${other}" lang="${other}">${other === 'it' ? 'Italiano' : 'English'}</a>
+          ${nav.map(([label, href, sec]) => `<a href="${href}"${sec && sec === section ? ' aria-current="page"' : ''}>${esc(label)}</a>`).join('\n          ')}
         </nav>
-        <a class="btn primary sm" href="${HOME[lang]}#download">${esc(tx(lang, 'nav.download'))}</a>
+        <div class="nav-right">
+          <div class="lang" role="group" aria-label="${esc(tx(lang, 'nav.language'))}">${lang === 'en' ? `<span aria-current="true">EN</span><a href="${alt}" hreflang="it" lang="it" title="Italiano">IT</a>` : `<a href="${alt}" hreflang="en" lang="en" title="English">EN</a><span aria-current="true">IT</span>`}</div>
+          <a class="gh" href="${REPO}" aria-label="${esc(tx(lang, 'nav.github'))}" title="GitHub">${GH_ICON}</a>
+          <a class="btn primary sm" href="${home}#download">${esc(tx(lang, 'nav.download'))}</a>
+        </div>
       </div>
     </header>
     <main id="main">
@@ -240,19 +272,23 @@ function page({ lang, path, alt, title, description, body, section = '', full = 
       <div class="wrap">
         <div class="foot-grid">
           <div>
-            <a class="logo" href="${HOME[lang]}">${LOGO} CablePilot</a>
+            <a class="logo" href="${home}">${LOGO} CablePilot</a>
             <p>${esc(tx(lang, 'foot.tagline'))}</p>
           </div>
-          <nav aria-label="${esc(tx(lang, 'nav.footer'))}">
-            ${footLinks([
-              [tx(lang, 'nav.demo'), DEMO[lang]],
-              [tx(lang, 'nav.download'), `${HOME[lang]}#download`],
-              [tx(lang, 'nav.companies'), COMPANIES[lang]],
-              ['GitHub', REPO],
-              [tx(lang, 'foot.discussions'), DISCUSSIONS],
-              [tx(lang, 'foot.releases'), `${REPO}/releases`],
-            ])}
-          </nav>
+          ${footCol(tx(lang, 'foot.product'), [
+            [tx(lang, 'nav.features'), `${home}#features`],
+            [tx(lang, 'nav.videos'), `${home}#videos`],
+            [tx(lang, 'nav.demo'), DEMO[lang]],
+            [tx(lang, 'nav.download'), `${home}#download`],
+            [tx(lang, 'nav.companies'), COMPANIES[lang]],
+          ])}
+          ${footCol(tx(lang, 'foot.docs'), DOC_PAGES.map((d) => [tx(lang, `doc.${d.slug}.title`), docHref(lang, d.slug)]))}
+          ${footCol(tx(lang, 'foot.community'), [
+            ['GitHub', REPO],
+            [tx(lang, 'foot.discussions'), DISCUSSIONS],
+            [tx(lang, 'foot.issues'), `${REPO}/issues`],
+            [tx(lang, 'foot.releases'), `${REPO}/releases`],
+          ])}
         </div>
         <div class="foot-base">
           <p>${esc(tx(lang, 'foot.copyright'))} ${esc(tx(lang, 'foot.version'))} ${esc(pkg.version)}.</p>
@@ -280,26 +316,50 @@ const FEATURES = [
   { key: 'workspace', m: 'M6', section: /^CAD workspace with the AI inside/i, std: [] },
   { key: 'layout', m: 'M6', std: ['IEC 61439'] },
   { key: 'erp', m: 'M8', section: /^ERP link/i, std: [] },
+  { key: 'panel', m: 'M8', section: /^Panel designer features/i, std: ['NFPA 79'] },
 ];
 const featureDone = (f) => (f.section ? sectionDone(f.section) : done(f.m));
 const statusTag = (lang, m, isDone = done(m)) =>
   isDone ? `<span class="tag available">${esc(tx(lang, 'tag.available'))}</span>` : `<span class="tag planned">${esc(tx(lang, 'tag.planned'))} (${m})</span>`;
 
+// Facts of the strip under the hero, counted from the repository (never typed by hand).
+const countFiles = (dir, re) => readdirSync(join(root, dir)).filter((f) => re.test(f)).length;
+const FACTS = {
+  symbols: countFiles('library/symbols', /\.json$/),
+  parts: countFiles('library/parts', /\.json$/),
+  reports: (/REPORT_IDS = \[([^\]]*)\]/.exec(read('shared/model/types.ts'))?.[1].split(',').filter((x) => x.trim()).length) ?? 0,
+  samples: countFiles('samples', /\.cablepilot\.json$/),
+};
+// Installers on the latest GitHub Release (.github/workflows/release.yml names them).
+const INSTALLERS = [
+  { key: 'mac', file: 'CablePilot-mac-arm64.dmg', icon: 'apple' },
+  { key: 'macIntel', file: 'CablePilot-mac-x64.dmg', icon: 'apple' },
+  { key: 'win', file: 'CablePilot-win-x64.exe', icon: 'windows' },
+  { key: 'linux', file: 'CablePilot-linux-x86_64.AppImage', icon: 'linux' },
+];
+const OS_ICON = {
+  apple: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.9-3.5.9-.7 0-1.9-.8-3.1-.8-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.1.8 1.3 0 2.1-1.2 2.9-2.4.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.6-1-2.7-4.1zM14.1 5.6c.6-.8 1.1-1.9 1-3-1 0-2.1.6-2.8 1.4-.6.7-1.1 1.8-1 2.9 1.1.1 2.1-.5 2.8-1.3z"/></svg>',
+  windows: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5l7.5-1v7H3zm8.5-1.2L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zm8.5 0H21V21l-9.5-1.3z"/></svg>',
+  linux: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c-2.2 0-3.6 1.9-3.6 4.6 0 1.3.3 2.3-.5 3.6-1.3 1.9-3 4.3-2.6 6.8.2 1.1.9 1.6 1.6 1.9-.4.7-.4 1.6.5 2 .9.4 2 .1 3-.4.6.2 1.2.3 1.6.3s1-.1 1.6-.3c1 .5 2.1.8 3 .4.9-.4.9-1.3.5-2 .7-.3 1.4-.8 1.6-1.9.4-2.5-1.3-4.9-2.6-6.8-.8-1.3-.5-2.3-.5-3.6C15.6 3.9 14.2 2 12 2z"/></svg>',
+};
+// The questions of the FAQ (texts faq.qN / faq.aN), shown on the page and given to search engines as FAQPage data.
+const FAQ_COUNT = 9;
+
 function landingVars(lang) {
   // Screenshots come from the real app (npm run screenshots, e2e/screenshots.e2e.ts) and show only for features that are done.
   const featImg = (f) => {
     if (!featureDone(f) || !imgExists(`feat-${f.key}.png`)) return '';
-    const one = (file, alt) => `<img class="card-img" src="/img/${file}" alt="${esc(tx(lang, alt))}" width="1200" height="700" loading="lazy" />`;
+    const one = (file, alt) => `<img class="card-img" src="/img/${file}" alt="${esc(tx(lang, alt))}" width="1200" height="700" loading="lazy" decoding="async" />`;
     // The cabinet layout shows its 2D front view and its 3D view.
     return one(`feat-${f.key}.png`, `feat.${f.key}.alt`) + (imgExists(`feat-${f.key}3d.png`) ? one(`feat-${f.key}3d.png`, `feat.${f.key}3d.alt`) : '');
   };
   const features = FEATURES.map(
-    (f) => `<article class="card">${featImg(f)}<h3>${esc(tx(lang, `feat.${f.key}.title`))}</h3>${statusTag(lang, f.m, featureDone(f))}<p>${esc(tx(lang, `feat.${f.key}.text`))}</p>${f.std.map((s) => `<span class="std">${esc(s)}</span>`).join('')}</article>`,
+    (f) => `<article class="card" id="feature-${f.key}">${featImg(f)}<div class="card-head"><h3>${esc(tx(lang, `feat.${f.key}.title`))}</h3>${statusTag(lang, f.m, featureDone(f))}</div><p>${esc(tx(lang, `feat.${f.key}.text`))}</p>${f.std.map((s) => `<span class="std">${esc(s)}</span>`).join('')}</article>`,
   ).join('\n      ');
   const strip = ['cover', 'single', 'multi', 'terminals', 'layout', 'bom']
-    .map((k) => (imgExists(`set-${k}.png`) ? `<li class="thumb has-img"><img src="/img/set-${k}.png" alt="${esc(tx(lang, `set.${k}`))}" width="600" height="420" loading="lazy" /><span>${esc(tx(lang, `set.${k}`))}</span></li>` : `<li class="thumb">${esc(tx(lang, `set.${k}`))}</li>`))
+    .map((k) => (imgExists(`set-${k}.png`) ? `<li class="thumb has-img"><img src="/img/set-${k}.png" alt="${esc(tx(lang, `set.${k}`))}" width="600" height="420" loading="lazy" decoding="async" /><span>${esc(tx(lang, `set.${k}`))}</span></li>` : `<li class="thumb">${esc(tx(lang, `set.${k}`))}</li>`))
     .join('\n      ');
-  const shot = (theme) => (imgExists(`app-${theme}.png`) ? `<div class="shot shot-${theme}-img has-img"><img src="/img/app-${theme}.png" alt="${esc(tx(lang, `shot.${theme}.alt`))}" width="1440" height="900" loading="lazy" /></div>` : `<div class="shot shot-${theme}-img"><p>${esc(tx(lang, 'shot.pending'))}</p></div>`);
+  const shot = (theme) => (imgExists(`app-${theme}.png`) ? `<div class="shot shot-${theme}-img has-img"><img src="/img/app-${theme}.png" alt="${esc(tx(lang, `shot.${theme}.alt`))}" width="1440" height="900" loading="lazy" decoding="async" /></div>` : `<div class="shot shot-${theme}-img"><p>${esc(tx(lang, 'shot.pending'))}</p></div>`);
   const rows = [
     ['open', null],
     ['local', null],
@@ -310,37 +370,90 @@ function landingVars(lang) {
     ['set', 'M4'],
     ['ai', 'M7'],
   ];
-  const compare = `<table><thead><tr><th scope="col">${esc(tx(lang, 'cmp.feature'))}</th><th scope="col">${esc(tx(lang, 'cmp.status'))}</th></tr></thead><tbody>${rows
+  const compare = `<div class="table-wrap"><table><thead><tr><th scope="col">${esc(tx(lang, 'cmp.feature'))}</th><th scope="col">${esc(tx(lang, 'cmp.status'))}</th></tr></thead><tbody>${rows
     .map(([k, m]) => `<tr><th scope="row">${esc(tx(lang, `cmp.row.${k}`))}</th><td>${m === null ? `<span class="tag available">${esc(tx(lang, 'tag.available'))}</span>` : k === 'ai' && !aiReady ? `<span class="tag planned">${esc(tx(lang, 'tag.planned'))} (${m})</span>` : statusTag(lang, m)}</td></tr>`)
-    .join('')}</tbody></table>`;
+    .join('')}</tbody></table></div>`;
   const status = `${tx(lang, 'status.version')} ${pkg.version} · ${doneCount}/${milestoneIds.length} ${tx(lang, 'status.milestones')} · ${tx(lang, releaseOut ? 'status.out' : 'status.notOut')}`;
-  // The hero loop: a <video autoplay muted loop playsinline> with a poster once the recording exists
-  // (npm run record:demo, M8); until then a placeholder slot.
+  // The hero loop: a <video autoplay muted loop playsinline> with a poster once the recording exists; until then a slot.
   const heroMedia = heroVideo
-    ? `<video autoplay muted loop playsinline poster="/img/hero-poster.png"><source src="/video/hero.webm" type="video/webm" /><source src="/video/hero.mp4" type="video/mp4" /></video>`
+    ? `<video autoplay muted loop playsinline poster="/img/hero-poster.png" width="1280" height="720" aria-label="${esc(tx(lang, 'hero.video.alt'))}"><source src="/video/hero.webm" type="video/webm" /><source src="/video/hero.mp4" type="video/mp4" /></video>`
     : `<div class="video-slot"><p>${esc(tx(lang, 'hero.video.note'))}</p></div>`;
   const demoMedia = demoVideo
-    ? `<a class="demo-poster" href="${DEMO[lang]}"><img src="/img/demo-poster.png" alt="${esc(tx(lang, 'demo.poster.alt'))}" width="1920" height="1080" loading="lazy" /></a>\n    <p class="actions"><a class="btn primary" href="${DEMO[lang]}">${esc(tx(lang, 'demo.watch'))}</a></p>`
+    ? `<a class="demo-poster" href="${DEMO[lang]}"><img src="/img/demo-poster.png" alt="${esc(tx(lang, 'demo.poster.alt'))}" width="1920" height="1080" loading="lazy" decoding="async" /></a>\n    <p class="actions"><a class="btn primary" href="${DEMO[lang]}">${esc(tx(lang, 'demo.watch'))}</a></p>`
     : `<div class="video-slot"><p>${esc(tx(lang, 'demo.pending'))}</p></div>`;
+  // Download buttons link straight to the installers once release 1 is out; until then they say so honestly.
+  const installerButtons = (cls) => INSTALLERS.map((i, k) => `<a class="btn${k === 0 ? ` ${cls}` : ''}" href="${REPO}/releases/latest/download/${i.file}">${OS_ICON[i.icon]}${esc(tx(lang, `dl.${i.key}`))}</a>`).join('\n        ');
+  const heroActions = releaseOut
+    ? `<p class="actions">${installerButtons('primary')}</p>`
+    : `<p class="actions"><a class="btn primary" href="${DEMO[lang]}">${esc(tx(lang, 'hero.demo'))}</a> <a class="btn" href="${REPO}/releases">${GH_ICON}${esc(tx(lang, 'hero.follow'))}</a></p>`;
+  const downloadActions = releaseOut
+    ? `<p class="actions os-list">${installerButtons('primary')}</p>`
+    : `<p class="actions"><a class="btn primary" href="${REPO}/releases">${esc(tx(lang, 'dl.follow'))}</a> <a class="btn" href="${REPO}">${GH_ICON}${esc(tx(lang, 'dl.source'))}</a></p>`;
+  const chipDefs = [
+    ['schematic', '', '#feature-schematic'], ['reports', 'g', '#feature-reports'], ['checks', 'y', '#feature-checks'], ['plc', '', '#feature-plc'],
+    ['layout', 'g', '#feature-layout'], ['sizing', 'y', '#feature-sizing'], ['erp', '', '#feature-erp'], ['ai', 'v', '#ai'], ['offline', 'g', '#why'],
+  ];
+  const chips = chipDefs.map(([k, c, href]) => `<a href="${href}"><i${c ? ` class="${c}"` : ''}></i>${esc(tx(lang, `chip.${k}`))}</a>`).join('\n        ');
+  const facts = [
+    [String(FACTS.symbols), tx(lang, 'facts.symbols')],
+    [String(FACTS.parts), tx(lang, 'facts.parts')],
+    [String(FACTS.reports), tx(lang, 'facts.reports')],
+    [String(FACTS.samples), tx(lang, 'facts.samples')],
+    ['EN · IT', tx(lang, 'facts.languages')],
+  ].map(([b, label]) => `<div><b>${esc(b)}</b><span>${esc(label)}</span></div>`).join('\n    ');
+  const docCards = DOC_PAGES.map((d) => `<a class="card" href="${docHref(lang, d.slug)}"><h3>${esc(tx(lang, `doc.${d.slug}.title`))}</h3><p>${esc(tx(lang, `doc.${d.slug}.description`))}</p><span class="more">${esc(tx(lang, 'docs.read'))} →</span></a>`).join('\n      ');
+  const faqItems = Array.from({ length: FAQ_COUNT }, (_, k) => ({ q: tx(lang, `faq.q${k + 1}`), a: tx(lang, `faq.a${k + 1}`) }));
+  const faq = faqItems.map(({ q, a }) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n      ');
   const clips = CLIPS.filter((c) => clipReady(c.id, lang));
   const clipsSection = clips.length
-    ? `<section class="band light" id="videos">
+    ? `<section class="band" id="videos">
   <div class="wrap">
-    <h2>${esc(tx(lang, 'clips.title'))}</h2>
-    <p class="lead">${esc(tx(lang, 'clips.lead'))}</p>
+    <div class="sec-head center">
+      <p class="eyebrow">${esc(tx(lang, 'clips.eyebrow'))}</p>
+      <h2>${esc(tx(lang, 'clips.title'))}</h2>
+      <p class="lead">${esc(tx(lang, 'clips.lead'))}</p>
+    </div>
     <div class="video-grid">
       ${clips.map((c) => `<figure class="video-card" id="video-${c.id}"><video src="/video/clip-${c.id}-${lang}.mp4" poster="/video/clip-${c.id}-${lang}.jpg" width="1280" height="720" controls muted loop playsinline preload="none" aria-label="${esc(c.title[lang])}"></video><figcaption><b>${esc(c.title[lang])}</b><span>${esc(c.desc[lang])}</span></figcaption></figure>`).join('\n      ')}
     </div>
-    <p class="note">${esc(tx(lang, 'clips.note'))}</p>
+    <p class="note center">${esc(tx(lang, 'clips.note'))}</p>
   </div>
 </section>`
     : '';
-  return { features, strip, shotDark: shot('dark'), shotLight: shot('light'), compare, status, heroMedia, demoMedia, clipsSection, demoHref: DEMO[lang], RELEASES, DISCUSSIONS, companiesHref: COMPANIES[lang] };
+  // Structured data: the app, the site and the FAQ (schema.org), for richer search results.
+  const jsonld = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'CablePilot',
+      applicationCategory: 'DesignApplication',
+      applicationSubCategory: tx(lang, 'ld.category'),
+      operatingSystem: 'macOS, Windows, Linux',
+      softwareVersion: pkg.version,
+      description: tx(lang, 'home.description'),
+      url: `${SITE}${HOME[lang]}`,
+      downloadUrl: `${REPO}/releases/latest`,
+      installUrl: `${REPO}/releases/latest`,
+      license: 'https://www.apache.org/licenses/LICENSE-2.0',
+      isAccessibleForFree: true,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+      inLanguage: ['en', 'it'],
+      screenshot: `${SITE}/img/app-dark.png`,
+      image: `${SITE}/img/og.png`,
+      codeRepository: REPO,
+      featureList: FEATURES.filter(featureDone).map((f) => tx(lang, `feat.${f.key}.title`)),
+    },
+    { '@context': 'https://schema.org', '@type': 'WebSite', name: 'CablePilot', url: `${SITE}${HOME[lang]}`, inLanguage: lang },
+    { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqItems.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
+  ];
+  const downloadNote = esc(tx(lang, releaseOut ? 'dl.note.out' : 'dl.note'));
+  return { features, strip, shotDark: shot('dark'), shotLight: shot('light'), compare, status, heroMedia, heroActions, downloadActions, downloadNote, chips, facts, docCards, faq, demoMedia, clipsSection, jsonld, demoHref: DEMO[lang], RELEASES, DISCUSSIONS, companiesHref: COMPANIES[lang] };
 }
 
 for (const lang of ['en', 'it']) {
   const other = lang === 'en' ? 'it' : 'en';
-  page({ lang, path: HOME[lang], alt: HOME[other], title: tx(lang, 'home.title'), description: tx(lang, 'home.description'), body: template('index.template.html', lang, landingVars(lang)) });
+  const vars = landingVars(lang);
+  page({ lang, path: HOME[lang], alt: HOME[other], title: tx(lang, 'home.title'), description: tx(lang, 'home.description'), body: template('index.template.html', lang, vars), jsonld: vars.jsonld });
   page({
     lang,
     path: COMPANIES[lang],
@@ -413,6 +526,89 @@ for (const lang of ['en', 'it']) {
   page({ lang, path: DEMO[lang], alt: DEMO[other], title: tx(lang, 'demo.page.title'), description: tx(lang, 'demo.page.description'), body, section: 'demo' });
 }
 
+// ---------------------------------------------------------------------------------------------
+// The user guides as pages: /docs/ (index) and /docs/<slug>/. English from docs/<slug>.md, Italian from
+// scripts/site/docs.it/<slug>.md, which records the hash of the English text it translates (a newer English text is a
+// warning, like the demo walkthrough). Links to other guides become site pages; links to repository files go to GitHub.
+
+const docLink = (lang) => (href) => {
+  if (/^(https?:|#)/.test(href)) return href;
+  const [file, anchor] = href.split('#');
+  const name = file.replace(/^\.\//, '');
+  const slug = name.replace(/\.md$/, '');
+  if (DOC_PAGES.some((d) => d.slug === slug)) return docHref(lang, slug) + (anchor ? `#${anchor}` : '');
+  const repoPath = name.startsWith('../') ? name.slice(3) : `docs/${name}`;
+  return `${REPO}/blob/main/${repoPath}${anchor ? `#${anchor}` : ''}`;
+};
+function docSource(lang, slug) {
+  const en = read(`docs/${slug}.md`);
+  if (lang === 'en') return en;
+  const file = `scripts/site/docs.it/${slug}.md`;
+  let source = '';
+  const it = read(file).replace(/^<!--\s*([\s\S]*?)-->\n/, (_, block) => {
+    source = (/^\s*source:\s*(\S+)/m.exec(block) ?? [])[1] ?? '';
+    return '';
+  });
+  const current = hash(en);
+  if (source !== current) console.warn(`warning: docs/${slug}.md changed since ${file} was translated (source ${source || 'missing'}, now ${current}): update the Italian text and its "source:" line`);
+  return it;
+}
+const crumbsLd = (items) => ({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items.map(([name, path], k) => ({ '@type': 'ListItem', position: k + 1, name, item: `${SITE}${path}` })) });
+
+for (const lang of ['en', 'it']) {
+  const other = lang === 'en' ? 'it' : 'en';
+  const home = HOME[lang];
+  const docNav = (current) => `<nav aria-label="${esc(tx(lang, 'docs.nav'))}"><ul class="doc-nav">${DOC_PAGES.map((d) => `<li><a href="${docHref(lang, d.slug)}"${d.slug === current ? ' aria-current="page"' : ''}>${esc(tx(lang, `doc.${d.slug}.title`))}</a></li>`).join('')}</ul></nav>`;
+  const cta = `<div class="cta-box"><h2>${esc(tx(lang, 'docs.cta.title'))}</h2><p class="lead">${esc(tx(lang, 'docs.cta.text'))}</p><p class="actions"><a class="btn primary" href="${home}#download">${esc(tx(lang, 'nav.download'))}</a> <a class="btn" href="${DISCUSSIONS}">${esc(tx(lang, 'foot.discussions'))}</a></p></div>`;
+  for (const d of DOC_PAGES) {
+    const { title, html } = renderMarkdown(docSource(lang, d.slug), { link: docLink(lang) });
+    const path = docHref(lang, d.slug);
+    const pageTitle = tx(lang, `doc.${d.slug}.title`);
+    const body = `<section class="hero hero-sub"><div class="glow" aria-hidden="true"></div>
+        <div class="wrap narrow">
+          <p class="crumbs"><a href="${home}">CablePilot</a> › <a href="${DOCS[lang]}">${esc(tx(lang, 'nav.docs'))}</a> › ${esc(pageTitle)}</p>
+          <h1>${esc(title || pageTitle)}</h1>
+          <p class="lead">${esc(tx(lang, `doc.${d.slug}.description`))}</p>
+          ${docNav(d.slug)}
+        </div>
+      </section>
+      <article class="article">
+        <div class="wrap narrow">
+          ${html}
+          ${cta}
+        </div>
+      </article>`;
+    const jsonld = [
+      { '@context': 'https://schema.org', '@type': 'TechArticle', headline: title || pageTitle, description: tx(lang, `doc.${d.slug}.description`), inLanguage: lang, url: `${SITE}${path}`, isPartOf: { '@type': 'WebSite', name: 'CablePilot', url: `${SITE}${home}` }, about: { '@type': 'SoftwareApplication', name: 'CablePilot' } },
+      crumbsLd([['CablePilot', home], [tx(lang, 'nav.docs'), DOCS[lang]], [pageTitle, path]]),
+    ];
+    page({ lang, path, alt: docHref(other, d.slug), title: `${pageTitle} · CablePilot`, description: tx(lang, `doc.${d.slug}.description`), body, section: 'docs', jsonld });
+  }
+  // The docs index.
+  const more = [
+    [tx(lang, 'docs.more.erp'), `${REPO}/blob/main/docs/erp-link.md`],
+    [tx(lang, 'docs.more.layout'), `${REPO}/blob/main/docs/layout-format.md`],
+    [tx(lang, 'docs.more.all'), `${REPO}/blob/main/docs/README.md`],
+  ];
+  const body = `<section class="hero hero-sub"><div class="glow" aria-hidden="true"></div>
+        <div class="wrap">
+          <p class="crumbs"><a href="${home}">CablePilot</a> › ${esc(tx(lang, 'nav.docs'))}</p>
+          <h1>${esc(tx(lang, 'docs.page.h1'))}</h1>
+          <p class="lead">${esc(tx(lang, 'docs.lead'))}</p>
+        </div>
+      </section>
+      <section class="band">
+        <div class="wrap">
+          <div class="grid three">
+            ${DOC_PAGES.map((d) => `<a class="card" href="${docHref(lang, d.slug)}"><h2 class="h3">${esc(tx(lang, `doc.${d.slug}.title`))}</h2><p>${esc(tx(lang, `doc.${d.slug}.description`))}</p><span class="more">${esc(tx(lang, 'docs.read'))} →</span></a>`).join('\n            ')}
+          </div>
+          <h2 class="toc-h">${esc(tx(lang, 'docs.more'))}</h2>
+          <ul class="doc-nav">${more.map(([label, href]) => `<li><a href="${href}">${esc(label)}</a></li>`).join('')}</ul>
+        </div>
+      </section>`;
+  page({ lang, path: DOCS[lang], alt: DOCS[other], title: tx(lang, 'docs.page.title'), description: tx(lang, 'docs.page.description'), body, section: 'docs', jsonld: [crumbsLd([['CablePilot', home], [tx(lang, 'nav.docs'), DOCS[lang]]])] });
+}
+
 emit(
   '404.html',
   `<!doctype html>
@@ -447,6 +643,11 @@ if (missing.size) throw new Error(`Missing site texts (add them to scripts/site/
 emit('style.css', css);
 emit('logo.svg', read('scripts/site/logo.svg'));
 emit('og.svg', read('scripts/site/og.svg'));
+// The web app manifest: name and icons for "add to home screen" and search engines.
+emit(
+  'site.webmanifest',
+  `${JSON.stringify({ name: 'CablePilot', short_name: 'CablePilot', description: TEXT['home.description'].en, start_url: '/', display: 'browser', background_color: '#0f1419', theme_color: '#0f1419', icons: [192, 512].map((n) => ({ src: `/img/icon-${n}.png`, sizes: `${n}x${n}`, type: 'image/png' })) }, null, 2)}\n`,
+);
 emit('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
 const sorted = [...pages].sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
 emit(

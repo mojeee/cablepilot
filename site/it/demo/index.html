@@ -10,16 +10,28 @@
     <link rel="alternate" hreflang="en" href="https://cablepilot.agentflowbind.com/demo/" />
     <link rel="alternate" hreflang="x-default" href="https://cablepilot.agentflowbind.com/demo/" />
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0f1216" />
+    <link rel="icon" href="/img/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/img/icon-180.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0f1419" />
+    <meta name="color-scheme" content="dark" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="CablePilot" />
     <meta property="og:locale" content="it_IT" />
+    <meta property="og:locale:alternate" content="en_GB" />
     <meta property="og:title" content="Demo: disegna una volta, elenchi e set di disegni seguono · CablePilot" />
     <meta property="og:description" content="Una dimostrazione registrata di CablePilot con il caricabatterie DC di esempio: il set di disegni, una bobina e il suo contatto, i numeri filo, gli elenchi in tempo reale e l’esportazione in PDF e XLSX e il dimensionamento di una linea motore con articoli dalla lista di magazzino." />
     <meta property="og:url" content="https://cablepilot.agentflowbind.com/it/demo/" />
-    <meta property="og:image" content="https://cablepilot.agentflowbind.com/og.svg" />
+    <meta property="og:image" content="https://cablepilot.agentflowbind.com/img/og-it.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="CablePilot: la finestra dell’app con uno schema di potenza multifilare, accanto al titolo «Disegna lo schema una volta.»" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="stylesheet" href="/style.css?v=71634ce4b4" />
+    <meta name="twitter:title" content="Demo: disegna una volta, elenchi e set di disegni seguono · CablePilot" />
+    <meta name="twitter:description" content="Una dimostrazione registrata di CablePilot con il caricabatterie DC di esempio: il set di disegni, una bobina e il suo contatto, i numeri filo, gli elenchi in tempo reale e l’esportazione in PDF e XLSX e il dimensionamento di una linea motore con articoli dalla lista di magazzino." />
+    <meta name="twitter:image" content="https://cablepilot.agentflowbind.com/img/og-it.png" />
+    <link rel="stylesheet" href="/style.css?v=0dd1d22f38" />
+    
   </head>
   <body>
     <a class="skip" href="#main">Vai al contenuto</a>
@@ -27,12 +39,19 @@
       <div class="wrap top-in">
         <a class="logo" href="/it/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
         <nav class="main-nav" aria-label="Principale">
+          <a href="/it/#features">Funzioni</a>
+          <a href="/it/#videos">Video</a>
           <a href="/it/demo/" aria-current="page">Demo</a>
+          <a href="/it/docs/">Guide</a>
+          <a href="/it/#compare">Confronto</a>
+          <a href="/it/#faq">Domande</a>
           <a href="/it/aziende/">Per le aziende</a>
-          <a href="https://github.com/mojeee/cablepilot">GitHub</a>
-          <a href="/demo/" hreflang="en" lang="en">English</a>
         </nav>
-        <a class="btn primary sm" href="/it/#download">Scarica</a>
+        <div class="nav-right">
+          <div class="lang" role="group" aria-label="Lingua"><a href="/demo/" hreflang="en" lang="en" title="English">EN</a><span aria-current="true">IT</span></div>
+          <a class="gh" href="https://github.com/mojeee/cablepilot" aria-label="CablePilot su GitHub" title="GitHub"><svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+          <a class="btn primary sm" href="/it/#download">Scarica</a>
+        </div>
       </div>
     </header>
     <main id="main">
@@ -171,9 +190,9 @@
             <a class="logo" href="/it/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
             <p>Progettazione elettrica per macchine, quadri ed elettronica. Libero e open source. Funziona sul tuo computer. I tuoi file restano tuoi.</p>
           </div>
-          <nav aria-label="Piè di pagina">
-            <ul><li><a href="/it/demo/">Demo</a></li><li><a href="/it/#download">Scarica</a></li><li><a href="/it/aziende/">Per le aziende</a></li><li><a href="https://github.com/mojeee/cablepilot">GitHub</a></li><li><a href="https://github.com/mojeee/cablepilot/discussions">Discussioni</a></li><li><a href="https://github.com/mojeee/cablepilot/releases">Versioni rilasciate</a></li></ul>
-          </nav>
+          <div><p class="foot-h">Prodotto</p><ul><li><a href="/it/#features">Funzioni</a></li><li><a href="/it/#videos">Video</a></li><li><a href="/it/demo/">Demo</a></li><li><a href="/it/#download">Scarica</a></li><li><a href="/it/aziende/">Per le aziende</a></li></ul></div>
+          <div><p class="foot-h">Guide</p><ul><li><a href="/it/docs/getting-started/">Per iniziare</a></li><li><a href="/it/docs/numbering/">Come funziona la numerazione</a></li><li><a href="/it/docs/file-format/">Formato del file di progetto</a></li></ul></div>
+          <div><p class="foot-h">Comunità</p><ul><li><a href="https://github.com/mojeee/cablepilot">GitHub</a></li><li><a href="https://github.com/mojeee/cablepilot/discussions">Discussioni</a></li><li><a href="https://github.com/mojeee/cablepilot/issues">Segnala un problema</a></li><li><a href="https://github.com/mojeee/cablepilot/releases">Versioni rilasciate</a></li></ul></div>
         </div>
         <div class="foot-base">
           <p>Copyright Mojtaba Amini. Apache-2.0. Versione 0.1.0.</p>

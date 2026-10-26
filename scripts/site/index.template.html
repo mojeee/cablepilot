@@ -1,25 +1,40 @@
-<section class="hero dark">
-  <div class="wrap hero-grid">
-    <div>
+<section class="hero">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap hero-in">
+    <div class="hero-copy">
       <p class="eyebrow">{{t:hero.eyebrow}}</p>
       <h1>{{t:hero.title}}</h1>
       <p class="lead">{{t:hero.lead}}</p>
-      <p class="actions">
-        <a class="btn primary" href="{{RELEASES}}">{{t:hero.download}}</a>
-        <a class="btn" href="{{demoHref}}">{{t:hero.demo}}</a>
-      </p>
+      {{heroActions}}
       <p class="status">{{status}}</p>
+      <div class="chips">
+        {{chips}}
+      </div>
     </div>
-    <div class="hero-media">{{heroMedia}}</div>
+    <div class="hero-shot">
+      <div class="window">
+        <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+        {{heroMedia}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="strip-facts" aria-label="{{t:facts.label}}">
+  <div class="wrap strip-in">
+    {{facts}}
   </div>
 </section>
 
 {{clipsSection}}
 
-<section class="band dark" id="today">
+<section class="band" id="features">
   <div class="wrap">
-    <h2>{{t:today.title}}</h2>
-    <p class="lead">{{t:today.lead}}</p>
+    <div class="sec-head">
+      <p class="eyebrow">{{t:today.eyebrow}}</p>
+      <h2>{{t:today.title}}</h2>
+      <p class="lead">{{t:today.lead}}</p>
+    </div>
     <div class="grid features">
       {{features}}
     </div>
@@ -36,25 +51,45 @@
   </div>
 </section>
 
-<section class="band light" id="set">
+<section class="band alt" id="how">
   <div class="wrap">
-    <h2>{{t:set.title}}</h2>
-    <p class="lead">{{t:set.lead}}</p>
+    <div class="sec-head center">
+      <p class="eyebrow">{{t:how.eyebrow}}</p>
+      <h2>{{t:how.title}}</h2>
+    </div>
+    <ol class="steps">
+      <li><span class="num">1</span><h3>{{t:how.s1.title}}</h3><p>{{t:how.s1.text}}</p></li>
+      <li><span class="num">2</span><h3>{{t:how.s2.title}}</h3><p>{{t:how.s2.text}}</p></li>
+      <li><span class="num">3</span><h3>{{t:how.s3.title}}</h3><p>{{t:how.s3.text}}</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="band" id="set">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">{{t:set.eyebrow}}</p>
+      <h2>{{t:set.title}}</h2>
+      <p class="lead">{{t:set.lead}}</p>
+    </div>
     <ul class="strip">
       {{strip}}
     </ul>
   </div>
 </section>
 
-<section class="band dark" id="ai">
+<section class="band alt" id="ai">
   <div class="wrap">
-    <h2>{{t:ai.title}}</h2>
-    <!-- if ai -->
-    <p class="lead">{{t:ai.lead.shipped}}</p>
-    <!-- else -->
-    <p class="tag soon">{{t:tag.comingNext}}</p>
-    <p class="lead">{{t:ai.lead.coming}}</p>
-    <!-- end -->
+    <div class="sec-head">
+      <p class="eyebrow">{{t:ai.eyebrow}}</p>
+      <h2>{{t:ai.title}}</h2>
+      <!-- if ai -->
+      <p class="lead">{{t:ai.lead.shipped}}</p>
+      <!-- else -->
+      <p class="tag soon">{{t:tag.comingNext}}</p>
+      <p class="lead">{{t:ai.lead.coming}}</p>
+      <!-- end -->
+    </div>
     <div class="grid two">
       <div>
         <h3>{{t:ai.prompts}}</h3>
@@ -79,51 +114,75 @@
   </div>
 </section>
 
-<section class="band light" id="why">
+<section class="band" id="why">
   <div class="wrap">
-    <h2>{{t:why.title}}</h2>
+    <div class="sec-head">
+      <p class="eyebrow">{{t:why.eyebrow}}</p>
+      <h2>{{t:why.title}}</h2>
+    </div>
     <div class="grid four">
-      <div><h3>{{t:why.local.title}}</h3><p>{{t:why.local.text}}</p></div>
-      <div><h3>{{t:why.format.title}}</h3><p>{{t:why.format.text}}</p></div>
-      <div><h3>{{t:why.sourced.title}}</h3><p>{{t:why.sourced.text}}</p></div>
-      <div><h3>{{t:why.open.title}}</h3><p>{{t:why.open.text}}</p></div>
+      <div class="card"><div class="icon g"><svg viewBox="0 0 24 24"><path d="M4 7h16v10H4z M8 21h8 M12 17v4"/></svg></div><h3>{{t:why.local.title}}</h3><p>{{t:why.local.text}}</p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z M14 3v5h5 M10 13h6 M10 17h6"/></svg></div><h3>{{t:why.format.title}}</h3><p>{{t:why.format.text}}</p></div>
+      <div class="card"><div class="icon y"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z M9 9h6 M9 13h6 M9 17h3"/></svg></div><h3>{{t:why.sourced.title}}</h3><p>{{t:why.sourced.text}}</p></div>
+      <div class="card"><div class="icon v"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v6c0 4-3.5 7-8 8-4.5-1-8-4-8-8V7z M9 12l2 2 4-4"/></svg></div><h3>{{t:why.open.title}}</h3><p>{{t:why.open.text}}</p></div>
     </div>
   </div>
 </section>
 
-<section class="band light" id="compare">
+<section class="band alt" id="compare">
   <div class="wrap">
-    <h2>{{t:cmp.title}}</h2>
-    <p class="lead">{{t:cmp.lead}}</p>
+    <div class="sec-head">
+      <p class="eyebrow">{{t:cmp.eyebrow}}</p>
+      <h2>{{t:cmp.title}}</h2>
+      <p class="lead">{{t:cmp.lead}}</p>
+    </div>
     {{compare}}
   </div>
 </section>
 
-<section class="band dark" id="demo">
+<section class="band" id="demo">
   <div class="wrap">
-    <h2>{{t:demo.title}}</h2>
+    <div class="sec-head">
+      <p class="eyebrow">{{t:demo.eyebrow}}</p>
+      <h2>{{t:demo.title}}</h2>
+    </div>
     {{demoMedia}}
   </div>
 </section>
 
-<section class="band light" id="download">
+<section class="band alt" id="docs">
   <div class="wrap">
-    <h2>{{t:dl.title}}</h2>
-    <div class="grid two">
-      <div>
-        <h3>{{t:dl.formats}}</h3>
-        <p>{{t:dl.formats.text}}</p>
-      </div>
-      <div>
-        <h3>{{t:dl.os}}</h3>
-        <ul class="os">
-          <li><a class="btn primary" href="{{RELEASES}}">{{t:dl.mac}}</a></li>
-          <li><a class="btn primary" href="{{RELEASES}}">{{t:dl.win}}</a></li>
-          <li><a class="btn primary" href="{{RELEASES}}">{{t:dl.linux}}</a></li>
-        </ul>
-        <p class="note">{{t:dl.note}}</p>
-        <p><a href="{{companiesHref}}">{{t:dl.companies}}</a></p>
-      </div>
+    <div class="sec-head">
+      <p class="eyebrow">{{t:docs.eyebrow}}</p>
+      <h2>{{t:docs.title}}</h2>
+      <p class="lead">{{t:docs.lead}}</p>
+    </div>
+    <div class="grid three">
+      {{docCards}}
+    </div>
+  </div>
+</section>
+
+<section class="band" id="faq">
+  <div class="wrap">
+    <div class="sec-head center">
+      <p class="eyebrow">{{t:faq.eyebrow}}</p>
+      <h2>{{t:faq.title}}</h2>
+    </div>
+    <div class="faq">
+      {{faq}}
+    </div>
+  </div>
+</section>
+
+<section class="band" id="download">
+  <div class="wrap">
+    <div class="dl">
+      <h2>{{t:dl.title}}</h2>
+      <p class="lead">{{t:dl.formats.text}}</p>
+      {{downloadActions}}
+      <p class="note">{{downloadNote}}</p>
+      <p><a href="{{companiesHref}}">{{t:dl.companies}}</a></p>
     </div>
   </div>
 </section>

@@ -1,24 +1,28 @@
-<section class="hero dark hero-sub">
+<section class="hero hero-sub">
+  <div class="glow" aria-hidden="true"></div>
   <div class="wrap">
+    <p class="eyebrow">{{t:nav.companies}}</p>
     <h1>{{t:co.h1}}</h1>
     <p class="lead">{{t:co.lead}}</p>
   </div>
 </section>
-<section class="band light">
+<section class="band">
   <div class="wrap">
     <div class="grid three">
-      <div><h2>{{t:co.support.title}}</h2><p>{{t:co.support.text}}</p></div>
-      <div><h2>{{t:co.training.title}}</h2><p>{{t:co.training.text}}</p></div>
-      <div><h2>{{t:co.custom.title}}</h2><p>{{t:co.custom.text}}</p></div>
+      <div class="card"><div class="icon g"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18 9 9 0 000-18z M9 10a3 3 0 115 2c-1 .7-2 1.3-2 2.5 M12 17.5v.5"/></svg></div><h2 class="h3">{{t:co.support.title}}</h2><p>{{t:co.support.text}}</p></div>
+      <div class="card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M3 8l9-4 9 4-9 4z M7 10v5c0 1.5 2.2 3 5 3s5-1.5 5-3v-5 M21 8v6"/></svg></div><h2 class="h3">{{t:co.training.title}}</h2><p>{{t:co.training.text}}</p></div>
+      <div class="card"><div class="icon v"><svg viewBox="0 0 24 24"><path d="M14 4l6 6-9 9H5v-6z M12 6l6 6"/></svg></div><h2 class="h3">{{t:co.custom.title}}</h2><p>{{t:co.custom.text}}</p></div>
     </div>
   </div>
 </section>
-<section class="band dark">
-  <div class="wrap">
+<section class="band alt">
+  <div class="wrap narrow">
     <h2>{{t:co.safe.title}}</h2>
     <p class="lead">{{t:co.safe.text}}</p>
-    <h2>{{t:co.contact.title}}</h2>
-    <p class="lead">{{t:co.contact.text}}</p>
-    <p class="actions"><a class="btn primary" href="{{DISCUSSIONS}}">{{t:co.contact.link}}</a></p>
+    <div class="cta-box">
+      <h2>{{t:co.contact.title}}</h2>
+      <p class="lead">{{t:co.contact.text}}</p>
+      <p class="actions"><a class="btn primary" href="{{DISCUSSIONS}}">{{t:co.contact.link}}</a></p>
+    </div>
   </div>
 </section>

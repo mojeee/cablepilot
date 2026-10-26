@@ -10,16 +10,28 @@
     <link rel="alternate" hreflang="it" href="https://cablepilot.agentflowbind.com/it/demo/" />
     <link rel="alternate" hreflang="x-default" href="https://cablepilot.agentflowbind.com/demo/" />
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0f1216" />
+    <link rel="icon" href="/img/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/img/icon-180.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0f1419" />
+    <meta name="color-scheme" content="dark" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="CablePilot" />
     <meta property="og:locale" content="en_GB" />
+    <meta property="og:locale:alternate" content="it_IT" />
     <meta property="og:title" content="Demo: draw it once, the lists and the drawing set follow · CablePilot" />
     <meta property="og:description" content="A recorded walkthrough of CablePilot with the DC battery-charger sample: the drawing set, a coil and its contact, wire numbers, live reports, and the PDF and XLSX export, and sizing a motor feeder with parts from the stock list." />
     <meta property="og:url" content="https://cablepilot.agentflowbind.com/demo/" />
-    <meta property="og:image" content="https://cablepilot.agentflowbind.com/og.svg" />
+    <meta property="og:image" content="https://cablepilot.agentflowbind.com/img/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="CablePilot: the app window with a multi-line power circuit, next to the headline &quot;Draw the schematic once.&quot;" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="stylesheet" href="/style.css?v=71634ce4b4" />
+    <meta name="twitter:title" content="Demo: draw it once, the lists and the drawing set follow · CablePilot" />
+    <meta name="twitter:description" content="A recorded walkthrough of CablePilot with the DC battery-charger sample: the drawing set, a coil and its contact, wire numbers, live reports, and the PDF and XLSX export, and sizing a motor feeder with parts from the stock list." />
+    <meta name="twitter:image" content="https://cablepilot.agentflowbind.com/img/og.png" />
+    <link rel="stylesheet" href="/style.css?v=0dd1d22f38" />
+    
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -27,12 +39,19 @@
       <div class="wrap top-in">
         <a class="logo" href="/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
         <nav class="main-nav" aria-label="Main">
+          <a href="/#features">Features</a>
+          <a href="/#videos">Videos</a>
           <a href="/demo/" aria-current="page">Demo</a>
+          <a href="/docs/">Docs</a>
+          <a href="/#compare">Compare</a>
+          <a href="/#faq">FAQ</a>
           <a href="/companies/">For companies</a>
-          <a href="https://github.com/mojeee/cablepilot">GitHub</a>
-          <a href="/it/demo/" hreflang="it" lang="it">Italiano</a>
         </nav>
-        <a class="btn primary sm" href="/#download">Download</a>
+        <div class="nav-right">
+          <div class="lang" role="group" aria-label="Language"><span aria-current="true">EN</span><a href="/it/demo/" hreflang="it" lang="it" title="Italiano">IT</a></div>
+          <a class="gh" href="https://github.com/mojeee/cablepilot" aria-label="CablePilot on GitHub" title="GitHub"><svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+          <a class="btn primary sm" href="/#download">Download</a>
+        </div>
       </div>
     </header>
     <main id="main">
@@ -171,9 +190,9 @@
             <a class="logo" href="/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
             <p>Electrical design for machines, control panels and electronics. Free and open source. Runs on your computer. Your files stay yours.</p>
           </div>
-          <nav aria-label="Footer">
-            <ul><li><a href="/demo/">Demo</a></li><li><a href="/#download">Download</a></li><li><a href="/companies/">For companies</a></li><li><a href="https://github.com/mojeee/cablepilot">GitHub</a></li><li><a href="https://github.com/mojeee/cablepilot/discussions">Discussions</a></li><li><a href="https://github.com/mojeee/cablepilot/releases">Releases</a></li></ul>
-          </nav>
+          <div><p class="foot-h">Product</p><ul><li><a href="/#features">Features</a></li><li><a href="/#videos">Videos</a></li><li><a href="/demo/">Demo</a></li><li><a href="/#download">Download</a></li><li><a href="/companies/">For companies</a></li></ul></div>
+          <div><p class="foot-h">Guides</p><ul><li><a href="/docs/getting-started/">Getting started</a></li><li><a href="/docs/numbering/">How numbering works</a></li><li><a href="/docs/file-format/">Project file format</a></li></ul></div>
+          <div><p class="foot-h">Community</p><ul><li><a href="https://github.com/mojeee/cablepilot">GitHub</a></li><li><a href="https://github.com/mojeee/cablepilot/discussions">Discussions</a></li><li><a href="https://github.com/mojeee/cablepilot/issues">Report a problem</a></li><li><a href="https://github.com/mojeee/cablepilot/releases">Releases</a></li></ul></div>
         </div>
         <div class="foot-base">
           <p>Copyright Mojtaba Amini. Apache-2.0. Version 0.1.0.</p>

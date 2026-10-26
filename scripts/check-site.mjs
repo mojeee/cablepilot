@@ -2,7 +2,8 @@
 // Checks the generated website in site/: every internal link and asset resolves to a file in site/
 // (anchors included), every page has a language, a title, one h1, a description and a canonical
 // link (or noindex), hreflang pairs point at each other, nothing loads from another origin (the
-// demo video in site/video/ is an internal asset like the images), no page carries a script or an
+// demo video in site/video/ is an internal asset like the images), no page carries a script (structured data in
+// application/ld+json excepted: it is never run) or an
 // email address. scripts/build-site.mjs runs it after every build; it
 // also runs on its own: node scripts/check-site.mjs
 
@@ -53,7 +54,18 @@ export function checkSite(siteDir, site) {
     if (!/<meta name="viewport"/.test(html)) err('no viewport');
     if ((html.match(/<title>[^<]+<\/title>/g) ?? []).length !== 1) err('needs exactly one non-empty <title>');
     if ((html.match(/<h1[\s>]/g) ?? []).length !== 1) err('needs exactly one <h1>');
-    if (/<script\b/i.test(html)) err('has a <script>: the site runs no JavaScript');
+    // The CSP allows only the stylesheet: an inline style attribute would be blocked in the browser.
+    if (/\sstyle="/i.test(html)) err('has an inline style attribute: the CSP blocks it, use style.css');
+    // Structured data for search engines (<script type="application/ld+json">) is data, never run; any other script is refused.
+    const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+    if (scripts.some((m) => !/\btype="application\/ld\+json"/.test(m[1]))) err('has a <script>: the site runs no JavaScript');
+    for (const m of scripts) {
+      try {
+        JSON.parse(m[2]);
+      } catch {
+        err('has structured data that is not valid JSON');
+      }
+    }
     if (/\son[a-z]+="/i.test(html)) err('has an inline event handler');
     if (/mailto:|[\w.+-]+@[\w-]+\.[a-z]{2,}/i.test(html)) err('has an email address');
     if (/(?:src|srcset|poster)="(?:https?:)?\/\//.test(html) || /<link[^>]+rel="(?:stylesheet|preload|icon)"[^>]+href="(?:https?:)?\/\//.test(html)) err('loads something from another origin');

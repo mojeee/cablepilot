@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project file format · CablePilot</title>
+    <meta name="description" content="What is in a .cablepilot.json project: the documented JSON format, how it is written for Git, versions, migrations and exchange formats." />
+    <link rel="canonical" href="https://cablepilot.agentflowbind.com/docs/file-format/" />
+    <link rel="alternate" hreflang="en" href="https://cablepilot.agentflowbind.com/docs/file-format/" />
+    <link rel="alternate" hreflang="it" href="https://cablepilot.agentflowbind.com/it/docs/file-format/" />
+    <link rel="alternate" hreflang="x-default" href="https://cablepilot.agentflowbind.com/docs/file-format/" />
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+    <link rel="icon" href="/img/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/img/icon-180.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0f1419" />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CablePilot" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:locale:alternate" content="it_IT" />
+    <meta property="og:title" content="Project file format · CablePilot" />
+    <meta property="og:description" content="What is in a .cablepilot.json project: the documented JSON format, how it is written for Git, versions, migrations and exchange formats." />
+    <meta property="og:url" content="https://cablepilot.agentflowbind.com/docs/file-format/" />
+    <meta property="og:image" content="https://cablepilot.agentflowbind.com/img/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="CablePilot: the app window with a multi-line power circuit, next to the headline &quot;Draw the schematic once.&quot;" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Project file format · CablePilot" />
+    <meta name="twitter:description" content="What is in a .cablepilot.json project: the documented JSON format, how it is written for Git, versions, migrations and exchange formats." />
+    <meta name="twitter:image" content="https://cablepilot.agentflowbind.com/img/og.png" />
+    <link rel="stylesheet" href="/style.css?v=0dd1d22f38" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Project file format","description":"What is in a .cablepilot.json project: the documented JSON format, how it is written for Git, versions, migrations and exchange formats.","inLanguage":"en","url":"https://cablepilot.agentflowbind.com/docs/file-format/","isPartOf":{"@type":"WebSite","name":"CablePilot","url":"https://cablepilot.agentflowbind.com/"},"about":{"@type":"SoftwareApplication","name":"CablePilot"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CablePilot","item":"https://cablepilot.agentflowbind.com/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://cablepilot.agentflowbind.com/docs/"},{"@type":"ListItem","position":3,"name":"Project file format","item":"https://cablepilot.agentflowbind.com/docs/file-format/"}]}</script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="top">
+      <div class="wrap top-in">
+        <a class="logo" href="/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
+        <nav class="main-nav" aria-label="Main">
+          <a href="/#features">Features</a>
+          <a href="/#videos">Videos</a>
+          <a href="/demo/">Demo</a>
+          <a href="/docs/" aria-current="page">Docs</a>
+          <a href="/#compare">Compare</a>
+          <a href="/#faq">FAQ</a>
+          <a href="/companies/">For companies</a>
+        </nav>
+        <div class="nav-right">
+          <div class="lang" role="group" aria-label="Language"><span aria-current="true">EN</span><a href="/it/docs/file-format/" hreflang="it" lang="it" title="Italiano">IT</a></div>
+          <a class="gh" href="https://github.com/mojeee/cablepilot" aria-label="CablePilot on GitHub" title="GitHub"><svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+          <a class="btn primary sm" href="/#download">Download</a>
+        </div>
+      </div>
+    </header>
+    <main id="main">
+      <section class="hero hero-sub"><div class="glow" aria-hidden="true"></div>
+        <div class="wrap narrow">
+          <p class="crumbs"><a href="/">CablePilot</a> › <a href="/docs/">Docs</a> › Project file format</p>
+          <h1>Project file format</h1>
+          <p class="lead">What is in a .cablepilot.json project: the documented JSON format, how it is written for Git, versions, migrations and exchange formats.</p>
+          <nav aria-label="Guides"><ul class="doc-nav"><li><a href="/docs/getting-started/">Getting started</a></li><li><a href="/docs/numbering/">How numbering works</a></li><li><a href="/docs/file-format/" aria-current="page">Project file format</a></li></ul></nav>
+        </div>
+      </section>
+      <article class="article">
+        <div class="wrap narrow">
+          <p>A CablePilot project is one UTF-8 text file named <code>&lt;name&gt;.cablepilot.json</code>. It is plain, documented JSON: you can read it, keep it in Git, compare two versions line by line, and write your own tools around it. No lock-in: the same data also leaves the app as PDF, DXF, CSV and XLSX.</p>
+<ul><li><strong>Schema:</strong> <a href="https://github.com/mojeee/cablepilot/blob/main/shared/schema/project.schema.json"><code>shared/schema/project.schema.json</code></a> (JSON Schema). Every sample project is checked against it in the tests.</li><li><strong>Current format version:</strong> 7. The version is the <code>version</code> field at the top of the file.</li></ul>
+<h2 id="stable-diff-friendly-writing">Stable, diff-friendly writing</h2>
+<p>The file is written the same way every time, so a change in the drawing gives a small change in the file:</p>
+<ul><li>keys always in the same order, two-space indentation, a newline at the end;</li><li>short objects and arrays on one line (up to 100 characters), longer ones expanded one item per line;</li><li>lists sorted where order has no meaning (device data by designation, cables by designation), and kept in drawing order where it has (pages, elements on a page);</li><li>no timestamps or machine-specific paths inside the project.</li></ul>
+<h2 id="what-is-in-the-file">What is in the file</h2>
+<div class="table-wrap"><table><thead><tr><th scope="col">Field</th><th scope="col">Contents</th></tr></thead><tbody><tr><td><code>format</code>, <code>version</code></td><td>always <code>&quot;cablepilot-project&quot;</code>, and the format version</td></tr><tr><td><code>id</code>, <code>name</code></td><td>the project's id (stays the same for its whole life) and its name</td></tr><tr><td><code>settings</code></td><td>drawing language, symbol standard (IEC 60617 or NFPA 79 / ANSI), drawing style, default sheet size and template, cross-reference format, BOM settings, numbering, wire colours, installation method, supply data, PLC addressing, cabinet layout defaults</td></tr><tr><td><code>properties</code></td><td>project data printed in the title block and on the cover: client, product, order and drawing numbers, drawn / checked / approved, issue date, revision...</td></tr><tr><td><code>assembly</code></td><td>assembly data for the data sheets (IEC 61439): rated voltages, Icw, IP degree...</td></tr><tr><td><code>templates</code></td><td>the company frames and title blocks used by the project, stored in it so it opens anywhere</td></tr><tr><td><code>potentials</code></td><td>the potentials (L1, L2, L3, N, PE, L+, L-, 24 V DC, 0 V...) with their types</td></tr><tr><td><code>pages</code></td><td>the pages, in order: type, title in each language, sheet size, template, default function and location, and the elements on the page</td></tr><tr><td><code>assets</code></td><td>images used on pages (logos, photos), embedded</td></tr><tr><td><code>symbols</code>, <code>parts</code></td><td>the company symbols and library parts the project uses, embedded so the project opens on a computer without your company library</td></tr><tr><td><code>devices</code></td><td>data kept beside the drawing for each device: parts and quantities, user fields, parent assembly, load data for sizing</td></tr><tr><td><code>projectParts</code></td><td>parts with no designation (mounting plate, wiring kit), in the BOM only</td></tr><tr><td><code>wireClasses</code>, <code>wireTypes</code>, <code>cables</code></td><td>the company wire-class table (function, colour, cross-section, type, suffix), named wire types, and cables with their cores</td></tr><tr><td><code>layers</code></td><td>layer state, colour and line type</td></tr><tr><td><code>issueStatus</code>, <code>revisions</code></td><td>the issue status of the set and every issued revision with its snapshot (pages, devices, wires and parts), used for the revision index and comparisons</td></tr></tbody></table></div>
+<h3 id="elements-on-a-page">Elements on a page</h3>
+<p>Each element has an <code>id</code>, a <code>kind</code> and its own fields, in page millimetres (origin top left, y downwards):</p>
+<p><code>symbol</code> (library symbol, position, rotation, mirror, designation, location, function text, value), <code>box</code> (black box or connector with pins), <code>wire</code> (orthogonal polyline, potential, number, wire type, cable and core), <code>junction</code>, <code>text</code>, <code>line</code>, <code>rect</code>, <code>circle</code>, <code>table</code>, <code>image</code>, <code>warning</code> (warning sign), <code>form</code> (a data sheet bound to project fields), <code>report</code> (a live report printed on the page) and <code>cab</code> (an item of the cabinet layout).</p>
+<p>Reports, cross-references, the BOM and the terminal and cable lists are <strong>not</strong> stored: they are computed from the schematic every time, so they can never disagree with it.</p>
+<h2 id="versions-and-migrations">Versions and migrations</h2>
+<p>When the format changes, the version goes up by one and a migration turns version *n* into *n + 1*. Opening an older file runs every migration in turn, in memory; the file is written in the new version only when you save. A file from a newer CablePilot is refused with a plain message (update the app), never half-read. A damaged file is reported with what is wrong and is not changed.</p>
+<h2 id="next-to-the-project">Next to the project</h2>
+<p>These live in CablePilot's data folder on your computer, not in the project:</p>
+<ul><li><strong>Autosave and crash recovery:</strong> a copy while you work; after a crash, CablePilot offers to bring it back.</li><li><strong>History:</strong> a daily backup and the versions you name (<strong>History</strong>), compared with the working copy and restored as one undo step.</li><li><strong>Company library:</strong> your own symbols, templates, macros, parts and layout templates, as data files in the same format as the built-in library.</li><li><strong>Settings:</strong> language, theme and panel layout; API keys and ERP passwords are encrypted by the operating system and never written in plain text.</li></ul>
+<h2 id="exchange-formats">Exchange formats</h2>
+<ul><li><strong>PDF:</strong> the drawing set or one page, vector, at true scale.</li><li><strong>DXF:</strong> pages in and out; the mounting plate for drilling.</li><li><strong>CSV and XLSX:</strong> every list (terminals, cables, wires, BOM, PLC I/O, markers, nameplates, picking list).</li><li><strong>Cabinet layout:</strong> documented JSON and CSV, see <a href="https://github.com/mojeee/cablepilot/blob/main/docs/layout-format.md">layout exchange format</a>.</li><li><strong>ERP:</strong> items and stock in, reservation requests out, see <a href="https://github.com/mojeee/cablepilot/blob/main/docs/erp-link.md">ERP link</a>.</li><li><strong>PLC tag lists:</strong> TIA Portal XML and CODESYS text, out and in with a preview.</li></ul>
+          <div class="cta-box"><h2>Try it on the sample projects</h2><p class="lead">CablePilot ships with three complete sample projects, so every feature can be tried without your own drawings.</p><p class="actions"><a class="btn primary" href="/#download">Download</a> <a class="btn" href="https://github.com/mojeee/cablepilot/discussions">Discussions</a></p></div>
+        </div>
+      </article>
+    </main>
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot-grid">
+          <div>
+            <a class="logo" href="/"><img src="/logo.svg" alt="" width="28" height="28" /> CablePilot</a>
+            <p>Electrical design for machines, control panels and electronics. Free and open source. Runs on your computer. Your files stay yours.</p>
+          </div>
+          <div><p class="foot-h">Product</p><ul><li><a href="/#features">Features</a></li><li><a href="/#videos">Videos</a></li><li><a href="/demo/">Demo</a></li><li><a href="/#download">Download</a></li><li><a href="/companies/">For companies</a></li></ul></div>
+          <div><p class="foot-h">Guides</p><ul><li><a href="/docs/getting-started/">Getting started</a></li><li><a href="/docs/numbering/">How numbering works</a></li><li><a href="/docs/file-format/">Project file format</a></li></ul></div>
+          <div><p class="foot-h">Community</p><ul><li><a href="https://github.com/mojeee/cablepilot">GitHub</a></li><li><a href="https://github.com/mojeee/cablepilot/discussions">Discussions</a></li><li><a href="https://github.com/mojeee/cablepilot/issues">Report a problem</a></li><li><a href="https://github.com/mojeee/cablepilot/releases">Releases</a></li></ul></div>
+        </div>
+        <div class="foot-base">
+          <p>Copyright Mojtaba Amini. Apache-2.0. Version 0.1.0.</p>
+          <p>This site sets no cookies, runs no scripts and loads nothing from third parties.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
