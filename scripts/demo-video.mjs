@@ -10,6 +10,7 @@ import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'no
 import { dirname, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { findSync } from './video-sync.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const rawDir = join(root, 'out', 'demo-video');
@@ -29,12 +30,16 @@ const run = (args) => {
 };
 const duration = (f) => Number(spawnSync(ffprobe, ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f], { encoding: 'utf8' }).stdout);
 
-// Marks are wall-clock times of the test; the video ends when the app closes, shortly after __end.
+// Marks are wall-clock times of the test, placed in the video by the sync frame.
 const { marks } = JSON.parse(readFileSync(join(rawDir, 'marks.json'), 'utf8'));
 const captions = JSON.parse(readFileSync(join(root, 'e2e', 'demo-captions.json'), 'utf8'));
 const total = duration(raw);
-const at = (id) => Math.max(0, total - (marks.__end + TAIL - marks[id]) / 1000);
-const TAIL = 350; // ms between the last mark and the end of the recording (page close)
+// The sync frame (a magenta flash at marks.__sync, e2e/recorder.ts) places every mark exactly; recordings without it
+// assume the video ends TAIL milliseconds after __end, which drifts when Playwright takes long to finish the file.
+const TAIL = 350;
+const syncAt = marks.__sync ? findSync(ffmpeg, raw) : null;
+if (marks.__sync && syncAt === null) throw new Error('the sync frame was not found in the recording');
+const at = (id) => Math.max(0, syncAt !== null ? syncAt + (marks[id] - marks.__sync) / 1000 : total - (marks.__end + TAIL - marks[id]) / 1000);
 
 const start = Math.max(0, at(captions[0].id) - 0.6);
 const end = Math.min(total, at(captions[captions.length - 1].id) + 4);
@@ -42,7 +47,7 @@ const length = end - start;
 const trim = ['-ss', start.toFixed(2), '-t', length.toFixed(2)];
 
 const vf = 'scale=1920:1080:flags=lanczos,fps=30';
-run([...trim, '-i', raw, '-vf', vf, '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', '35', '-row-mt', '1', '-deadline', 'good', '-cpu-used', '4', '-an', join(videoDir, 'demo.webm')]);
+run([...trim, '-i', raw, '-vf', vf, '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', '38', '-row-mt', '1', '-deadline', 'good', '-cpu-used', '4', '-an', join(videoDir, 'demo.webm')]);
 run([...trim, '-i', raw, '-vf', vf, '-c:v', 'libx264', '-preset', 'slow', '-crf', '25', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', join(videoDir, 'demo.mp4')]);
 
 // The hero loop: about 15 s from the wire numbering and the reports that follow (from the mark "number").
@@ -55,10 +60,10 @@ run([...htrim, '-i', raw, '-vf', hvf, '-c:v', 'libx264', '-preset', 'slow', '-cr
 
 // Frames of the recording for the demo page: one per step (site/img/demo-N.png), and the posters.
 const frame = (id, offset, out, src = join(videoDir, 'demo.mp4')) => run(['-ss', Math.max(0, at(id) - start + offset).toFixed(2), '-i', src, '-frames:v', '1', join(imgDir, out)]);
-frame('cover', 3.0, 'demo-1.png');
+frame('cover', 1.6, 'demo-1.png');
 frame('part', -0.8, 'demo-2.png');
 frame('bom', 2.6, 'demo-3.png');
-frame('loose', 2.6, 'demo-4.png');
+frame('fix', -0.4, 'demo-4.png');
 frame('plc', 2.2, 'demo-5.png');
 frame('pdf', 1.2, 'demo-6.png');
 frame('pick', 1.9, 'demo-7.png');

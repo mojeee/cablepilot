@@ -27,7 +27,19 @@ export async function launch(opts: { profile?: string; env?: Record<string, stri
   });
   const page = await app.firstWindow();
   await page.waitForSelector('.topbar', { timeout: 60_000 });
-  return { app, page, profile, out, close: () => app.close() };
+  // Quit the way a user does (the app closes its window and exits in a fraction of a second) and wait for the process;
+  // Playwright's own app.close() sometimes waits 8-19 s, and leaves recordings with a long, varying tail. It stays as the fallback, and for recordings (their timing is anchored by a sync frame, e2e/recorder.ts).
+  const close = async () => {
+    const proc = app.process();
+    if (proc.exitCode !== null) return;
+    // A recording must be finished by Playwright itself, or the video file ends early.
+    if (opts.recordVideo) return app.close();
+    const exited = new Promise<void>((resolve) => proc.once('exit', () => resolve()));
+    await app.evaluate(({ app: a }) => { setTimeout(() => a.quit(), 10); }).catch(() => undefined);
+    await Promise.race([exited, new Promise((resolve) => setTimeout(resolve, 10_000))]);
+    if (proc.exitCode === null) await app.close();
+  };
+  return { app, page, profile, out, close };
 }
 
 export { expect };

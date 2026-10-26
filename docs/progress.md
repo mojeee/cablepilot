@@ -459,7 +459,6 @@ Panel Designer) before release 1. Both are now parts of M8 in the roadmap. This 
 
 **What is left**
 
-- The full demo video (`npm run record:demo`) still shows the previous look. Record it again before release 1.
 - The clips do not show the M8 part 2 features (ladder pages, auto-wire, project history) yet. Add a clip for them in
   `e2e/clips.json` when those screens are final.
 
@@ -467,3 +466,11 @@ Panel Designer) before release 1. Both are now parts of M8 in the roadmap. This 
 
 - Watch the clips on the landing page in both languages and tell us which caption or step should change. Each clip
   is data in `e2e/clips.json` plus one script in `e2e/clips.e2e.ts`.
+
+## Demo video with the new design (done)
+
+- The full demo, its captions, step frames and the hero loop are recorded again with the new design. The captions now
+  line up with the action. A magenta sync frame at the start of each recording anchors the timing
+  (`scripts/video-sync.mjs`). Before, the end of the file was the anchor, and it drifted by the seconds Playwright
+  took to finish writing. The short clips use the same anchor and were recorded again.
+- The demo WebM is encoded a little harder (CRF 38) to stay under the 8 MB budget now that it runs 141 s.

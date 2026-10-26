@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Demo video with the new design
+
+- The full demo video, its captions, the step frames and the hero loop are recorded again with the new design.
+- Recordings are placed exactly. A sync frame at the start of each recording anchors the captions and frames, so they
+  no longer drift by the seconds Playwright takes to finish the file. This applies to the demo and the short clips.
+- End-to-end tests quit the app the way a user does and wait for the process to exit; Playwright's own close
+  sometimes took 8–19 s. Recordings still let Playwright finish the file.
+- The demo script uses the **Fit page** button rather than the F key, which could land in a text field.
+
 ### Design polish and short videos
 
 - A design pass over the whole window:

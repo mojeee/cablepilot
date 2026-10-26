@@ -9,6 +9,7 @@ import { test, type Locator } from '@playwright/test';
 import { copyFileSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, launch, tab } from './app';
+import { recorder } from './recorder';
 
 test.skip(!!process.env.CI || !process.env.CP_DEMO, 'run with npm run record:demo (not in CI)');
 
@@ -45,6 +46,8 @@ test('demo recording: the battery-charger story', async () => {
     });
 
     const wait = (ms: number) => page.waitForTimeout(ms);
+    // The sync frame anchors every mark in the recording (scripts/video-sync.mjs), however long the file takes to finish.
+    marks.__sync = await recorder(page, { title: '' }).sync();
     const cue = async (id: string) => {
       marks[id] = Date.now();
     };
@@ -97,8 +100,9 @@ test('demo recording: the battery-charger story', async () => {
         await wait(55);
       }
     };
+    // "Fit page" from the status bar: the F key could land in a text field that still has the focus.
     const fit = async () => {
-      await page.keyboard.press('f');
+      await page.getByTestId('fit-page').click();
       await wait(300);
     };
     const gotoPage = async (n: number, hold = 1300) => {

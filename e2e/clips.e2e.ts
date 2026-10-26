@@ -453,6 +453,7 @@ for (const clip of clips) {
         await page.setViewportSize({ width: W, height: H });
         const r = recorder(page, { title: clip.title[lang] });
         await r.install();
+        marks.sync = await r.sync();
         await r.wait(400);
         const ctx: Ctx = {
           page, lang, out, r,

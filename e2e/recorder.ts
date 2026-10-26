@@ -35,6 +35,24 @@ export function recorder(page: Page, opts: { title: string; brand?: string }) {
       document.body.appendChild(bar);
     }, { title: opts.title, brand: opts.brand ?? 'CablePilot' });
 
+  /**
+   * A sync frame: the whole window turns magenta for a moment. Returns the wall-clock time it was on screen; the encoders
+   * (scripts/video-sync.mjs) find the first magenta frame in the recording, so every mark is placed exactly, however
+   * long Playwright takes to finish the file.
+   */
+  const sync = async (): Promise<number> => {
+    const at = await page.evaluate(() => new Promise<number>((resolve) => {
+      const f = document.createElement('div');
+      f.id = 'cp-sync';
+      f.style.cssText = 'position:fixed;inset:0;background:#ff00ff;z-index:2147483647;pointer-events:none';
+      document.body.appendChild(f);
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve(Date.now())));
+    }));
+    await wait(400);
+    await page.evaluate(() => document.getElementById('cp-sync')?.remove());
+    await wait(200);
+    return at;
+  };
   /** Shows a caption (null hides it); `top` moves it up when the lower part of the window matters. */
   const say = (text: string | null, top = false) =>
     page.evaluate(({ text, top }) => {
@@ -128,5 +146,5 @@ export function recorder(page: Page, opts: { title: string; brand?: string }) {
     const kx = (p2.x - p1.x) / (m2.x - m1.x), ky = (p2.y - p1.y) / (m2.y - m1.y);
     return (x: number, y: number) => ({ x: p1.x + (x - m1.x) * kx, y: p1.y + (y - m1.y) * ky });
   };
-  return { install, say, calibrate, wait, glide, centre, hover, clickOn, clickAt, typeInto, zoomAt, fit, gotoPage, mm };
+  return { install, sync, say, calibrate, wait, glide, centre, hover, clickOn, clickAt, typeInto, zoomAt, fit, gotoPage, mm };
 }

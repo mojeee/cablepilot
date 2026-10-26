@@ -10,6 +10,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { findSync } from './video-sync.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const rawDir = join(root, 'out', 'clips');
@@ -37,7 +38,10 @@ for (const f of readdirSync(rawDir).filter((x) => x.endsWith('.json')).sort()) {
     continue;
   }
   const total = duration(raw);
-  const at = (ms) => Math.max(0, total - TAIL - (marks.close - ms) / 1000);
+  // The sync frame (marks.sync, e2e/recorder.ts) places the marks exactly; older recordings assume TAIL after "close".
+  const syncAt = marks.sync ? findSync(ffmpeg, raw) : null;
+  if (marks.sync && syncAt === null) throw new Error(`${clip}-${lang}: the sync frame was not found in the recording`);
+  const at = (ms) => Math.max(0, syncAt !== null ? syncAt + (ms - marks.sync) / 1000 : total - TAIL - (marks.close - ms) / 1000);
   const start = Math.max(0, at(marks.start) - 0.5);
   const end = Math.min(total, at(marks.end) + 0.6);
   const length = end - start;

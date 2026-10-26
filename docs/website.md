@@ -54,7 +54,10 @@ tables and symbol/device pages generated from `library/`, the guides and real sc
   `hero.*` / `demo.*` exist the pages show a "recording in progress" slot. Once any recording file exists,
   `scripts/check-site.mjs` fails if one of the files is missing or over its budget (8 MB demo, 2 MB hero
   loop). `_headers` caches `/video/*` and the CSP keeps `media-src 'self'`. Re-record whenever the interface
-  changes; needs ffmpeg (`brew install ffmpeg`).
+  changes; needs ffmpeg (`brew install ffmpeg`). Timing: at the start of every recording the window turns magenta for
+  a moment (`e2e/recorder.ts`, `sync()`); `scripts/video-sync.mjs` finds that frame, and every mark (captions, trims,
+  step frames, posters) is placed from it. Playwright takes a varying time to finish a recording, so the end of the
+  file is not a reliable anchor.
 - **The short videos.** `npm run record:clips` builds the app and records one short clip per feature area
   (schematic, wire numbers and reports, checks and revisions, PLC, the drawing set, sizing, the CAD workspace,
   the cabinet layout, the assistant, the ERP link) in English and Italian, the way BoardPilot's landing page

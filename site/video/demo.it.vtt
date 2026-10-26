@@ -1,101 +1,101 @@
 WEBVTT
 
 1
-00:00:00.850 --> 00:00:02.621
+00:00:00.850 --> 00:00:02.807
 Apri il caricabatterie di esempio: un set di disegni completo, 27 pagine.
 
 2
-00:00:02.871 --> 00:00:06.745
+00:00:03.057 --> 00:00:07.570
 La copertina: ogni foglio con la sua revisione, lo stato di emissione e l'approvazione del cliente.
 
 3
-00:00:06.995 --> 00:00:13.214
+00:00:07.820 --> 00:00:15.160
 Inserisci una bobina di contattore dalla libreria: la designazione è assegnata da sola.
 
 4
-00:00:13.464 --> 00:00:23.277
+00:00:15.410 --> 00:00:26.946
 Inserisci il suo contatto: stesso dispositivo, e i riferimenti incrociati compaiono su entrambi.
 
 5
-00:00:23.527 --> 00:00:25.873
+00:00:27.196 --> 00:00:30.614
 Assegna al dispositivo un articolo dalla libreria: la distinta lo conterà.
 
 6
-00:00:26.123 --> 00:00:30.583
+00:00:30.864 --> 00:00:36.143
 Numera i fili con il tuo schema: 020L+, 021L+ ...
 
 7
-00:00:30.833 --> 00:00:32.906
+00:00:36.393 --> 00:00:39.798
 L'elenco fili segue lo schema ...
 
 8
-00:00:33.156 --> 00:00:35.719
+00:00:40.048 --> 00:00:43.881
 ... e la distinta conta già il nuovo contattore.
 
 9
-00:00:35.969 --> 00:00:40.385
+00:00:44.131 --> 00:00:49.451
 Disegna un filo che non collega nulla: il banner dei controlli lo trova subito.
 
 10
-00:00:40.635 --> 00:00:42.180
+00:00:49.701 --> 00:00:51.600
 Un clic sulla correzione e il problema sparisce.
 
 11
-00:00:42.430 --> 00:00:44.554
+00:00:51.850 --> 00:00:54.347
 I/O PLC: ogni canale con indirizzo, simbolo e a cosa è collegato.
 
 12
-00:00:44.804 --> 00:00:50.488
+00:00:54.597 --> 00:01:01.187
 Modifica un simbolo qui ed esporta l'elenco per lo strumento del PLC.
 
 13
-00:00:50.738 --> 00:00:52.222
+00:01:01.437 --> 00:01:03.529
 Esporta il set di disegni in PDF ...
 
 14
-00:00:52.472 --> 00:00:54.698
+00:01:03.779 --> 00:01:06.683
 ... e tutti gli elenchi in un'unica cartella XLSX.
 
 15
-00:00:54.948 --> 00:01:03.757
+00:01:06.933 --> 00:01:19.398
 Dimensionamento: il motore passa a 7,5 kW e la linea è dimensionata dallo schema.
 
 16
-00:01:04.007 --> 00:01:06.739
+00:01:19.648 --> 00:01:23.212
 Il contattore che soddisfa il requisito ed è a magazzino, con magazzino e ubicazione: seleziona e conferma.
 
 17
-00:01:06.989 --> 00:01:10.501
+00:01:23.462 --> 00:01:28.047
 La distinta mostra il nuovo articolo con giacenza, disponibile e ubicazione.
 
 18
-00:01:10.751 --> 00:01:16.154
+00:01:28.297 --> 00:01:34.996
 Layout del quadro: suggerisci tutto il layout. È un'anteprima, con le regole applicate.
 
 19
-00:01:16.404 --> 00:01:20.150
+00:01:35.246 --> 00:01:39.466
 Accettalo, poi sposta un componente: si aggancia alla sua guida DIN.
 
 20
-00:01:20.400 --> 00:01:26.857
+00:01:39.716 --> 00:01:53.384
 Lo stesso quadro in 3D, con i componenti come parallelepipedi dalle loro dimensioni.
 
 21
-00:01:27.107 --> 00:01:31.784
+00:01:53.634 --> 00:01:59.170
 L'area di lavoro CAD: scrivi L, poi le coordinate, e la linea è disegnata.
 
 22
-00:01:32.034 --> 00:01:33.643
+00:01:59.420 --> 00:02:01.513
 Snap a oggetto: il cursore si aggancia all'estremità della linea e lo dice.
 
 23
-00:01:33.893 --> 00:01:42.327
+00:02:01.763 --> 00:02:13.942
 L'assistente, con la tua chiave API: chiedi a parole tue. Legge la pagina, cerca in libreria e dimensiona con il motore di dimensionamento.
 
 24
-00:01:42.577 --> 00:01:45.917
+00:02:14.192 --> 00:02:17.876
 Un'anteprima con una fonte su ogni affermazione; le portate sono articoli di libreria e suggerimenti da confermare. Accetta è un solo passo, e così l'annullamento. (Questa registrazione usa un sostituto con copione.)
 
 25
-00:01:46.167 --> 00:01:47.615
+00:02:18.126 --> 00:02:21.396
 CablePilot: libero, open source, i tuoi file restano tuoi.
