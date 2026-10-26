@@ -408,6 +408,39 @@ IEC 60617 symbols by default with NFPA 79 / ANSI as an option from M1; three sam
 - **Samples.** Every sample ships with the suggested layout (front and side views; the conveyor and the charger also
   have a door page); the generator replaces the placeholder layout page after the parts are final.
 
+## M7 AI assistant
+
+- **No SDK, `fetch` for all three providers.** The owner's MechPilot uses the Anthropic SDK; here Claude goes through
+  `fetch` like OpenAI and Gemini (brief: through `fetch`), so there is no new dependency and one `http.ts` handles
+  timeouts, cancel and plain error kinds. Request/response mapping is pure and tested from recorded fixtures.
+  API shapes: Anthropic Messages (`x-api-key`, `anthropic-version: 2023-06-01`, tools with `input_schema`, prompt-cache
+  marker on system and tools), OpenAI Responses (`store: false`, reasoning items replayed), Gemini `generateContent`
+  (key in the `x-goog-api-key` header, never in the URL; thought signatures replayed).
+- **Models are settings.** Defaults from the brief: `claude-sonnet-5-5` and fast `claude-haiku-4-5-20251001`;
+  `gpt-5.1` / `gpt-5.1-mini` and `gemini-3.1-pro` / `gemini-3.1-flash` as in MechPilot. The user can type any model id.
+- **Keys.** Electron safeStorage only; without OS encryption the key is not saved (a plain file is not safe). In
+  development (app not packaged) a key may come from the environment or `.env.local` (git-ignored). With `CP_AI_FAKE=1`
+  (tests, screenshots, the demo) a scripted stand-in answers, keys are only encoded, and no provider is ever called.
+- **Without a key the built-in assistant stays.** The M6 part 2 deterministic assistant answers when no key is stored,
+  so the app is fully usable without AI and the earlier tests keep their meaning.
+- **One proposal per reply.** The model may call several propose tools; they are validated one after the other (later
+  ones see the earlier ones applied) and merged into one preview and one undo step.
+- **The model never types a rating.** Parts for `device/update` and `cable/set` must exist in the library or the
+  project (`find_parts`); ratings come from the sizing engine (`size_feeder`, `propose_starter`, `propose_sizing`).
+  Command types that change standards-bound data or the file's history (`revision/issue`, `issue/status`,
+  `project/settings`, `projectPart/set`, `part/embed` by hand, templates, assets) are not offered to the model.
+- **Sources.** Tool results carry their claims (project, standard and clause from the check rules and the sizing
+  assumptions, library entry from part codes). Claims written by the model are checked: a library entry that does not
+  exist or a "standard" that is not a standard name is downgraded to "suggestion". Anything electrical the model
+  states itself gets a "suggestion, confirm before use" claim.
+- **Assumptions are explicit.** For "a 7.5 kW motor" the nameplate current, cos φ and efficiency are usually unknown:
+  the model passes typical values only as declared assumptions, shown as a suggestion to confirm, and the tool refuses
+  to size without any (it says what is missing). The scripted stand-in assumes cos φ 0.85 and efficiency 90 %.
+- **A starter on a full page goes on a new power page** inserted after it, in the same proposal and undo step.
+- **Limits.** 10 tool rounds, 120 s per request, 30 requests per 10 minutes, prompt 2,000 characters, 8 earlier turns.
+- **Library.** `library/macros/star-delta-starter.json`, drawn from the pump-station sample (generic symbols, ratings
+  not part of the macro, a PE stub so a new page does not trigger the missing-PE check).
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite

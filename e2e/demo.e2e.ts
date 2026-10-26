@@ -21,7 +21,7 @@ test('demo recording: the battery-charger story', async () => {
   test.setTimeout(10 * 60_000);
   rmSync(outDir, { recursive: true, force: true });
   mkdirSync(outDir, { recursive: true });
-  const { app, page, out, close } = await launch({ recordVideo: { dir: join(outDir, 'raw'), size: { width: W, height: H } } });
+  const { app, page, out, close } = await launch({ env: { CP_AI_FAKE: '1' }, recordVideo: { dir: join(outDir, 'raw'), size: { width: W, height: H } } });
   const marks: Record<string, number> = {};
   try {
     await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setContentSize(1920, 1080));
@@ -374,18 +374,26 @@ test('demo recording: the battery-charger story', async () => {
     await wait(900);
     await cmdLine.press('Escape');
     await cue('chat');
-    const coilPos = await mm(300, 60);
-    await clickOn(page.getByTestId('symbol-coil'), 600);
-    await clickAt(coilPos.x, coilPos.y, 700);
+    // Settings: the user's own key (the recording uses a test key and the scripted stand-in: nothing leaves the computer).
+    await clickOn(page.getByTestId('ai-settings-open'), 700);
+    await clickOn(page.getByTestId('ai-key'), 500);
+    await page.getByTestId('ai-key').pressSequentially('sk-ant-demo-key-0123456789abcdef', { delay: 12 });
+    await clickOn(page.getByTestId('ai-key-save'), 600);
+    await wait(500);
     await page.keyboard.press('Escape');
-    await expect(page.getByTestId('ai-hint')).toBeVisible();
-    await wait(800);
-    await clickOn(page.getByTestId('ai-hint-ask'), 700);
+    await wait(300);
+    // A request in plain words: the assistant reads the page, searches the library, sizes with the engine and proposes.
+    const chatInput = page.getByTestId('chat-input');
+    await clickOn(chatInput, 600);
+    await chatInput.pressSequentially('add a star-delta starter for a 7.5 kW motor on page 5', { delay: 22 });
+    await clickOn(page.getByTestId('chat-send'), 500);
     await expect(page.getByTestId('chat-proposal').last()).toBeVisible();
-    await wait(1800);
+    await wait(2200);
     await cue('accept');
     await clickOn(page.getByTestId('chat-accept'), 700);
     await expect(page.getByTestId('chat-outcome').last()).toContainText('Accepted');
+    await wait(800);
+    await page.keyboard.press('Control+z');
     await wait(1000);
     await gotoPage(1, 300);
     await cue('end');

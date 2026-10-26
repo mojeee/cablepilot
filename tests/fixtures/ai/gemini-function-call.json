@@ -1,0 +1,10 @@
+{
+  "candidates": [
+    {
+      "content": { "role": "model", "parts": [ { "text": "Looking at the checks.", "thoughtSignature": "CiQB" }, { "functionCall": { "name": "run_checks", "args": { "query": "Q3" } } } ] },
+      "finishReason": "STOP",
+      "index": 0
+    }
+  ],
+  "usageMetadata": { "promptTokenCount": 3410, "candidatesTokenCount": 21, "totalTokenCount": 3431 }
+}

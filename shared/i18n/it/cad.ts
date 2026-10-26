@@ -58,7 +58,6 @@ const it: Record<string, string> = {
   'Repeat {command}': 'Ripeti {command}',
   'Accepted': 'Accettata',
   'Ask the assistant...': 'Chiedi all\'assistente...',
-  'Built-in assistant: it understands a few requests. Free-form requests need an API key (arrives in M7). The app works fully without it.': 'Assistente integrato: capisce poche richieste. Le richieste libere richiedono una chiave API (arriva con M7). L\'app funziona completamente anche senza.',
   'Highlighted on the canvas. One undo step.': 'Evidenziata sul disegno. Un solo passo di annullamento.',
   'It sees: project "{name}", {page}, {n} selected.': 'Vede: progetto "{name}", {page}, {n} selezionati.',
   'Library': 'Libreria',
@@ -156,7 +155,6 @@ const it: Record<string, string> = {
   'POLAR': 'POLARE',
   'Perpendicular': 'Perpendicolare',
   'SNAP': 'SNAP',
-  'The assistant needs an API key for free-form requests (M7).': 'L\'assistente richiede una chiave API per le richieste libere (M7).',
   // Toolbar, Workspace
   'Tool options': 'Opzioni dello strumento',
   'AI assistant': 'Assistente IA',
@@ -175,7 +173,6 @@ const it: Record<string, string> = {
   'Design current Ib = {ib} A ({source}).': 'Corrente di impiego Ib = {ib} A ({source}).',
   'Every wire already has the right number; nothing to change.': 'Ogni filo ha già il numero giusto; nulla da cambiare.',
   'I cannot size the feeder of {des} yet: {missing} are missing in its load data. I do not guess ratings.': 'Non posso ancora dimensionare la linea di {des}: nei suoi dati di carico mancano {missing}. Non indovino i valori nominali.',
-  'I only understand a few requests until a provider with an API key is connected (M7). Free-form requests need that key. Try one of these:': 'Capisco poche richieste finché non è collegato un provider con chiave API (M7). Le richieste libere richiedono quella chiave. Prova una di queste:',
   'I propose these ratings for the feeder of {des}. They are suggestions from the stated data; confirm each one.': 'Propongo questi valori per la linea di {des}. Sono suggerimenti ricavati dai dati indicati; conferma ciascuno.',
   'I propose to number {n} wires ({scope}). Numbers you typed by hand stay as they are.': 'Propongo di numerare {n} fili ({scope}). I numeri scritti a mano restano com\'è.',
   'I propose {n} contacts for {des}, placed to the right of its coil on page {page}. Accept to place them, then move them where they belong.': 'Propongo {n} contatti per {des}, posti a destra della sua bobina a pagina {page}. Accetta per inserirli, poi spostali dove servono.',

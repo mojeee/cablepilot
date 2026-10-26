@@ -6,7 +6,7 @@
 //   "suggest a layout"               the cabinet layout suggestion (shared/cabinet/suggest.ts), with the rules it applied
 //   "move the PLC to the right and rearrange"  moves one device on the layout, keeps it there and arranges the rest around it
 //   "explain the layout"             lists the rules the layout was made with
-// Anything else gets an honest answer: a real request needs an API key (M7). Pure: no network, no clock.
+// Anything else gets an honest answer: a free-form request needs an API key (AI settings). Pure: no network, no clock.
 
 import { computeBom } from '../bom';
 import { cabinetOf, isCab } from '../cabinet/model';
@@ -25,6 +25,8 @@ import type { AiAnswer, AiRequest, Claim } from './types';
 
 const PROVIDER = { id: 'built-in', fake: true } as const;
 
+/** Requests worth trying with a real model (tool-driven). */
+export const AI_EXAMPLES = ['add a star-delta starter for a 7.5 kW motor on page 5', 'renumber the wires on pages 3–8', 'why does the check say Q3 is too small?', 'suggest a layout'];
 export const FAKE_EXAMPLES = ['add contacts for -K1', 'number the wires on this page', 'size the feeder of -M1', 'suggest a layout', 'move the PLC to the right and rearrange'];
 
 const DES = /(?:^|[\s(])(-?[A-Za-z]{1,3}\d+[A-Za-z0-9.]*)(?=[\s?.,)]|$)/g;
@@ -36,7 +38,7 @@ export function designationsIn(prompt: string): string[] {
 const say = (text: string, extra: Partial<AiAnswer> = {}): AiAnswer => ({ text, claims: [], provider: PROVIDER, ...extra });
 
 function noKey(): AiAnswer {
-  return say(t('I only understand a few requests until a provider with an API key is connected (M7). Free-form requests need that key. Try one of these:'), { examples: FAKE_EXAMPLES, needsKey: true });
+  return say(t('I only understand a few requests until you add your API key in the AI settings. Free-form requests need that key. Try one of these:'), { examples: FAKE_EXAMPLES, needsKey: true });
 }
 
 export function fakeAnswer(req: AiRequest, libIn: Library, newId: (prefix?: string) => string = defaultId): AiAnswer {
@@ -47,11 +49,11 @@ export function fakeAnswer(req: AiRequest, libIn: Library, newId: (prefix?: stri
   const des = designationsIn(req.prompt);
 
   if (/(layout|quadro|cabinet|armadio|piastra)/.test(p)) {
-    if (/(explain|why|spiega|perch)/.test(p)) return explainLayout(project, libIn, newId);
-    if (/(move|shift|sposta)/.test(p)) return moveDevice(project, libIn, req.prompt, des, /(rearrange|reorder|riorganizza|riordina|sistema)/.test(p), newId);
-    return suggest(project, libIn, newId);
+    if (/(explain|why|spiega|perch)/.test(p)) return explainLayoutAnswer(project, libIn, newId);
+    if (/(move|shift|sposta)/.test(p)) return moveDeviceAnswer(project, libIn, req.prompt, des, /(rearrange|reorder|riorganizza|riordina|sistema)/.test(p), newId);
+    return suggestAnswer(project, libIn, newId);
   }
-  if (/(move|sposta)/.test(p) && /(right|left|destra|sinistra)/.test(p) && cabinetOf(project).devices.length > 0) return moveDevice(project, libIn, req.prompt, des, /(rearrange|reorder|riorganizza|riordina|sistema)/.test(p), newId);
+  if (/(move|sposta)/.test(p) && /(right|left|destra|sinistra)/.test(p) && cabinetOf(project).devices.length > 0) return moveDeviceAnswer(project, libIn, req.prompt, des, /(rearrange|reorder|riorganizza|riordina|sistema)/.test(p), newId);
 
   if (/contact|contatt/.test(p)) {
     let target = des[0];
@@ -62,7 +64,7 @@ export function fakeAnswer(req: AiRequest, libIn: Library, newId: (prefix?: stri
     return target ? contactsFor(project, lib, target, newId) : say(t('Which device? Name its designation, for example "add contacts for -K1", or select the coil first.'), { examples: FAKE_EXAMPLES });
   }
   if (/(number|numer).*(wire|fil[oi]|conduttor|cavi)|(wire|fil[oi]).*(number|numer)/.test(p)) return numberWires(project, libIn, req.pageId, /this page|current page|questa pagina|sulla pagina|in questa/.test(p));
-  if (/(size|dimension)/.test(p) && (des[0] || /feeder|linea|alimentaz/.test(p))) return des[0] ? sizeFeeder(project, libIn, des[0]) : say(t('Which feeder? Name the load, for example "size the feeder of -M1".'), { examples: FAKE_EXAMPLES });
+  if (/(size|dimension)/.test(p) && (des[0] || /feeder|linea|alimentaz/.test(p))) return des[0] ? sizeFeederAnswer(project, libIn, des[0]) : say(t('Which feeder? Name the load, for example "size the feeder of -M1".'), { examples: FAKE_EXAMPLES });
   return noKey();
 }
 
@@ -93,7 +95,7 @@ function contactsFor(project: Project, lib: Library, des: string, newId: (prefix
   });
 }
 
-function numberWires(project: Project, lib: Library, pageId: string, onPage: boolean): AiAnswer {
+export function numberWires(project: Project, lib: Library, pageId: string, onPage: boolean): AiAnswer {
   const cmd: Command = onPage ? { type: 'wire/renumber', page: pageId } : { type: 'wire/renumber' };
   const after = apply(project, cmd, { lib });
   const changed: { was: string; now: string }[] = [];
@@ -111,7 +113,7 @@ function numberWires(project: Project, lib: Library, pageId: string, onPage: boo
   });
 }
 
-function sizeFeeder(project: Project, lib: Library, des: string): AiAnswer {
+export function sizeFeederAnswer(project: Project, lib: Library, des: string): AiAnswer {
   const ctx = { project, lib, stock: null, bom: computeBom(project, lib) };
   const feeders: Feeder[] = sizeProject(ctx);
   const f = feeders.find((x) => x.load === des || x.load.endsWith(des));
@@ -138,7 +140,7 @@ function sizeFeeder(project: Project, lib: Library, des: string): AiAnswer {
   });
 }
 
-function suggest(project: Project, lib: Library, newId: (prefix?: string) => string): AiAnswer {
+export function suggestAnswer(project: Project, lib: Library, newId: (prefix?: string) => string): AiAnswer {
   const sug = suggestLayout(project, lib, { newId });
   if (!sug.commands.length) return say(t('Every device is already placed and nothing is left to arrange.'), { claims: sug.rules });
   const note = sug.issues.length ? ` ${t('Look at: {issues}', { issues: sug.issues.join(' ') })}` : '';
@@ -148,7 +150,7 @@ function suggest(project: Project, lib: Library, newId: (prefix?: string) => str
   });
 }
 
-function explainLayout(project: Project, lib: Library, newId: (prefix?: string) => string): AiAnswer {
+export function explainLayoutAnswer(project: Project, lib: Library, newId: (prefix?: string) => string): AiAnswer {
   const sug = suggestLayout(project, lib, { newId });
   return say(t('This is how a layout is suggested. The rules apply to the devices that are not placed or locked by you; the rest stays where it is.'), { claims: sug.rules });
 }
@@ -165,7 +167,7 @@ function findDevice(project: Project, lib: Library, prompt: string, des: string[
   return undefined;
 }
 
-function moveDevice(project: Project, lib: Library, prompt: string, des: string[], rearrange: boolean, newId: (prefix?: string) => string): AiAnswer {
+export function moveDeviceAnswer(project: Project, lib: Library, prompt: string, des: string[], rearrange: boolean, newId: (prefix?: string) => string): AiAnswer {
   const cab = cabinetOf(project);
   const key = findDevice(project, lib, prompt, des);
   const placed = cab.devices.find((p) => p.el.designation === key);

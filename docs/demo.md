@@ -92,14 +92,17 @@ device and it snaps onto its rail. Open **3D view** and turn the cabinet with th
 
 On a page of the conveyor sample, click the command line and type `L`, press Enter, then type `30,40` and `@60,0`
 (Enter after each) and Enter again: the line is drawn from typed coordinates. Type `L` again and bring the
-cursor near the end of that line: it locks on and the status bar names the snap (object snap, F3). Then place a
-coil from the symbol list: the app offers "Add the contacts of -K1?". Ask: the built-in assistant answers in the
-chat panel with a highlighted preview on the canvas and a source on every claim (this project, or "suggestion"
-where it proposes a count). **Accept** places the contacts as one undo step.
+cursor near the end of that line: it locks on and the status bar names the snap (object snap, F3). Then open **AI
+settings**, paste an API key and save it (the recording uses a test key and the scripted stand-in, so nothing leaves
+the computer; with your own key a model drives the same tools). In the chat, type "add a star-delta starter for a
+7.5 kW motor on page 5": the assistant reads the page, searches the library, sizes the feeder with the sizing engine
+and the stock list, and answers with a highlighted preview (the starter circuit on a new power page, because page 5 is
+full) and a source on every claim (this project, a standard and clause, a library entry, or "suggestion" with its
+assumptions). **Accept** places it as one undo step; **Ctrl+Z** takes it away again.
 
 - The ribbon, the command line (aliases such as `L`, `PL`, `REC`, `M`, `CO`, `TR`, `Z`), the status-bar aids
   (grid F7, ortho F8, snap F9, object snap F3, polar F10), layers and the dockable panels are all in the app.
-- Until M7 the chat uses a built-in stand-in provider that understands a few requests and says that free-form
+- Without a key the chat uses the built-in assistant, which understands a few requests and says that free-form
   requests need an API key; the app is fully usable without it.
 
 The video ends on the cover sheet of the conveyor sample.

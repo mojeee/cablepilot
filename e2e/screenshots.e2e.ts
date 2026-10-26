@@ -12,7 +12,7 @@ test.skip(!!process.env.CI || !process.env.CP_SCREENSHOTS, 'run with npm run scr
 
 test('screenshots of the sample projects, dark and light', async () => {
   mkdirSync(out, { recursive: true });
-  const { app, page, close } = await launch();
+  const { app, page, close } = await launch({ env: { CP_AI_FAKE: '1' } });
   try {
     await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setContentSize(1440, 900));
     const theme = async (ui: 'dark' | 'light', canvas: 'dark' | 'white') => {
@@ -136,10 +136,14 @@ test('screenshots of the sample projects, dark and light', async () => {
     }
     await cmdLine.press('Enter');
     const wb = (await canvas().boundingBox())!;
-    await page.getByTestId('symbol-coil').click();
-    await page.mouse.click(wb.x + wb.width * 0.8, wb.y + wb.height * 0.62);
+    // The assistant with a (test) key and the scripted stand-in: a star-delta starter, still a preview, with its sources.
+    await page.getByTestId('ai-settings-open').click();
+    await page.getByTestId('ai-key').fill('sk-ant-screenshot-key-0123456789abcdef');
+    await page.getByTestId('ai-key-save').click();
+    await expect(page.getByTestId('ai-key-state')).toContainText('A key is stored');
     await page.keyboard.press('Escape');
-    await page.getByTestId('ai-hint-ask').click();
+    await page.getByTestId('chat-input').fill('add a star-delta starter for a 7.5 kW motor on page 5');
+    await page.getByTestId('chat-send').click();
     await expect(page.getByTestId('chat-proposal')).toBeVisible();
     await page.mouse.move(wb.x + wb.width * 0.35, wb.y + wb.height * 0.4);
     await page.waitForTimeout(500);

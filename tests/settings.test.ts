@@ -9,7 +9,7 @@ describe('settings', () => {
     expect(parseSettings({ theme: 'purple', canvas: 3, language: 'fr' })).toEqual(DEFAULT_SETTINGS);
   });
   it('keeps valid values', () => {
-    expect(parseSettings({ theme: 'light', canvas: 'white', language: 'it' })).toEqual({ theme: 'light', canvas: 'white', language: 'it', layout: DEFAULT_SETTINGS.layout });
+    expect(parseSettings({ theme: 'light', canvas: 'white', language: 'it' })).toEqual({ theme: 'light', canvas: 'white', language: 'it', layout: DEFAULT_SETTINGS.layout, ai: DEFAULT_SETTINGS.ai });
   });
 });
 

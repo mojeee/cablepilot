@@ -32,7 +32,14 @@ const api: CablePilotApi = {
       return () => void ipcRenderer.removeListener('layout:changed', fn);
     },
   },
-  ai: { status: call('ai:status'), ask: call('ai:ask') },
+  ai: {
+    status: call('ai:status'), setSettings: call('ai:setSettings'), setKey: call('ai:setKey'), clearKey: call('ai:clearKey'), testKey: call('ai:testKey'), ask: call('ai:ask'), cancel: call('ai:cancel'),
+    onProgress: (cb) => {
+      const fn = (_e: unknown, p: unknown) => cb(p as Parameters<typeof cb>[0]);
+      ipcRenderer.on('ai:progress', fn);
+      return () => void ipcRenderer.removeListener('ai:progress', fn);
+    },
+  },
   company: { list: call('company:list'), save: call('company:save'), folder: call('company:folder') },
 };
 

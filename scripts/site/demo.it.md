@@ -1,7 +1,7 @@
 <!--
 Italian text of the demo page (/it/demo/), translated from docs/demo.md: same "## N." sections.
 "source" is the hash the build prints when docs/demo.md changes; update it together with the translation.
-source: 7bfcbc7dba
+source: d9f4977933
 -->
 # Demo: disegna una volta, gli elenchi e il set di disegni seguono
 
@@ -102,14 +102,18 @@ pagine di layout, poi lo modifichi con i normali strumenti: trascina un componen
 
 In una pagina del nastro trasportatore di esempio, fai clic sulla riga di comando e scrivi `L`, premi Invio, poi scrivi `30,40` e `@60,0`
 (Invio dopo ciascuno) e ancora Invio: la linea viene disegnata da coordinate scritte. Scrivi di nuovo `L` e avvicina il
-cursore all’estremità di quella linea: si aggancia e la barra di stato nomina lo snap (snap a oggetto, F3). Poi inserisci una
-bobina dall’elenco dei simboli: l’app propone «Aggiungere i contatti di -K1?». Chiedi: l’assistente integrato risponde nel
-pannello chat con un’anteprima evidenziata sul disegno e una fonte per ogni affermazione (questo progetto, oppure «suggerimento»
-dove propone un numero). **Accetta** inserisce i contatti in un solo passo di annullamento.
+cursore all’estremità di quella linea: si aggancia e la barra di stato nomina lo snap (snap a oggetto, F3). Poi apri
+**Impostazioni IA**, incolla una chiave API e salvala (la registrazione usa una chiave di prova e il sostituto scriptato, quindi
+nulla lascia il computer; con la tua chiave un modello usa gli stessi strumenti). Nella chat scrivi «aggiungi un avviatore
+stella-triangolo per un motore da 7,5 kW a pagina 5»: l’assistente legge la pagina, cerca nella libreria, dimensiona la
+partenza con il motore di dimensionamento e l’elenco di magazzino, e risponde con un’anteprima evidenziata (il circuito
+dell’avviatore su una nuova pagina di potenza, perché la pagina 5 è piena) e una fonte per ogni affermazione (questo
+progetto, una norma e il suo punto, una voce di libreria, oppure «suggerimento» con le sue ipotesi). **Accetta** lo inserisce
+in un solo passo di annullamento; **Ctrl+Z** lo toglie di nuovo.
 
 - La barra multifunzione, la riga di comando (alias come `L`, `PL`, `REC`, `M`, `CO`, `TR`, `Z`), gli ausili nella barra di stato
   (griglia F7, orto F8, snap F9, snap a oggetto F3, polare F10), i livelli e i pannelli ancorabili sono tutti nell’app.
-- Fino a M7 la chat usa un provider integrato che capisce poche richieste e dice che le richieste libere richiedono una chiave
-  API; l’app è pienamente utilizzabile anche senza.
+- Senza chiave la chat usa l’assistente integrato, che capisce poche richieste e dice che le richieste libere richiedono una
+  chiave API; l’app è pienamente utilizzabile anche senza.
 
 Il video finisce sulla copertina del campione del nastro trasportatore.

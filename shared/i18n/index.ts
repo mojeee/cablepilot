@@ -3,6 +3,7 @@
 // Placeholders: t('{n} pages', { n: 3 }). tests/i18n.test.ts checks that every t() literal has an
 // Italian entry with the same placeholders.
 
+import ai from './it/ai';
 import app from './it/app';
 import cad from './it/cad';
 import checks from './it/checks';
@@ -19,7 +20,7 @@ export const LANGS: { id: Lang; label: string }[] = [
   { id: 'it', label: 'Italiano' },
 ];
 
-export const IT: Record<string, string> = { ...app, ...editor, ...devices, ...reports, ...checks, ...plc, ...sizing, ...cad, ...layout };
+export const IT: Record<string, string> = { ...app, ...editor, ...devices, ...reports, ...checks, ...plc, ...sizing, ...cad, ...layout, ...ai };
 
 let current: Lang = 'en';
 const listeners = new Set<(l: Lang) => void>();

@@ -95,6 +95,7 @@ const RUN: Record<string, Runner> = {
   SIZE: () => { ed().patch({ sizingFocus: null }); ed().setDialog('sizing'); },
   PLC: dialog('plc'),
   WAREHOUSE: dialog('warehouse'),
+  AISETTINGS: dialog('ai'),
   REVISIONS: dialog('revisions'),
   SETTINGS: dialog('settings'),
   ADDPAGE: dialog('addPage'),

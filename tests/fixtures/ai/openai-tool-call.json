@@ -1,0 +1,10 @@
+{
+  "id": "resp_67ccd2bed1ec8190b14f964abc0542670bb6a6b452d3795b",
+  "object": "response",
+  "status": "completed",
+  "model": "gpt-5.1",
+  "output": [
+    { "id": "rs_1", "type": "reasoning", "summary": [], "encrypted_content": "gAAAA" },
+    { "id": "fc_67ccd2bf17f0819081ff3bb2cf6508e60bb6a6b452d3795b", "type": "function_call", "status": "completed", "call_id": "call_67ccd2be", "name": "propose_renumber", "arguments": "{\"what\":\"wires\",\"fromPage\":3,\"toPage\":8}" }
+  ]
+}

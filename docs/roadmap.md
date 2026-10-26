@@ -114,11 +114,11 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 
 ## M7-AI Assistant
 
-- [ ] Providers: Claude, OpenAI or Gemini with the user's key, called only from the main process
-- [ ] It sees the project, the current page, the selection and the check results
-- [ ] Tools to read the project, find devices, run the checks and propose commands
-- [ ] Each proposal shows as a highlighted preview with Accept / Reject and goes into undo
-- [ ] Tested against a fake provider in CI; a real-key test is written but skipped until a key is set
+- [x] Providers: Claude, OpenAI or Gemini with the user's key, called only from the main process
+- [x] It sees the project, the current page, the selection and the check results
+- [x] Tools to read the project, find devices, run the checks and propose commands
+- [x] Each proposal shows as a highlighted preview with Accept / Reject and goes into undo
+- [x] Tested against a fake provider in CI; a real-key test is written but skipped until a key is set
 
 ## M8 Release 1 (end of phase 1)
 

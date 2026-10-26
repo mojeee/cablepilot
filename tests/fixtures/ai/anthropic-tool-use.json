@@ -1,0 +1,14 @@
+{
+  "id": "msg_01XFDUDYJgAACzvnptvVoYEL",
+  "type": "message",
+  "role": "assistant",
+  "model": "claude-sonnet-5-5",
+  "content": [
+    { "type": "thinking", "thinking": "", "signature": "EqQBCkYIARgCKkA=" },
+    { "type": "text", "text": "I will read page 5 first." },
+    { "type": "tool_use", "id": "toolu_01A09q90qw90lq917835lq9", "name": "read_page", "input": { "page": 5 } }
+  ],
+  "stop_reason": "tool_use",
+  "stop_sequence": null,
+  "usage": { "input_tokens": 2095, "output_tokens": 80 }
+}

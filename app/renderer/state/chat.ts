@@ -5,7 +5,7 @@
 import { create } from 'zustand';
 import { t, getLanguage } from '@shared/i18n';
 import { apply, type Command } from '@shared/commands';
-import type { AiAnswer, AiStatus } from '@shared/ai/types';
+import type { AiAnswer, AiProviderId, AiStatus } from '@shared/ai/types';
 import type { Project } from '@shared/model/types';
 import { useEditor } from './editor';
 import { withShown } from '@shared/layout';
@@ -37,8 +37,16 @@ interface ChatState {
   proposal: Pending | null;
   hint: { text: string; prompt: string } | null;
   status: AiStatus | null;
+  /** What the assistant is doing now, one plain line per tool call (while busy). */
+  progress: string[];
   setHint(h: { text: string; prompt: string } | null): void;
   loadStatus(): Promise<void>;
+  /** Settings actions (the AI settings dialog); each returns an error message or null. */
+  setSettings(patch: { provider?: AiProviderId; model?: string }): Promise<string | null>;
+  setKey(provider: AiProviderId, key: string): Promise<string | null>;
+  clearKey(provider: AiProviderId): Promise<string | null>;
+  testKey(provider: AiProviderId): Promise<{ ok: boolean; text: string }>;
+  cancel(): void;
   ask(prompt: string): Promise<void>;
   /** Shows an answer made here (a layout suggestion, an import preview) as the assistant would: text, sources and a proposal to accept or reject. */
   present(text: string, answer: AiAnswer): void;
@@ -64,25 +72,35 @@ export const useChat = create<ChatState>((set, get) => ({
   proposal: null,
   hint: null,
   status: null,
+  progress: [],
   setHint: (hint) => set({ hint }),
   loadStatus: async () => {
     const r = await window.cablepilot?.ai.status();
     if (r?.ok) set({ status: r.value });
   },
+  setSettings: async (patch) => { const r = await window.cablepilot.ai.setSettings(patch); if (r.ok) set({ status: r.value }); return r.ok ? null : `${r.error.message} ${r.error.hint}`; },
+  setKey: async (provider, key) => { const r = await window.cablepilot.ai.setKey(provider, key); if (r.ok) set({ status: r.value }); return r.ok ? null : `${r.error.message} ${r.error.hint}`; },
+  clearKey: async (provider) => { const r = await window.cablepilot.ai.clearKey(provider); if (r.ok) set({ status: r.value }); return r.ok ? null : `${r.error.message} ${r.error.hint}`; },
+  testKey: async (provider) => { const r = await window.cablepilot.ai.testKey(provider); return r.ok ? { ok: true, text: t('The key works with {model}.', { model: r.value.model }) } : { ok: false, text: `${r.error.message} ${r.error.hint}` }; },
+  cancel: () => { void window.cablepilot.ai.cancel(); },
   ask: async (prompt) => {
     const text = prompt.trim();
     if (!text || get().busy) return;
     const ed = useEditor.getState();
     const prev = get().proposal;
+    const history = get().messages.filter((m) => m.text).slice(-8).map((m) => ({ role: m.role, text: m.text }));
     set((s) => ({
       busy: true,
+      progress: [],
       hint: null,
       proposal: null,
       messages: [...s.messages.map((m) => (prev && m.id === prev.msg ? { ...m, outcome: 'stale' as const } : m)), { id: nextId++, role: 'user', text }],
     }));
-    const r = await window.cablepilot.ai.ask({ prompt: text, lang: getLanguage(), project: ed.project(), pageId: ed.pageId, selection: ed.selection });
+    const off = window.cablepilot.ai.onProgress((p) => { if (p.kind === 'tool') set((s) => ({ progress: [...s.progress, p.summary] })); });
+    const r = await window.cablepilot.ai.ask({ prompt: text, lang: getLanguage(), history, project: ed.project(), pageId: ed.pageId, selection: ed.selection });
+    off();
     if (!r.ok) {
-      set((s) => ({ busy: false, messages: [...s.messages, { id: nextId++, role: 'assistant', text: `${r.error.message} ${r.error.hint}` }] }));
+      set((s) => ({ busy: false, progress: [], messages: [...s.messages, { id: nextId++, role: 'assistant', text: `${r.error.message} ${r.error.hint}` }] }));
       return;
     }
     const answer = r.value;
@@ -93,8 +111,8 @@ export const useChat = create<ChatState>((set, get) => ({
       const preview = apply(base, command, { lib: useEditor.getState().lib });
       const highlight = changedElementIds(base, preview);
       if (answer.proposal.page) useEditor.getState().patch({ pageId: answer.proposal.page, selection: [] });
-      set((s) => ({ busy: false, proposal: { msg: id, answer, base, preview, highlight, command }, messages: [...s.messages, { id, role: 'assistant', text: answer.text, answer, outcome: 'pending' }] }));
-    } else set((s) => ({ busy: false, messages: [...s.messages, { id, role: 'assistant', text: answer.text, answer }] }));
+      set((s) => ({ busy: false, progress: [], proposal: { msg: id, answer, base, preview, highlight, command }, messages: [...s.messages, { id, role: 'assistant', text: answer.text, answer, outcome: 'pending' }] }));
+    } else set((s) => ({ busy: false, progress: [], messages: [...s.messages, { id, role: 'assistant', text: answer.text, answer }] }));
   },
   present: (text, answer) => {
     const ed = useEditor.getState();

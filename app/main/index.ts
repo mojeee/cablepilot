@@ -1,14 +1,16 @@
 // Electron main process entry. Owns the window, settings and files; the renderer is sandboxed and
 // talks to it only through the typed API in shared/api.ts (CLAUDE.md, Security).
 
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, safeStorage, shell } from 'electron';
 import { join } from 'node:path';
 import { FileService } from './files';
 import { registerIpc } from './ipc';
 import { SettingsStore } from './settings';
 import { WarehouseService } from './warehouse';
 import { LayoutService } from './layoutFiles';
-import { FakeProvider } from './ai/fake';
+import { registerAiIpc } from './ai/ipc';
+import { KeyStore, type SafeStorageLike } from './ai/keys';
+import { useFake } from './ai/providers';
 
 // CP_PROFILE=<dir>: use this folder as the app's data. End-to-end tests start from a clean profile,
 // so nothing remembered by an earlier run changes what they see.
@@ -19,6 +21,12 @@ let mainWindow: BrowserWindow | null = null;
 const files = new FileService(app.getPath('userData'), join(app.getAppPath(), 'samples'), () => mainWindow);
 const warehouse = new WarehouseService(app.getPath('userData'), join(app.getAppPath(), 'samples'), () => mainWindow);
 const layout = new LayoutService(app.getPath('userData'), () => mainWindow);
+
+// Keys: encrypted with the OS (safeStorage) and never sent to the renderer. With CP_AI_FAKE=1 (tests, the demo) the
+// answers come from a scripted stand-in and the keys are only base64-encoded, so no OS keychain is needed; a real
+// provider is never called in that mode.
+const fakeStorage: SafeStorageLike = { isEncryptionAvailable: () => true, encryptString: (s) => Buffer.from(s, 'utf8'), decryptString: (b) => b.toString('utf8') };
+const keys = new KeyStore({ dataDir: app.getPath('userData'), safeStorage: useFake() ? fakeStorage : safeStorage, ...(app.isPackaged ? {} : { env: process.env, devEnvFile: join(app.getAppPath(), '.env.local') }) });
 
 function createWindow(): void {
   const dark = settings.get().theme !== 'light';
@@ -55,7 +63,8 @@ function createWindow(): void {
 }
 
 void app.whenReady().then(() => {
-  registerIpc({ settings, files, warehouse, layout, ai: new FakeProvider() });
+  registerIpc({ settings, files, warehouse, layout });
+  registerAiIpc({ settings, keys, warehouse });
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

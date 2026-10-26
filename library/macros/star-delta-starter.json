@@ -1,0 +1,547 @@
+{
+  "id": "star-delta-starter",
+  "kind": "macro",
+  "title": {
+    "en": "Star-delta motor starter (breaker, 3 contactors, overload relay, motor)",
+    "it": "Avviatore stella-triangolo (interruttore, 3 contattori, relè termico, motore)"
+  },
+  "category": "power",
+  "source": "CablePilot example macro: generic symbols only; the star-delta power circuit of the pump-station sample (breaker, main, star and delta contactors, overload relay, six-terminal motor), IEC 60617 symbols",
+  "verification": "secondary",
+  "verifiedFrom": "Example macro drawn by CablePilot; the symbols it uses carry their own sources (docs/to-verify.md). The ratings are not part of the macro: they are sized from the load data. A PE connection stub is included so the page has its protective earth (IEC 60204-1 clause 8.2).",
+  "size": {
+    "w": 95,
+    "h": 197
+  },
+  "elements": [
+    {
+      "id": "m1",
+      "kind": "symbol",
+      "designation": "-QF1",
+      "functionText": {
+        "en": "Pump 1 motor breaker"
+      },
+      "mirror": false,
+      "rot": 0,
+      "symbolId": "mcb-3p",
+      "x": 20,
+      "y": 27
+    },
+    {
+      "id": "m2",
+      "kind": "symbol",
+      "designation": "-KM1",
+      "functionText": {
+        "en": "Main contactor"
+      },
+      "mirror": false,
+      "rot": 0,
+      "symbolId": "contactor-3p",
+      "x": 20,
+      "y": 52
+    },
+    {
+      "id": "m3",
+      "kind": "symbol",
+      "designation": "-FR1",
+      "functionText": {
+        "en": "Overload relay"
+      },
+      "mirror": false,
+      "rot": 0,
+      "symbolId": "overload-relay-3p",
+      "x": 20,
+      "y": 77
+    },
+    {
+      "id": "m4",
+      "kind": "symbol",
+      "designation": "-M1",
+      "functionText": {
+        "en": "Motor, star-delta start",
+        "it": "Motore, avviamento stella-triangolo"
+      },
+      "mirror": false,
+      "rot": 0,
+      "symbolId": "motor-3ph-6",
+      "x": 20,
+      "y": 132
+    },
+    {
+      "id": "m5",
+      "kind": "symbol",
+      "designation": "-KM2",
+      "functionText": {
+        "en": "Delta contactor"
+      },
+      "mirror": false,
+      "rot": 0,
+      "symbolId": "contactor-3p",
+      "x": 55,
+      "y": 142
+    },
+    {
+      "id": "m6",
+      "kind": "symbol",
+      "designation": "-KM3",
+      "functionText": {
+        "en": "Star contactor"
+      },
+      "mirror": false,
+      "rot": 0,
+      "symbolId": "contactor-3p",
+      "x": 20,
+      "y": 177
+    },
+    {
+      "id": "m7",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 15,
+          "y": 0
+        },
+        {
+          "x": 15,
+          "y": 22
+        }
+      ],
+      "potential": "L1"
+    },
+    {
+      "id": "m8",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 20,
+          "y": 0
+        },
+        {
+          "x": 20,
+          "y": 22
+        }
+      ],
+      "potential": "L2"
+    },
+    {
+      "id": "m9",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 25,
+          "y": 0
+        },
+        {
+          "x": 25,
+          "y": 22
+        }
+      ],
+      "potential": "L3"
+    },
+    {
+      "id": "m10",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 15,
+          "y": 32
+        },
+        {
+          "x": 15,
+          "y": 47
+        }
+      ]
+    },
+    {
+      "id": "m11",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 20,
+          "y": 32
+        },
+        {
+          "x": 20,
+          "y": 47
+        }
+      ]
+    },
+    {
+      "id": "m12",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 25,
+          "y": 32
+        },
+        {
+          "x": 25,
+          "y": 47
+        }
+      ]
+    },
+    {
+      "id": "m13",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 15,
+          "y": 57
+        },
+        {
+          "x": 15,
+          "y": 72
+        }
+      ]
+    },
+    {
+      "id": "m14",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 20,
+          "y": 57
+        },
+        {
+          "x": 20,
+          "y": 72
+        }
+      ]
+    },
+    {
+      "id": "m15",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 25,
+          "y": 57
+        },
+        {
+          "x": 25,
+          "y": 72
+        }
+      ]
+    },
+    {
+      "id": "m16",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 15,
+          "y": 82
+        },
+        {
+          "x": 15,
+          "y": 122
+        }
+      ]
+    },
+    {
+      "id": "m17",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 20,
+          "y": 82
+        },
+        {
+          "x": 20,
+          "y": 122
+        }
+      ]
+    },
+    {
+      "id": "m18",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 25,
+          "y": 82
+        },
+        {
+          "x": 25,
+          "y": 122
+        }
+      ]
+    },
+    {
+      "id": "m19",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 50,
+          "y": 137
+        },
+        {
+          "x": 50,
+          "y": 102
+        },
+        {
+          "x": 15,
+          "y": 102
+        }
+      ]
+    },
+    {
+      "id": "m20",
+      "kind": "junction",
+      "x": 15,
+      "y": 102
+    },
+    {
+      "id": "m21",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 55,
+          "y": 137
+        },
+        {
+          "x": 55,
+          "y": 99.5
+        },
+        {
+          "x": 20,
+          "y": 99.5
+        }
+      ]
+    },
+    {
+      "id": "m22",
+      "kind": "junction",
+      "x": 20,
+      "y": 99.5
+    },
+    {
+      "id": "m23",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 60,
+          "y": 137
+        },
+        {
+          "x": 60,
+          "y": 97
+        },
+        {
+          "x": 25,
+          "y": 97
+        }
+      ]
+    },
+    {
+      "id": "m24",
+      "kind": "junction",
+      "x": 25,
+      "y": 97
+    },
+    {
+      "id": "m25",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 50,
+          "y": 147
+        },
+        {
+          "x": 50,
+          "y": 157
+        },
+        {
+          "x": 15,
+          "y": 157
+        }
+      ]
+    },
+    {
+      "id": "m26",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 55,
+          "y": 147
+        },
+        {
+          "x": 55,
+          "y": 154.5
+        },
+        {
+          "x": 20,
+          "y": 154.5
+        }
+      ]
+    },
+    {
+      "id": "m27",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 60,
+          "y": 147
+        },
+        {
+          "x": 60,
+          "y": 152
+        },
+        {
+          "x": 25,
+          "y": 152
+        }
+      ]
+    },
+    {
+      "id": "m28",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 15,
+          "y": 142
+        },
+        {
+          "x": 15,
+          "y": 172
+        }
+      ]
+    },
+    {
+      "id": "m29",
+      "kind": "junction",
+      "x": 15,
+      "y": 157
+    },
+    {
+      "id": "m30",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 20,
+          "y": 142
+        },
+        {
+          "x": 20,
+          "y": 172
+        }
+      ]
+    },
+    {
+      "id": "m31",
+      "kind": "junction",
+      "x": 20,
+      "y": 154.5
+    },
+    {
+      "id": "m32",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 25,
+          "y": 142
+        },
+        {
+          "x": 25,
+          "y": 172
+        }
+      ]
+    },
+    {
+      "id": "m33",
+      "kind": "junction",
+      "x": 25,
+      "y": 152
+    },
+    {
+      "id": "m34",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 15,
+          "y": 182
+        },
+        {
+          "x": 25,
+          "y": 182
+        }
+      ]
+    },
+    {
+      "id": "m35",
+      "kind": "rect",
+      "dashed": true,
+      "h": 185,
+      "label": "Star-delta starter",
+      "w": 95,
+      "x": 0,
+      "y": 12
+    },
+    {
+      "id": "m36",
+      "kind": "symbol",
+      "designation": "",
+      "mirror": false,
+      "rot": 270,
+      "symbolId": "potential-tag",
+      "value": "L1",
+      "x": 15,
+      "y": 0
+    },
+    {
+      "id": "m37",
+      "kind": "symbol",
+      "designation": "",
+      "mirror": false,
+      "rot": 270,
+      "symbolId": "potential-tag",
+      "value": "L2",
+      "x": 20,
+      "y": 0
+    },
+    {
+      "id": "m38",
+      "kind": "symbol",
+      "designation": "",
+      "mirror": false,
+      "rot": 270,
+      "symbolId": "potential-tag",
+      "value": "L3",
+      "x": 25,
+      "y": 0
+    },
+    {
+      "id": "m39",
+      "kind": "wire",
+      "points": [
+        {
+          "x": 85,
+          "y": 17
+        },
+        {
+          "x": 85,
+          "y": -3
+        }
+      ],
+      "potential": "PE"
+    },
+    {
+      "id": "m40",
+      "kind": "symbol",
+      "designation": "",
+      "mirror": false,
+      "rot": 0,
+      "symbolId": "earth-pe",
+      "x": 85,
+      "y": 22
+    },
+    {
+      "id": "m41",
+      "kind": "symbol",
+      "designation": "",
+      "mirror": false,
+      "rot": 270,
+      "symbolId": "potential-tag",
+      "value": "PE",
+      "x": 85,
+      "y": -3
+    }
+  ]
+}

@@ -1,14 +1,15 @@
 // The AI chat panel: the conversation, the project, page and selection the assistant sees, and the
 // proposal with its sources and Accept / Reject (rule 6: a proposal is previewed on the canvas and never
-// applied silently; every claim shows where it comes from). Until a provider with an API key is
-// connected (M7) the built-in assistant answers a few requests and says so.
+// applied silently; every claim shows where it comes from). With the user's API key (AI settings) a model answers
+// through tools; without one the built-in assistant answers a few requests and says so.
 import { useEffect, useRef, useState } from 'react';
 import { t } from '@shared/i18n';
 import type { SourceKind } from '@shared/ai/types';
-import { FAKE_EXAMPLES } from '@shared/ai/fake';
+import { AI_EXAMPLES, FAKE_EXAMPLES } from '@shared/ai/fake';
 import { useChat } from '../state/chat';
 import { useEditor } from '../state/editor';
 import { useUi } from '../state/ui';
+import { PROVIDER_INFO } from '@shared/ai/types';
 
 function sourceLabel(k: SourceKind): string {
   switch (k) {
@@ -23,6 +24,7 @@ export function ChatPanel() {
   const messages = useChat((s) => s.messages);
   const busy = useChat((s) => s.busy);
   const status = useChat((s) => s.status);
+  const progress = useChat((s) => s.progress);
   const project = useEditor((s) => s.history.present);
   const pageId = useEditor((s) => s.pageId);
   const selection = useEditor((s) => s.selection);
@@ -37,13 +39,18 @@ export function ChatPanel() {
   return (
     <aside className="panel chat" aria-label={t('AI assistant')}>
       <h2>{t('AI assistant')}</h2>
-      <p className="chat-note" data-testid="chat-note">{status?.fake !== false ? t('Built-in assistant: it understands a few requests. Free-form requests need an API key (arrives in M7). The app works fully without it.') : t('Assistant: {name}', { name: status.provider })}</p>
+      <p className="chat-note" data-testid="chat-note">
+        {status && status.active !== 'built-in'
+          ? t('Assistant: {name}, model {model}. Everything it proposes is a preview, and electrical values are suggestions to confirm.', { name: PROVIDER_INFO[status.active].name, model: status.model }) + (status.scripted ? ` ${t('(scripted test stand-in, not a model)')}` : '')
+          : t('Built-in assistant: it understands a few requests. For free-form requests, add your API key in the AI settings. The app works fully without it.')}
+        {' '}<button type="button" className="link" data-testid="ai-settings-open" onClick={() => useEditor.getState().setDialog('ai')}>{t('AI settings')}</button>
+      </p>
       <div className="chat-context" data-testid="chat-context">{t('It sees: project "{name}", {page}, {n} selected.', { name: project.name, page: pageIdx >= 0 ? t('page {n}', { n: pageIdx + 1 }) : t('no page'), n: selection.length })}</div>
       <div className="chat-log" ref={log} role="log" aria-live="polite" data-testid="chat-log">
         {messages.length === 0 && (
           <div className="chat-examples">
             <p className="hint">{t('Try:')}</p>
-            {FAKE_EXAMPLES.map((e) => <button key={e} type="button" className="chip" onClick={() => send(e)}>{e}</button>)}
+            {(status && status.active !== 'built-in' ? AI_EXAMPLES : FAKE_EXAMPLES).map((e) => <button key={e} type="button" className="chip" onClick={() => send(e)}>{e}</button>)}
           </div>
         )}
         {messages.map((m) => (
@@ -53,6 +60,9 @@ export function ChatPanel() {
               <ul className="claims" data-testid="chat-claims">
                 {m.answer.claims.map((c, i) => <li key={i}><span>{c.text}</span> <em className={`src src-${c.source.kind}`} data-testid={`source-${c.source.kind}`}>{sourceLabel(c.source.kind)}: {c.source.ref}</em></li>)}
               </ul>
+            )}
+            {m.answer?.toolLog && m.answer.toolLog.length > 0 && (
+              <details className="toollog" data-testid="chat-toollog"><summary>{t('What the assistant looked at ({n})', { n: m.answer.toolLog.length })}</summary><ul>{m.answer.toolLog.map((l, i) => <li key={i}>{l}</li>)}</ul></details>
             )}
             {m.answer?.examples && <div className="chat-examples">{m.answer.examples.map((e) => <button key={e} type="button" className="chip" onClick={() => send(e)}>{e}</button>)}</div>}
             {m.answer?.proposal && (
@@ -70,7 +80,13 @@ export function ChatPanel() {
             )}
           </div>
         ))}
-        {busy && <div className="bubble assistant"><p>…</p></div>}
+        {busy && (
+          <div className="bubble assistant" data-testid="chat-busy">
+            <p>…</p>
+            {progress.length > 0 && <ul className="toollog">{progress.map((l, i) => <li key={i}>{l}</li>)}</ul>}
+            {status?.active !== 'built-in' && <button type="button" data-testid="chat-cancel" onClick={() => useChat.getState().cancel()}>{t('Stop')}</button>}
+          </div>
+        )}
       </div>
       <form className="chat-form" onSubmit={(e) => { e.preventDefault(); send(text); }}>
         <input type="text" data-testid="chat-input" aria-label={t('Message to the assistant')} placeholder={t('Ask the assistant...')} value={text} onChange={(e) => setText(e.target.value)} />

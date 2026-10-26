@@ -37,12 +37,12 @@ const at = (id) => Math.max(0, total - (marks.__end + TAIL - marks[id]) / 1000);
 const TAIL = 350; // ms between the last mark and the end of the recording (page close)
 
 const start = Math.max(0, at(captions[0].id) - 0.6);
-const end = Math.min(total, at(captions[captions.length - 1].id) + 6.5);
+const end = Math.min(total, at(captions[captions.length - 1].id) + 4);
 const length = end - start;
 const trim = ['-ss', start.toFixed(2), '-t', length.toFixed(2)];
 
 const vf = 'scale=1920:1080:flags=lanczos,fps=30';
-run([...trim, '-i', raw, '-vf', vf, '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', '33', '-row-mt', '1', '-deadline', 'good', '-cpu-used', '4', '-an', join(videoDir, 'demo.webm')]);
+run([...trim, '-i', raw, '-vf', vf, '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', '35', '-row-mt', '1', '-deadline', 'good', '-cpu-used', '4', '-an', join(videoDir, 'demo.webm')]);
 run([...trim, '-i', raw, '-vf', vf, '-c:v', 'libx264', '-preset', 'slow', '-crf', '25', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', join(videoDir, 'demo.mp4')]);
 
 // The hero loop: about 15 s from the wire numbering and the reports that follow (from the mark "number").

@@ -1,0 +1,1 @@
+{ "id": "resp_2", "object": "response", "status": "completed", "output": [{ "id": "msg_1", "type": "message", "status": "completed", "role": "assistant", "content": [{ "type": "output_text", "text": "Done: that is a suggestion, please confirm.", "annotations": [] }] }] }

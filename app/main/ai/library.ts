@@ -7,3 +7,6 @@ export const MAIN_LIBRARY = makeLibrary(
   load(import.meta.glob('@library/symbols/*.json', { eager: true, import: 'default' }) as Record<string, SymbolDef>),
   load(import.meta.glob('@library/parts/*.json', { eager: true, import: 'default' }) as Record<string, PartDef>),
 );
+import type { MacroDef as MacroDefT } from '@shared/library/types';
+/** The library macros (the assistant places them: the star-delta starter). */
+export const MAIN_MACROS: MacroDefT[] = load(import.meta.glob('@library/macros/*.json', { eager: true, import: 'default' }) as Record<string, MacroDefT>);

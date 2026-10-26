@@ -1,101 +1,101 @@
 WEBVTT
 
 1
-00:00:00.850 --> 00:00:02.630
+00:00:00.850 --> 00:00:02.621
 Open the battery-charger sample: a complete drawing set, 27 pages.
 
 2
-00:00:02.880 --> 00:00:06.778
+00:00:02.871 --> 00:00:06.745
 The cover sheet: every sheet with its revision, issue status and the customer's approval.
 
 3
-00:00:07.028 --> 00:00:13.205
+00:00:06.995 --> 00:00:13.214
 Place a contactor coil from the library: its designation is assigned by itself.
 
 4
-00:00:13.455 --> 00:00:23.211
+00:00:13.464 --> 00:00:23.277
 Place its contact: same device, and the cross-references appear on both.
 
 5
-00:00:23.461 --> 00:00:25.799
+00:00:23.527 --> 00:00:25.873
 Give the device a part from the library: the BOM will know about it.
 
 6
-00:00:26.049 --> 00:00:30.527
+00:00:26.123 --> 00:00:30.583
 Number the wires with your own pattern: 020L+, 021L+ ...
 
 7
-00:00:30.777 --> 00:00:32.804
+00:00:30.833 --> 00:00:32.906
 The wire list follows the schematic ...
 
 8
-00:00:33.054 --> 00:00:35.627
+00:00:33.156 --> 00:00:35.719
 ... and the BOM already counts the new contactor.
 
 9
-00:00:35.877 --> 00:00:40.203
+00:00:35.969 --> 00:00:40.385
 Draw a wire that connects to nothing: the check banner finds it at once.
 
 10
-00:00:40.453 --> 00:00:42.007
+00:00:40.635 --> 00:00:42.180
 One click on the fix, and the problem is gone.
 
 11
-00:00:42.257 --> 00:00:44.417
+00:00:42.430 --> 00:00:44.554
 PLC I/O: every channel with address, tag and what it is wired to.
 
 12
-00:00:44.667 --> 00:00:50.365
+00:00:44.804 --> 00:00:50.488
 Edit a tag here, export the tag list for the PLC tool.
 
 13
-00:00:50.615 --> 00:00:52.098
+00:00:50.738 --> 00:00:52.222
 Export the PDF drawing set ...
 
 14
-00:00:52.348 --> 00:00:54.538
+00:00:52.472 --> 00:00:54.698
 ... and every list as one XLSX workbook.
 
 15
-00:00:54.788 --> 00:01:03.669
+00:00:54.948 --> 00:01:03.757
 Sizing: the motor is raised to 7.5 kW and the feeder is sized from the schematic.
 
 16
-00:01:03.919 --> 00:01:06.604
+00:01:04.007 --> 00:01:06.739
 The contactor that meets the requirement and is in stock, with warehouse and location: select and confirm.
 
 17
-00:01:06.854 --> 00:01:10.280
+00:01:06.989 --> 00:01:10.501
 The BOM shows the new part with on hand, available and location.
 
 18
-00:01:10.530 --> 00:01:15.964
+00:01:10.751 --> 00:01:16.154
 Cabinet layout: suggest the whole layout. It is a preview, with the rules it applied.
 
 19
-00:01:16.214 --> 00:01:19.957
+00:01:16.404 --> 00:01:20.150
 Accept it, then move a device: it snaps onto its DIN rail.
 
 20
-00:01:20.207 --> 00:01:26.686
+00:01:20.400 --> 00:01:26.857
 The same cabinet in 3D, devices as boxes from their dimensions.
 
 21
-00:01:26.936 --> 00:01:31.626
+00:01:27.107 --> 00:01:31.784
 The CAD workspace: type L, then coordinates, and the line is drawn.
 
 22
-00:01:31.876 --> 00:01:33.508
+00:01:32.034 --> 00:01:33.643
 Object snap: the cursor locks on the end of the line and says so.
 
 23
-00:01:33.758 --> 00:01:38.626
-Place a coil: the assistant offers its contacts, as a preview with its sources.
+00:01:33.893 --> 00:01:42.327
+The assistant, with your own API key: ask in plain words. It reads the page, searches the library and sizes with the sizing engine.
 
 24
-00:01:38.876 --> 00:01:41.365
-Accept, and it is one undo step. (Built-in assistant; providers with your API key arrive in M7.)
+00:01:42.577 --> 00:01:45.917
+A preview with a source on every claim; ratings are library parts and suggestions to confirm. Accept is one undo step, and so is undo. (This recording uses a scripted stand-in.)
 
 25
-00:01:41.615 --> 00:01:43.076
+00:01:46.167 --> 00:01:47.615
 CablePilot: free, open source, your files stay yours.

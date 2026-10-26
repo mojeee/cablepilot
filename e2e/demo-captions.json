@@ -21,7 +21,7 @@
   {"id": "view3d", "en": "The same cabinet in 3D, devices as boxes from their dimensions.", "it": "Lo stesso quadro in 3D, con i componenti come parallelepipedi dalle loro dimensioni."},
   {"id": "cmd", "en": "The CAD workspace: type L, then coordinates, and the line is drawn.", "it": "L'area di lavoro CAD: scrivi L, poi le coordinate, e la linea è disegnata."},
   {"id": "snap", "en": "Object snap: the cursor locks on the end of the line and says so.", "it": "Snap a oggetto: il cursore si aggancia all'estremità della linea e lo dice."},
-  {"id": "chat", "en": "Place a coil: the assistant offers its contacts, as a preview with its sources.", "it": "Inserisci una bobina: l'assistente propone i suoi contatti, in anteprima e con le fonti."},
-  {"id": "accept", "en": "Accept, and it is one undo step. (Built-in assistant; providers with your API key arrive in M7.)", "it": "Accetta, ed è un solo passo di annullamento. (Assistente integrato; i provider con la tua chiave API arrivano con M7.)"},
+  {"id": "chat", "en": "The assistant, with your own API key: ask in plain words. It reads the page, searches the library and sizes with the sizing engine.", "it": "L'assistente, con la tua chiave API: chiedi a parole tue. Legge la pagina, cerca in libreria e dimensiona con il motore di dimensionamento."},
+  {"id": "accept", "en": "A preview with a source on every claim; ratings are library parts and suggestions to confirm. Accept is one undo step, and so is undo. (This recording uses a scripted stand-in.)", "it": "Un'anteprima con una fonte su ogni affermazione; le portate sono articoli di libreria e suggerimenti da confermare. Accetta è un solo passo, e così l'annullamento. (Questa registrazione usa un sostituto con copione.)"},
   {"id": "end", "en": "CablePilot: free, open source, your files stay yours.", "it": "CablePilot: libero, open source, i tuoi file restano tuoi."}
 ]

@@ -346,3 +346,35 @@ One entry per milestone: what works, what is left, and anything the owner must d
 
 - Try the workspace with the habits of your CAD users and tell us which command, key or prompt is missing or behaves
   differently from what they expect.
+
+## M7 AI assistant (done)
+
+**What works**
+
+- Claude, OpenAI and Gemini with the user's key (main process, `fetch`), keys in safeStorage, AI settings window, model
+  ids as settings; the tool loop (read project/page/devices/wires, run checks, size feeder/cable with stock, find parts,
+  propose starter, renumbering, sizing, layout, plain commands); size-bounded context with check results; previews with
+  Accept / Reject, one undo step; sources on every claim, electrical values as suggestions with assumptions; refusals,
+  limits, cancel and plain-language errors; the built-in assistant without a key.
+- Tests: scripted conversations through the tool loop (starter, renumbering, "why does the check say", refusals,
+  cancel, limits, undo), provider mapping from recorded fixtures, key storage, end-to-end settings/chat/command line.
+
+**What is left**
+
+- Only the star-delta starter exists as a library macro (a direct-on-line or other starter needs `propose_commands`
+  or a new macro). Hypothetical sizing (no device in the project) is `size_cable` and `find_parts`; the feeder engine
+  sizes devices that have load data. Prompt wording and tool descriptions are tuned from fixtures, not from a real model:
+  expect to adjust them once a real key has been tried. Model ids of OpenAI and Gemini follow MechPilot and are
+  unverified against the live APIs.
+- No streaming of the answer text (tool steps are shown while it works). Proposals are not replayed in later turns.
+
+**What the owner must do by hand**
+
+- Try it with a real key: open **AI settings** (chat panel or `AISETTINGS`), pick the provider, paste the key, **Test
+  key**, then ask "add a star-delta starter for a 7.5 kW motor on page 5". Tell us where the answers or the proposals
+  are wrong; the model ids may need updating.
+- Run the skipped real-key tests: put `ANTHROPIC_API_KEY=...`, `OPENAI_API_KEY=...` and/or `GEMINI_API_KEY=...` in the
+  environment or in `.env.local` at the repository root (git-ignored), then `npx vitest run tests/ai-real.test.ts`. Each
+  runs one short request with the fast model; without a key it is skipped. In development (`npm run dev`) the same
+  variables act as a fallback key.
+

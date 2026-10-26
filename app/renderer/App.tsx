@@ -16,6 +16,7 @@ import { ChecksBanner } from './components/ChecksBanner';
 import { RevisionsDialog } from './components/RevisionsDialog';
 import { SizingDialog } from './components/SizingDialog';
 import { WarehouseDialog } from './components/WarehouseDialog';
+import { AiSettingsDialog } from './components/AiSettingsDialog';
 import { LayoutDialog } from './components/LayoutDialog';
 import { useEditor } from './state/editor';
 import { useLayout } from './state/layout';
@@ -91,6 +92,7 @@ export function App() {
       {dialog === 'plc' && <PlcDialog />}
       {dialog === 'sizing' && <SizingDialog />}
       {dialog === 'warehouse' && <WarehouseDialog />}
+      {dialog === 'ai' && <AiSettingsDialog />}
       {dialog === 'layout' && <LayoutDialog />}
       {dialog === 'layout3d' && <Suspense fallback={null}><Cabinet3D /></Suspense>}
     </div>

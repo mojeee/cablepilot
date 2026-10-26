@@ -54,6 +54,7 @@ export const CAD_COMMANDS: CadCommand[] = [
   c('SIZE', ['SIZING'], () => t('Size cables and components')),
   c('PLC', [], () => t('PLC I/O overview and tag lists')),
   c('WAREHOUSE', ['WH'], () => t('Warehouse stock list')),
+  c('AISETTINGS', ['AIKEY'], () => t('AI assistant settings: provider, model, API key')),
   c('REVISIONS', ['REV'], () => t('Revisions and issue status')),
   c('SETTINGS', ['PS'], () => t('Project settings')),
   c('ADDPAGE', ['PAGE'], () => t('Add a page')),

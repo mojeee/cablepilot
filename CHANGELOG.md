@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+### M7: AI assistant
+
+- Real providers: Claude (default `claude-sonnet-5-5`, fast model `claude-haiku-4-5-20251001`), OpenAI and Gemini with
+  the user's own key, called only from the main process through `fetch` (Messages API, Responses API, generateContent
+  with function calling). Keys are encrypted with Electron safeStorage (nothing is stored without OS encryption), never
+  reach the renderer, settings, git or logs, and are scrubbed from every error. AI settings window (provider, model id
+  with the default and fast models offered, enter, test and remove a key); the `AISETTINGS` command and a ribbon button.
+- A tool loop with validated tools: read the project, a page, devices and wires; run the rule check; size a feeder or a
+  cable with the sizing engine and the warehouse stock; search parts; propose a star-delta starter (the new library
+  macro, motor data, ratings from the engine), renumbering of wires, designations or terminals for a page range, the
+  feeder's ratings, a cabinet layout, or plain editing commands. Context: project summary, current page, selection and
+  check results, size-bounded. A proposal never carries an invented part or rating, and a claim whose source cannot be
+  verified is shown as a suggestion. Preview with Accept / Reject, one undo step; what the assistant looked at is listed.
+- Honest by construction: sources on every claim (project, standard and clause, library entry, suggestion with its
+  assumptions); requests that cannot be built are answered in plain words and change nothing; rate limit, round and time
+  limits, cancel, plain-language errors. Without a key the built-in assistant still answers a few requests.
+- Tests: the scripted provider drives the tool loop in CI; request and response mapping of each provider from recorded
+  fixtures; key storage; a real-key test per provider, skipped unless its key is set; end-to-end settings, chat and
+  command line, accept and undo, Italian.
+- Website: the AI section says the assistant has shipped (the gate); the AI screenshot and the demo step show the
+  star-delta starter request.
+
 ### M6 part 3: Cabinet layout
 
 - Layout pages in real millimetres drawn with the CAD workspace tools: enclosure and plate from the library, DIN rails

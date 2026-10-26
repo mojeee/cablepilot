@@ -4,7 +4,7 @@
 import type { Result } from './result';
 import type { Settings } from './settings';
 import type { WarehouseData } from './stock';
-import type { AiAnswer, AiRequest, AiStatus } from './ai/types';
+import type { AiAnswer, AiProgress, AiProviderId, AiRequest, AiStatus } from './ai/types';
 
 export interface AppInfo {
   name: string;
@@ -112,10 +112,18 @@ export interface CablePilotApi {
     watch(on: boolean): Promise<Result<boolean>>;
     onChanged(cb: () => void): () => void;
   };
-  /** The assistant (M6 part 2): providers run here in the main process, API keys never reach the renderer. */
+  /** The assistant (M7): providers run here in the main process, API keys never reach the renderer. Without a stored key the built-in assistant answers. */
   ai: {
     status(): Promise<Result<AiStatus>>;
+    /** Provider and model id (an empty model id goes back to the default); never a key. */
+    setSettings(patch: { provider?: AiProviderId; model?: string }): Promise<Result<AiStatus>>;
+    setKey(provider: AiProviderId, key: string): Promise<Result<AiStatus>>;
+    clearKey(provider: AiProviderId): Promise<Result<AiStatus>>;
+    /** One cheap call that proves the key and the model work. */
+    testKey(provider: AiProviderId): Promise<Result<{ model: string }>>;
     ask(req: AiRequest): Promise<Result<AiAnswer>>;
+    cancel(): Promise<Result<null>>;
+    onProgress(cb: (p: AiProgress) => void): () => void;
   };
   /** The company library: plain data files in the app's data folder, same format as /library. */
   company: {

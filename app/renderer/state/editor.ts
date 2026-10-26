@@ -42,7 +42,7 @@ import { loadPdfFonts } from '../render/fonts';
 import { useUi } from './ui';
 
 export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'table' | 'image' | 'warning';
-export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc' | 'sizing' | 'warehouse' | 'layout' | 'layout3d';
+export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc' | 'sizing' | 'warehouse' | 'layout' | 'layout3d' | 'ai';
 
 export interface Recovery {
   id: string;
