@@ -8,9 +8,9 @@ drawing-set requirements are in `docs/reference-drawing-check.md`; the milestone
 
 ## What we are building
 
-CablePilot is an open-source (Apache-2.0), local-first desktop app for macOS, Windows and Linux for
-electrical design of machines, control panels and electronics. No account, no cloud. An optional AI
-assistant uses the user's own API key. A marketing website is generated from the repo into `/site`.
+CablePilot is a source-available (CablePilot License 1.0), local-first desktop app for macOS, Windows
+and Linux for electrical design of machines, control panels and electronics: free for a 30-day trial,
+then a paid licence key. No account, no cloud. An optional AI assistant uses the user's own API key. A marketing website is generated from the repo into `/site`.
 
 - **Phase 1, machines and panels:** multi-page schematic projects with IEC symbols, reference
   designations, cross-references and automatic wire numbers; reports generated live from the
@@ -108,7 +108,14 @@ draw in plain CAD. The app must feel professional to them in the first ten minut
 
 ### Licences
 
-- Our code: Apache-2.0 (`LICENSE`, `NOTICE`). Copyright holder: Mojtaba Amini.
+- Our code: CablePilot License 1.0, source-available (`LICENSE.md`, `NOTICE`), like BoardPilot's: the code
+  is public, use is free for a 30-day trial per computer, then needs a licence key (`CP1-…`, Ed25519-signed,
+  checked offline in `app/main/license/`; issued with `scripts/make-license.mjs` from the private key in
+  `~/.cablepilot/`, which never enters the repository). Never remove or weaken the check; the trial length
+  can be changed only in an unpackaged build (`CP_TRIAL_DAYS`, for tests). The end of the trial never
+  locks a user out of their drawings: the file format stays open and documented. Versions up to commit
+  `01271c2` were released under Apache-2.0. Copyright holder: Mojtaba Amini.
+- Library data in `library/`: CC BY 4.0 (`library/LICENSE`).
 - No GPL or AGPL dependencies, ever. KiCad is GPL: its file formats are documented and we may read and
   write them, but never copy KiCad code. `npm run check:licenses` lists every dependency's licence and
   fails on GPL or AGPL; CI runs it. `THIRD_PARTY_LICENSES.md` is generated at build time.

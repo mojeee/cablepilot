@@ -502,3 +502,21 @@ Panel Designer) before release 1. Both are now parts of M8 in the roadmap. This 
 - On GitHub, under the repository's About: the description, the website `https://cablepilot.agentflowbind.com`,
   topics (electrical-cad, iec-60617, control-panel, schematic, electron), and under Settings the social preview
   image `site/img/og.png`.
+
+## Licence change (done)
+
+- CablePilot is source-available under the CablePilot License 1.0, like BoardPilot: a 30-day free trial on each
+  computer, then a licence key. The app shows the trial in the top bar, takes a key in the Licence dialog and asks
+  for one when the trial has ended. Keys are Ed25519-signed and checked offline (`app/main/license/`).
+- `library/` data is CC BY 4.0. Versions up to `01271c2` stay Apache-2.0.
+- The website has a pricing section; the README, FAQ and contributor guide describe the new licence.
+
+**What the owner must do by hand**
+
+- Back up `~/.cablepilot/license-private.pem` somewhere safe (a password manager or an encrypted drive). It signs
+  every licence key; if it is lost, no new key can be issued that the released app accepts.
+- Issue a key: `node scripts/make-license.mjs --name "Customer name" --plan commercial --seats 3`.
+- Decide prices and how people pay. Until then the website says "Coming soon" and requests go through GitHub
+  Discussions.
+- The demo video and the short clips were recorded before the trial chip existed; they still show the old top bar.
+

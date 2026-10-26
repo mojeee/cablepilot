@@ -30,11 +30,14 @@ npm run typecheck && npm test && npm run check:licenses && npm run check:library
 - Do not put an email address anywhere in the repository or the site.
 - Read [CLAUDE.md](CLAUDE.md) for the product rules and the architecture.
 
-## Developer Certificate of Origin
+## Licence of contributions
 
-Every commit must be signed off (`git commit -s`), which adds a `Signed-off-by:` line stating that
-you agree to the [Developer Certificate of Origin 1.1](https://developercertificate.org/): you wrote
-the contribution or have the right to submit it under the project's licence (Apache-2.0).
+CablePilot is source-available under the [CablePilot License 1.0](LICENSE.md). By submitting a
+contribution (a pull request, a patch, a library file), you confirm that you have the right to do so
+and you grant the licensor a perpetual, worldwide, royalty-free, irrevocable licence to use, modify,
+relicense and distribute your contribution as part of CablePilot ([LICENSE.md](LICENSE.md), section 7).
+Library data in `library/` is published under [CC BY 4.0](library/LICENSE), like the rest of that
+folder. No sign-off line is needed.
 
 ## Pull requests
 

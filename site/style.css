@@ -183,6 +183,18 @@ th[scope='row'] { background: none; border-top: 1px solid var(--line); font-weig
 .video-card figcaption b { font-weight: 600; }
 .video-card figcaption span { color: var(--muted); font-size: 14.5px; }
 
+/* pricing (the same plan cards as BoardPilot's site; the app links to /#pricing) */
+.plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 26px; }
+.plan { background: linear-gradient(180deg, #1c232b, #181e25); border: 1px solid var(--line); border-radius: 18px; padding: 30px; display: flex; flex-direction: column; }
+.plan.featured { border-color: var(--ai-line); background: linear-gradient(180deg, var(--ai-bg), var(--panel) 60%); box-shadow: 0 20px 60px rgba(201, 190, 255, 0.08); }
+.plan h3 { margin: 0; }
+.price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; margin: 6px 0 18px; }
+.price b { font-size: 34px; letter-spacing: -0.02em; white-space: nowrap; }
+.price span { color: var(--dim); }
+.plan ul { margin: 0 0 26px; padding: 0; display: flex; flex-direction: column; gap: 9px; color: var(--muted); flex: 1; }
+.plan li::before { content: '\2192  '; color: var(--ok); }
+#pricing .fine a { color: var(--accent-2); }
+
 /* FAQ */
 .faq { max-width: 860px; margin: 0 auto; }
 details { border-bottom: 1px solid var(--line); padding: 18px 0; }
@@ -251,7 +263,7 @@ details p { color: var(--muted); margin: 10px 0 0; }
 
 @media (max-width: 1060px) { .main-nav { display: none; } }
 @media (max-width: 920px) {
-  .features, .three, .two, .four, .steps { grid-template-columns: 1fr; }
+  .features, .three, .two, .four, .steps, .plans { grid-template-columns: 1fr; }
   .strip { grid-template-columns: repeat(2, 1fr); }
   .strip-in { grid-template-columns: 1fr 1fr; }
   .strip-in div { border-left: 0; border-top: 1px solid var(--line); }

@@ -23,5 +23,5 @@
   {"id": "snap", "en": "Object snap: the cursor locks on the end of the line and says so.", "it": "Snap a oggetto: il cursore si aggancia all'estremità della linea e lo dice."},
   {"id": "chat", "en": "The assistant, with your own API key: ask in plain words. It reads the page, searches the library and sizes with the sizing engine.", "it": "L'assistente, con la tua chiave API: chiedi a parole tue. Legge la pagina, cerca in libreria e dimensiona con il motore di dimensionamento."},
   {"id": "accept", "en": "A preview with a source on every claim; ratings are library parts and suggestions to confirm. Accept is one undo step, and so is undo. (This recording uses a scripted stand-in.)", "it": "Un'anteprima con una fonte su ogni affermazione; le portate sono articoli di libreria e suggerimenti da confermare. Accetta è un solo passo, e così l'annullamento. (Questa registrazione usa un sostituto con copione.)"},
-  {"id": "end", "en": "CablePilot: free, open source, your files stay yours.", "it": "CablePilot: libero, open source, i tuoi file restano tuoi."}
+  {"id": "end", "en": "CablePilot: try it free for 30 days, and your files stay yours.", "it": "CablePilot: provalo gratis per 30 giorni, e i tuoi file restano tuoi."}
 ]

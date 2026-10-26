@@ -13,6 +13,8 @@ import { LayoutService } from './layoutFiles';
 import { registerAiIpc } from './ai/ipc';
 import { KeyStore, type SafeStorageLike } from './ai/keys';
 import { useFake } from './ai/providers';
+import { LicenseService } from './license/license';
+import { TRIAL_DAYS } from '@shared/brand';
 
 // CP_PROFILE=<dir>: use this folder as the app's data. End-to-end tests start from a clean profile,
 // so nothing remembered by an earlier run changes what they see.
@@ -24,6 +26,9 @@ const files = new FileService(app.getPath('userData'), join(app.getAppPath(), 's
 const warehouse = new WarehouseService(app.getPath('userData'), join(app.getAppPath(), 'samples'), () => mainWindow);
 const layout = new LayoutService(app.getPath('userData'), () => mainWindow);
 const history = new HistoryService(app.getPath('userData'));
+// The trial length can be changed for tests (CP_TRIAL_DAYS=0 shows the end of the trial), never in an installed app.
+const trialDays = !app.isPackaged && process.env.CP_TRIAL_DAYS !== undefined ? Number(process.env.CP_TRIAL_DAYS) : TRIAL_DAYS;
+const license = new LicenseService(app.getPath('userData'), trialDays);
 
 // Keys: encrypted with the OS (safeStorage) and never sent to the renderer. With CP_AI_FAKE=1 (tests, the demo) the
 // answers come from a scripted stand-in and the keys are only base64-encoded, so no OS keychain is needed; a real
@@ -69,7 +74,7 @@ function createWindow(): void {
 }
 
 void app.whenReady().then(() => {
-  registerIpc({ settings, files, warehouse, layout, erp, history });
+  registerIpc({ settings, files, warehouse, layout, erp, history, license });
   registerAiIpc({ settings, keys, warehouse });
   createWindow();
   app.on('activate', () => {

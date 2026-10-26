@@ -522,6 +522,29 @@ already there; these four were missing.
 - **Icon.** `build/icon.svg` (the website's mark on the macOS icon grid) rendered to `build/icon.png` by
   `scripts/make-icon.mjs` with Playwright's Chromium; electron-builder derives the .icns and .ico from it.
 
+## Licence: source-available, like BoardPilot (2026-10-26)
+
+- **The owner's choice.** CablePilot moves from Apache-2.0 to the CablePilot License 1.0 (`LICENSE.md`), modelled on
+  the BoardPilot License: the code stays public (read, study, modify, build, contribute), use is free for 30 days
+  from the first start on each computer, then needs a paid licence key per user or seat. Resale, redistribution of
+  modified builds and hosted services need permission. Copies of versions up to commit `01271c2` keep Apache-2.0:
+  a licence already granted cannot be taken back.
+- **What stays open.** The library data (`library/`) is CC BY 4.0, like BoardPilot's parts data, so symbol and part
+  data can be reused with credit. The user's drawings are theirs (section 5 of the licence): the project format stays
+  open and documented, and nothing about the trial changes what a user can do with files already made. This keeps
+  product rule 3 ("the files belong to the user").
+- **How keys work.** Same scheme as BoardPilot, with its own key pair and prefix (`CP1-`, so a BoardPilot key never
+  unlocks CablePilot): a JSON payload (name, plan, issue date, optional seats and expiry) signed with Ed25519, verified
+  offline in the main process; no account, no network, no server. The trial starts at the first run and is stored
+  in `license.json` in the app's data folder. `CP_TRIAL_DAYS` changes the trial only when the app is not packaged
+  (tests), so an installed app cannot be extended with an environment variable. The private key is in
+  `~/.cablepilot/license-private.pem` on the owner's computer, never in the repository; losing it means no new
+  keys can be issued that existing installs accept.
+- **No prices yet.** Like BoardPilot's site, the pricing section says "Coming soon" and licence keys are requested
+  through GitHub Discussions (no email address is published). Adding a payment service is a decision for the owner.
+- **Contributions.** The DCO sign-off (made for Apache-2.0) is replaced by the contribution grant of section 7 of
+  the licence, as in BoardPilot.
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite

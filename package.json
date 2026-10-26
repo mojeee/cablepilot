@@ -2,9 +2,9 @@
   "name": "cablepilot",
   "productName": "CablePilot",
   "version": "0.1.0",
-  "description": "Open-source electrical design for machines, control panels and electronics: multi-page schematics, live reports, cabinet layout and production drawing sets. Local, no account, your files stay yours.",
+  "description": "Source-available electrical design for machines, control panels and electronics: multi-page schematics, live reports, cabinet layout and production drawing sets. Local, no account, your files stay yours.",
   "private": true,
-  "license": "Apache-2.0",
+  "license": "SEE LICENSE IN LICENSE.md",
   "main": "out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev",
@@ -64,10 +64,13 @@
   "build": {
     "appId": "com.agentflowbind.cablepilot",
     "productName": "CablePilot",
-    "copyright": "Copyright Mojtaba Amini. Apache-2.0.",
+    "copyright": "Copyright Mojtaba Amini. CablePilot License 1.0.",
     "files": [
       "out/**/*",
       "samples/**/*",
+      "LICENSE.md",
+      "NOTICE",
+      "!samples/assets/**",
       "!out/e2e-*/**",
       "!out/clips/**",
       "!out/demo-video/**",

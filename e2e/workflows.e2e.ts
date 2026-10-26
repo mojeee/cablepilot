@@ -157,8 +157,9 @@ test('macros: save a selection to the company library, place it again with new d
     expect(first).toEqual(['-H1', '-S1']);
     expect(symbols(s).map((e) => [e.x, e.y])).toEqual([[100, 80], [140, 80]]);
 
-    // Window selection around the group, then Save as macro in the properties panel.
-    const a = at(85, 65), b = at(160, 105);
+    // Window selection around the group, then Save as macro in the properties panel. The rectangle leaves a wide
+    // margin around the symbols and their labels: a tighter one (85,65 to 160,105) took only 2 of the 3 on the Linux CI runner.
+    const a = at(60, 50), b = at(200, 120);
     await page.mouse.move(a.x, a.y);
     await page.mouse.down();
     await page.mouse.move(b.x, b.y, { steps: 5 });

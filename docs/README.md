@@ -9,6 +9,8 @@
 - [ERP link](erp-link.md): items and stock from your ERP, picking from the warehouse, reservation requests.
 - [Cabinet layout exchange](layout-format.md): the JSON and CSV layout format for an ERP or another system.
 - [Demo walkthrough](demo.md): the story the demo video follows, step by step.
+- [Licence](../LICENSE.md): CablePilot License 1.0, source-available: every feature free for 30 days, then a licence
+  key. The library data in `library/` is [CC BY 4.0](../library/LICENSE); your drawings are yours.
 
 **For contributors and the owner**
 

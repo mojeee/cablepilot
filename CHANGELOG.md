@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+### Licence: source-available, like BoardPilot
+
+- CablePilot is now under the **CablePilot License 1.0** (`LICENSE.md`), source-available like BoardPilot: the code
+  stays public, every feature is free for 30 days from the first start on a computer, and using it after that needs
+  a licence key. Versions up to commit `01271c2` keep their Apache-2.0 licence.
+- The library data in `library/` is CC BY 4.0 (`library/LICENSE`). Your drawings are yours: the project format stays
+  open and documented, and the end of the trial never takes a file away.
+- In the app: a trial chip in the top bar ("Trial: 30 days left"), a Licence dialog to enter a key, and a screen
+  that asks for one when the trial has ended. Keys (`CP1-…`) are checked offline; no account, no network.
+- The website has a pricing section (free trial; licence coming soon, requested through GitHub Discussions; companies
+  and schools), and the README, FAQ, footer and structured data describe the new licence.
+- Contributions are licensed as in section 7 of the licence; the DCO sign-off is no longer needed.
+- Fixed: the macros end-to-end test selected only two of its three objects on the Linux CI runner.
+
 ### M8 part 3: release preparation
 
 - Release builds: `npm run dist` packages the app with electron-builder (macOS dmg for arm64 and x64, Windows

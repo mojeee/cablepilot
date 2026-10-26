@@ -152,7 +152,7 @@ function sizeFeeders(b: B, lib: Library) {
 export function conveyorSample(lib: Library) {
   const b = builder(lib, 'sample-conveyor', 'Conveyor with direct-on-line starter', { drawingLanguage: 'en' });
   b.set({
-    properties: { client: 'Example Conveyors Ltd', product: 'Belt conveyor C1, 5.5 kW', orderNo: 'SAMPLE-0001', drawingNo: 'SMP-CNV-001', drawn: 'CablePilot', checked: '', approved: '', issueDate: '2026-10-24', revision: 'A', copyright: 'Sample project of CablePilot (Apache-2.0). Example data only.' },
+    properties: { client: 'Example Conveyors Ltd', product: 'Belt conveyor C1, 5.5 kW', orderNo: 'SAMPLE-0001', drawingNo: 'SMP-CNV-001', drawn: 'CablePilot', checked: '', approved: '', issueDate: '2026-10-24', revision: 'A', copyright: 'Sample project of CablePilot. Example data only.' },
     assembly: { ratedOperationalVoltage: '400', ratedInsulationVoltage: '690', ratedImpulseVoltage: '6', ratedCurrent: '32', ratedShortTimeCurrent: '10', ratedFrequency: '50', ratedDiversityFactor: '1', earthingSystem: 'TN-S', formOfSeparation: '1', ipDegree: 'IP54', installation: 'indoor', mobility: 'fixed', enclosureMaterial: 'Sheet steel, powder coated' },
   });
   b.run({ type: 'project/settings', settings: { crossRef: { format: 'page.column', pageDigits: 0 } } });
@@ -273,7 +273,7 @@ export function conveyorSample(lib: Library) {
 export function pumpSample(lib: Library) {
   const b = builder(lib, 'sample-pump-station', 'Pump station, two pumps', { drawingLanguage: 'en' });
   b.set({
-    properties: { client: 'Example Water Utility', product: 'Pump station PS1, 2 x 7.5 kW', orderNo: 'SAMPLE-0002', drawingNo: 'SMP-PMP-001', drawn: 'CablePilot', issueDate: '2026-10-24', revision: 'A', copyright: 'Sample project of CablePilot (Apache-2.0). Example data only.' },
+    properties: { client: 'Example Water Utility', product: 'Pump station PS1, 2 x 7.5 kW', orderNo: 'SAMPLE-0002', drawingNo: 'SMP-PMP-001', drawn: 'CablePilot', issueDate: '2026-10-24', revision: 'A', copyright: 'Sample project of CablePilot. Example data only.' },
     assembly: { ratedOperationalVoltage: '400', ratedInsulationVoltage: '690', ratedImpulseVoltage: '6', ratedCurrent: '63', ratedShortTimeCurrent: '10', ratedFrequency: '50', ratedDiversityFactor: '0.8', earthingSystem: 'TT', formOfSeparation: '2b', ipDegree: 'IP55', installation: 'outdoor', mobility: 'fixed', enclosureMaterial: 'Stainless steel' },
   });
   b.run({ type: 'project/settings', settings: { crossRef: { format: 'page.column', pageDigits: 0 }, bom: { ...b.project.settings.bom, units: 1 } } });
@@ -397,7 +397,7 @@ export function pumpSample(lib: Library) {
 export function chargerSample(lib: Library) {
   const b = builder(lib, 'sample-dc-charger', 'Caricabatterie 110 V DC', { drawingLanguage: 'it' });
   b.set({
-    properties: { client: 'Cliente di esempio S.r.l.', product: 'Quadro caricabatterie 110 V DC', orderNo: 'ESEMPIO-0003', drawingNo: 'SMP-CHG-001', drawn: 'CablePilot', issueDate: '2026-10-24', revision: 'A', copyright: 'Progetto di esempio di CablePilot (Apache-2.0). Solo dati di esempio.' },
+    properties: { client: 'Cliente di esempio S.r.l.', product: 'Quadro caricabatterie 110 V DC', orderNo: 'ESEMPIO-0003', drawingNo: 'SMP-CHG-001', drawn: 'CablePilot', issueDate: '2026-10-24', revision: 'A', copyright: 'Progetto di esempio di CablePilot. Solo dati di esempio.' },
     assembly: { ratedOperationalVoltage: '400', ratedInsulationVoltage: '690', ratedImpulseVoltage: '6', ratedCurrent: '40', ratedShortTimeCurrent: '10', ratedFrequency: '50', ratedDiversityFactor: '1', earthingSystem: 'TN-S', formOfSeparation: '1', ipDegree: 'IP31', installation: 'indoor', mobility: 'fixed', enclosureMaterial: 'Lamiera di acciaio verniciata', dcOutputVoltage: '110', dcOutputCurrent: '30', batteryType: 'Piombo-acido ermetico', batteryNominalVoltage: '110', batteryCapacity: '100' },
   });
   // Frame zones as on production sets: columns A to H then M to U (skipping O and Q), rows 0 to 9, so cross-references read like [08-E3] (page-column-row).

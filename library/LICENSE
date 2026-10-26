@@ -1,0 +1,9 @@
+The data files in this folder (symbols, parts, terminals, cables, frames, title blocks and macros) are
+Copyright (c) 2026 Mojtaba Amini and are licensed under the Creative Commons Attribution 4.0
+International License (CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
+
+You may share and adapt them for any purpose, also commercially, as long as you give appropriate
+credit ("CablePilot library, CC BY 4.0"), link to the license and indicate if changes were made.
+
+Each file keeps its own `source` field: the standard and clause, or the catalogue, its values come
+from. Standards are cited, never reproduced.

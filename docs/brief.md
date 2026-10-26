@@ -1,5 +1,11 @@
 # New project: CablePilot — open-source electrical design app for machines, control panels and electronics
 
+> **Licence note (2026-10-26).** This is the original brief, kept as written. On 2026-10-26 CablePilot changed from
+> Apache-2.0 to the CablePilot License 1.0, source-available: the code stays public, every feature is free for 30 days,
+> then a licence key is needed; the library data is CC BY 4.0. See [LICENSE.md](../LICENSE.md). Versions up to commit
+> `01271c2` remain Apache-2.0. Where this brief says "open source", "free" or "Apache-2.0" about CablePilot itself,
+> LICENSE.md now applies.
+
 You are starting a new open-source product in an empty repository. Read this whole brief before doing
 anything. The open decisions are already made (see "Decisions already made" near the end): turn this
 brief into the project's CLAUDE.md and roadmap, then build it milestone by milestone.

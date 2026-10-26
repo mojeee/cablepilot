@@ -13,6 +13,16 @@ export interface AppInfo {
   platform: string;
 }
 
+/** The trial or the licence on this computer (LICENSE.md, sections 2 and 3). */
+export interface LicenseStatus {
+  state: 'trial' | 'licensed' | 'expired';
+  /** Days of the trial still left (0 once it has ended). */
+  daysLeft: number;
+  trialDays: number;
+  licensee?: string;
+  plan?: string;
+}
+
 /** A project's text with the file it came from (null: it has no file yet). */
 export interface OpenedFile {
   text: string;
@@ -168,6 +178,13 @@ export interface CablePilotApi {
     onChanged(cb: () => void): () => void;
   };
   /** The assistant (M7): providers run here in the main process, API keys never reach the renderer. Without a stored key the built-in assistant answers. */
+  /** The trial and the licence key, checked offline in the main process. */
+  license: {
+    status(): Promise<Result<LicenseStatus>>;
+    activate(key: string): Promise<Result<LicenseStatus>>;
+    /** Opens the website's pricing section or the licence text in the browser. */
+    open(page: 'buy' | 'license'): Promise<Result<null>>;
+  };
   ai: {
     status(): Promise<Result<AiStatus>>;
     /** Provider and model id (an empty model id goes back to the default); never a key. */

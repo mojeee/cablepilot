@@ -5,12 +5,14 @@ and served as it is by Cloudflare Pages. English pages are at `/`, Italian pages
 no JavaScript on any page, no cookie, no web font, no tracking and no request to a third party. One
 stylesheet with colour tokens (`scripts/site/style.css`; text pairs pass WCAG AA; motion only when
 the visitor has not asked for less). The approach is the same as MechPilot's site; the texts are
-CablePilot's own.
+CablePilot's own. The site describes CablePilot as it is licensed: source-available under the CablePilot License 1.0
+(`LICENSE.md`), with a free 30-day trial and then a license key; it never calls the app free or open source. Only the
+history (versions up to `01271c2` were Apache-2.0) may name the old licence.
 
 ## What is in it
 
 The design follows BoardPilot's site (the owner's other product): dark throughout, a sticky blurred navigation bar
-with the sections, an EN/IT switch, the GitHub link and Download; a centred hero; a strip of facts; cards with icons;
+with the sections (Pricing among them), an EN/IT switch, the GitHub link and Download; a centred hero; a strip of facts; cards with icons;
 an FAQ; a footer with Product, Guides and Community columns. Fonts stay the system stack (BoardPilot loads web fonts;
 this site loads nothing from a third party).
 
@@ -26,11 +28,22 @@ The landing page has, in order: the hero (eyebrow, headline, what the app does, 
 chips, the hero video loop in a window frame); a strip of facts counted from the repository (symbols, parts, reports,
 samples, languages); the short videos; "In the app today" (one card per feature area with an Available / Planned (Mx)
 tag and the standards, and a dark/light screenshot switch made with radio inputs and CSS, no script); how it works;
-the drawing set; the assistant; the principles; the comparison; the demo; the guides; the FAQ; download.
+the drawing set; the assistant; the principles; the comparison; the demo; the guides; pricing; the FAQ; download.
+The footer names the licence with a link to `LICENSE.md`.
 
 **Download.** Until every box of `## M8 Release 1` is ticked, the buttons say so honestly (watch the demo, follow the
 releases on GitHub). Once it is, they link straight to the installers on the latest release
 (`releases/latest/download/CablePilot-mac-arm64.dmg`, `-mac-x64.dmg`, `-win-x64.exe`, `-linux-x86_64.AppImage`).
+
+**Pricing** (`id="pricing"`, on `/` and `/it/`). The app opens `https://cablepilot.agentflowbind.com/#pricing` as its
+"Buy a license" page, so the anchor must stay. Three plan cards in BoardPilot's style: **Free trial** (€0 for 30 days:
+every feature, no account, files stay on your computer; button to Download), **License** ("Coming soon", one key per
+person or seat: keep using CablePilot after the trial, updates in the same major version; button "Request a license
+key" to GitHub Discussions) and **Companies and schools** ("Ask us", per seat: training, company libraries and title
+blocks; button to the page for companies), then one line saying the code is source-available, the library data is
+CC BY 4.0 and the drawings are the user's, with a link to the licence. No prices are shown until they are decided;
+requests go through GitHub Discussions, never an email address. The JSON-LD `SoftwareApplication` names
+`LICENSE.md` as its licence and describes its zero-price offer as the free 30-day trial.
 
 ## Search engines
 

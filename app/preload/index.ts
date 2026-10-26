@@ -37,6 +37,7 @@ const api: CablePilotApi = {
       return () => void ipcRenderer.removeListener('layout:changed', fn);
     },
   },
+  license: { status: call('license:status'), activate: call('license:activate'), open: call('license:open') },
   ai: {
     status: call('ai:status'), setSettings: call('ai:setSettings'), setKey: call('ai:setKey'), clearKey: call('ai:clearKey'), testKey: call('ai:testKey'), ask: call('ai:ask'), cancel: call('ai:cancel'),
     onProgress: (cb) => {

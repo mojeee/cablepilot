@@ -5,12 +5,13 @@
   </picture>
 </p>
 
-<p align="center"><b>Draw the schematic once. Terminals, cables, BOM and cabinet follow.</b><br>Free, open-source electrical CAD for machine builders, control-panel builders and system integrators: multi-page IEC schematics, live terminal, cable and wire lists, PLC I/O and BOM, a cabinet layout in 2D and 3D, and production drawing sets in your own title block.<br>English and Italian · macOS, Windows and Linux · runs offline, no account.</p>
+<p align="center"><b>Draw the schematic once. Terminals, cables, BOM and cabinet follow.</b><br>Source-available electrical CAD for machine builders, control-panel builders and system integrators: multi-page IEC schematics, live terminal, cable and wire lists, PLC I/O and BOM, a cabinet layout in 2D and 3D, and production drawing sets in your own title block.<br>English and Italian · macOS, Windows and Linux · runs offline, no account · every feature free for 30 days.</p>
 
 <p align="center">
   <a href="https://github.com/mojeee/cablepilot/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/mojeee/cablepilot?label=download&color=4da3ff"></a>
   <a href="https://github.com/mojeee/cablepilot/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/mojeee/cablepilot/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="LICENSE"><img alt="Licence: Apache-2.0" src="https://img.shields.io/badge/licence-Apache--2.0-5ccb8f"></a>
+  <a href="LICENSE.md"><img alt="Licence: source-available" src="https://img.shields.io/badge/licence-source--available-5ccb8f"></a>
+  <a href="library/LICENSE"><img alt="Library data CC BY 4.0" src="https://img.shields.io/badge/library%20data-CC%20BY%204.0-c9beff"></a>
   <img alt="Platforms" src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-8592a0">
   <img alt="Languages" src="https://img.shields.io/badge/lang-EN%20%7C%20IT-f2a93b">
   <a href="https://cablepilot.agentflowbind.com/docs/"><img alt="Docs" src="https://img.shields.io/badge/docs-guides-c9beff"></a>
@@ -79,6 +80,11 @@ The first release is being prepared. When it is out, download the file for your 
 The builds are not signed yet: on a Mac open the app the first time with right-click > Open; on Windows choose More
 info > Run anyway. Until then, run it from source (below). Then follow [Getting started](docs/getting-started.md).
 
+Every feature is free for 30 days on each computer, with no account. After the trial CablePilot asks for a licence
+key (`CP1-…`), one per user or seat: see [Pricing](https://cablepilot.agentflowbind.com/#pricing) (prices are not set
+yet; request a key in [GitHub Discussions](https://github.com/mojeee/cablepilot/discussions)). Your projects and
+exports stay yours and stay readable without a key.
+
 ## Run from source
 
 ```bash
@@ -114,8 +120,9 @@ Releases are built by [.github/workflows/release.yml](.github/workflows/release.
    - add a unit test for a function in `shared/`;
    - improve a text in `scripts/site/texts.mjs` and run `npm run build:site`.
 3. Run `npm run typecheck && npm test` (2 minutes).
-4. Commit with `git commit -s` (the DCO sign-off, see [CONTRIBUTING.md](CONTRIBUTING.md)) and open a pull request.
-   Issues labelled `good first issue` are a good place to start.
+4. Commit and open a pull request. By contributing you agree to the contribution terms in
+   [LICENSE.md](LICENSE.md) section 7 (see [CONTRIBUTING.md](CONTRIBUTING.md)). Issues labelled `good first issue`
+   are a good place to start.
 
 Questions, training and custom features for companies: [GitHub Discussions](https://github.com/mojeee/cablepilot/discussions)
 and the [page for companies](https://cablepilot.agentflowbind.com/companies/).
@@ -134,5 +141,16 @@ website), `scripts`, `tests`, `e2e`, `build` (app icon).
 
 ## Licence
 
-Apache-2.0. Copyright Mojtaba Amini. See [LICENSE](LICENSE) and [NOTICE](NOTICE). Third-party licences are listed in
-`THIRD_PARTY_LICENSES.md`, generated at build time.
+CablePilot is **source-available**, not open source: the code is public so you can read it, check what it does with
+your drawings, build it and contribute.
+
+| What | Licence |
+|---|---|
+| The app (this repository, except below) | [CablePilot License 1.0](LICENSE.md): source-available, free 30-day trial with every feature, then a licence key |
+| `library/` (symbols, parts, terminals, cables, frames, title blocks, macros as data) | [CC BY 4.0](library/LICENSE) |
+| `shared/fonts/` | [SIL Open Font License 1.1](shared/fonts/LICENSE.txt) |
+| Your drawings | Yours: open JSON format and PDF, DXF, CSV and XLSX exports, usable without the app and after the trial |
+
+Versions up to commit `01271c2` were released under the Apache License 2.0 and keep that licence. Copyright Mojtaba
+Amini; see also [NOTICE](NOTICE). Third-party licences are listed in `THIRD_PARTY_LICENSES.md`, generated at build
+time.

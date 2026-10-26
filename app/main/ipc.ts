@@ -1,6 +1,6 @@
 // IPC handlers behind the preload API (shared/api.ts). Every handler returns a Result.
 
-import { app, ipcMain } from 'electron';
+import { app, ipcMain, shell } from 'electron';
 import { fail, ok, type Result } from '@shared/result';
 import { setLanguage } from '@shared/i18n';
 import type { AppInfo, CompanyKind } from '@shared/api';
@@ -11,6 +11,8 @@ import type { WarehouseService } from './warehouse';
 import type { LayoutService } from './layoutFiles';
 import type { ErpService } from './erp';
 import type { HistoryService } from './history';
+import type { LicenseService } from './license/license';
+import { BUY_URL, LICENSE_URL } from '@shared/brand';
 
 function guard<T>(fn: () => T): Result<T> {
   try {
@@ -31,7 +33,7 @@ async function guardAsync<T>(fn: () => Promise<Result<T>>): Promise<Result<T>> {
 
 const isKind = (k: unknown): k is CompanyKind => k === 'symbols' || k === 'templates' || k === 'macros' || k === 'parts' || k === 'layouts';
 
-export function registerIpc(deps: { settings: SettingsStore; files: FileService; warehouse: WarehouseService; layout: LayoutService; erp: ErpService; history: HistoryService }): void {
+export function registerIpc(deps: { settings: SettingsStore; files: FileService; warehouse: WarehouseService; layout: LayoutService; erp: ErpService; history: HistoryService; license: LicenseService }): void {
   const { files } = deps;
   ipcMain.handle('app:info', (): Result<AppInfo> => guard(() => ({ name: app.getName(), version: app.getVersion(), platform: process.platform })));
   ipcMain.handle('settings:get', (): Result<Settings> => guard(() => deps.settings.get()));
@@ -92,4 +94,8 @@ export function registerIpc(deps: { settings: SettingsStore; files: FileService;
   ipcMain.handle('company:list', (_e, kind: unknown) => safe(() => (isKind(kind) ? files.listCompany(kind) : fail('company.kind', 'Unknown library kind.', 'Report this on GitHub.'))));
   ipcMain.handle('company:save', (_e, kind: unknown, id: string, text: string) => safe(() => (isKind(kind) ? files.saveCompany(kind, String(id), String(text)) : fail('company.kind', 'Unknown library kind.', 'Report this on GitHub.'))));
   ipcMain.handle('company:folder', () => ok(files.companyFolder()));
+  const license = deps.license;
+  ipcMain.handle('license:status', () => guard(() => license.status()));
+  ipcMain.handle('license:activate', (_e, key: unknown) => safe(() => (lang(), license.activate(typeof key === 'string' ? key : ''))));
+  ipcMain.handle('license:open', (_e, page: unknown) => guardAsync(async () => (await shell.openExternal(page === 'license' ? LICENSE_URL : BUY_URL), ok(null))));
 }

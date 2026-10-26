@@ -9,4 +9,4 @@
 - [ ] Connectivity, numbering, report or check changes have a test; a bug fix has a test
 - [ ] Table values from a standard cite the standard and clause; unverified values went to `docs/to-verify.md`
 - [ ] A line under "Unreleased" in `CHANGELOG.md`
-- [ ] Commits are signed off (`git commit -s`, DCO)
+- [ ] I agree my contribution is licensed as in `LICENSE.md` section 7

@@ -4,6 +4,7 @@ import type { SampleInfo } from '@shared/api';
 import { useEditor } from '../state/editor';
 import { useUi } from '../state/ui';
 import { Icon } from './Icons';
+import { LicenseChip } from './License';
 
 /** The app's mark: a wire between two terminals (the same drawing as the website's logo). */
 function Mark() {
@@ -54,6 +55,7 @@ export function TopBar() {
         </select>
       </div>
       <div className="spacer" />
+      <LicenseChip />
       <div className="tb-group prefs" role="group" aria-label={t('Display')}>
         <select className="tb-select" aria-label={t('Theme')} title={t('Theme')} value={theme} onChange={(e) => setTheme(e.target.value === 'light' ? 'light' : 'dark')}>
           <option value="dark">{t('Dark')}</option>

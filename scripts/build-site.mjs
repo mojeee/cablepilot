@@ -22,6 +22,9 @@ export const SITE = 'https://cablepilot.agentflowbind.com';
 const REPO = 'https://github.com/mojeee/cablepilot';
 const RELEASES = `${REPO}/releases/latest`;
 const DISCUSSIONS = `${REPO}/discussions`;
+// The licence (CablePilot License 1.0, source-available). The app opens ${SITE}/#pricing as its "Buy a license" page,
+// so the landing page must keep id="pricing" in both languages.
+const LICENSE_URL = `${REPO}/blob/main/LICENSE.md`;
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 const siteDir = join(root, 'site');
 const read = (rel) => readFileSync(join(root, rel), 'utf8').replace(/\r\n?/g, '\n');
@@ -214,6 +217,7 @@ function page({ lang, path, alt, title, description, body, section = '', jsonld 
     [tx(lang, 'nav.demo'), DEMO[lang], 'demo'],
     [tx(lang, 'nav.docs'), DOCS[lang], 'docs'],
     [tx(lang, 'nav.compare'), `${home}#compare`, ''],
+    [tx(lang, 'nav.pricing'), `${home}#pricing`, ''],
     [tx(lang, 'nav.faq'), `${home}#faq`, ''],
     [tx(lang, 'nav.companies'), COMPANIES[lang], 'companies'],
   ];
@@ -280,6 +284,7 @@ function page({ lang, path, alt, title, description, body, section = '', jsonld 
             [tx(lang, 'nav.videos'), `${home}#videos`],
             [tx(lang, 'nav.demo'), DEMO[lang]],
             [tx(lang, 'nav.download'), `${home}#download`],
+            [tx(lang, 'nav.pricing'), `${home}#pricing`],
             [tx(lang, 'nav.companies'), COMPANIES[lang]],
           ])}
           ${footCol(tx(lang, 'foot.docs'), DOC_PAGES.map((d) => [tx(lang, `doc.${d.slug}.title`), docHref(lang, d.slug)]))}
@@ -291,7 +296,7 @@ function page({ lang, path, alt, title, description, body, section = '', jsonld 
           ])}
         </div>
         <div class="foot-base">
-          <p>${esc(tx(lang, 'foot.copyright'))} ${esc(tx(lang, 'foot.version'))} ${esc(pkg.version)}.</p>
+          <p>${esc(tx(lang, 'foot.copyright'))} <a href="${LICENSE_URL}">${esc(tx(lang, 'foot.license'))}</a>. ${esc(tx(lang, 'foot.version'))} ${esc(pkg.version)}.</p>
           <p>${esc(tx(lang, 'foot.privacy'))}</p>
         </div>
       </div>
@@ -362,6 +367,7 @@ function landingVars(lang) {
   const shot = (theme) => (imgExists(`app-${theme}.png`) ? `<div class="shot shot-${theme}-img has-img"><img src="/img/app-${theme}.png" alt="${esc(tx(lang, `shot.${theme}.alt`))}" width="1440" height="900" loading="lazy" decoding="async" /></div>` : `<div class="shot shot-${theme}-img"><p>${esc(tx(lang, 'shot.pending'))}</p></div>`);
   const rows = [
     ['open', null],
+    ['trial', null],
     ['local', null],
     ['schematic', 'M1'],
     ['reports', 'M3'],
@@ -434,9 +440,9 @@ function landingVars(lang) {
       url: `${SITE}${HOME[lang]}`,
       downloadUrl: `${REPO}/releases/latest`,
       installUrl: `${REPO}/releases/latest`,
-      license: 'https://www.apache.org/licenses/LICENSE-2.0',
-      isAccessibleForFree: true,
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+      // Source-available (CablePilot License 1.0): the offer is the free 30-day trial, described as such.
+      license: LICENSE_URL,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR', description: tx(lang, 'ld.offer') },
       inLanguage: ['en', 'it'],
       screenshot: `${SITE}/img/app-dark.png`,
       image: `${SITE}/img/og.png`,
@@ -447,7 +453,7 @@ function landingVars(lang) {
     { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqItems.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
   ];
   const downloadNote = esc(tx(lang, releaseOut ? 'dl.note.out' : 'dl.note'));
-  return { features, strip, shotDark: shot('dark'), shotLight: shot('light'), compare, status, heroMedia, heroActions, downloadActions, downloadNote, chips, facts, docCards, faq, demoMedia, clipsSection, jsonld, demoHref: DEMO[lang], RELEASES, DISCUSSIONS, companiesHref: COMPANIES[lang] };
+  return { features, strip, shotDark: shot('dark'), shotLight: shot('light'), compare, status, heroMedia, heroActions, downloadActions, downloadNote, chips, facts, docCards, faq, demoMedia, clipsSection, jsonld, demoHref: DEMO[lang], RELEASES, DISCUSSIONS, LICENSE_URL, companiesHref: COMPANIES[lang] };
 }
 
 for (const lang of ['en', 'it']) {
@@ -460,7 +466,7 @@ for (const lang of ['en', 'it']) {
     alt: COMPANIES[other],
     title: tx(lang, 'co.title'),
     description: tx(lang, 'co.description'),
-    body: template('companies.template.html', lang, { DISCUSSIONS }),
+    body: template('companies.template.html', lang, { DISCUSSIONS, pricingHref: `${HOME[lang]}#pricing` }),
     section: 'companies',
   });
 }

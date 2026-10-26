@@ -20,6 +20,10 @@ The builds are not signed yet. On a Mac, open the app the first time with right-
 Windows, choose **More info > Run anyway** if SmartScreen warns. On Linux, make the AppImage executable
 (`chmod +x CablePilot-linux-x86_64.AppImage`) and run it.
 
+Every feature is free for 30 days on each computer, with no account. After the trial CablePilot needs a license key,
+one per user or seat: see [Pricing](https://cablepilot.agentflowbind.com/#pricing). Your projects and exports stay
+yours, also without a key.
+
 ## Your first ten minutes
 
 1. **Open a sample.** Choose **Sample projects** in the top bar: the conveyor with a direct-on-line starter, the pump

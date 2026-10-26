@@ -1,7 +1,7 @@
 <!--
 Italian text of the guide /it/docs/getting-started/, translated from docs/getting-started.md.
 "source" is the hash the build prints when the English file changes; update it together with the translation.
-source: f08dd6c5db
+source: 52606739ed
 -->
 # Per iniziare
 
@@ -24,6 +24,10 @@ Scarica il file per il tuo computer dall’[ultima versione](https://github.com/
 Le build non sono ancora firmate. Su Mac, apri l’app la prima volta con clic destro > **Apri** e conferma. Su Windows,
 scegli **Ulteriori informazioni > Esegui comunque** se SmartScreen avvisa. Su Linux, rendi eseguibile l’AppImage
 (`chmod +x CablePilot-linux-x86_64.AppImage`) e avviala.
+
+Ogni funzione è gratuita per 30 giorni su ogni computer, senza account. Dopo la prova CablePilot richiede una chiave
+di licenza, una per utente o postazione: vedi [Prezzi](https://cablepilot.agentflowbind.com/it/#pricing). I tuoi
+progetti e le esportazioni restano tuoi, anche senza chiave.
 
 ## I tuoi primi dieci minuti
 

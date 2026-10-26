@@ -27,6 +27,7 @@ import { useLayout } from './state/layout';
 import { watchProposals } from './state/chat';
 import { listenForStockChanges, useStock } from './state/stock';
 import { useUi } from './state/ui';
+import { LicenseDialog, TrialEndedScreen, useLicense } from './components/License';
 
 const AUTOSAVE_MS = 4000;
 // The 3D view loads only when it is opened: three.js stays out of the startup (M6 part 3).
@@ -42,6 +43,7 @@ export function App() {
       if (!api) return;
       const settings = await api.settings.get();
       if (settings.ok) useUi.getState().hydrate(settings.value);
+      await useLicense.getState().refresh();
       const info = await api.app.info();
       if (info.ok) {
         const { version, platform } = info.value;
@@ -103,6 +105,8 @@ export function App() {
       {dialog === 'ai' && <AiSettingsDialog />}
       {dialog === 'layout' && <LayoutDialog />}
       {dialog === 'layout3d' && <Suspense fallback={null}><Cabinet3D /></Suspense>}
+      <LicenseDialog />
+      <TrialEndedScreen />
     </div>
   );
 }

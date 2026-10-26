@@ -353,3 +353,21 @@ button.link:hover:not(:disabled) { background: none; text-decoration-color: curr
 p.warn { color: var(--warn); margin: 4px 0; }
 table.bom tr.over td { color: var(--warn); font-weight: 600; }
 .legend { margin-top: 6px; }
+
+/* Trial and licence (components/License.tsx). */
+.lic-chip { font-size: 12px; font-weight: 600; }
+.lic-chip .lic-short { display: none; }
+@media (max-width: 1600px) { .project-name { max-width: 150px; } }
+@media (max-width: 1366px) { .topbar { column-gap: 8px; } .lic-chip .lic-long { display: none; } .lic-chip .lic-short { display: inline; } .project-name { max-width: 110px; } }
+.lic-chip.lic-trial { color: var(--accent); background: var(--accent-soft); }
+.lic-chip.lic-expired { color: var(--warn); background: var(--warn-soft); }
+.lic-chip.lic-licensed { color: var(--ok); }
+.key-form { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.key-form label { display: flex; flex-direction: column; gap: 4px; }
+.key-label { color: var(--muted); font-size: 12px; }
+.key-form textarea { width: 100%; resize: vertical; background: var(--raised); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 6px 8px; color: var(--text); font-size: 12px; word-break: break-all; }
+.key-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.lock-screen { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background: var(--bg); }
+.lock-card { width: min(520px, 92vw); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 24px; box-shadow: var(--shadow); }
+.lock-card h1 { margin: 0 0 8px; font-size: 18px; }
+.lock-card p { margin: 0 0 8px; line-height: 1.5; }
