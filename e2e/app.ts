@@ -20,7 +20,8 @@ export async function launch(opts: { profile?: string; env?: Record<string, stri
   const profile = opts.profile ?? mkdtempSync(join(tmpdir(), 'cp-e2e-'));
   const out = mkdtempSync(join(tmpdir(), 'cp-e2e-out-'));
   const app = await electron.launch({
-    args: ['.', '--no-sandbox'],
+    // Linux CI has no GPU under xvfb: software WebGL (SwiftShader) for the 3D cabinet view, as in BoardPilot.
+    args: ['.', '--no-sandbox', ...(process.platform === 'linux' ? ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] : [])],
     cwd: root,
     env: { ...process.env, CP_PROFILE: profile, CP_E2E_DIR: out, ...opts.env },
     ...(opts.recordVideo ? { recordVideo: opts.recordVideo } : {}),

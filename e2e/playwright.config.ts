@@ -10,7 +10,8 @@ export default defineConfig({
   // One app at a time: every test starts its own Electron.
   workers: 1,
   retries: 0,
-  reporter: [['list'], ['html', { outputFolder: '../out/e2e-report', open: 'never' }]],
+  // On GitHub Actions each failure also becomes an annotation, readable on the run page without signing in.
+  reporter: [['list'], ['html', { outputFolder: '../out/e2e-report', open: 'never' }], ...(process.env.GITHUB_ACTIONS ? [['github'] as ['github']] : [])],
   outputDir: '../out/e2e-results',
   use: { screenshot: 'only-on-failure', trace: 'retain-on-failure' },
 });
