@@ -37,6 +37,15 @@ export const TEXT = {
   },
   'hero.download': { en: 'Download', it: 'Scarica' },
   'hero.demo': { en: 'Watch the demo', it: 'Guarda la demo' },
+  'clips.title': { en: 'See every feature in half a minute', it: 'Ogni funzione in mezzo minuto' },
+  'clips.lead': {
+    en: 'Short videos recorded from the real app on the sample projects. No voice, just captions, so they work with the sound off. Nothing is mocked up.',
+    it: 'Brevi video registrati dall’app reale sui progetti di esempio. Niente voce, solo sottotitoli, così funzionano anche senza audio. Nulla è simulato.',
+  },
+  'clips.note': {
+    en: 'The sample projects and the demo ERP are fictional. The assistant clip uses a test key and the app’s scripted stand-in, so nothing leaves the computer.',
+    it: 'I progetti di esempio e l’ERP dimostrativo sono fittizi. Il video dell’assistente usa una chiave di prova e il sostituto scriptato dell’app, quindi nulla lascia il computer.',
+  },
   'hero.video.note': { en: 'The demo loop will play here once it is recorded from the real app.', it: 'Il ciclo della demo verrà mostrato qui quando sarà registrato dall’app reale.' },
   'status.version': { en: 'Version', it: 'Versione' },
   'status.milestones': { en: 'milestones done', it: 'milestone completate' },

@@ -7,6 +7,15 @@ import type { Finding } from '@shared/checks';
 import { useEditor } from '../state/editor';
 import { useChecks, usePageNames } from '../state/checks';
 import { useUi } from '../state/ui';
+import { Icon } from './Icons';
+
+/** "1 error", "2 errors": the summary reads as plain language in both languages. */
+export function countText(errors: number, warnings: number, infos: number): string {
+  const e = errors === 1 ? t('1 error') : t('{n} errors', { n: errors });
+  const w = warnings === 1 ? t('1 warning') : t('{n} warnings', { n: warnings });
+  const i = infos === 1 ? t('1 note') : t('{n} notes', { n: infos });
+  return `${e}, ${w}, ${i}`;
+}
 
 const MAX_ROWS = 200;
 
@@ -19,8 +28,9 @@ export function ChecksBanner() {
   const level = r.errors ? 'error' : r.warnings ? 'warning' : 'info';
   return (
     <div className={`checks-banner ${level}`} role="status" data-testid="checks-banner">
+      <span className="checks-icon"><Icon name={level === 'info' ? 'check' : 'warning'} size={16} /></span>
       <strong>{t('Electrical rule check')}</strong>
-      <span data-testid="checks-summary">{t('{errors} errors, {warnings} warnings, {infos} notes', { errors: r.errors, warnings: r.warnings, infos: r.infos })}</span>
+      <span className="checks-summary" data-testid="checks-summary">{countText(r.errors, r.warnings, r.infos)}</span>
       <span className="grow" />
       {fixable > 0 && <button type="button" data-testid="fix-all" onClick={() => useEditor.getState().fixAll()}>{t('Fix all that can be fixed')} ({fixable})</button>}
       <button type="button" data-testid="toggle-findings" onClick={() => setChecksOpen(!open)}>{open ? t('Hide findings') : t('Show findings')}</button>
@@ -41,13 +51,14 @@ export function FindingsList() {
     <>
       {shown.map((f: Finding) => (
         <li key={f.id} className={`msg finding ${f.severity}`} data-testid="finding" data-rule={f.rule}>
-          <button type="button" className="link" title={t('Go to')} onClick={() => st.goTo(f)}>{names.pageName(f.page ?? '')}</button>
+          <span className="sev" aria-hidden="true" />
+          <button type="button" className="link page-chip" title={t('Go to')} onClick={() => st.goTo(f)}>{names.pageName(f.page ?? '')}</button>
           <span className="finding-text">
             {findingText(f, names)}
             <span className="finding-src"> [{ruleTitle(f.rule)}; {t('Standard')}: {RULE_SOURCE[f.rule]}]</span>
             {findingDetail(f) && <span className="finding-detail">{findingDetail(f)}</span>}
           </span>
-          {f.fix && <button type="button" data-testid="fix-one" onClick={() => st.fix(f)}>{t('Fix')}: {fixText(f.fix)}</button>}
+          {f.fix && <button type="button" className="fix" data-testid="fix-one" onClick={() => st.fix(f)}>{t('Fix')}: {fixText(f.fix)}</button>}
         </li>
       ))}
       {r.findings.length > shown.length && <li className="msg info">{t('and {n} more', { n: r.findings.length - shown.length })}</li>}

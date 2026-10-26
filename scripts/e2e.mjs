@@ -12,7 +12,9 @@ if (!process.argv.includes('--no-build')) run('npm', ['run', 'build']);
 if (process.argv.includes('--screenshots')) process.env.CP_SCREENSHOTS = '1';
 // --demo: only the demo recording test (writes out/demo-video/); npm run record:demo then encodes it.
 if (process.argv.includes('--demo')) process.env.CP_DEMO = '1';
-const extra = process.argv.slice(2).filter((a) => !['--no-build', '--screenshots', '--demo'].includes(a));
-const pw = ['playwright', 'test', '-c', 'e2e/playwright.config.ts', ...(process.argv.includes('--screenshots') ? ['-g', 'screenshots'] : []), ...(process.argv.includes('--demo') ? ['-g', 'demo recording'] : []), ...extra];
+// --clips: only the short clips for the website (writes out/clips/); CP_CLIPS=erp,ai picks some, CP_CLIPS_LANG=en or it one language.
+if (process.argv.includes('--clips')) process.env.CP_CLIPS ||= '1';
+const extra = process.argv.slice(2).filter((a) => !['--no-build', '--screenshots', '--demo', '--clips'].includes(a));
+const pw = ['playwright', 'test', '-c', 'e2e/playwright.config.ts', ...(process.argv.includes('--screenshots') ? ['-g', 'screenshots'] : []), ...(process.argv.includes('--demo') ? ['-g', 'demo recording'] : []), ...(process.argv.includes('--clips') ? ['-g', 'clip [a-z-]+ \\((en|it)\\)'] : []), ...extra];
 if (process.platform === 'linux' && !process.env.DISPLAY) run('xvfb-run', ['-a', '-s', '-screen 0 1920x1200x24', 'npx', ...pw]);
 else run('npx', pw);

@@ -55,6 +55,18 @@ tables and symbol/device pages generated from `library/`, the guides and real sc
   `scripts/check-site.mjs` fails if one of the files is missing or over its budget (8 MB demo, 2 MB hero
   loop). `_headers` caches `/video/*` and the CSP keeps `media-src 'self'`. Re-record whenever the interface
   changes; needs ffmpeg (`brew install ffmpeg`).
+- **The short videos.** `npm run record:clips` builds the app and records one short clip per feature area
+  (schematic, wire numbers and reports, checks and revisions, PLC, the drawing set, sizing, the CAD workspace,
+  the cabinet layout, the assistant, the ERP link) in English and Italian, the way BoardPilot's landing page
+  does. Each clip is recorded from the real app on a sample project with the UI in its language
+  (`e2e/clips.e2e.ts`, 1920 x 1080, a visible pointer); the captions are drawn on top of the window while it
+  records (`e2e/recorder.ts`), so they are part of the picture and work with the sound off. Titles,
+  descriptions and captions are in `e2e/clips.json`. `scripts/clips-video.mjs` trims and encodes them to
+  `site/video/clip-<id>-<lang>.mp4` (1280 x 720, H.264, faststart, no audio) with a `.jpg` poster, and the
+  landing page shows them in a "See every feature in half a minute" grid (`<video controls muted loop
+  playsinline preload="none">`, no script), in the page's language. `CP_CLIPS=erp,ai` records some clips
+  only, `CP_CLIPS_LANG=it` one language. `scripts/check-site.mjs` fails when a clip has no poster or is over
+  4 MB. The assistant clip uses a test key and the scripted stand-in; the page says so.
 - **Deterministic.** No dates, stable order; two runs give identical bytes. Everything in `site/`
   except `site/img/` and `site/video/` is deleted and written again on every build.
 - **Checked.** After writing, the build runs `scripts/check-site.mjs`: every internal link, image

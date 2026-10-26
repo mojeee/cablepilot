@@ -202,6 +202,8 @@ test('a device with a coil and a contact shows its cross-references, takes a par
     await page.getByTestId('symbol-coil').click();
     await page.mouse.click(cx - 100, cy);
     await page.keyboard.press('Escape');
+    // The coil offers its contacts; the offer goes away by itself once a contact joins the device.
+    await expect(page.getByTestId('ai-hint')).toContainText('Add the contacts of -K1?');
     await page.getByTestId('symbol-contact-no').click();
     await page.mouse.click(cx + 100, cy - 60);
     await page.keyboard.press('Escape');
@@ -211,6 +213,7 @@ test('a device with a coil and a contact shows its cross-references, takes a par
     const reps = page.getByTestId('device-reps');
     await expect(reps).toContainText('Coil');
     await expect(reps).toContainText('Auxiliary contact (NO)');
+    await expect(page.getByTestId('ai-hint')).toHaveCount(0);
     // Cross-reference text in the default format page.column (the starter project's power page is page 3).
     await expect(reps).toContainText(/Coil: 3\.[0-9]/);
     await expect(reps).toContainText(/Auxiliary contact \(NO\): 3\.[0-9]/);
@@ -307,7 +310,7 @@ test('M4: the warnings banner finds a loose wire, fixes it with one click, and u
     await page.keyboard.press('Enter');
     const banner = page.getByTestId('checks-banner');
     await expect(banner).toBeVisible();
-    await expect(page.getByTestId('checks-summary')).toContainText('0 errors, 1 warnings');
+    await expect(page.getByTestId('checks-summary')).toContainText('0 errors, 1 warning,');
     const finding = page.getByTestId('finding');
     await expect(finding).toHaveCount(1);
     await expect(finding).toContainText('not connected at either end');
@@ -319,7 +322,7 @@ test('M4: the warnings banner finds a loose wire, fixes it with one click, and u
     await expect(banner).toBeVisible();
     // Fix all of them in one step, in Italian.
     await page.getByLabel('Language').selectOption('it');
-    await expect(page.getByTestId('checks-summary')).toContainText('0 errori, 1 avvisi');
+    await expect(page.getByTestId('checks-summary')).toContainText('0 errori, 1 avviso,');
     await page.getByTestId('fix-all').click();
     await expect(banner).toHaveCount(0);
   } finally {

@@ -218,7 +218,7 @@ test('demo recording: the battery-charger story', async () => {
     await clickAt(w2.x, w2.y, 500);
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('checks-banner')).toBeVisible();
-    await expect(page.getByTestId('checks-summary')).toContainText('0 errors, 1 warnings');
+    await expect(page.getByTestId('checks-summary')).toContainText('0 errors, 1 warning,');
     await wait(900);
     await cue('fix');
     await clickOn(page.getByTestId('fix-one'), 800);

@@ -34,22 +34,22 @@ test('screenshots of the sample projects, dark and light', async () => {
     await goto('Motor power circuit');
     await theme('dark', 'dark');
     await page.waitForTimeout(400);
-    await page.screenshot({ path: join(out, 'app-dark.png') });
+    await page.screenshot({ animations: 'disabled', path: join(out, 'app-dark.png') });
     await theme('light', 'white');
     await page.waitForTimeout(400);
-    await page.screenshot({ path: join(out, 'app-light.png') });
+    await page.screenshot({ animations: 'disabled', path: join(out, 'app-light.png') });
 
     // The features: schematic, devices and cross-references, reports (dark canvas).
     await open('dc-charger');
     await theme('dark', 'dark');
     await goto('Ingresso e moduli');
-    await canvas().screenshot({ path: join(out, 'feat-schematic.png') });
+    await canvas().screenshot({ animations: 'disabled', path: join(out, 'feat-schematic.png') });
     await goto('Relè di allarme');
-    await canvas().screenshot({ path: join(out, 'feat-devices.png') });
+    await canvas().screenshot({ animations: 'disabled', path: join(out, 'feat-devices.png') });
     await tab(page, 'reports');
     await page.getByTestId('reports').click();
     await page.getByTestId('report-wires').click();
-    await page.getByRole('dialog').screenshot({ path: join(out, 'feat-reports.png') });
+    await page.getByRole('dialog').screenshot({ animations: 'disabled', path: join(out, 'feat-reports.png') });
     await page.keyboard.press('Escape');
 
     // The electrical rule check: the conveyor sample with a duplicate designation (a second coil renamed
@@ -59,14 +59,16 @@ test('screenshots of the sample projects, dark and light', async () => {
     await theme('dark', 'dark');
     await goto('Control circuit');
     const cb = (await canvas().boundingBox())!;
-    const at = { x: cb.x + cb.width * 0.88, y: cb.y + cb.height * 0.62 };
+    const at = { x: cb.x + cb.width * 0.78, y: cb.y + cb.height * 0.62 };
     await page.getByTestId('symbol-coil').click();
     await page.mouse.move(at.x, at.y);
     await page.waitForTimeout(200);
     await page.mouse.click(at.x, at.y);
     await page.keyboard.press('Escape');
     await page.waitForTimeout(700);
-    await page.mouse.click(at.x, at.y + 36);
+    // The warnings banner has appeared above the ribbon and moved the canvas down: follow it, then select the coil.
+    const moved = (await canvas().boundingBox())!;
+    await page.mouse.click(at.x + moved.x - cb.x, at.y + moved.y - cb.y);
     await page.getByTestId('prop-designation').fill('-KM1');
     await page.getByTestId('prop-designation').blur();
     await tab(page, 'reports');
@@ -80,7 +82,7 @@ test('screenshots of the sample projects, dark and light', async () => {
     await page.getByTestId('split-bottom').focus();
     for (let i = 0; i < 4; i++) await page.keyboard.press('ArrowUp');
     await page.waitForTimeout(500);
-    await page.screenshot({ path: join(out, 'feat-checks.png') });
+    await page.screenshot({ animations: 'disabled', path: join(out, 'feat-checks.png') });
     await page.getByTestId('tab-view').click();
     await page.getByTestId('rb-reset-layout').click();
 
@@ -92,7 +94,7 @@ test('screenshots of the sample projects, dark and light', async () => {
     await expect(page.getByTestId('plc-table')).toBeVisible();
     // The top of the window, in the 12:7 shape of the other feature images.
     const bb = (await page.getByRole('dialog').boundingBox())!;
-    await page.screenshot({ path: join(out, 'feat-plc.png'), clip: { x: bb.x, y: bb.y, width: bb.width, height: Math.min(bb.height, Math.round((bb.width * 7) / 12)) } });
+    await page.screenshot({ animations: 'disabled', path: join(out, 'feat-plc.png'), clip: { x: bb.x, y: bb.y, width: bb.width, height: Math.min(bb.height, Math.round((bb.width * 7) / 12)) } });
     await page.keyboard.press('Escape');
 
     // Sizing: the conveyor sample's motor raised to 7.5 kW on its nameplate, the sample stock list loaded; the review
@@ -116,7 +118,7 @@ test('screenshots of the sample projects, dark and light', async () => {
     await expect(page.getByTestId('sizing-panel')).toBeVisible();
     await page.locator('.modal-body').evaluate((el) => { el.scrollTop = 112; });
     const sb = (await page.getByRole('dialog').boundingBox())!;
-    await page.screenshot({ path: join(out, 'feat-sizing.png'), clip: { x: sb.x, y: sb.y, width: sb.width, height: Math.min(sb.height, Math.round((sb.width * 7) / 12)) } });
+    await page.screenshot({ animations: 'disabled', path: join(out, 'feat-sizing.png'), clip: { x: sb.x, y: sb.y, width: sb.width, height: Math.min(sb.height, Math.round((sb.width * 7) / 12)) } });
     await page.keyboard.press('Escape');
 
     // The CAD workspace: a typed line, a coil placed, and the assistant's proposal for its contacts, still a preview.
@@ -147,7 +149,7 @@ test('screenshots of the sample projects, dark and light', async () => {
     await expect(page.getByTestId('chat-proposal')).toBeVisible();
     await page.mouse.move(wb.x + wb.width * 0.35, wb.y + wb.height * 0.4);
     await page.waitForTimeout(500);
-    await page.screenshot({ path: join(out, 'feat-workspace.png') });
+    await page.screenshot({ animations: 'disabled', path: join(out, 'feat-workspace.png') });
     await page.getByTestId('panel-toggle-properties').click();
 
     // The cabinet layout: the pump station's mounting plate in front view with dimensions (top half, real size), then the 3D view.
@@ -160,13 +162,13 @@ test('screenshots of the sample projects, dark and light', async () => {
     await lc.press('Enter');
     for (const t of ['60,110', '980,640']) { await lc.fill(t); await lc.press('Enter'); }
     await page.waitForTimeout(500);
-    await canvas().screenshot({ path: join(out, 'feat-layout.png') });
+    await canvas().screenshot({ animations: 'disabled', path: join(out, 'feat-layout.png') });
     await tab(page, 'layout');
     await page.getByTestId('rb-3d').click();
     await expect(page.getByTestId('cabinet-3d').locator('canvas')).toBeVisible({ timeout: 30_000 });
     await page.waitForTimeout(1200);
     const db = (await page.getByRole('dialog').boundingBox())!;
-    await page.screenshot({ path: join(out, 'feat-layout3d.png'), clip: { x: db.x, y: db.y, width: db.width, height: Math.min(db.height, Math.round((db.width * 7) / 12)) } });
+    await page.screenshot({ animations: 'disabled', path: join(out, 'feat-layout3d.png'), clip: { x: db.x, y: db.y, width: db.width, height: Math.min(db.height, Math.round((db.width * 7) / 12)) } });
     await page.keyboard.press('Escape');
 
     // The drawing set: pages as they print (white), from the charger sample.
@@ -174,13 +176,13 @@ test('screenshots of the sample projects, dark and light', async () => {
     await theme('light', 'white');
     for (const [file, title] of [['set-cover', 'Copertina'], ['set-single', 'Schema unifilare'], ['set-multi', 'Ingresso e moduli'], ['set-terminals', 'Schema morsettiere'], ['set-bom', 'Distinta materiali']] as const) {
       await goto(title);
-      await canvas().screenshot({ path: join(out, `${file}.png`) });
+      await canvas().screenshot({ animations: 'disabled', path: join(out, `${file}.png`) });
     }
     // The layout page prints at a standard scale in the company frame: show the print preview.
     await goto('piastra di montaggio');
     await page.getByLabel('Print preview (white)').check();
     await page.waitForTimeout(400);
-    await canvas().screenshot({ path: join(out, 'set-layout.png') });
+    await canvas().screenshot({ animations: 'disabled', path: join(out, 'set-layout.png') });
     await page.getByLabel('Print preview (white)').uncheck();
   } finally {
     await close();

@@ -35,7 +35,6 @@ const it: Record<string, string> = {
   'Electrical rule check': 'Controllo delle regole elettriche',
   'No findings': 'Nessuna segnalazione',
   'The electrical rule check found nothing.': 'Il controllo delle regole elettriche non ha trovato nulla.',
-  '{errors} errors, {warnings} warnings, {infos} notes': '{errors} errori, {warnings} avvisi, {infos} note',
   'Show findings': 'Mostra le segnalazioni',
   'Hide findings': 'Nascondi le segnalazioni',
   'Fix all that can be fixed': 'Correggi tutto il correggibile',

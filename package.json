@@ -17,6 +17,7 @@
     "test:e2e": "node scripts/e2e.mjs",
     "screenshots": "node scripts/e2e.mjs --screenshots",
     "record:demo": "node scripts/e2e.mjs --demo && node scripts/demo-video.mjs && node scripts/build-site.mjs",
+    "record:clips": "node scripts/e2e.mjs --clips && node scripts/clips-video.mjs && node scripts/build-site.mjs",
     "check:licenses": "node scripts/check-licenses.mjs",
     "check:library": "node scripts/check-library.mjs",
     "build:site": "node scripts/build-site.mjs",

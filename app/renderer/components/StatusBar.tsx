@@ -41,7 +41,7 @@ export function StatusBar() {
         {aid('dyn', t('DYN'))}
       </div>
       <span>{t('Zoom')} {zoom}%</span>
-      <button type="button" onClick={() => view()?.fit()}>{t('Fit page')}</button>
+      <button type="button" data-testid="fit-page" onClick={() => view()?.fit()}>{t('Fit page')}</button>
       <span className="sheet">{sheetText}</span>
       <span className="status-msg" data-testid="status-message">{hint}</span>
       <span className="ai-status" data-testid="ai-status" title={t('The assistant needs an API key for free-form requests: AI settings.')}>{ai ? (ai.active === 'built-in' ? t('Assistant: built-in (no API key)') : t('Assistant: {name}', { name: PROVIDER_INFO[ai.active].name })) : ''}</span>

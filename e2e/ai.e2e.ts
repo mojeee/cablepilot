@@ -123,6 +123,29 @@ test('the assistant uses its tools through the chat and the command line; propos
   }
 });
 
+test('undoing a starter on a new page goes back to the page it was asked from', async () => {
+  const { page, close } = await launch({ env: { CP_AI_FAKE: '1' } });
+  try {
+    await page.getByTestId('samples').selectOption('conveyor');
+    await page.getByTestId('page-5').click();
+    await page.getByTestId('ai-settings-open').click();
+    await page.getByTestId('ai-key').fill(FAKE_KEY);
+    await page.getByTestId('ai-key-save').click();
+    await page.keyboard.press('Escape');
+    const chat = page.getByTestId('panel-chat');
+    // Page 5 is full, so the starter goes on a new page 6.
+    await chat.getByTestId('chat-input').fill('add a star-delta starter for a 7.5 kW motor on page 5');
+    await chat.getByTestId('chat-send').click();
+    await chat.getByTestId('chat-accept').click();
+    await expect(chat.getByTestId('chat-outcome')).toContainText('Accepted');
+    await page.getByTestId('page-6').click();
+    await page.keyboard.press('Control+z');
+    await expect(page.getByTestId('page-5')).toHaveAttribute('aria-current', 'page');
+  } finally {
+    await close();
+  }
+});
+
 test('the assistant answers in Italian and its settings are translated', async () => {
   const { page, close } = await launch({ env: { CP_AI_FAKE: '1' } });
   try {

@@ -31,15 +31,22 @@ export interface Pending {
   command: Command;
 }
 
+export interface Hint {
+  text: string;
+  prompt: string;
+  coil?: { page: string; el: string };
+}
+
 interface ChatState {
   messages: ChatMsg[];
   busy: boolean;
   proposal: Pending | null;
-  hint: { text: string; prompt: string } | null;
+  /** A context hint; `coil` names the coil it is about, so it goes away once that coil has a contact or is gone. */
+  hint: Hint | null;
   status: AiStatus | null;
   /** What the assistant is doing now, one plain line per tool call (while busy). */
   progress: string[];
-  setHint(h: { text: string; prompt: string } | null): void;
+  setHint(h: Hint | null): void;
   loadStatus(): Promise<void>;
   /** Settings actions (the AI settings dialog); each returns an error message or null. */
   setSettings(patch: { provider?: AiProviderId; model?: string }): Promise<string | null>;

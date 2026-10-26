@@ -3,9 +3,10 @@
 // Enter or Space to repeat the last command, Esc to cancel. Text that is not a command goes to the
 // assistant (cad/run.ts). The context hint of the assistant (for example after placing a coil) shows
 // above it.
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { t } from '@shared/i18n';
 import { autocomplete } from '@shared/cad/commands';
+import { deviceIndex } from '@shared/devices';
 import { escapeKey, submit } from '../cad/run';
 import { useCad } from '../state/cad';
 import { useChat } from '../state/chat';
@@ -30,6 +31,19 @@ export function CommandLine() {
   useEffect(() => {
     logEl.current?.scrollTo({ top: logEl.current.scrollHeight });
   }, [log.length]);
+
+  // A "add the contacts" hint is done once its coil has a contact (or any other part of the device) or is gone.
+  const project = useEditor((s) => s.history.present);
+  const lib = useEditor((s) => s.lib);
+  const hintDone = useMemo(() => {
+    const c = hint?.coil;
+    if (!c) return false;
+    const d = deviceIndex(project, lib).byEl.get(`${c.page}/${c.el}`);
+    return !d || d.device.reps.some((r) => r.el !== c.el);
+  }, [hint, project, lib]);
+  useEffect(() => {
+    if (hintDone) useChat.getState().setHint(null);
+  }, [hintDone]);
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const mod = e.metaKey || e.ctrlKey;

@@ -54,5 +54,13 @@ const it: Record<string, string> = {
   'Untitled project': 'Progetto senza titolo',
   'Fit page': 'Adatta alla pagina',
   'Info': 'Info',
+  '1 error': '1 errore',
+  '{n} errors': '{n} errori',
+  '1 warning': '1 avviso',
+  '{n} warnings': '{n} avvisi',
+  '1 note': '1 nota',
+  '{n} notes': '{n} note',
+  'File': 'File',
+  'Display': 'Visualizzazione',
 };
 export default it;

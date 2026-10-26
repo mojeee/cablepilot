@@ -7,6 +7,7 @@ import type { PageType } from '@shared/sheets';
 import { changedPages } from '@shared/revisions';
 import { useMemo } from 'react';
 import { useEditor } from '../state/editor';
+import { Icon } from './Icons';
 import { useUi } from '../state/ui';
 
 /** The label of a page type. Literal t() calls, so the i18n test sees every string. */
@@ -44,12 +45,13 @@ export function PageNavigator() {
   return (
     <nav className="panel navigator" aria-label={t('Page navigator')}>
       <h2>{t('Pages')}</h2>
-      <div className="row-buttons">
-        <button type="button" data-testid="add-page" title={t('Add a page')} onClick={() => setDialog('addPage')}>+</button>
-        <button type="button" title={t('Duplicate page')} disabled={!cur} onClick={() => cur && exec({ type: 'page/add', page: duplicatePage(cur), index: i + 1 })}>{t('Copy')}</button>
-        <button type="button" title={t('Move page up')} disabled={i <= 0} onClick={() => exec({ type: 'page/move', id: pageId, index: i - 1 })}>↑</button>
-        <button type="button" title={t('Move page down')} disabled={i < 0 || i >= project.pages.length - 1} onClick={() => exec({ type: 'page/move', id: pageId, index: i + 1 })}>↓</button>
-        <button type="button" title={t('Delete page')} disabled={project.pages.length <= 1} onClick={() => exec({ type: 'page/remove', id: pageId })}>✕</button>
+      <div className="row-buttons icon-row">
+        <button type="button" className="icon-btn" data-testid="add-page" title={t('Add a page')} aria-label={t('Add a page')} onClick={() => setDialog('addPage')}><Icon name="page" size={15} /></button>
+        <button type="button" className="icon-btn" title={t('Duplicate page')} aria-label={t('Duplicate page')} disabled={!cur} onClick={() => cur && exec({ type: 'page/add', page: duplicatePage(cur), index: i + 1 })}><Icon name="copy" size={15} /></button>
+        <button type="button" className="icon-btn" title={t('Move page up')} aria-label={t('Move page up')} disabled={i <= 0} onClick={() => exec({ type: 'page/move', id: pageId, index: i - 1 })}>↑</button>
+        <button type="button" className="icon-btn" title={t('Move page down')} aria-label={t('Move page down')} disabled={i < 0 || i >= project.pages.length - 1} onClick={() => exec({ type: 'page/move', id: pageId, index: i + 1 })}>↓</button>
+        <span className="grow" />
+        <button type="button" className="icon-btn danger" title={t('Delete page')} aria-label={t('Delete page')} disabled={project.pages.length <= 1} onClick={() => exec({ type: 'page/remove', id: pageId })}><Icon name="erase" size={15} /></button>
       </div>
       <ul>
         {project.pages.map((p, n) => (

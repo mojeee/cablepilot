@@ -434,3 +434,36 @@ Panel Designer) before release 1. Both are now parts of M8 in the roadmap. This 
 - Check the ladder conventions (page × 100 line numbers, 10 mm rungs, `205A` wire numbers) against what your North
   American customers expect. They are listed in `docs/to-verify.md`.
 
+
+## Design polish and short videos (done)
+
+**What works**
+
+- A design pass over the whole window:
+  - top bar with grouped icon buttons
+  - a calm warnings banner, with correct plurals
+  - tidy findings with page chips and soft fix buttons
+  - quieter panel headers
+  - clamped symbol names
+  - a three-line command history
+  - a tidier status bar (its hint still shows in full)
+  - info-style AI notice, real-looking links, readable tables
+  - dialogs with a shadow and a short fade-in
+  - thin scrollbars and hairline splitters
+
+  It covers the dark and light themes. A layout bug where the window could grow wider than the screen is fixed.
+  The website screenshots were taken again.
+- Short videos for the website, like BoardPilot's: one clip per feature area in English and Italian, recorded from
+  the real app on the sample projects. The captions are drawn into the picture. Run `npm run record:clips` to record
+  them again after any visible change.
+
+**What is left**
+
+- The full demo video (`npm run record:demo`) still shows the previous look. Record it again before release 1.
+- The clips do not show the M8 part 2 features (ladder pages, auto-wire, project history) yet. Add a clip for them in
+  `e2e/clips.json` when those screens are final.
+
+**What the owner must do by hand**
+
+- Watch the clips on the landing page in both languages and tell us which caption or step should change. Each clip
+  is data in `e2e/clips.json` plus one script in `e2e/clips.e2e.ts`.

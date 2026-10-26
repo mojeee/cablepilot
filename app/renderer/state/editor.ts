@@ -194,6 +194,19 @@ export const useEditor = create<EditorState>((set, get) => {
   const ctx = () => ({ lib: get().lib });
   const flash = (severity: 'info' | 'warning' | 'error', text: () => string) => msg().addMessage(severity, text);
   const errMsg = (e: { message: string; hint: string }) => flash('error', () => `${e.message} ${e.hint}`);
+  /**
+   * After an edit, undo or redo: keep the page when it still exists, otherwise go to the page before the one that
+   * went away (undoing a page the assistant added returns to the page you asked from, not to the cover sheet), and
+   * keep only the selected elements that still exist.
+   */
+  const settle = (h: History) => {
+    const before = get().history.present;
+    const p = h.present;
+    const idx = before.pages.findIndex((x) => x.id === get().pageId);
+    const pg = pageById(p, get().pageId) ?? p.pages[Math.max(0, Math.min(idx - 1, p.pages.length - 1))] ?? p.pages[0];
+    const ids = new Set(pg?.elements.map((e) => e.id));
+    set({ history: h, pageId: pg?.id ?? '', selection: get().selection.filter((id) => ids.has(id)) });
+  };
 
   const withLoaded = (p: Project, path: string | null) => {
     void window.cablepilot.autosave.clear(get().project().id);
@@ -235,27 +248,17 @@ export const useEditor = create<EditorState>((set, get) => {
       // On a layout page a move snaps devices to rails and rails take their devices along.
       const h = execHistory(get().history, adaptMove(get().history.present, get().lib, cmd), ctx());
       if (h === get().history) return;
-      const p = h.present;
-      // Keep the selection to elements that still exist; keep the page if it still exists.
-      const pg = pageById(p, get().pageId) ?? p.pages[0];
-      const ids = new Set(pg?.elements.map((e) => e.id));
-      set({ history: h, pageId: pg?.id ?? '', selection: get().selection.filter((id) => ids.has(id)) });
+      settle(h);
     },
     undo: () => {
       const h = undoHistory(get().history);
       if (h === get().history) return;
-      const p = h.present;
-      const pg = pageById(p, get().pageId) ?? p.pages[0];
-      const ids = new Set(pg?.elements.map((e) => e.id));
-      set({ history: h, pageId: pg?.id ?? '', selection: get().selection.filter((id) => ids.has(id)) });
+      settle(h);
     },
     redo: () => {
       const h = redoHistory(get().history);
       if (h === get().history) return;
-      const p = h.present;
-      const pg = pageById(p, get().pageId) ?? p.pages[0];
-      const ids = new Set(pg?.elements.map((e) => e.id));
-      set({ history: h, pageId: pg?.id ?? '', selection: get().selection.filter((id) => ids.has(id)) });
+      settle(h);
     },
     select: (selection) => set({ selection }),
     setPage: (pageId) => set({ pageId, selection: [] }),
@@ -535,7 +538,7 @@ export const useEditor = create<EditorState>((set, get) => {
       flash('info', () => (des ? t('Placed {designation} ({symbol}).', { designation: des, symbol: title }) : t('Placed {symbol}.', { symbol: title })));
       set({ selection: [id] });
       // Context hint (M6 part 2): a coil placed with a designation offers its contacts.
-      if (def.function === 'coil' && des) useChat.getState().setHint({ text: t('Add the contacts of {des}?', { des }), prompt: `add contacts for ${des}` });
+      if (def.function === 'coil' && des) useChat.getState().setHint({ text: t('Add the contacts of {des}?', { des }), prompt: `add contacts for ${des}`, coil: { page: pg.id, el: id } });
     },
 
     deleteSelection: () => {

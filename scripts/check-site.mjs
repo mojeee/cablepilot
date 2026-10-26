@@ -118,6 +118,14 @@ export function checkSite(siteDir, site) {
       else if (f.endsWith('.vtt') && !readFileSync(p, 'utf8').startsWith('WEBVTT')) problems.push(`site/${f} is not a WebVTT file`);
     }
   }
+  // Short clips (npm run record:clips): each MP4 has its poster and stays small enough to load on a landing page.
+  if (existsSync(videoDir)) {
+    for (const f of readdirSync(videoDir).filter((x) => /^clip-.+\.mp4$/.test(x))) {
+      const poster = f.replace(/\.mp4$/, '.jpg');
+      if (!existsSync(join(videoDir, poster))) problems.push(`site/video/${poster} is missing (the poster of ${f})`);
+      if (statSync(join(videoDir, f)).size > 4 * 1024 * 1024) problems.push(`site/video/${f} is over 4 MB`);
+    }
+  }
   // The sitemap lists only pages that exist and are not noindex.
   const sitemap = join(siteDir, 'sitemap.xml');
   if (existsSync(sitemap)) {

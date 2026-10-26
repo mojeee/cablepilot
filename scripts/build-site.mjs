@@ -148,6 +148,10 @@ const videoExists = (name) => existsSync(join(siteDir, 'video', name));
 // A recording counts once its WebM and MP4 and its poster (site/img/) exist; scripts/check-site.mjs then demands the rest.
 const heroVideo = videoExists('hero.webm') && videoExists('hero.mp4') && imgExists('hero-poster.png');
 const demoVideo = videoExists('demo.webm') && videoExists('demo.mp4') && imgExists('demo-poster.png');
+// The short clips (npm run record:clips, e2e/clips.json): one per feature area and language, captions in the picture.
+// A clip shows in a language once its MP4 and poster exist; the section shows once any clip does.
+const CLIPS = JSON.parse(read('e2e/clips.json')).clips;
+const clipReady = (id, lang) => videoExists(`clip-${id}-${lang}.mp4`) && videoExists(`clip-${id}-${lang}.jpg`);
 
 // ---------------------------------------------------------------------------------------------
 // Output registry: every page and file goes through here, so the sitemap and the link check see it.
@@ -318,7 +322,20 @@ function landingVars(lang) {
   const demoMedia = demoVideo
     ? `<a class="demo-poster" href="${DEMO[lang]}"><img src="/img/demo-poster.png" alt="${esc(tx(lang, 'demo.poster.alt'))}" width="1920" height="1080" loading="lazy" /></a>\n    <p class="actions"><a class="btn primary" href="${DEMO[lang]}">${esc(tx(lang, 'demo.watch'))}</a></p>`
     : `<div class="video-slot"><p>${esc(tx(lang, 'demo.pending'))}</p></div>`;
-  return { features, strip, shotDark: shot('dark'), shotLight: shot('light'), compare, status, heroMedia, demoMedia, demoHref: DEMO[lang], RELEASES, DISCUSSIONS, companiesHref: COMPANIES[lang] };
+  const clips = CLIPS.filter((c) => clipReady(c.id, lang));
+  const clipsSection = clips.length
+    ? `<section class="band light" id="videos">
+  <div class="wrap">
+    <h2>${esc(tx(lang, 'clips.title'))}</h2>
+    <p class="lead">${esc(tx(lang, 'clips.lead'))}</p>
+    <div class="video-grid">
+      ${clips.map((c) => `<figure class="video-card" id="video-${c.id}"><video src="/video/clip-${c.id}-${lang}.mp4" poster="/video/clip-${c.id}-${lang}.jpg" width="1280" height="720" controls muted loop playsinline preload="none" aria-label="${esc(c.title[lang])}"></video><figcaption><b>${esc(c.title[lang])}</b><span>${esc(c.desc[lang])}</span></figcaption></figure>`).join('\n      ')}
+    </div>
+    <p class="note">${esc(tx(lang, 'clips.note'))}</p>
+  </div>
+</section>`
+    : '';
+  return { features, strip, shotDark: shot('dark'), shotLight: shot('light'), compare, status, heroMedia, demoMedia, clipsSection, demoHref: DEMO[lang], RELEASES, DISCUSSIONS, companiesHref: COMPANIES[lang] };
 }
 
 for (const lang of ['en', 'it']) {

@@ -2,6 +2,30 @@
 
 ## Unreleased
 
+### Design polish and short videos
+
+- A design pass over the whole window:
+  - The top bar has compact icon buttons in groups (file, edit, PDF export as a split button, display settings).
+    The file buttons keep only their icons on narrower windows.
+  - The warnings banner is a calm tinted bar with an icon, and its counts read "1 error, 6 warnings, 0 notes".
+  - Findings show a severity dot, the page as a chip and a soft "Fix" button.
+  - Messages use the UI font.
+  - The page list has icon buttons and a clear selected page.
+  - Panel headers keep the dock selector dim until hovered.
+  - Symbol tiles clamp long names to two lines.
+  - The empty strip above the command line is gone. The command history shows exactly three lines, and the status
+    bar's hint is never cut off.
+  - The AI notice is an info callout; links look like links.
+  - Tables have a header row, row hover and middle-aligned editable rows.
+  - Dialogs have a shadow and a short fade-in. Scrollbars are thin, focus rings are consistent, and the splitters
+    are hairlines.
+  - Fixed: the window could grow wider than the screen when the status bar text was long.
+- Short videos on the website, like BoardPilot's: one clip per feature area in English and Italian, recorded from the
+  real app on the sample projects with the captions in the picture (`npm run record:clips`, `e2e/clips.json`,
+  `scripts/clips-video.mjs`). They are shown in a "See every feature in half a minute" grid on the landing page.
+- The website screenshots are taken again with the new design. The screenshot script waits for animations and
+  follows the canvas when the warnings banner appears.
+
 ### M8 part 2: Panel designer features
 
 - Insert a symbol onto a wire: placing a symbol cuts every wire that two or more of its pins lie on, between them.
