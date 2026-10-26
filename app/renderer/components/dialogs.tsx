@@ -15,10 +15,12 @@ export function AddPageDialog() {
   const [title, setTitle] = useState('');
   const [size, setSize] = useState<SheetSize>(defaultSize);
   const [preset, setPreset] = useState(FORM_PRESETS[0].id);
+  const [ladder, setLadder] = useState(false);
+  const canLadder = type === 'control' || type === 'power' || type === 'plc';
   const close = () => useEditor.getState().setDialog(null);
   const add = () => {
     const p = FORM_PRESETS.find((x) => x.id === preset);
-    useEditor.getState().addPage(type, title.trim() || (type === 'data' && p ? p.title[lang] : pageTypeLabel(type)), size, preset);
+    useEditor.getState().addPage(type, title.trim() || (type === 'data' && p ? p.title[lang] : pageTypeLabel(type)), size, preset, canLadder && ladder);
     close();
   };
   return (
@@ -35,6 +37,7 @@ export function AddPageDialog() {
           </select>
         </label>
       )}
+      {canLadder && <label className="prop check"><input type="checkbox" data-testid="new-page-ladder" checked={ladder} onChange={(e) => setLadder(e.target.checked)} /> <span>{t('Ladder page: rails and numbered rungs (NFPA 79 style)')}</span></label>}
       <label className="prop"><span>{t('Sheet title')}</span><input type="text" data-testid="new-page-title" value={title} placeholder={pageTypeLabel(type)} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && add()} /></label>
       <label className="prop"><span>{t('Sheet size')}</span>
         <select value={size} onChange={(e) => setSize(e.target.value as SheetSize)}>{SHEET_SIZES.map((x) => <option key={x}>{x}</option>)}</select>

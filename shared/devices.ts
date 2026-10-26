@@ -5,6 +5,7 @@
 // Pages are scanned once and cached while their object is unchanged, so editing one page rescans
 // only that page (incremental, product rule 7).
 
+import { rungAt } from './ladder';
 import { sheetMm } from './sheets';
 import type { Library, Role } from './library/types';
 import { symbolRole, withProjectSymbols } from './library/types';
@@ -105,7 +106,8 @@ export function deviceIndex(project: Project, libIn: Library): DeviceIndex {
       const z = zoneAt(project, page, r.x, r.y);
       const rep: DeviceRepr = {
         page: page.id, pageIndex, el: r.id, kind: r.kind, symbolId: r.symbolId, role: symbolRole(def), x: r.x, y: r.y,
-        position: formatPosition(project.settings.crossRef, pageIndex + 1, z.col, z.row),
+        // On a ladder page the position is the line number of the rung (M8 part 2).
+        position: page.ladder ? String(rungAt(page, r.y) ?? '') : formatPosition(project.settings.crossRef, pageIndex + 1, z.col, z.row),
       };
       if (def?.function === 'contact-no') rep.contact = 'no';
       else if (def?.function === 'contact-nc') rep.contact = 'nc';

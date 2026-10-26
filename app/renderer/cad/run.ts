@@ -7,6 +7,9 @@ import { autocomplete, routeInput, resolveCommand } from '@shared/cad/commands';
 import { parsePointInput } from '@shared/cad/input';
 import { OSNAP_MODES, type OsnapMode } from '@shared/cad/snap';
 import { runChecks } from '@shared/checks';
+import { autoWire } from '@shared/autowire';
+import { newId } from '@shared/ids';
+import { withProjectSymbols } from '@shared/library/types';
 import { withShown, type PanelId } from '@shared/layout';
 import { useChat } from '../state/chat';
 import { useCad } from '../state/cad';
@@ -83,6 +86,19 @@ const RUN: Record<string, Runner> = {
   BOX: () => ed().setTool('symbol', 'box:blackbox'),
   CONNECTOR: () => ed().setTool('symbol', 'box:connector'),
   NUMBER: () => ed().renumberWires(),
+  LADDER: (a) => {
+    const off = /^(off|no|0)$/i.test(a.trim());
+    ed().setLadder(!off);
+    cad().say('info', off ? t('This page is a normal page again.') : t('This page is a ladder page: rungs are numbered and cross-references show line numbers.'));
+  },
+  AUTOWIRE: () => {
+    const pg = ed().page();
+    if (!pg) return;
+    const paths = autoWire(pg, withProjectSymbols(ed().lib, ed().project().symbols), ed().selection);
+    if (!paths.length) return cad().say('error', t('AUTOWIRE: select two or more symbols with free connection points facing each other.'));
+    ed().exec({ type: 'batch', label: 'auto-wire', commands: paths.map((points) => ({ type: 'wire/add' as const, page: pg.id, id: newId('w'), points })) });
+    cad().say('info', t('Auto-wire: wires drawn: {n}.', { n: paths.length }));
+  },
   RENUMBER: () => ed().exec({ type: 'designation/renumber' }),
   WIRES: dialog('wires'),
   REPORT: dialog('reports'),
@@ -101,6 +117,7 @@ const RUN: Record<string, Runner> = {
   RESERVE: dialog('reservation'),
   AISETTINGS: dialog('ai'),
   REVISIONS: dialog('revisions'),
+  HISTORY: dialog('history'),
   SETTINGS: dialog('settings'),
   ADDPAGE: dialog('addPage'),
   NEW: () => ed().newProject(),

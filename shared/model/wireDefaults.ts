@@ -25,6 +25,8 @@ export const NUMBERING_PRESETS: Record<NumberingSettings['scheme'], string> = {
   sequential: '{n}',
   potential: '{n:3}{suffix}',
   'page-column': '{page:2}.{col}.{n}',
+  // Ladder pages: the line number the wire starts on, then A, B... for further wires on the same rung (a convention).
+  rung: '{rung}{sub}',
 };
 export const DEFAULT_NUMBERING: NumberingSettings = { scheme: 'potential', pattern: NUMBERING_PRESETS.potential, start: 1, step: 1 };
 

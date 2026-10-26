@@ -40,10 +40,10 @@ const GROUPS: Record<string, () => Group[]> = {
   ],
   insert: () => [
     { label: () => t('Symbols'), buttons: [b('INSERT', 'symbol', () => t('Symbol')), b('BOX', 'box', () => t('Black box')), b('CONNECTOR', 'connector', () => t('Connector'))] },
-    { label: () => t('Pages'), buttons: [b('ADDPAGE', 'page', () => t('Add page')), b('DXFIN', 'dxf', () => t('Import DXF'))] },
+    { label: () => t('Pages'), buttons: [b('ADDPAGE', 'page', () => t('Add page')), b('LADDER', 'ladder', () => t('Ladder page'), { testid: 'rb-ladder', title: () => t('Make this page a ladder page (rails and numbered rungs); LADDER OFF makes it a normal page') }), b('DXFIN', 'dxf', () => t('Import DXF'))] },
   ],
   wires: () => [
-    { label: () => t('Wires'), buttons: [b('WIRE', 'wire', () => t('Wire'), { testid: 'tool-wire', title: () => `${t('Wire')} (W)` }), b('NUMBER', 'number', () => t('Number wires'), { testid: 'number-wires', title: () => t('Number the wires automatically') }), b('WIRES', 'wires', () => t('Wires and cables'), { testid: 'wires' })] },
+    { label: () => t('Wires'), buttons: [b('WIRE', 'wire', () => t('Wire'), { testid: 'tool-wire', title: () => `${t('Wire')} (W)` }), b('NUMBER', 'number', () => t('Number wires'), { testid: 'number-wires', title: () => t('Number the wires automatically') }), b('AUTOWIRE', 'autowire', () => t('Auto-wire'), { testid: 'rb-autowire', title: () => t('Connect the selected symbols in sequence') }), b('WIRES', 'wires', () => t('Wires and cables'), { testid: 'wires' })] },
     { label: () => t('Designations'), buttons: [b('RENUMBER', 'renumber', () => t('Renumber'), { title: () => t('Renumber designations automatically') })] },
     { label: () => t('Check'), buttons: [b('CHECK', 'check', () => t('Rule check'))] },
   ],
@@ -51,7 +51,7 @@ const GROUPS: Record<string, () => Group[]> = {
     { label: () => t('Lists'), buttons: [b('REPORT', 'report', () => t('Reports'), { testid: 'reports' }), b('BOM', 'bom', () => t('BOM'), { testid: 'bom', title: () => t('Bill of materials') })] },
     { label: () => t('Sizing and stock'), buttons: [b('SIZE', 'size', () => t('Sizing'), { testid: 'sizing', title: () => t('Size cables and components from the schematic and the warehouse') }), b('WAREHOUSE', 'warehouse', () => t('Warehouse'), { testid: 'warehouse', title: () => t('Stock list, links to library parts') })] },
     { label: () => t('ERP'), buttons: [b('ERPPULL', 'erp', () => t('Pull stock'), { testid: 'rb-erp-pull', title: () => t('Pull the stock from the ERP') }), b('RESERVE', 'reserve', () => t('Reserve'), { testid: 'rb-reserve', title: () => t('Reservation request for the ERP') }), b('ERP', 'settings', () => t('ERP link'), { testid: 'rb-erp', title: () => t('ERP link: items, stock and reservations') })] },
-    { label: () => t('Issue'), buttons: [b('REVISIONS', 'revisions', () => t('Revisions'), { testid: 'revisions', title: () => t('Revisions and issue status') }), b('SETTINGS', 'settings', () => t('Project settings...'), { testid: 'settings' }), b('PDF', 'pdf', () => t('Export PDF'), { testid: 'rb-pdf' }), b('DXFOUT', 'dxf', () => t('Export DXF'))] },
+    { label: () => t('Issue'), buttons: [b('REVISIONS', 'revisions', () => t('Revisions'), { testid: 'revisions', title: () => t('Revisions and issue status') }), b('HISTORY', 'history', () => t('History'), { testid: 'rb-history', title: () => t('Project history: daily backups and saved versions') }), b('SETTINGS', 'settings', () => t('Project settings...'), { testid: 'settings' }), b('PDF', 'pdf', () => t('Export PDF'), { testid: 'rb-pdf' }), b('DXFOUT', 'dxf', () => t('Export DXF'))] },
   ],
   plc: () => [
     { label: () => t('PLC'), buttons: [b('PLC', 'plc', () => t('PLC I/O'), { testid: 'plc', title: () => t('PLC I/O overview and tag lists') }), b('INSERT', 'symbol', () => t('PLC input'), { args: 'plc-input', testid: 'rb-plc-input' }), b('INSERT', 'symbol', () => t('PLC output'), { args: 'plc-output', testid: 'rb-plc-output' })] },

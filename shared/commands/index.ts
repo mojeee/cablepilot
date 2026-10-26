@@ -3,14 +3,14 @@
 // redo are in history.ts; autosave and (later) the AI use the same path.
 
 import { pinWorld } from '../draw/symbol';
-import { junctionCandidates, needsJunction, normalizePoints, samePt } from '../geometry/wires';
+import { breakWire, junctionCandidates, needsJunction, normalizePoints, samePt } from '../geometry/wires';
 import { boxPinsWorld } from '../draw/box';
 import { keyOf } from '../devices';
 import type { Library, MacroDef, PartDef } from '../library/types';
 import { withProjectSymbols } from '../library/types';
 import type { SymbolDef } from '../library/types';
 import { placeMacro } from '../macros';
-import type { Layer, IssueStatus, LoadData, Revision, BoxEl, CableRec, DeviceRec, El, JunctionEl, Page, PartUse, Potential, Project, ProjectPart, ProjectSettings, Pt, RectEl, Rot, SymbolEl, Template, WireEl, WireClass, WireType, Asset } from '../model/types';
+import type { LadderSettings, Layer, IssueStatus, LoadData, Revision, BoxEl, CableRec, DeviceRec, El, JunctionEl, Page, PartUse, Potential, Project, ProjectPart, ProjectSettings, Pt, RectEl, Rot, SymbolEl, Template, WireEl, WireClass, WireType, Asset } from '../model/types';
 import { fullDesignation, nextDesignation, parseDesignation, renumber } from '../numbering';
 import { terminalStrips } from '../reports';
 import { renumberWires } from '../wires';
@@ -20,6 +20,8 @@ import { applyChannelEdits, assignEdits, type ChannelEdit } from '../plc';
 export type Command =
   | { type: 'project/set'; name?: string; properties?: Record<string, string>; assembly?: Record<string, string> }
   | { type: 'project/settings'; settings: Partial<ProjectSettings> }
+  /** Replaces the whole project, e.g. with a version from the project history (M8 part 2); one undo step. */
+  | { type: 'project/replace'; project: Project }
   | { type: 'project/potentials'; potentials: Potential[] }
   | { type: 'template/upsert'; template: Template }
   | { type: 'template/remove'; id: string }
@@ -29,13 +31,16 @@ export type Command =
   | { type: 'page/remove'; id: string }
   | { type: 'page/move'; id: string; index: number }
   | { type: 'page/update'; id: string; patch: Partial<Omit<Page, 'id' | 'elements'>> }
+  /** Makes a page a ladder page (rails drawn as wires with these potentials) or a normal page again (null). */
+  | { type: 'page/ladder'; id: string; ladder: LadderSettings | null; rails?: { left?: string; right?: string } }
   | { type: 'el/add'; page: string; elements: El[] }
   | { type: 'el/update'; page: string; id: string; patch: Record<string, unknown> }
   | { type: 'el/remove'; page: string; ids: string[] }
   | { type: 'el/move'; page: string; ids: string[]; dx: number; dy: number }
   | { type: 'el/rotate'; page: string; ids: string[] }
   | { type: 'el/mirror'; page: string; ids: string[] }
-  | { type: 'symbol/place'; page: string; element: SymbolEl; autoNumber?: boolean }
+  /** Places a symbol; with breakWires a wire that two or more of its pins lie on is cut between them (and renumbered when it was numbered automatically). */
+  | { type: 'symbol/place'; page: string; element: SymbolEl; autoNumber?: boolean; breakWires?: boolean }
   | { type: 'wire/add'; page: string; id: string; points: Pt[]; potential?: string; conductors?: number }
   | { type: 'designation/renumber'; page?: string }
   /** Numbers the wires automatically (the whole project, or the nets that touch one page). */
@@ -394,8 +399,24 @@ export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
         const c = centre(pg, cmd.ids);
         return transform(pg, cmd.ids, (p) => ({ x: 2 * c.x - p.x, y: p.y }), 'mirror', lib);
       });
-    case 'symbol/place':
-      return mapPage(project, cmd.page, (pg) => {
+    case 'project/replace': return cmd.project;
+    case 'page/ladder':
+      return mapPage(project, cmd.id, (pg) => {
+        const railIds = [`${pg.id}-rail-l`, `${pg.id}-rail-r`];
+        const rest = pg.elements.filter((e) => !railIds.includes(e.id));
+        if (!cmd.ladder) {
+          const { ladder: _l, ...plain } = pg;
+          return cleanupJunctions({ ...plain, elements: rest });
+        }
+        const l = cmd.ladder;
+        const rails: WireEl[] = [
+          { id: railIds[0], kind: 'wire', points: [{ x: l.left, y: l.top }, { x: l.left, y: l.bottom }], ...(cmd.rails?.left ? { potential: cmd.rails.left } : {}) },
+          { id: railIds[1], kind: 'wire', points: [{ x: l.right, y: l.top }, { x: l.right, y: l.bottom }], ...(cmd.rails?.right ? { potential: cmd.rails.right } : {}) },
+        ];
+        return { ...pg, ladder: l, elements: [...rest, ...rails] };
+      });
+    case 'symbol/place': {
+      const placed = mapPage(project, cmd.page, (pg) => {
         let el = cmd.element;
         const letters = lib.symbols.get(el.symbolId)?.designationLetter;
         const auto = lib.symbols.get(el.symbolId)?.autoNumber !== false;
@@ -403,6 +424,26 @@ export function apply(project: Project, cmd: Command, ctx: Ctx): Project {
         if (cmd.autoNumber && lib.symbols.get(el.symbolId)?.function === 'terminal') el = placeTerminal(project, pg, el, lib);
         return { ...pg, elements: [...pg.elements, el] };
       });
+      if (!cmd.breakWires) return placed;
+      const def = lib.symbols.get(cmd.element.symbolId);
+      if (!def) return placed;
+      let renumberPage = false;
+      const broken = mapPage(placed, cmd.page, (pg) => {
+        const pins = pinWorld(def, cmd.element);
+        let changed = false;
+        const elements = pg.elements.flatMap((e): El[] => {
+          if (e.kind !== 'wire') return [e];
+          const pieces = breakWire(e, pins, `${e.id}-${cmd.element.id}`);
+          if (!pieces) return [e];
+          changed = true;
+          if (e.number && !e.numberLocked) renumberPage = true;
+          return pieces;
+        });
+        return changed ? cleanupJunctions({ ...pg, elements }) : pg;
+      });
+      // An automatically numbered wire that was cut gets its numbers again, so the new piece has its own (one undo step).
+      return renumberPage ? renumberWires(broken, lib, cmd.page) : broken;
+    }
     case 'wire/add':
       return mapPage(project, cmd.page, (pg) => {
         const points = normalizePoints(cmd.points);

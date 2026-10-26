@@ -408,3 +408,29 @@ Panel Designer) before release 1. Both are now parts of M8 in the roadmap. This 
 - Decide whether reservations should go by HTTP or through an outbox folder, and who writes the small adapter on the
   ERP side that turns the request into a reservation.
 
+## M8 part 2: Panel designer features (done)
+
+**What works**
+
+- A symbol placed on a wire cuts it between its pins (renumbered in the same step when the wire was numbered
+  automatically). Auto-wire connects selected symbols in sequence, pole by pole. Ladder pages have rails, numbered
+  rungs, line-number cross-references and the `rung` wire-numbering scheme. Project history keeps daily backups
+  and named versions, with compare and restore (one undo step).
+- Tests: unit tests for each piece (`tests/panel.test.ts`) and an end-to-end test of all four (`e2e/panel.e2e.ts`).
+
+**What is left**
+
+- Only placing from the library cuts wires. Moving an existing symbol onto a wire does not, and neither do paste,
+  macros, imports or the assistant.
+- Auto-wire follows pin directions. A symbol rotated so that no pin faces the next one is skipped, and it does not
+  route around other symbols.
+- Ladder pages: the rails are ordinary wires (change their potential in the properties), and the contact image under a
+  coil lists line numbers but does not use the NFPA right-margin listing with underlined NC contacts. The line
+  numbers do not move when pages are reordered: switch the page back with `LADDER OFF` and then `LADDER` to renumber.
+- History files stay in the app's data folder of this computer; they do not travel with the project file.
+
+**What the owner must do by hand**
+
+- Check the ladder conventions (page × 100 line numbers, 10 mm rungs, `205A` wire numbers) against what your North
+  American customers expect. They are listed in `docs/to-verify.md`.
+

@@ -15,6 +15,7 @@ const api: CablePilotApi = {
   files: { open: call('files:open'), save: call('files:save'), exportPdf: call('files:exportPdf'), exportText: call('files:exportText'), exportBinary: call('files:exportBinary'), importDxf: call('files:importDxf'), importTags: call('files:importTags') },
   samples: { list: call('samples:list'), read: call('samples:read') },
   autosave: { write: call('autosave:write'), list: call('autosave:list'), read: call('autosave:read'), clear: call('autosave:clear') },
+  history: { list: call('history:list'), backup: call('history:backup'), saveVersion: call('history:saveVersion'), read: call('history:read'), remove: call('history:remove') },
   warehouse: {
     load: call('warehouse:load'), save: call('warehouse:save'), pickFile: call('warehouse:pickFile'), pickFolder: call('warehouse:pickFolder'),
     refresh: call('warehouse:refresh'), sample: call('warehouse:sample'), watch: call('warehouse:watch'),

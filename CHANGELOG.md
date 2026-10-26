@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+### M8 part 2: Panel designer features
+
+- Insert a symbol onto a wire: placing a symbol cuts every wire that two or more of its pins lie on, between them.
+  The contact is then in series instead of shorted. The new piece keeps the potential, type and cable. When the wire
+  was numbered automatically, the page's wires are numbered again in the same undo step.
+- Auto-wire (`AUTOWIRE`, `AW`, Wires tab): connects the selected symbols in sequence, pole by pole, top to bottom or
+  left to right, with orthogonal wires; pins that are already wired are left alone.
+- Ladder pages (NFPA 79 option): `LADDER` (Insert tab) or the "Ladder page" box when adding a page. The page gets
+  two rails (24 V DC and 0 V when the project has them) and line numbers per rung, page × 100 upwards, in the margin.
+  Cross-references and contact images on it show line numbers. The new `rung` wire-numbering scheme gives
+  `205`, `205A`... `LADDER OFF` makes it a normal page again.
+- Project history (`HISTORY`, Reports tab): a daily backup of each project (the newest 30 kept) and versions saved
+  with a name, in the app's data folder. Compare a version with the working copy (pages, devices, wires, parts) and
+  restore it as one undo step.
+- Tests: wire cutting and renumbering, auto-wire pairing and routing, ladder geometry, line-number positions and
+  rung numbering, a project with a ladder page against the schema, the history files (one per day, 30 kept, unsafe
+  names refused), restore as one command; an end-to-end test of all four in the built app.
+
 ### M8 part 1: ERP link
 
 - Live link with the company's ERP over HTTP (REST or OData v4 JSON, with paging). Items and stock are pulled into

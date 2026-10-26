@@ -20,7 +20,7 @@ export function statusLabel(s: IssueStatus): string {
 }
 const changeLabel = (s: 'added' | 'removed' | 'changed'): string => (s === 'added' ? t('added') : s === 'removed' ? t('removed') : t('changed'));
 
-function ChangeList({ title, items, testid }: { title: string; items: { key: string; status: 'added' | 'removed' | 'changed'; extra?: string }[]; testid: string }) {
+export function ChangeList({ title, items, testid }: { title: string; items: { key: string; status: 'added' | 'removed' | 'changed'; extra?: string }[]; testid: string }) {
   return (
     <div className="rev-list" data-testid={testid}>
       <h4>{title} ({items.length})</h4>
@@ -28,7 +28,7 @@ function ChangeList({ title, items, testid }: { title: string; items: { key: str
     </div>
   );
 }
-const items = (c: ItemChange[]) => c.map((x) => ({ key: x.key, status: x.status, extra: x.from !== undefined || x.to !== undefined ? t('{from} to {to}', { from: x.from ?? 0, to: x.to ?? 0 }) : undefined }));
+export const changeItems = (c: ItemChange[]) => c.map((x) => ({ key: x.key, status: x.status, extra: x.from !== undefined || x.to !== undefined ? t('{from} to {to}', { from: x.from ?? 0, to: x.to ?? 0 }) : undefined }));
 
 export function RevisionsDialog() {
   const project = useEditor((s) => s.history.present);
@@ -90,9 +90,9 @@ export function RevisionsDialog() {
           {cmp && (
             <div className="rev-compare" data-testid="compare">
               <ChangeList title={t('Pages')} testid="cmp-pages" items={cmp.pages.map((p) => ({ key: p.title, status: p.status }))} />
-              <ChangeList title={t('Devices')} testid="cmp-devices" items={items(cmp.devices)} />
-              <ChangeList title={t('Wires')} testid="cmp-wires" items={items(cmp.wires)} />
-              <ChangeList title={t('Parts')} testid="cmp-parts" items={items(cmp.parts)} />
+              <ChangeList title={t('Devices')} testid="cmp-devices" items={changeItems(cmp.devices)} />
+              <ChangeList title={t('Wires')} testid="cmp-wires" items={changeItems(cmp.wires)} />
+              <ChangeList title={t('Parts')} testid="cmp-parts" items={changeItems(cmp.parts)} />
             </div>
           )}
         </>

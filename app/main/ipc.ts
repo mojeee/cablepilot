@@ -10,6 +10,7 @@ import type { SettingsStore } from './settings';
 import type { WarehouseService } from './warehouse';
 import type { LayoutService } from './layoutFiles';
 import type { ErpService } from './erp';
+import type { HistoryService } from './history';
 
 function guard<T>(fn: () => T): Result<T> {
   try {
@@ -30,7 +31,7 @@ async function guardAsync<T>(fn: () => Promise<Result<T>>): Promise<Result<T>> {
 
 const isKind = (k: unknown): k is CompanyKind => k === 'symbols' || k === 'templates' || k === 'macros' || k === 'parts' || k === 'layouts';
 
-export function registerIpc(deps: { settings: SettingsStore; files: FileService; warehouse: WarehouseService; layout: LayoutService; erp: ErpService }): void {
+export function registerIpc(deps: { settings: SettingsStore; files: FileService; warehouse: WarehouseService; layout: LayoutService; erp: ErpService; history: HistoryService }): void {
   const { files } = deps;
   ipcMain.handle('app:info', (): Result<AppInfo> => guard(() => ({ name: app.getName(), version: app.getVersion(), platform: process.platform })));
   ipcMain.handle('settings:get', (): Result<Settings> => guard(() => deps.settings.get()));
@@ -55,6 +56,13 @@ export function registerIpc(deps: { settings: SettingsStore; files: FileService;
   ipcMain.handle('autosave:list', () => safe(() => files.listAutosaves()));
   ipcMain.handle('autosave:read', (_e, id: string) => safe(() => files.readAutosave(String(id))));
   ipcMain.handle('autosave:clear', (_e, id: string) => safe(() => files.clearAutosave(String(id))));
+  const hist = deps.history;
+  const str = (v: unknown): string => (typeof v === 'string' ? v : '');
+  ipcMain.handle('history:list', (_e, id: unknown) => safe(() => (setLanguage(deps.settings.get().language), hist.list(str(id)))));
+  ipcMain.handle('history:backup', (_e, id: unknown, name: unknown, text: unknown) => safe(() => hist.backup(str(id), str(name), str(text))));
+  ipcMain.handle('history:saveVersion', (_e, id: unknown, name: unknown, text: unknown) => safe(() => (setLanguage(deps.settings.get().language), hist.saveVersion(str(id), str(name), str(text)))));
+  ipcMain.handle('history:read', (_e, id: unknown, entry: unknown) => safe(() => (setLanguage(deps.settings.get().language), hist.read(str(id), str(entry)))));
+  ipcMain.handle('history:remove', (_e, id: unknown, entry: unknown) => safe(() => (setLanguage(deps.settings.get().language), hist.remove(str(id), str(entry)))));
   const wh = deps.warehouse;
   ipcMain.handle('warehouse:load', () => safe(() => wh.load()));
   ipcMain.handle('warehouse:save', (_e, data: unknown) => safe(() => wh.save(data)));

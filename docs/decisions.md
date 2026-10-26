@@ -477,6 +477,35 @@ ways. No specific ERP was named, so the conservative choice is one generic conne
   it serves the generic sample stock list as OData v4 in pages of 25 and accepts reservations (raising "reserved").
   It shows the whole two-way flow without a real ERP (rule 10) and is what the end-to-end test talks to.
 
+## M8 part 2: Panel designer features
+
+The owner asked (2026-10-26) for the features of Siemens Capital Electra X, now Capital X Panel Designer. Most were
+already there; these four were missing.
+
+- **Inserting a symbol onto a wire cuts the wire.** A pin anywhere on a wire joins it (connectivity), so a contact
+  dropped on a wire used to short itself. Placing a symbol from the library now cuts every wire that two or more of
+  its pins lie on, between the first and the last pin along the wire. The piece before keeps the wire (id, number,
+  potential, type, cable); the piece after is a new wire with the same properties and no number. When the cut wire
+  was numbered automatically, the wires of that page are numbered again in the same step, so the new piece gets its
+  own number (the same as pressing Number for the page). A pin that only taps a wire (one pin on it) still joins it.
+  Pasting, macros, imports and the assistant keep the old behaviour: they place exactly what they describe.
+- **Auto-wire** (`AUTOWIRE`, `AW`) connects the selected symbols in sequence along the direction they are spread in
+  (top to bottom, or left to right). Outgoing pins (down, or right) go to the next symbol's incoming pins (up, or
+  left), the pairs nearest across first, so a three-pole breaker above a contactor gets three straight wires. Pins
+  that already touch a wire are left alone. Wires are orthogonal, with a jog halfway when the pins are not in line.
+- **Ladder pages** (NFPA 79 option): a page setting with the two rails, the rung spacing and the line number of the
+  first rung. The rails are drawn as real wires (24 V DC and 0 V when the project has them), so connectivity and
+  numbering need nothing special. Line numbers start at page number × 100 and go up by one per rung, every 10 mm.
+  On a ladder page a device's position is its line number, so contact images and cross-references read "205". The
+  `rung` wire-numbering scheme (`{rung}{sub}`) gives a wire the line number it starts on, then A, B... for further
+  wires on the same rung; off a ladder page `{rung}` is "page-column". These are drawing conventions common in North
+  American practice, not values from NFPA 79. The first number, the spacing and the pattern are company choices.
+- **Project history.** A backup of each project is written the first time it is autosaved or saved on a day (the
+  newest 30 are kept), and the user can save versions with a name. They are files in the app's data folder
+  (`history/<project id>/`), in addition to the project file, never instead of it. A version is compared with the
+  working copy with the same comparison as revisions (pages, devices, wires, parts) and restored with a new command,
+  `project/replace`, so a restore is one undo step. The assistant is not offered `project/replace`.
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite

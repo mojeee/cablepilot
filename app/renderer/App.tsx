@@ -18,6 +18,7 @@ import { SizingDialog } from './components/SizingDialog';
 import { WarehouseDialog } from './components/WarehouseDialog';
 import { ErpDialog } from './components/ErpDialog';
 import { ReservationDialog } from './components/ReservationDialog';
+import { HistoryDialog } from './components/HistoryDialog';
 import { useErp } from './state/erp';
 import { AiSettingsDialog } from './components/AiSettingsDialog';
 import { LayoutDialog } from './components/LayoutDialog';
@@ -98,6 +99,7 @@ export function App() {
       {dialog === 'warehouse' && <WarehouseDialog />}
       {dialog === 'erp' && <ErpDialog />}
       {dialog === 'reservation' && <ReservationDialog />}
+      {dialog === 'history' && <HistoryDialog />}
       {dialog === 'ai' && <AiSettingsDialog />}
       {dialog === 'layout' && <LayoutDialog />}
       {dialog === 'layout3d' && <Suspense fallback={null}><Cabinet3D /></Suspense>}

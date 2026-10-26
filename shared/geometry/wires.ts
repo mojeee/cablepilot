@@ -70,3 +70,61 @@ export function junctionCandidates(page: Page, wire: WireEl): Pt[] {
   }
   return cands;
 }
+
+// ---- inserting a symbol into a wire (M8 part 2) ----------------------------------------------------------------
+
+const segLen = (a: Pt, b: Pt): number => Math.hypot(b.x - a.x, b.y - a.y);
+
+/** Distance along the polyline to a point on it (the first segment that holds it); undefined when it is not on it. */
+export function distanceAlong(p: Pt, pts: Pt[]): number | undefined {
+  let s = 0;
+  for (let i = 0; i + 1 < pts.length; i++) {
+    if (onSegment(p, pts[i], pts[i + 1])) return s + segLen(pts[i], p);
+    s += segLen(pts[i], pts[i + 1]);
+  }
+  return undefined;
+}
+
+/** The part of a polyline between two distances along it. */
+export function subPolyline(pts: Pt[], from: number, to: number): Pt[] {
+  const out: Pt[] = [];
+  let s = 0;
+  const at = (a: Pt, b: Pt, d: number): Pt => {
+    const l = segLen(a, b);
+    return l === 0 ? { x: a.x, y: a.y } : { x: a.x + ((b.x - a.x) * d) / l, y: a.y + ((b.y - a.y) * d) / l };
+  };
+  for (let i = 0; i + 1 < pts.length; i++) {
+    const a = pts[i], b = pts[i + 1], l = segLen(a, b);
+    const s0 = s, s1 = s + l;
+    s = s1;
+    if (s1 < from - EPS || s0 > to + EPS) continue;
+    const start = Math.max(from, s0), end = Math.min(to, s1);
+    if (out.length === 0) out.push(at(a, b, start - s0));
+    out.push(at(a, b, end - s0));
+  }
+  return normalizePoints(out);
+}
+
+const polyLen = (pts: Pt[]): number => pts.reduce((a, p, i) => (i ? a + segLen(pts[i - 1], p) : a), 0);
+
+/**
+ * Cuts a wire between the pins of a symbol inserted on it: a symbol with two or more pins on the same wire would
+ * otherwise join them (a pin on a wire connects, shared/connectivity.ts) and short the device. The piece before the
+ * first pin keeps the wire; the piece after the last pin becomes a new wire. Pieces of zero length are dropped.
+ * Returns the wires that replace `wire`, or null when fewer than two pins lie on it.
+ */
+export function breakWire(wire: WireEl, pins: readonly Pt[], newId: string): WireEl[] | null {
+  const along = pins.map((p) => distanceAlong(p, wire.points)).filter((d): d is number => d !== undefined);
+  if (along.length < 2) return null;
+  const lo = Math.min(...along), hi = Math.max(...along);
+  if (hi - lo < EPS) return null;
+  const total = polyLen(wire.points);
+  const out: WireEl[] = [];
+  const before = lo > EPS ? subPolyline(wire.points, 0, lo) : [];
+  const after = hi < total - EPS ? subPolyline(wire.points, hi, total) : [];
+  // The new piece is a new conductor: same potential, type and cable, but its own number.
+  const { number: _n, numberLocked: _l, ...rest } = wire;
+  if (before.length >= 2) out.push({ ...wire, points: before });
+  if (after.length >= 2) out.push(out.length ? { ...rest, id: newId, points: after } : { ...wire, points: after });
+  return out;
+}

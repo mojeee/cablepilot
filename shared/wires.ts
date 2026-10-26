@@ -3,6 +3,7 @@
 // (a net, and the nets joined to it across pages by interruption points, carries one number) and
 // stored on the wires so they print and export; renumbering is a command and undoes like any edit.
 
+import { rungAt } from './ladder';
 import { netGroups, projectNets, type Net } from './connectivity';
 import { zoneAt } from './devices';
 import type { Library } from './library/types';
@@ -64,19 +65,29 @@ export const bundleLabel = (s: WireSpec): string => `${s.crossSection ? `${s.cro
 
 export interface NumberCtx {
   n: number;
+  /** Rung scheme: the line number (or "page-column" off a ladder page) and the letter of a further wire on it. */
+  rung?: string;
+  sub?: string;
   page: number;
   col: string;
   row: string;
   potential: string;
   suffix: string;
 }
-/** Fills a numbering pattern: {n} {n:3} (padded counter), {page} {page:2}, {col}, {row}, {potential}, {suffix}. */
+/** Fills a numbering pattern: {n} {n:3} (padded counter), {page} {page:2}, {col}, {row}, {potential}, {suffix}, {rung}, {sub}. */
 export function formatWireNumber(pattern: string, c: NumberCtx): string {
   return pattern.replace(/\{(\w+)(?::(\d+))?\}/g, (m, k: string, pad?: string) => {
-    const v = k === 'n' ? c.n : k === 'page' ? c.page : k === 'col' ? c.col : k === 'row' ? c.row : k === 'potential' ? c.potential : k === 'suffix' ? c.suffix : undefined;
+    const v = k === 'n' ? c.n : k === 'page' ? c.page : k === 'col' ? c.col : k === 'row' ? c.row : k === 'potential' ? c.potential : k === 'suffix' ? c.suffix : k === 'rung' ? c.rung ?? '' : k === 'sub' ? c.sub ?? '' : undefined;
     if (v === undefined) return m;
     return typeof v === 'number' && pad ? String(v).padStart(Number(pad), '0') : String(v);
   });
+}
+
+/** A, B, ... Z, AA, AB...: the letter of the n-th further wire on a rung (n from 1). */
+export function subLetter(n: number): string {
+  let s = '';
+  for (let x = n; x > 0; x = Math.floor((x - 1) / 26)) s = String.fromCharCode(65 + ((x - 1) % 26)) + s;
+  return s;
 }
 
 /** Page types whose wires are numbered: single-line pages, data pages and report pages are not. */
@@ -133,13 +144,20 @@ export function renumberWires(project: Project, lib: Library, pageId?: string, n
     const page = project.pages[g.firstPage];
     const zone = zoneAt(project, page, g.fx, g.fy);
     const spec = wireSpec(project, g.wires[0].wire, g.potential);
-    const scope = cfg.scheme === 'potential' ? `p:${g.potential}` : cfg.scheme === 'page-column' ? `c:${g.firstPage}:${zone.col}` : 's';
+    // Rung scheme: the line the wire starts on (its topmost point on a ladder page), "page-column" elsewhere.
+    const rungNo = cfg.scheme === 'rung' ? rungAt(page, Math.min(...g.wires.filter((w) => w.page === page).flatMap((w) => w.wire.points.map((p) => p.y)))) : undefined;
+    const rung = cfg.scheme === 'rung' ? (rungNo !== undefined ? String(rungNo) : `${g.firstPage + 1}-${zone.col}`) : undefined;
+    const scope = cfg.scheme === 'potential' ? `p:${g.potential}` : cfg.scheme === 'page-column' ? `c:${g.firstPage}:${zone.col}` : cfg.scheme === 'rung' ? `r:${rung}` : 's';
     let k = counters.get(scope) ?? cfg.start - cfg.step;
     let text: string;
+    let tries = 0;
     do {
       k += cfg.step;
-      text = formatWireNumber(cfg.pattern, { n: k, page: g.firstPage + 1, col: zone.col, row: zone.row, potential: g.potential, suffix: spec.suffix });
-    } while (used.has(text));
+      // {sub}: nothing for the first wire on a rung, then A, B... (counted from the start value).
+      const nth = Math.round((k - cfg.start) / cfg.step);
+      const sub = nth <= 0 ? '' : subLetter(nth);
+      text = formatWireNumber(cfg.pattern, { n: k, page: g.firstPage + 1, col: zone.col, row: zone.row, potential: g.potential, suffix: spec.suffix, ...(rung !== undefined ? { rung, sub } : {}) });
+    } while (used.has(text) && ++tries < 10_000);
     counters.set(scope, k);
     used.add(text);
     for (const w of g.wires) assigned.set(`${w.page.id}/${w.wire.id}`, text);

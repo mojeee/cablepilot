@@ -17,6 +17,7 @@ import { warningPrims } from './warning';
 import { reportPrims } from './report';
 import { coverPrims } from './cover';
 import { pageRevision } from '../revisions';
+import { rungs } from '../ladder';
 import { cabPrims, drawingArea, layoutBody, layoutCaption, layoutScale, transformPrims } from '../cabinet/draw';
 import { isLayoutPage } from '../cabinet/model';
 import { pageNets } from '../connectivity';
@@ -66,6 +67,8 @@ export function furniture(project: Project, page: Page, index: number): Prim[] {
       out.push(line(fx - 5, ty, fx, ty, 0.25, fc), line(fx + fw, ty, fx + fw + 5, ty, 0.25, fc));
     }
   });
+  // Ladder page (M8 part 2): the line number of every rung, left of the left rail.
+  if (page.ladder) for (const r of rungs(page.ladder)) out.push(txt(page.ladder.left - 3, r.y, String(r.n), 2.5, 'end', 0, st.colours.text));
   const margin = t.marginText ?? project.properties.copyright ?? '';
   if (margin) out.push(txt(w - 2, h / 2, margin, 2.2, 'middle', -90, fc));
   // Title block, bottom-right inside the frame.

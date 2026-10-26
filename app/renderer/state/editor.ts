@@ -2,6 +2,7 @@
 // tool, files, autosave and PDF export. The project itself is pure data from /shared and changes
 // only through commands (CLAUDE.md, Architecture): `exec` is the single door.
 
+import { defaultLadder } from '@shared/ladder';
 import { create } from 'zustand';
 import { t, getLanguage } from '@shared/i18n';
 import { apply, type Command } from '@shared/commands';
@@ -42,7 +43,7 @@ import { loadPdfFonts } from '../render/fonts';
 import { useUi } from './ui';
 
 export type Tool = 'select' | 'wire' | 'symbol' | 'text' | 'table' | 'image' | 'warning';
-export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc' | 'sizing' | 'warehouse' | 'erp' | 'reservation' | 'layout' | 'layout3d' | 'ai';
+export type Dialog = null | 'settings' | 'symbolEditor' | 'addPage' | 'shortcuts' | 'bom' | 'reports' | 'wires' | 'revisions' | 'plc' | 'sizing' | 'warehouse' | 'erp' | 'reservation' | 'history' | 'layout' | 'layout3d' | 'ai';
 
 export interface Recovery {
   id: string;
@@ -102,7 +103,9 @@ interface EditorState {
   openSample(id: string): Promise<void>;
   save(saveAs?: boolean): Promise<void>;
   exportPdf(scope: 'all' | 'page'): Promise<void>;
-  addPage(type: PageType, title: string, size: SheetSize, preset?: string): void;
+  addPage(type: PageType, title: string, size: SheetSize, preset?: string, ladder?: boolean): void;
+  /** Makes the current page a ladder page (rails and numbered rungs) or a normal page again (M8 part 2), one undo step. */
+  setLadder(on: boolean): void;
   placeSymbol(symbolId: string, x: number, y: number, rot: 0 | 90 | 180 | 270, mirror: boolean): void;
   deleteSelection(): void;
   copy(): void;
@@ -142,6 +145,12 @@ interface EditorState {
 }
 
 const msg = useUi.getState;
+
+/** Rail potentials of a new ladder page: the project's DC control supply when it has one (the user can change the wires). */
+export function ladderRails(p: Project): { left?: string; right?: string } {
+  const pick = (ids: string[], kind: string) => ids.find((id) => p.potentials.some((x) => x.id === id)) ?? p.potentials.find((x) => x.kind === kind)?.id;
+  return { left: pick(['24VDC'], 'dc-plus'), right: pick(['0V'], 'dc-minus') };
+}
 
 export function makePage(project: Project, type: PageType, title: string, size: SheetSize, presetId?: string): Page {
   const lang = project.settings.drawingLanguage;
@@ -286,9 +295,11 @@ export const useEditor = create<EditorState>((set, get) => {
     },
     save: async (saveAs = false) => {
       const p = get().project();
-      const r = await window.cablepilot.files.save(serializeProject(p), saveAs ? null : get().filePath, projectFileName(p));
+      const text = serializeProject(p);
+      const r = await window.cablepilot.files.save(text, saveAs ? null : get().filePath, projectFileName(p));
       if (!r.ok) return errMsg(r.error);
       if (!r.value) return;
+      void window.cablepilot.history.backup(p.id, p.name, text);
       const { path, name } = r.value;
       set({ saved: p, filePath: path });
       void window.cablepilot.autosave.clear(p.id);
@@ -313,12 +324,23 @@ export const useEditor = create<EditorState>((set, get) => {
       }
     },
 
-    addPage: (type, title, size, preset) => {
+    addPage: (type, title, size, preset, ladder) => {
       const p = get().project();
       const page = makePage(p, type, title, size, preset);
       const at = Math.max(0, p.pages.findIndex((x) => x.id === get().pageId)) + 1;
-      get().exec({ type: 'page/add', page, index: at });
+      if (!ladder) get().exec({ type: 'page/add', page, index: at });
+      else {
+        // The ladder's line numbers follow the page's place in the set, so it is computed with the page inserted.
+        const withPage = { ...p, pages: [...p.pages.slice(0, at), page, ...p.pages.slice(at)] };
+        get().exec({ type: 'batch', label: 'add ladder page', commands: [{ type: 'page/add', page, index: at }, { type: 'page/ladder', id: page.id, ladder: defaultLadder(withPage, page), rails: ladderRails(p) }] });
+      }
       set({ pageId: page.id, selection: [] });
+    },
+    setLadder: (on) => {
+      const p = get().project();
+      const pg = get().page();
+      if (!pg) return;
+      get().exec({ type: 'page/ladder', id: pg.id, ladder: on ? pg.ladder ?? defaultLadder(p, pg) : null, rails: ladderRails(p) });
     },
 
     placeBox: (variant, x, y) => {
@@ -505,7 +527,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const id = newId('s');
       const cmds: Command[] = [];
       if (!BUILTIN_SYMBOLS.some((s) => s.id === symbolId)) cmds.push({ type: 'symbol/embed', def });
-      cmds.push({ type: 'symbol/place', page: pg.id, autoNumber: true, element: { id, kind: 'symbol', symbolId, x, y, rot, mirror, designation: ''} });
+      cmds.push({ type: 'symbol/place', page: pg.id, autoNumber: true, breakWires: true, element: { id, kind: 'symbol', symbolId, x, y, rot, mirror, designation: ''} });
       get().exec(cmds.length === 1 ? cmds[0] : { type: 'batch', label: 'place', commands: cmds });
       const placed = get().page()?.elements.find((e) => e.id === id);
       const des = placed && placed.kind === 'symbol' ? placed.designation : '';
@@ -589,7 +611,10 @@ export const useEditor = create<EditorState>((set, get) => {
     autosaveNow: async () => {
       if (!get().dirty()) return;
       const p = get().project();
-      await window.cablepilot.autosave.write(p.id, p.name, get().filePath, serializeProject(p));
+      const text = serializeProject(p);
+      await window.cablepilot.autosave.write(p.id, p.name, get().filePath, text);
+      // The first change of the day also keeps a daily backup in the project history (M8 part 2).
+      await window.cablepilot.history.backup(p.id, p.name, text);
     },
   };
 });

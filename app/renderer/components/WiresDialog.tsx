@@ -40,7 +40,7 @@ export function WiresDialog() {
       </div>
       {tab === 'numbering' && (
         <>
-          <Select<NumberingSettings['scheme']> label={t('Numbering scheme')} testid="num-scheme" value={cfg.scheme} options={[{ value: 'potential', label: t('By potential (one counter per potential)') }, { value: 'page-column', label: t('By page and column') }, { value: 'sequential', label: t('Sequential') }]} onChange={(v) => setNum({ scheme: v, pattern: NUMBERING_PRESETS[v] })} />
+          <Select<NumberingSettings['scheme']> label={t('Numbering scheme')} testid="num-scheme" value={cfg.scheme} options={[{ value: 'potential', label: t('By potential (one counter per potential)') }, { value: 'page-column', label: t('By page and column') }, { value: 'sequential', label: t('Sequential') }, { value: 'rung', label: t('By rung line number (ladder pages)') }]} onChange={(v) => setNum({ scheme: v, pattern: NUMBERING_PRESETS[v] })} />
           <TextField label={t('Pattern ({n:3} counter, {page}, {col}, {row}, {potential}, {suffix})')} testid="num-pattern" value={cfg.pattern} onCommit={(v) => v.trim() && setNum({ pattern: v.trim() })} mono />
           <div className="bom-controls">
             <NumField label={t('Start at')} value={cfg.start} min={0} step={1} onCommit={(v) => setNum({ start: Math.round(v) })} />

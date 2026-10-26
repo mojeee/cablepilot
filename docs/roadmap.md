@@ -131,10 +131,10 @@ and a short entry in `docs/progress.md`. The website reads the ticked boxes here
 
 ## M8-Panel designer features (part 2 of M8, parity with Capital X Panel Designer)
 
-- [ ] Insert a symbol onto an existing wire: the wire is split at the symbol's connection points and the wire numbers follow
-- [ ] Auto-wire: connect the selected symbols in sequence with one command
-- [ ] Ladder pages (NFPA 79 option): numbered rungs, line-reference cross-references and wire numbers by rung
-- [ ] Project history: automatic daily backups and named versions, compared and rolled back as one undoable step
+- [x] Insert a symbol onto an existing wire: the wire is split at the symbol's connection points and the wire numbers follow
+- [x] Auto-wire: connect the selected symbols in sequence with one command
+- [x] Ladder pages (NFPA 79 option): numbered rungs, line-reference cross-references and wire numbers by rung
+- [x] Project history: automatic daily backups and named versions, compared and rolled back as one undoable step
 
 ## M8 Release 1 (end of phase 1)
 

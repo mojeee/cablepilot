@@ -286,6 +286,17 @@ export interface PageLayout {
   /** Side view: the front page it is generated from. */
   of?: string;
 }
+/** A ladder page (M8 part 2, NFPA 79 option): rails at left and right, rungs from top to bottom, in page millimetres. */
+export interface LadderSettings {
+  /** Line number of the first rung (page × 100 by default). */
+  first: number;
+  spacing: number;
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}
+
 export interface Page {
   id: string;
   type: PageType;
@@ -299,6 +310,8 @@ export interface Page {
   elements: El[];
   /** Layout pages made by the cabinet layout (M6 part 3); absent on other pages and on layout pages of older projects. */
   layout?: PageLayout;
+  /** Ladder layout of a schematic page (M8 part 2); absent: a normal page with zones. */
+  ladder?: LadderSettings;
 }
 
 export type StyleColourKey = 'symbol' | 'wire' | 'designation' | 'wireNumber' | 'text' | 'annotation' | 'frame' | 'titleBlock';
@@ -454,8 +467,8 @@ export interface LayoutSettings {
 /** How automatic wire numbers are made (shared/wires.ts). */
 export interface NumberingSettings {
   /** Which counter a wire uses: one per potential, one per page and column, or a single one. */
-  scheme: 'potential' | 'page-column' | 'sequential';
-  /** Tokens: {n} or {n:3} counter, {page} {page:2}, {col}, {row}, {potential}, {suffix}. */
+  scheme: 'potential' | 'page-column' | 'sequential' | 'rung';
+  /** Tokens: {n} or {n:3} counter, {page} {page:2}, {col}, {row}, {potential}, {suffix}; {rung} line number and {sub} ('', A, B...) for the rung scheme. */
   pattern: string;
   start: number;
   step: number;

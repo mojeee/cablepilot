@@ -8,6 +8,7 @@ import { registerIpc } from './ipc';
 import { SettingsStore } from './settings';
 import { WarehouseService } from './warehouse';
 import { ErpService } from './erp';
+import { HistoryService } from './history';
 import { LayoutService } from './layoutFiles';
 import { registerAiIpc } from './ai/ipc';
 import { KeyStore, type SafeStorageLike } from './ai/keys';
@@ -22,6 +23,7 @@ let mainWindow: BrowserWindow | null = null;
 const files = new FileService(app.getPath('userData'), join(app.getAppPath(), 'samples'), () => mainWindow);
 const warehouse = new WarehouseService(app.getPath('userData'), join(app.getAppPath(), 'samples'), () => mainWindow);
 const layout = new LayoutService(app.getPath('userData'), () => mainWindow);
+const history = new HistoryService(app.getPath('userData'));
 
 // Keys: encrypted with the OS (safeStorage) and never sent to the renderer. With CP_AI_FAKE=1 (tests, the demo) the
 // answers come from a scripted stand-in and the keys are only base64-encoded, so no OS keychain is needed; a real
@@ -67,7 +69,7 @@ function createWindow(): void {
 }
 
 void app.whenReady().then(() => {
-  registerIpc({ settings, files, warehouse, layout, erp });
+  registerIpc({ settings, files, warehouse, layout, erp, history });
   registerAiIpc({ settings, keys, warehouse });
   createWindow();
   app.on('activate', () => {

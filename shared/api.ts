@@ -62,6 +62,13 @@ export interface ErpReceipt {
   /** The ERP's reference for the request, or the file written. */
   reference: string;
 }
+/** A daily backup or a named version of a project (M8 part 2). */
+export interface HistoryEntry {
+  id: string;
+  kind: 'daily' | 'version';
+  name: string;
+  createdAt: string;
+}
 export type CompanyKind = 'symbols' | 'templates' | 'macros' | 'parts' | 'layouts';
 /** A layout exchange file or an ERP item master read by the main process (M6 part 3): JSON text, or CSV and XLSX rows. */
 export interface LayoutFileData {
@@ -104,6 +111,15 @@ export interface CablePilotApi {
     list(): Promise<Result<AutosaveInfo[]>>;
     read(id: string): Promise<Result<string>>;
     clear(id: string): Promise<Result<null>>;
+  };
+  /** Project history (M8 part 2): daily backups and named versions, kept in the app's data folder. */
+  history: {
+    list(projectId: string): Promise<Result<HistoryEntry[]>>;
+    /** Writes today's backup unless there is one; true when it wrote one. */
+    backup(projectId: string, name: string, text: string): Promise<Result<boolean>>;
+    saveVersion(projectId: string, name: string, text: string): Promise<Result<HistoryEntry>>;
+    read(projectId: string, entryId: string): Promise<Result<string>>;
+    remove(projectId: string, entryId: string): Promise<Result<null>>;
   };
   /** The company's warehouse (M6 part 1): the stock file is read here, never in the renderer. */
   warehouse: {
