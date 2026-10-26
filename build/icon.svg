@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- CablePilot app icon: the website's mark (a wire between two terminals) on the macOS icon grid (824 px tile). -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1d2430"/>
+      <stop offset="1" stop-color="#0d1116"/>
+    </linearGradient>
+    <linearGradient id="wire" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6fb6ff"/>
+      <stop offset="1" stop-color="#3d8ff0"/>
+    </linearGradient>
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)"/>
+  <rect x="100.5" y="100.5" width="823" height="823" rx="184.5" fill="none" stroke="#ffffff" stroke-opacity="0.08"/>
+  <path d="M232 620h168V404h224v216h168" fill="none" stroke="url(#wire)" stroke-width="64" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="232" cy="620" r="52" fill="#52c98b"/>
+  <circle cx="792" cy="620" r="52" fill="#52c98b"/>
+</svg>

@@ -21,7 +21,9 @@
     "check:licenses": "node scripts/check-licenses.mjs",
     "check:library": "node scripts/check-library.mjs",
     "build:site": "node scripts/build-site.mjs",
-    "check:site": "node scripts/check-site.mjs"
+    "check:site": "node scripts/check-site.mjs",
+    "dist": "electron-vite build && electron-builder --publish never",
+    "icon": "node scripts/make-icon.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
@@ -33,6 +35,7 @@
     "@vitejs/plugin-react": "^6.1.2",
     "ajv": "^8.20.0",
     "electron": "^45.0.0",
+    "electron-builder": "^26.15.3",
     "electron-vite": "^6.0.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
@@ -57,5 +60,73 @@
   "dependencies": {
     "@pdf-lib/fontkit": "^1.1.1",
     "pdf-lib": "^1.17.1"
+  },
+  "build": {
+    "appId": "com.agentflowbind.cablepilot",
+    "productName": "CablePilot",
+    "copyright": "Copyright Mojtaba Amini. Apache-2.0.",
+    "files": [
+      "out/**/*",
+      "samples/**/*",
+      "!out/e2e-*/**",
+      "!out/clips/**",
+      "!out/demo-video/**",
+      "!out/ci-linux/**",
+      "!out/dev-profile/**"
+    ],
+    "npmRebuild": false,
+    "publish": null,
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "CablePilot-mac-${arch}.${ext}",
+      "identity": null
+    },
+    "dmg": {
+      "title": "CablePilot ${version}"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "CablePilot-win-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "CablePilot"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Engineering",
+      "artifactName": "CablePilot-linux-${arch}.${ext}",
+      "synopsis": "Electrical design for machines and control panels"
+    }
   }
 }

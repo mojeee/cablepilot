@@ -19,7 +19,8 @@ IEC 60617 symbols by default with NFPA 79 / ANSI as an option from M1; three sam
   and `tsconfig.web.json` (renderer, shared). MechPilot's workers project is not needed: CablePilot
   has no WebAssembly solver or CAD kernel. A worker project is added if M6 or later needs one.
 - **No `electron-builder` yet.** Packaging arrives with M8; adding it now would add many transitive
-  dependencies to the licence check for nothing. M8 will add it and record it here.
+  dependencies to the licence check for nothing. M8 will add it and record it here. (Added in M8: see "M8 Release
+  builds".)
 - **No three.js, pdf-lib or AI SDK yet.** Each is added by the milestone that needs it (M6 3D view,
   M1 PDF export, M7 assistant) and recorded here with its licence.
 - **Settings in a JSON file** in the app's data folder, validated on read (`shared/settings.ts`),
@@ -506,6 +507,21 @@ already there; these four were missing.
   working copy with the same comparison as revisions (pages, devices, wires, parts) and restored with a new command,
   `project/replace`, so a restore is one undo step. The assistant is not offered `project/replace`.
 
+## M8 Release builds
+
+- **Same pipeline as BoardPilot.** `electron-builder` packages the electron-vite output (`out/`) and the sample
+  projects (`samples/`, read at run time from the app bundle). Files: `CablePilot-mac-arm64.dmg`,
+  `CablePilot-mac-x64.dmg`, `CablePilot-win-x64.exe`, `CablePilot-linux-x86_64.AppImage`, so the website can link
+  to `releases/latest/download/<file>`.
+- **A tag publishes.** `.github/workflows/release.yml` runs only on a `v*` tag or by hand with a version: it runs the
+  tests, packages on macOS, Windows and Linux runners and creates one GitHub Release. Creating the tag is the owner's
+  decision (it publishes).
+- **Unsigned at first.** macOS signing is off (`identity: null`) and Windows signing is not configured, so macOS asks
+  the user to confirm the first launch (right-click > Open) and Windows SmartScreen warns. Signing needs the owner's
+  certificates as repository secrets.
+- **Icon.** `build/icon.svg` (the website's mark on the macOS icon grid) rendered to `build/icon.png` by
+  `scripts/make-icon.mjs` with Playwright's Chromium; electron-builder derives the .icns and .ico from it.
+
 ## Dependencies
 
 All development dependencies, none shipped in a runtime `dependencies` list yet (Electron-vite
@@ -528,6 +544,7 @@ bundles the renderer; the main process uses only Electron and Node).
 | three | MIT | 3D view of the cabinet (M6 part 3): devices as boxes from their dimensions, loaded only when the view opens. |
 | @react-three/fiber | MIT | React renderer for three.js (brief: 3D through @react-three/fiber); with its small dependencies (its-fine, react-use-measure, scheduler, suspend-react, zustand). |
 | @types/three | MIT | Type definitions of three. |
+| electron-builder | MIT | Release builds (M8): macOS DMG (arm64, x64), Windows NSIS installer, Linux AppImage; the same tool and version as BoardPilot. Dev only. |
 | @pdf-lib/fontkit | MIT | Embeds the TrueType font in the PDF export so text shows in every viewer (M3). |
 | Roboto Regular and Bold (font files, not a package) | SIL OFL 1.1 | Bundled in `shared/fonts/` with its licence; embedded as a subset in PDFs. Taken from the `@expo-google-fonts/roboto` package (MIT wrapper); only the two TTF files and the font licence are copied. |
 
